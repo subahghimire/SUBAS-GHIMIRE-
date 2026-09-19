@@ -7,7 +7,6 @@
 <title>Subas Ghimire | Professional Video Editor</title>
 
 <style>
-
 *{
     margin:0;
     padding:0;
@@ -19,21 +18,20 @@ html{
 }
 
 body{
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     background:#090a0c;
     color:#f5f5f5;
     overflow-x:hidden;
 }
 
-/* ================= NAVBAR ================= */
-
+/* NAVBAR */
 nav{
     position:fixed;
     top:0;
     left:0;
     width:100%;
     z-index:999;
-    background:rgba(9,10,12,.82);
+    background:rgba(9,10,12,.85);
     backdrop-filter:blur(18px);
     border-bottom:1px solid rgba(255,255,255,.08);
 }
@@ -67,31 +65,13 @@ nav{
     text-decoration:none;
     font-size:14px;
     transition:.35s;
-    position:relative;
-}
-
-.links a::after{
-    content:"";
-    position:absolute;
-    left:0;
-    bottom:-7px;
-    width:0;
-    height:2px;
-    background:#ff4b3e;
-    transition:.35s;
 }
 
 .links a:hover{
-    color:white;
+    color:#ff4b3e;
 }
 
-.links a:hover::after{
-    width:100%;
-}
-
-
-/* ================= HERO ================= */
-
+/* HERO */
 .hero{
     min-height:100vh;
     display:flex;
@@ -101,30 +81,6 @@ nav{
     background:
     radial-gradient(circle at 80% 35%,rgba(255,75,62,.13),transparent 28%),
     linear-gradient(135deg,#090a0c,#111318);
-}
-
-.hero::before{
-    content:"";
-    position:absolute;
-    width:700px;
-    height:700px;
-    border:1px solid rgba(255,75,62,.12);
-    border-radius:50%;
-    right:-280px;
-    top:-180px;
-    animation:rotateCircle 18s linear infinite;
-}
-
-.hero::after{
-    content:"";
-    position:absolute;
-    width:420px;
-    height:420px;
-    border:1px solid rgba(255,255,255,.05);
-    border-radius:50%;
-    right:-100px;
-    top:80px;
-    animation:rotateCircle 12s linear infinite reverse;
 }
 
 .hero-content{
@@ -171,16 +127,10 @@ nav{
     animation:titleReveal 1s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-.hero h1 .one{
-    animation-delay:.35s;
-}
-
-.hero h1 .two{
-    animation-delay:.55s;
-}
-
-.hero h1 .three{
-    animation-delay:.75s;
+.one{animation-delay:.35s!important;}
+.two{animation-delay:.55s!important;}
+.three{
+    animation-delay:.75s!important;
     color:#ff4b3e;
 }
 
@@ -237,9 +187,7 @@ nav{
     transform:translateY(-6px);
 }
 
-
-/* ================= GENERAL ================= */
-
+/* SECTIONS */
 section{
     max-width:1250px;
     margin:auto;
@@ -259,12 +207,6 @@ section{
     letter-spacing:-2px;
 }
 
-.section-intro{
-    color:#8e9197;
-    max-width:700px;
-    line-height:1.8;
-}
-
 .reveal{
     opacity:0;
     transform:translateY(70px);
@@ -278,9 +220,7 @@ section{
     transform:translateY(0);
 }
 
-
-/* ================= ABOUT ================= */
-
+/* ABOUT */
 .about-grid{
     display:grid;
     grid-template-columns:1.2fr .8fr;
@@ -300,7 +240,6 @@ section{
     background:linear-gradient(145deg,#121419,#0e0f12);
     border:1px solid #25272c;
     position:relative;
-    overflow:hidden;
 }
 
 .info-box::before{
@@ -334,9 +273,7 @@ section{
     color:#e6e6e6;
 }
 
-
-/* ================= SKILLS ================= */
-
+/* SKILLS */
 .skills{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -348,29 +285,12 @@ section{
     padding:30px;
     background:#101115;
     border:1px solid #24262b;
-    position:relative;
-    overflow:hidden;
     transition:.45s;
-}
-
-.skill-card::before{
-    content:"";
-    position:absolute;
-    left:0;
-    bottom:0;
-    width:0;
-    height:2px;
-    background:#ff4b3e;
-    transition:.5s;
 }
 
 .skill-card:hover{
     transform:translateY(-12px);
-    border-color:#3c3f45;
-}
-
-.skill-card:hover::before{
-    width:100%;
+    border-color:#ff4b3e;
 }
 
 .skill-number{
@@ -389,9 +309,7 @@ section{
     line-height:1.7;
 }
 
-
-/* ================= SOFTWARE ================= */
-
+/* SOFTWARE */
 .software{
     display:flex;
     flex-wrap:wrap;
@@ -409,12 +327,9 @@ section{
 .software span:hover{
     transform:translateY(-6px);
     border-color:#ff4b3e;
-    color:white;
 }
 
-
-/* ================= PHOTO ================= */
-
+/* PHOTO */
 .photo-area{
     max-width:560px;
 }
@@ -436,30 +351,8 @@ section{
     transition:1s cubic-bezier(.16,1,.3,1);
 }
 
-.photo-card::before{
-    content:"";
-    position:absolute;
-    z-index:2;
-    left:-120%;
-    top:0;
-    width:70%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.16),
-        transparent
-    );
-    transform:skewX(-18deg);
-    transition:.8s;
-}
-
 .photo-card:hover img{
     transform:scale(1.07);
-}
-
-.photo-card:hover::before{
-    left:140%;
 }
 
 .photo-caption{
@@ -483,29 +376,42 @@ section{
     font-size:26px;
 }
 
-
-/* ================= EXPERIENCE ================= */
+/* EXPERIENCE */
+.experience-list{
+    display:grid;
+    gap:25px;
+}
 
 .experience-box{
     border-left:2px solid #ff4b3e;
-    padding:5px 0 5px 35px;
-    position:relative;
+    padding:28px 35px;
+    background:#101115;
+    border:1px solid #24262b;
+    border-left:2px solid #ff4b3e;
+    transition:.4s;
 }
 
-.experience-box::before{
-    content:"";
-    position:absolute;
-    width:10px;
-    height:10px;
-    background:#ff4b3e;
-    border-radius:50%;
-    left:-6px;
-    top:10px;
+.experience-box:hover{
+    transform:translateX(10px);
+    border-color:#ff4b3e;
+}
+
+.experience-box .year{
+    color:#ff6257;
+    font-size:12px;
+    letter-spacing:3px;
+    font-weight:bold;
 }
 
 .experience-box h3{
     font-size:27px;
-    margin-bottom:10px;
+    margin:10px 0;
+}
+
+.experience-box h4{
+    color:#bfc1c6;
+    font-size:15px;
+    margin-bottom:12px;
 }
 
 .experience-box p{
@@ -513,9 +419,7 @@ section{
     line-height:1.8;
 }
 
-
-/* ================= CONTACT ================= */
-
+/* CONTACT */
 .contact-box{
     padding:60px;
     background:
@@ -532,11 +436,10 @@ section{
 .contact-box p{
     color:#8f9298;
     line-height:1.8;
+    margin-bottom:25px;
 }
 
-
-/* ================= FOOTER ================= */
-
+/* FOOTER */
 footer{
     border-top:1px solid #202226;
     padding:35px 30px;
@@ -545,9 +448,7 @@ footer{
     font-size:13px;
 }
 
-
-/* ================= PHOTO VIEWER ================= */
-
+/* PHOTO VIEWER */
 .viewer{
     position:fixed;
     inset:0;
@@ -588,17 +489,9 @@ footer{
     font-size:42px;
     color:#fff;
     cursor:pointer;
-    transition:.3s;
 }
 
-.close:hover{
-    color:#ff4b3e;
-    transform:rotate(90deg);
-}
-
-
-/* ================= KEYFRAMES ================= */
-
+/* ANIMATION */
 @keyframes titleReveal{
     to{
         opacity:1;
@@ -624,18 +517,7 @@ footer{
     }
 }
 
-@keyframes rotateCircle{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-
-/* ================= MOBILE ================= */
-
+/* MOBILE */
 @media(max-width:900px){
 
     .links{
@@ -648,10 +530,6 @@ footer{
 
     .skills{
         grid-template-columns:1fr 1fr;
-    }
-
-    .hero h1{
-        letter-spacing:-2px;
     }
 }
 
@@ -677,10 +555,6 @@ footer{
         font-size:48px;
     }
 
-    .hero-text{
-        font-size:16px;
-    }
-
     .skills{
         grid-template-columns:1fr;
     }
@@ -701,17 +575,13 @@ footer{
         font-size:36px;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-
 <!-- NAVIGATION -->
-
 <nav>
-
 <div class="nav">
 
 <div class="logo">
@@ -728,12 +598,10 @@ SUBAS <span>GHIMIRE</span>
 </div>
 
 </div>
-
 </nav>
 
 
 <!-- HERO -->
-
 <header class="hero">
 
 <div class="hero-content">
@@ -769,12 +637,10 @@ VIEW / DOWNLOAD CV
 </div>
 
 </div>
-
 </header>
 
 
 <!-- ABOUT -->
-
 <section id="about">
 
 <div class="section-label reveal">
@@ -791,24 +657,22 @@ Who I Am
 
 <p>
 I am Subas Ghimire, a Professional Video Editor
-with a passion for turning raw footage into
-strong visual stories.
+currently working at Kantipur Television.
+</p>
+
+<p>
+With professional experience in television video
+editing and post-production, I focus on turning
+raw footage into polished visual stories.
 </p>
 
 <p>
 My approach combines precise editing, rhythm,
 visual composition, color, sound and motion
-to create polished and engaging videos.
-</p>
-
-<p>
-I focus on professional post-production and
-visual storytelling that communicates clearly
-and leaves a lasting impression.
+to create engaging and professional videos.
 </p>
 
 </div>
-
 
 <div class="info-box reveal">
 
@@ -820,6 +684,11 @@ and leaves a lasting impression.
 <div class="info-row">
 <strong>PROFESSION</strong>
 <span>Professional Video Editor</span>
+</div>
+
+<div class="info-row">
+<strong>CURRENT WORKPLACE</strong>
+<span>Kantipur Television</span>
 </div>
 
 <div class="info-row">
@@ -838,14 +707,11 @@ and leaves a lasting impression.
 </div>
 
 </div>
-
 </div>
-
 </section>
 
 
 <!-- SKILLS -->
-
 <section id="skills">
 
 <div class="section-label reveal">
@@ -871,7 +737,7 @@ visual storytelling.
 <div class="skill-number">02</div>
 <h3>Color Grading</h3>
 <p>
-Color correction and cinematic visual
+Color correction and professional visual
 finishing.
 </p>
 </div>
@@ -895,12 +761,10 @@ final delivery.
 </div>
 
 </div>
-
 </section>
 
 
 <!-- SOFTWARE -->
-
 <section id="software">
 
 <div class="section-label reveal">
@@ -920,12 +784,10 @@ Software
 <span>DaVinci Resolve</span>
 
 </div>
-
 </section>
 
 
 <!-- PHOTO -->
-
 <section id="photo">
 
 <div class="section-label reveal">
@@ -938,8 +800,7 @@ My Photo
 
 <div class="photo-area reveal">
 
-<div class="photo-card"
-onclick="openPhoto()">
+<div class="photo-card" onclick="openPhoto()">
 
 <img
 src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
@@ -954,14 +815,11 @@ alt="Subas Ghimire">
 </div>
 
 </div>
-
 </div>
-
 </section>
 
 
 <!-- EXPERIENCE -->
-
 <section id="experience">
 
 <div class="section-label reveal">
@@ -972,25 +830,61 @@ CAREER
 Experience
 </h2>
 
+<div class="experience-list">
+
 <div class="experience-box reveal">
 
-<h3>
-Professional Video Editor
-</h3>
+<div class="year">CURRENT</div>
+
+<h3>Video Editor / Visual Editor</h3>
+
+<h4>Kantipur Television</h4>
 
 <p>
-Professional experience in video editing,
-post-production, visual storytelling,
-color and motion-based editing.
+Currently working as a Video Editor / Visual Editor,
+focused on professional video editing and
+post-production.
 </p>
 
 </div>
 
+
+<div class="experience-box reveal">
+
+<div class="year">4 MONTHS</div>
+
+<h3>Video Editor</h3>
+
+<h4>Global Television HD</h4>
+
+<p>
+Professional experience in video editing,
+post-production and visual finishing.
+</p>
+
+</div>
+
+
+<div class="experience-box reveal">
+
+<div class="year">4 MONTHS</div>
+
+<h3>Video Editor</h3>
+
+<h4>Janata Television</h4>
+
+<p>
+Experience in television video editing and
+post-production workflow.
+</p>
+
+</div>
+
+</div>
 </section>
 
 
 <!-- CONTACT -->
-
 <section id="contact">
 
 <div class="contact-box reveal">
@@ -1015,21 +909,16 @@ EMAIL ME
 </a>
 
 </div>
-
 </section>
 
 
 <!-- FOOTER -->
-
 <footer>
-
 © 2026 Subas Ghimire — Professional Video Editor
-
 </footer>
 
 
 <!-- PHOTO VIEWER -->
-
 <div class="viewer" id="viewer">
 
 <div class="close" onclick="closePhoto()">
@@ -1037,7 +926,6 @@ EMAIL ME
 </div>
 
 <img
-id="viewerImage"
 src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
 alt="Subas Ghimire">
 
@@ -1046,7 +934,7 @@ alt="Subas Ghimire">
 
 <script>
 
-/* ================= SCROLL ANIMATION ================= */
+/* SCROLL ANIMATION */
 
 const reveals = document.querySelectorAll(".reveal");
 
@@ -1060,15 +948,14 @@ const observer = new IntersectionObserver(
 },
 {
     threshold:0.12
-}
-);
+});
 
 reveals.forEach(item=>{
     observer.observe(item);
 });
 
 
-/* ================= PHOTO POPUP ================= */
+/* PHOTO POPUP */
 
 function openPhoto(){
 
@@ -1097,7 +984,7 @@ document
 });
 
 
-/* ================= ESCAPE KEY ================= */
+/* ESCAPE */
 
 document.addEventListener("keydown",function(e){
 
