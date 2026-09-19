@@ -3,326 +3,731 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subas Ghimire | Visual Editor</title>
+    <title>Subas Ghimire | Ultimate Visual Editor</title>
     <style>
+        /* =========================================
+           ULTIMATE MOTION & EXTREME CSS VARIABLES
+           ========================================= */
         :root {
-            --bg: #080808;
-            --text: #e0e0e0;
-            --accent: #ff2020;
-            --card-bg: #141414;
+            --bg-dark: #000000;
+            --bg-gradient-1: #1a0000;
+            --bg-gradient-2: #00001a;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent-red: #ff003c;
+            --accent-glow: #ff003c88;
+            --card-glass: rgba(20, 20, 20, 0.6);
+            --card-border: rgba(255, 0, 60, 0.3);
+            --transition-fast: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-slow: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        
-        body {
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             overflow-x: hidden;
+            perspective: 1000px;
+            /* Extreme Continuous Background Motion */
+            background: linear-gradient(315deg, var(--bg-dark), var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-dark));
+            background-size: 400% 400%;
+            animation: insaneGradientMotion 15s ease infinite;
         }
 
-        /* Hero Section Animations */
-        @keyframes cinematicZoom {
-            from { transform: scale(1.1); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        /* =========================================
+           KEYFRAME ANIMATIONS (EXTREME MOTION)
+           ========================================= */
+        @keyframes insaneGradientMotion {
+            0% { background-position: 0% 0%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 0%; }
         }
 
+        @keyframes ultraFloat {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); }
+            33% { transform: translateY(-15px) rotate(2deg) scale(1.02); }
+            66% { transform: translateY(10px) rotate(-1deg) scale(0.98); }
+            100% { transform: translateY(0px) rotate(0deg) scale(1); }
+        }
+
+        @keyframes reverseFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(20px) rotate(-2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow); }
+            50% { text-shadow: 0 0 30px var(--accent-red), 0 0 50px var(--accent-red), 0 0 70px var(--accent-red); }
+            100% { text-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow); }
+        }
+
+        @keyframes spin3D {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            50% { transform: rotateY(180deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(0deg); }
+        }
+
+        @keyframes slideInExtremeLeft {
+            0% { transform: translateX(-200%) skewX(45deg); opacity: 0; filter: blur(20px); }
+            100% { transform: translateX(0) skewX(0deg); opacity: 1; filter: blur(0); }
+        }
+
+        @keyframes slideInExtremeRight {
+            0% { transform: translateX(200%) skewX(-45deg); opacity: 0; filter: blur(20px); }
+            100% { transform: translateX(0) skewX(0deg); opacity: 1; filter: blur(0); }
+        }
+
+        @keyframes zoomBurst {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes khatraExplode {
+            0% { transform: scale(1) rotate(0deg); letter-spacing: 10px; filter: hue-rotate(0deg); }
+            20% { transform: scale(1.5) rotate(-10deg) skewX(30deg); letter-spacing: 30px; filter: blur(4px) hue-rotate(90deg); color: #fff; text-shadow: 0 0 50px var(--accent-red), 0 0 100px var(--accent-red); }
+            40% { transform: scale(0.5) rotate(15deg) skewX(-30deg); letter-spacing: -5px; filter: blur(1px) hue-rotate(180deg); color: var(--accent-red); }
+            60% { transform: scale(1.3) rotate(-5deg); letter-spacing: 20px; filter: hue-rotate(270deg); color: #fff; }
+            80% { transform: scale(0.9) rotate(2deg); letter-spacing: 5px; filter: hue-rotate(320deg); color: var(--accent-red); }
+            100% { transform: scale(1) rotate(0deg); letter-spacing: 10px; filter: hue-rotate(360deg); color: var(--text-main); }
+        }
+
+        @keyframes borderDance {
+            0% { border-color: var(--accent-red); box-shadow: 0 0 15px var(--accent-red); }
+            33% { border-color: #00ffcc; box-shadow: 0 0 15px #00ffcc; }
+            66% { border-color: #cc00ff; box-shadow: 0 0 15px #cc00ff; }
+            100% { border-color: var(--accent-red); box-shadow: 0 0 15px var(--accent-red); }
+        }
+
+        @keyframes particleDrift {
+            from { transform: translateY(0) translateX(0); opacity: 1; }
+            to { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        /* =========================================
+           PARTICLES BACKGROUND
+           ========================================= */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* =========================================
+           GLOBAL LAYOUT & CONTAINERS
+           ========================================= */
+        .wrapper {
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
         .hero {
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, #1f1f1f 0%, #000 100%);
             text-align: center;
-            border-bottom: 2px solid #222;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, var(--accent-red) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            opacity: 0.15;
+            animation: pulseGlow 4s infinite alternate;
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 6vw;
+            font-weight: 900;
             margin: 0;
             text-transform: uppercase;
-            letter-spacing: 8px;
-            animation: cinematicZoom 2s ease-out forwards;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.9);
+            letter-spacing: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        /* "Khatra" Name Click Animation */
-        .khatra-active {
-            animation: khatraExplode 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-        }
-
-        @keyframes khatraExplode {
-            0% { transform: scale(1) rotate(0deg); letter-spacing: 8px; filter: hue-rotate(0deg); }
-            25% { transform: scale(1.3) rotate(-3deg) skewX(15deg); letter-spacing: 20px; filter: blur(2px) hue-rotate(90deg); color: #fff; text-shadow: 0 0 30px #ff2020, 0 0 60px #ff2020; }
-            50% { transform: scale(0.8) rotate(3deg) skewX(-15deg); letter-spacing: 2px; filter: blur(0px) hue-rotate(180deg); color: var(--accent); }
-            75% { transform: scale(1.1) rotate(-1deg); letter-spacing: 12px; filter: hue-rotate(270deg); color: #fff; }
-            100% { transform: scale(1) rotate(0deg); letter-spacing: 8px; filter: hue-rotate(360deg); color: var(--text); }
-        }
-
-        .hero h2 {
-            color: var(--accent);
-            font-weight: 300;
-            letter-spacing: 3px;
-            font-size: 1.5rem;
-            margin-top: 15px;
-            opacity: 0;
-            animation: slideUp 1.5s ease-out 0.8s forwards;
-        }
-
-        /* Scroll Reveal Classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(80px);
-            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 80px 20px;
-        }
-        
-        .section {
-            margin-bottom: 80px;
-        }
-        
-        h3 {
-            font-size: 2.2rem;
-            border-bottom: 3px solid var(--accent);
-            display: inline-block;
-            padding-bottom: 8px;
-            margin-bottom: 35px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        p {
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: #b0b0b0;
-        }
-
-        /* Cards with Hover Motion */
-        .card {
-            background: var(--card-bg);
-            padding: 35px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--accent);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateX(15px);
-            box-shadow: -10px 15px 30px rgba(255, 32, 32, 0.1);
-            border-left: 5px solid #fff;
-        }
-        
-        .job-title {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #fff;
-        }
-        
-        .company {
-            color: var(--accent);
-            font-size: 1.1rem;
-            margin: 8px 0 15px 0;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        /* Skills List */
-        .skills-list {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .skills-list li {
-            background: #1a1a1a;
-            padding: 18px 25px;
-            border-radius: 6px;
-            border-right: 3px solid var(--accent);
-            font-size: 1.1rem;
-            transition: background 0.3s ease;
-        }
-        
-        .skills-list li:hover {
-            background: #2a2a2a;
-        }
-
-        /* Photo Gallery */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .gallery img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            transition: transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease;
-            filter: grayscale(40%);
-        }
-
-        .gallery img:hover {
-            transform: scale(1.05);
-            filter: grayscale(0%);
-            box-shadow: 0 10px 25px rgba(255, 32, 32, 0.3);
+            transition: var(--transition-fast);
+            animation: ultraFloat 6s ease-in-out infinite;
+            text-shadow: 2px 2px 15px rgba(255,0,0,0.5);
             z-index: 2;
         }
 
-        /* Video Section */
-        .video-grid {
+        .khatra-active {
+            animation: khatraExplode 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both !important;
+        }
+
+        .hero h2 {
+            font-size: 2vw;
+            color: var(--accent-red);
+            font-weight: 400;
+            letter-spacing: 8px;
+            margin-top: 30px;
+            animation: pulseGlow 3s infinite, slideInExtremeRight 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            animation: reverseFloat 2s infinite;
+        }
+
+        /* =========================================
+           SECTIONS & HEADINGS
+           ========================================= */
+        .section {
+            margin-bottom: 120px;
+            position: relative;
+        }
+
+        h3.section-title {
+            font-size: 3.5rem;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 60px;
+            display: inline-block;
+            position: relative;
+            animation: ultraFloat 8s infinite alternate;
+        }
+
+        h3.section-title::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            color: var(--accent-red);
+            z-index: -1;
+            filter: blur(8px);
+            animation: pulseGlow 3s infinite;
+        }
+
+        p.lead-text {
+            font-size: 1.4rem;
+            line-height: 2.2;
+            color: var(--text-muted);
+            text-align: justify;
+            margin-bottom: 30px;
+            animation: reverseFloat 7s infinite alternate;
+            padding: 20px;
+            border-left: 4px solid var(--accent-red);
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(5px);
+        }
+
+        /* =========================================
+           EXPERIENCE TIMELINE (3D CARDS)
+           ========================================= */
+        .timeline {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .timeline-card {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 50px;
+            backdrop-filter: blur(15px);
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+        }
+
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,0,60,0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.6s;
+            z-index: 0;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-20px) rotateX(5deg) rotateY(-5deg) scale(1.05);
+            box-shadow: -20px 30px 60px rgba(255,0,60,0.2);
+            border-color: var(--accent-red);
+        }
+
+        .timeline-card:hover::before {
+            animation: borderDance 3s infinite;
+            left: 100%;
+        }
+
+        .job-title {
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .company-name {
+            font-size: 1.4rem;
+            color: var(--accent-red);
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .job-desc {
+            font-size: 1.1rem;
+            color: #ccc;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* =========================================
+           EXTREME PHOTO GALLERY
+           ========================================= */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            perspective: 1500px;
+        }
+
+        .gallery-item {
+            position: relative;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.7s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            border: 2px solid transparent;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.7s ease;
+            filter: grayscale(100%) contrast(1.2) brightness(0.7);
+            transform: scale(1.1);
+        }
+
+        .gallery-item:hover {
+            transform: rotateY(15deg) rotateX(10deg) scale(1.1) translateZ(50px);
+            border: 2px solid var(--accent-red);
+            box-shadow: -20px 20px 50px rgba(255,0,60,0.5);
+            z-index: 10;
+        }
+
+        .gallery-item:hover img {
+            filter: grayscale(0%) contrast(1.1) brightness(1.1);
+            transform: scale(1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            transition: all 0.5s ease;
+            text-align: center;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            bottom: 0;
+        }
+
+        .gallery-overlay h4 {
+            color: var(--accent-red);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* =========================================
+           ADVANCED SKILLS SECTION
+           ========================================= */
+        .skills-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 40px;
         }
 
-        .video-wrapper {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 8px;
-            border-bottom: 4px solid var(--accent);
+        .skill-box {
+            background: rgba(30,30,30,0.5);
+            padding: 40px;
+            border-radius: 15px;
+            border-top: 4px solid var(--accent-red);
+            transition: var(--transition-slow);
+            animation: ultraFloat 7s infinite alternate;
         }
 
-        .video-wrapper video {
-            width: 100%;
-            border-radius: 4px;
-            outline: none;
+        .skill-box:nth-child(even) {
+            animation-direction: alternate-reverse;
+            border-top: none;
+            border-bottom: 4px solid var(--accent-red);
         }
 
-        .video-wrapper p {
-            margin-top: 10px;
-            margin-bottom: 0;
+        .skill-box:hover {
+            transform: scale(1.1) translateY(-20px) !important;
+            background: rgba(50,10,10,0.8);
+            box-shadow: 0 20px 40px rgba(255,0,0,0.3);
+        }
+
+        .skill-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
             color: #fff;
-            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .skill-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #222;
+            border-radius: 10px;
+            margin-top: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff003c, #ff6600, #ff003c);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 2s cubic-bezier(0.19, 1, 0.22, 1);
+            animation: borderDance 3s infinite linear;
+        }
+
+        /* =========================================
+           SCROLL REVEAL UTILITIES
+           ========================================= */
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-150px) rotate(-5deg);
+            transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(150px) rotate(5deg);
+            transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .reveal-bottom {
+            opacity: 0;
+            transform: translateY(150px) scale(0.8);
+            transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .reveal-left.active, .reveal-right.active, .reveal-bottom.active {
+            opacity: 1;
+            transform: translate(0) rotate(0) scale(1);
+        }
+
+        /* Footer */
+        footer {
             text-align: center;
+            padding: 50px 20px;
+            border-top: 1px solid rgba(255,0,0,0.2);
+            margin-top: 100px;
+            background: rgba(0,0,0,0.8);
+        }
+        footer h2 {
+            animation: pulseGlow 3s infinite;
         }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <!-- क्लिक गर्दा प्ले हुने 'Khatra' एनिमेसन -->
-        <h1 id="myName" onclick="playKhatraMotion()">Subas Ghimire</h1>
-        <h2>Video Editor / Visual Editor</h2>
-    </header>
+    <!-- Particle Background Elements Generation via JS -->
+    <div id="particles-js"></div>
 
-    <div class="container">
+    <div class="wrapper">
         
-        <div class="section reveal">
-            <h3>About Me</h3>
-            <p>I am a professional Video Editor with a strong background in television production. I specialize in editing news, talk-shows, and broadcast content, focusing on delivering clean and engaging visual stories. Beyond the editing suite, I am passionate about capturing scenic landscapes and exploring historic pagoda-style architecture, bringing a natural cinematic eye to my professional work.</p>
-        </div>
+        <!-- HERO SECTION -->
+        <header class="hero">
+            <h1 id="myName" onclick="playKhatraMotion()">Subas Ghimire</h1>
+            <h2>Ultimate Visual Editor</h2>
+            <div class="scroll-indicator">Scroll to Explore ↓</div>
+        </header>
 
-        <div class="section reveal">
-            <h3>Professional Experience</h3>
-            <div class="card">
-                <div class="job-title">Video Editor</div>
-                <div class="company">Kantipur Television | Current</div>
-                <p>Handling professional television production and broadcast video editing tasks.</p>
+        <div class="container">
+            
+            <!-- ABOUT SECTION -->
+            <div class="section">
+                <h3 class="section-title reveal-left" data-text="The Visionary">The Visionary</h3>
+                <p class="lead-text reveal-right">
+                    I am a professional Video Editor with a profound background in high-end television production. I specialize in crafting high-impact visual stories through editing news, talk-shows, and dynamic broadcast content. My approach is purely cinematic, extremely detail-oriented, and driven by an insatiable passion for visual perfection.
+                </p>
+                <p class="lead-text reveal-left" style="animation-delay: 0.5s;">
+                    Beyond the editing suite, my lens is always active. I am deeply passionate about capturing raw scenic landscapes and exploring historic pagoda-style architecture across Nepal, bringing a natural, unfiltered cinematic eye directly into my professional digital workspace.
+                </p>
             </div>
-            <div class="card">
-                <div class="job-title">Video Editor</div>
-                <div class="company">Global Television HD | 4 Months</div>
-                <p>Worked on television content, news, and daily program editing.</p>
-            </div>
-            <div class="card">
-                <div class="job-title">Video Editor</div>
-                <div class="company">Janata Television | 4 Months</div>
-                <p>Collaborated on video editing for various television programs and shows.</p>
-            </div>
-        </div>
 
-        <!-- फोटो ग्यालरी सेक्सन (ड्राइभबाट निकालिएका ४ वटा फोटो) -->
-        <div class="section reveal">
-            <h3>My Gallery</h3>
-            <div class="gallery">
-                <img src="https://drive.google.com/uc?export=view&id=1QIHtv-NOHxMoybIp0i79rkbpyO52t3Qh" alt="Subas Gallery 1">
-                <img src="https://drive.google.com/uc?export=view&id=1Opf3-vPrLwAbU_rAB3s9C6DQAjNG6hHP" alt="Subas Gallery 2">
-                <img src="https://drive.google.com/uc?export=view&id=1LREDC-lcje8lbTSNx70K8GL9nX9rqpmf" alt="Subas Gallery 3">
-                <img src="https://drive.google.com/uc?export=view&id=1awZsIKlC5JO8voSpsjusB3R75lX_B8C-" alt="Subas Gallery 4">
-            </div>
-        </div>
+            <!-- EXPERIENCE SECTION -->
+            <div class="section">
+                <h3 class="section-title reveal-bottom" data-text="Career Timeline">Career Timeline</h3>
+                
+                <div class="timeline">
+                    <!-- Job 1 -->
+                    <div class="timeline-card reveal-left">
+                        <div class="job-title">Senior Video Editor</div>
+                        <div class="company-name">Kantipur Television | Current</div>
+                        <div class="job-desc">
+                            Spearheading professional television production, high-end broadcast video editing, and ensuring top-tier visual quality for national audiences. Managing complex timelines and advanced visual effects for flagship shows.
+                        </div>
+                    </div>
 
-        <!-- भिडियो सेक्सन -->
-        <div class="section reveal">
-            <h3>Kantipur Works</h3>
-            <div class="video-grid">
-                <div class="video-wrapper">
-                    <video controls>
-                        <!-- तलको kantipur_video1.mp4 मेटाएर पछि आफ्नो भिडियोको लिङ्क राख्नुहोला -->
-                        <source src="kantipur_video1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <p>Kantipur Production - 1</p>
-                </div>
-                <div class="video-wrapper">
-                    <video controls>
-                        <!-- तलको kantipur_video2.mp4 मेटाएर पछि आफ्नो भिडियोको लिङ्क राख्नुहोला -->
-                        <source src="kantipur_video2.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <p>Kantipur Production - 2</p>
+                    <!-- Job 2 -->
+                    <div class="timeline-card reveal-right" style="transition-delay: 0.2s;">
+                        <div class="job-title">Video Editor</div>
+                        <div class="company-name">Global Television HD | 4 Months</div>
+                        <div class="job-desc">
+                            Engineered daily television content, fast-paced news editing, and daily program scheduling visuals. Handled tight deadlines while maintaining impeccable broadcast standards.
+                        </div>
+                    </div>
+
+                    <!-- Job 3 -->
+                    <div class="timeline-card reveal-left" style="transition-delay: 0.4s;">
+                        <div class="job-title">Video Editor</div>
+                        <div class="company-name">Janata Television | 4 Months</div>
+                        <div class="job-desc">
+                            Collaborated extensively on video editing for diverse television programs, shows, and special broadcast events. Focused on seamless transitions, audio-sync, and color grading.
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- EXTREME GALLERY SECTION (Using new uploaded photos) -->
+            <div class="section">
+                <h3 class="section-title reveal-right" data-text="Visual Captures">Visual Captures</h3>
+                <div class="gallery-grid">
+                    
+                    <div class="gallery-item reveal-bottom">
+                        <!-- Drive ID for 1000009498_2.jpg equivalent -->
+                        <img src="https://drive.google.com/uc?export=view&id=11t4Y_kjGyCpBUH6-CWkZGAB7XxS1_6G4" alt="Professional Shot 1">
+                        <div class="gallery-overlay">
+                            <h4>Focus</h4>
+                            <p>Kantipur Studio</p>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item reveal-bottom" style="transition-delay: 0.2s;">
+                        <!-- Drive ID for 8c7d3194-6291-4f40-b28e-2f970c61e7e7-1_all_1716_2.jpg equivalent -->
+                        <img src="https://drive.google.com/uc?export=view&id=14xLma715n_sWRfkXaw5KhnvtazN-ep_a" alt="Professional Shot 2">
+                        <div class="gallery-overlay">
+                            <h4>Editing Suite</h4>
+                            <p>Visual Mastery</p>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item reveal-bottom" style="transition-delay: 0.4s;">
+                        <!-- Drive ID for 8c7d3194-6291-4f40-b28e-2f970c61e7e7-1_all_35_2.jpg equivalent -->
+                        <img src="https://drive.google.com/uc?export=view&id=1P-NDuSiqmtiFNq5E1Cx1hjTkaGOjCH2S" alt="Professional Shot 3">
+                        <div class="gallery-overlay">
+                            <h4>Nature Lens</h4>
+                            <p>Cinematic Landscapes</p>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item reveal-bottom" style="transition-delay: 0.6s;">
+                        <!-- Drive ID for 1000002100_2.heic equivalent -->
+                        <img src="https://drive.google.com/uc?export=view&id=1TJkRtnNDnxTnR99AVAPcutQsnenS5HRe" alt="Professional Shot 4">
+                        <div class="gallery-overlay">
+                            <h4>Heritage</h4>
+                            <p>Pagoda Architecture</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ADVANCED SKILLS SECTION -->
+            <div class="section">
+                <h3 class="section-title reveal-left" data-text="Technical Arsenal">Technical Arsenal</h3>
+                
+                <div class="skills-container">
+                    <div class="skill-box reveal-bottom">
+                        <div class="skill-title">Broadcast Video Editing</div>
+                        <div class="skill-desc">Seamless cutting, advanced color grading, and post-production tailored specifically for high-definition television formats.</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-width="95%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-box reveal-bottom" style="transition-delay: 0.2s;">
+                        <div class="skill-title">Geospatial Animation</div>
+                        <div class="skill-desc">Advanced 3D rendering and motion graphics using Google Earth Studio to create captivating aerial narratives.</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-width="85%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-box reveal-bottom" style="transition-delay: 0.4s;">
+                        <div class="skill-title">AI Workflow Integration</div>
+                        <div class="skill-desc">Utilizing modern digital AI workflows, prompt engineering, and intelligent asset management for rapid visual generation.</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-width="90%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-box reveal-bottom" style="transition-delay: 0.6s;">
+                        <div class="skill-title">Cinematic Composition</div>
+                        <div class="skill-desc">Expert understanding of framing, lighting, rhythm, and pacing to create deeply engaging visual stories.</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-width="98%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="section reveal">
-            <h3>Technical Expertise</h3>
-            <ul class="skills-list">
-                <li><strong>Broadcast Video Editing</strong> - Seamless cutting and post-production for television.</li>
-                <li><strong>Geospatial Video Rendering</strong> - Advanced animations using Google Earth Studio.</li>
-                <li><strong>AI Tools Integration</strong> - Utilizing modern digital AI workflows for content generation.</li>
-            </ul>
-        </div>
-        
+        <footer>
+            <h2>SUBAS GHIMIRE</h2>
+            <p style="color: #666; margin-top: 10px; font-size: 0.9rem;">© 2026 | Visual Editor Portfolio</p>
+        </footer>
+
     </div>
 
-    <!-- JavaScript for Scroll and Click Motion -->
+    <!-- EXTREME JAVASCRIPT FOR MOTION AND REVEALS -->
     <script>
-        // तल स्क्रोल गर्दा आउने मोसन
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 120;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal();
-
-        // नाममा क्लिक गर्दा आउने "Khatra" मोसन
+        // 1. Extreme "Khatra" Click Animation Logic
         function playKhatraMotion() {
             const nameEl = document.getElementById("myName");
             nameEl.classList.remove("khatra-active");
-            void nameEl.offsetWidth; // Trigger reflow
+            void nameEl.offsetWidth; // Force reflow
             nameEl.classList.add("khatra-active");
+            
+            // Create mini explosion particles on click
+            for(let i=0; i<20; i++) {
+                createExplosionParticle(nameEl);
+            }
+        }
+
+        function createExplosionParticle(parent) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = Math.random() * 10 + 5 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = '#ff003c';
+            particle.style.borderRadius = '50%';
+            particle.style.left = (parent.getBoundingClientRect().left + parent.offsetWidth/2) + 'px';
+            particle.style.top = (parent.getBoundingClientRect().top + parent.offsetHeight/2) + 'px';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            document.body.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 100 + Math.random() * 200;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity;
+
+            particle.animate([
+                { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 800 + Math.random() * 500,
+                easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            }).onfinish = () => particle.remove();
+        }
+
+        // 2. Scroll Reveal Observer Logic
+        const revealElements = document.querySelectorAll('.reveal-left, .reveal-right, .reveal-bottom');
+        const progressBars = document.querySelectorAll('.progress-bar');
+
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                
+                entry.target.classList.add('active');
+                
+                // If it's a skill box, animate the progress bar
+                if(entry.target.classList.contains('skill-box')) {
+                    const bar = entry.target.querySelector('.progress-bar');
+                    if(bar) {
+                        setTimeout(() => {
+                            bar.style.width = bar.getAttribute('data-width');
+                        }, 500);
+                    }
+                }
+                
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // 3. Generate Floating Background Particles
+        const particleContainer = document.getElementById('particles-js');
+        for(let i=0; i<30; i++) {
+            let p = document.createElement('div');
+            p.style.position = 'absolute';
+            p.style.bottom = '-50px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = Math.random() * 4 + 1 + 'px';
+            p.style.height = p.style.width;
+            p.style.background = 'rgba(255,0,60,' + (Math.random() * 0.5 + 0.1) + ')';
+            p.style.borderRadius = '50%';
+            p.style.boxShadow = '0 0 10px rgba(255,0,60,0.8)';
+            p.style.animation = `particleDrift ${10 + Math.random() * 20}s linear infinite`;
+            p.style.animationDelay = `-${Math.random() * 20}s`;
+            particleContainer.appendChild(p);
         }
     </script>
-
 </body>
 </html>
-
