@@ -2,1017 +2,1225 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUBAS GHIMIRE — Professional Video Editor</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>SUBAS GHIMIRE — MOTION VIDEO EDITOR</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root{
-    --bg:#070707;
-    --card:#101010;
-    --text:#f5f5f5;
-    --muted:#858585;
-    --line:rgba(255,255,255,.10);
-    --accent:#ff3b30;
-    --accent2:#ff735c;
+ --bg:#030303;
+ --red:#ff3b30;
+ --white:#f5f5f5;
+ --gray:#777;
+ --line:rgba(255,255,255,.1);
 }
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
 }
 
 html{
-    scroll-behavior:smooth;
+ scroll-behavior:smooth;
 }
 
 body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:Inter,Arial,sans-serif;
-    overflow-x:hidden;
-    cursor:none;
+ background:var(--bg);
+ color:var(--white);
+ font-family:Inter,sans-serif;
+ overflow-x:hidden;
+ cursor:none;
 }
 
-/* ================= CURSOR ================= */
-
-.cursor{
-    position:fixed;
-    width:9px;
-    height:9px;
-    background:#fff;
-    border-radius:50%;
-    pointer-events:none;
-    z-index:10000;
-    transform:translate(-50%,-50%);
-    mix-blend-mode:difference;
+a{
+ color:inherit;
+ text-decoration:none;
 }
 
-.cursor-ring{
-    position:fixed;
-    width:38px;
-    height:38px;
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:50%;
-    pointer-events:none;
-    z-index:9999;
-    transform:translate(-50%,-50%);
-    transition:
-        width .25s ease,
-        height .25s ease,
-        background .25s ease;
-}
-
-/* ================= LOADER ================= */
+/* =========================
+   LOADER
+========================= */
 
 .loader{
-    position:fixed;
-    inset:0;
-    z-index:20000;
-    background:#050505;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    animation:loaderOut 1s 2.4s forwards;
-    pointer-events:none;
+ position:fixed;
+ inset:0;
+ background:#030303;
+ z-index:99999;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden;
+ transition:1s;
 }
 
-.loader-inner{
-    text-align:center;
-    overflow:hidden;
+.loader.hide{
+ opacity:0;
+ visibility:hidden;
+}
+
+.loader-box{
+ width:300px;
 }
 
 .loader-name{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(40px,8vw,100px);
-    font-weight:800;
-    letter-spacing:-5px;
-    animation:loaderText 1.2s ease forwards;
+ font-family:"Space Grotesk";
+ font-size:60px;
+ font-weight:900;
+ letter-spacing:-5px;
+ overflow:hidden;
+}
+
+.loader-name span{
+ display:block;
+ transform:translateY(100%);
+ animation:loadText 1s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.loader-percent{
+ margin-top:25px;
+ font-size:12px;
+ letter-spacing:3px;
+ color:#777;
 }
 
 .loader-line{
-    height:2px;
-    width:0;
-    background:var(--accent);
-    margin:20px auto 0;
-    animation:loaderLine 1.2s .5s forwards;
+ height:2px;
+ background:#222;
+ margin-top:12px;
+ overflow:hidden;
 }
 
-/* ================= NOISE ================= */
-
-.noise{
-    position:fixed;
-    inset:0;
-    z-index:9998;
-    pointer-events:none;
-    opacity:.035;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+.loader-line i{
+ display:block;
+ height:100%;
+ width:0;
+ background:var(--red);
+ animation:loadLine 2.8s forwards;
 }
 
-/* ================= NAV ================= */
+@keyframes loadText{
+ to{transform:translateY(0)}
+}
+
+@keyframes loadLine{
+ to{width:100%}
+}
+
+/* =========================
+   CURSOR
+========================= */
+
+.cursor{
+ position:fixed;
+ width:8px;
+ height:8px;
+ background:#fff;
+ border-radius:50%;
+ pointer-events:none;
+ z-index:99998;
+ transform:translate(-50%,-50%);
+}
+
+.cursor-ring{
+ position:fixed;
+ width:45px;
+ height:45px;
+ border:1px solid rgba(255,255,255,.45);
+ border-radius:50%;
+ pointer-events:none;
+ z-index:99997;
+ transform:translate(-50%,-50%);
+ transition:.2s;
+}
+
+body.hover .cursor-ring{
+ width:85px;
+ height:85px;
+ border-color:var(--red);
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress{
+ position:fixed;
+ top:0;
+ left:0;
+ height:3px;
+ width:0;
+ background:var(--red);
+ z-index:10000;
+}
+
+/* =========================
+   BACKGROUND GRID
+========================= */
+
+.grid{
+ position:fixed;
+ inset:-100px;
+ z-index:-5;
+ opacity:.25;
+ background-image:
+ linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+ background-size:60px 60px;
+ transform:perspective(600px) rotateX(55deg) scale(2);
+ transform-origin:center bottom;
+ animation:gridMove 12s linear infinite;
+}
+
+@keyframes gridMove{
+ to{
+  background-position:0 600px;
+ }
+}
+
+/* =========================
+   FLOATING ORBS
+========================= */
+
+.orb{
+ position:fixed;
+ width:500px;
+ height:500px;
+ border-radius:50%;
+ background:var(--red);
+ filter:blur(180px);
+ opacity:.055;
+ z-index:-4;
+ pointer-events:none;
+}
+
+.orb1{
+ right:-250px;
+ top:10%;
+ animation:orb1 12s ease-in-out infinite alternate;
+}
+
+.orb2{
+ left:-300px;
+ top:60%;
+ animation:orb2 15s ease-in-out infinite alternate;
+}
+
+@keyframes orb1{
+ to{transform:translate(-180px,200px) scale(1.4)}
+}
+
+@keyframes orb2{
+ to{transform:translate(200px,-150px) scale(1.3)}
+}
+
+/* =========================
+   NAV
+========================= */
 
 nav{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    z-index:9000;
-    padding:25px 4vw;
-    transition:.5s;
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ padding:25px 5vw;
+ z-index:9000;
+ transition:.5s;
 }
 
 nav.scrolled{
-    background:rgba(7,7,7,.78);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid var(--line);
-    padding:17px 4vw;
+ padding:15px 5vw;
+ background:rgba(3,3,3,.75);
+ backdrop-filter:blur(20px);
+ border-bottom:1px solid var(--line);
 }
 
 .nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
 }
 
 .logo{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:20px;
-    font-weight:800;
-    letter-spacing:2px;
+ font-family:"Space Grotesk";
+ font-weight:900;
+ letter-spacing:2px;
 }
 
 .logo b{
-    color:var(--accent);
+ color:var(--red);
 }
 
-.menu{
-    display:flex;
-    gap:30px;
+.links{
+ display:flex;
+ gap:30px;
 }
 
-.menu a{
-    position:relative;
-    color:#aaa;
-    text-decoration:none;
-    font-size:12px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    transition:.3s;
+.links a{
+ font-size:10px;
+ letter-spacing:2px;
+ color:#777;
+ text-transform:uppercase;
+ transition:.3s;
 }
 
-.menu a:after{
-    content:"";
-    position:absolute;
-    left:0;
-    bottom:-8px;
-    width:0;
-    height:1px;
-    background:var(--accent);
-    transition:.35s;
+.links a:hover{
+ color:#fff;
 }
 
-.menu a:hover{
-    color:#fff;
-}
-
-.menu a:hover:after{
-    width:100%;
-}
-
-/* ================= HERO ================= */
+/* =========================
+   HERO
+========================= */
 
 .hero{
-    min-height:100vh;
-    position:relative;
-    display:flex;
-    align-items:center;
-    overflow:hidden;
-    padding:140px 7vw 80px;
+ min-height:100vh;
+ padding:150px 7vw 80px;
+ display:flex;
+ align-items:center;
+ position:relative;
+ overflow:hidden;
 }
 
-.hero-grid{
-    position:absolute;
-    inset:0;
-    background-image:
-        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-    background-size:80px 80px;
-    mask-image:linear-gradient(to bottom,#000,transparent);
-}
-
-.hero-glow{
-    position:absolute;
-    width:600px;
-    height:600px;
-    border-radius:50%;
-    background:var(--accent);
-    filter:blur(180px);
-    opacity:.09;
-    right:-200px;
-    top:100px;
-    animation:glowMove 8s ease-in-out infinite alternate;
-}
-
-.hero-content{
-    position:relative;
-    z-index:3;
-    width:100%;
-    max-width:1400px;
-    margin:auto;
-}
-
-.eyebrow{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    color:var(--accent2);
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:4px;
-    text-transform:uppercase;
-    opacity:0;
-    transform:translateY(30px);
-    animation:heroIn 1s 2.7s forwards;
-}
-
-.eyebrow i{
-    display:block;
-    width:45px;
-    height:1px;
-    background:var(--accent);
-}
-
-.hero-title{
-    margin-top:28px;
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(65px,10vw,155px);
-    line-height:.82;
-    letter-spacing:-8px;
-    font-weight:800;
-}
-
-.hero-title .line{
-    display:block;
-    overflow:hidden;
-}
-
-.hero-title .word{
-    display:inline-block;
-    opacity:0;
-    transform:translateY(120%);
-    animation:titleIn 1.2s cubic-bezier(.16,1,.3,1) forwards;
-}
-
-.hero-title .a{
-    animation-delay:2.75s;
-}
-
-.hero-title .b{
-    animation-delay:2.95s;
-}
-
-.hero-title .c{
-    animation-delay:3.15s;
-    color:var(--accent);
-}
-
-.hero-bottom{
-    margin-top:55px;
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
-    gap:40px;
-    max-width:1150px;
-}
-
-.hero-description{
-    max-width:560px;
-    color:#929292;
-    font-size:16px;
-    line-height:1.9;
-    opacity:0;
-    transform:translateY(25px);
-    animation:heroIn 1s 3.4s forwards;
-}
-
-.hero-actions{
-    display:flex;
-    gap:12px;
-    opacity:0;
-    transform:translateY(25px);
-    animation:heroIn 1s 3.6s forwards;
-}
-
-.btn{
-    position:relative;
-    overflow:hidden;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:52px;
-    padding:0 25px;
-    border:1px solid var(--line);
-    text-decoration:none;
-    color:#fff;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    transition:.45s;
-}
-
-.btn span{
-    position:relative;
-    z-index:2;
-}
-
-.btn-primary{
-    background:var(--accent);
-    border-color:var(--accent);
-}
-
-.btn-primary:before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:#fff;
-    transform:translateY(100%);
-    transition:.45s;
-}
-
-.btn-primary:hover{
-    color:#000;
-}
-
-.btn-primary:hover:before{
-    transform:translateY(0);
-}
-
-.btn-outline:hover{
-    border-color:var(--accent);
-    transform:translateY(-5px);
-}
-
-/* ================= SIDE INDEX ================= */
-
-.hero-index{
-    position:absolute;
-    right:4vw;
-    bottom:45px;
-    writing-mode:vertical-rl;
-    color:#444;
-    font-size:10px;
-    letter-spacing:4px;
-}
-
-/* ================= GENERAL ================= */
-
-.section{
-    max-width:1400px;
-    margin:auto;
-    padding:150px 7vw;
-}
-
-.section-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    margin-bottom:70px;
-    gap:30px;
+.hero-inner{
+ width:100%;
+ max-width:1500px;
+ margin:auto;
 }
 
 .kicker{
-    color:var(--accent);
-    font-size:10px;
-    letter-spacing:4px;
-    font-weight:800;
+ display:flex;
+ align-items:center;
+ gap:15px;
+ color:var(--red);
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:4px;
+ text-transform:uppercase;
+}
+
+.kicker:before{
+ content:"";
+ width:45px;
+ height:1px;
+ background:var(--red);
+}
+
+.hero-title{
+ margin-top:35px;
+ font-family:"Space Grotesk";
+ font-size:clamp(70px,13vw,190px);
+ line-height:.73;
+ letter-spacing:-12px;
+ font-weight:900;
+}
+
+.title-line{
+ display:block;
+ overflow:hidden;
+}
+
+.letter{
+ display:inline-block;
+ transform:translateY(130%) rotate(8deg);
+ opacity:0;
+ animation:letterIn 1.2s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.hero-title .title-line:nth-child(1) .letter{
+ animation-delay:2.8s;
+}
+
+.hero-title .title-line:nth-child(2) .letter{
+ animation-delay:3s;
+}
+
+.hero-title .red{
+ color:var(--red);
+}
+
+@keyframes letterIn{
+ to{
+  transform:translateY(0) rotate(0);
+  opacity:1;
+ }
+}
+
+/* floating HUD */
+
+.hud{
+ position:absolute;
+ right:7vw;
+ top:28%;
+ width:190px;
+ height:190px;
+ border:1px solid #222;
+ border-radius:50%;
+ animation:spin 12s linear infinite;
+}
+
+.hud:before,
+.hud:after{
+ content:"";
+ position:absolute;
+ inset:20px;
+ border:1px dashed #333;
+ border-radius:50%;
+}
+
+.hud:after{
+ inset:55px;
+ border:1px solid var(--red);
+ animation:pulse 2s infinite;
+}
+
+.hud-label{
+ position:absolute;
+ left:50%;
+ top:50%;
+ transform:translate(-50%,-50%);
+ font-size:9px;
+ letter-spacing:2px;
+ color:#777;
+ z-index:3;
+}
+
+@keyframes spin{
+ to{transform:rotate(360deg)}
+}
+
+@keyframes pulse{
+ 50%{
+  transform:scale(1.3);
+  opacity:.2;
+ }
+}
+
+/* hero lower */
+
+.hero-bottom{
+ margin-top:80px;
+ display:flex;
+ justify-content:space-between;
+ align-items:end;
+ gap:40px;
+}
+
+.hero-text{
+ max-width:530px;
+ color:#777;
+ font-size:14px;
+ line-height:1.9;
+}
+
+.buttons{
+ display:flex;
+ gap:12px;
+}
+
+.btn{
+ min-width:165px;
+ height:55px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border:1px solid #333;
+ position:relative;
+ overflow:hidden;
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:2px;
+ text-transform:uppercase;
+ transition:.4s;
+}
+
+.btn:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:#fff;
+ transform:translateY(100%);
+ transition:.45s;
+}
+
+.btn:hover:before{
+ transform:translateY(0);
+}
+
+.btn:hover{
+ color:#000;
+}
+
+.btn span{
+ position:relative;
+ z-index:2;
+}
+
+.btn.red{
+ background:var(--red);
+ border-color:var(--red);
+}
+
+/* =========================
+   ROTATING TICKER
+========================= */
+
+.ticker{
+ width:110%;
+ margin-left:-5%;
+ padding:20px 0;
+ border-top:1px solid var(--line);
+ border-bottom:1px solid var(--line);
+ transform:rotate(-2deg);
+ overflow:hidden;
+ background:#070707;
+}
+
+.ticker-track{
+ display:flex;
+ width:max-content;
+ animation:ticker 20s linear infinite;
+}
+
+.ticker-item{
+ font-family:"Space Grotesk";
+ font-size:42px;
+ font-weight:800;
+ padding:0 30px;
+ color:#292929;
+ white-space:nowrap;
+}
+
+.ticker-item b{
+ color:var(--red);
+}
+
+@keyframes ticker{
+ to{transform:translateX(-50%)}
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+ max-width:1500px;
+ margin:auto;
+ padding:170px 7vw;
+}
+
+.section-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:end;
+ margin-bottom:80px;
+}
+
+.number{
+ font-size:10px;
+ color:#444;
+ letter-spacing:3px;
 }
 
 .heading{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(45px,6vw,82px);
-    letter-spacing:-5px;
-    line-height:.9;
-    margin-top:15px;
+ font-family:"Space Grotesk";
+ font-size:clamp(55px,8vw,110px);
+ line-height:.8;
+ letter-spacing:-7px;
+ margin-top:15px;
 }
 
-.heading em{
-    color:#444;
-    font-style:normal;
+.heading span{
+ color:#333;
 }
 
-.section-number{
-    color:#444;
-    font-size:12px;
-    letter-spacing:3px;
+/* =========================
+   ABOUT
+========================= */
+
+.about{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:100px;
 }
 
-.reveal{
-    opacity:0;
-    transform:translateY(80px);
-    transition:
-        opacity 1s cubic-bezier(.16,1,.3,1),
-        transform 1s cubic-bezier(.16,1,.3,1);
+.about-big{
+ font-family:"Space Grotesk";
+ font-size:clamp(30px,4vw,60px);
+ line-height:1;
+ letter-spacing:-3px;
 }
 
-.reveal.active{
-    opacity:1;
-    transform:translateY(0);
+.about-big span{
+ color:var(--red);
 }
 
-/* ================= ABOUT ================= */
-
-.about-layout{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:100px;
+.about-text{
+ color:#777;
+ line-height:2;
+ font-size:14px;
 }
 
-.about-copy{
-    color:#999;
-    font-size:20px;
-    line-height:1.8;
+/* =========================
+   EDITOR TIMELINE
+========================= */
+
+.timeline-box{
+ border:1px solid #222;
+ padding:30px;
+ position:relative;
+ overflow:hidden;
+ background:#070707;
 }
 
-.about-copy strong{
-    color:#fff;
+.timeline-top{
+ display:flex;
+ justify-content:space-between;
+ color:#555;
+ font-size:9px;
+ letter-spacing:2px;
+ margin-bottom:25px;
 }
 
-.about-details{
-    border-top:1px solid var(--line);
+.timecode{
+ color:var(--red);
 }
 
-.detail{
-    padding:25px 0;
-    border-bottom:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
-    gap:30px;
+.timeline-area{
+ height:270px;
+ position:relative;
+ background:
+ repeating-linear-gradient(
+  to bottom,
+  transparent 0,
+  transparent 52px,
+  rgba(255,255,255,.04) 53px
+ );
+ border:1px solid #161616;
+ overflow:hidden;
 }
 
-.detail small{
-    color:#555;
-    font-size:9px;
-    letter-spacing:2px;
+.playhead{
+ position:absolute;
+ top:0;
+ bottom:0;
+ left:0;
+ width:2px;
+ background:var(--red);
+ box-shadow:0 0 20px var(--red);
+ z-index:5;
+ animation:playhead 6s linear infinite;
 }
 
-.detail span{
-    color:#ddd;
-    font-size:14px;
-    text-align:right;
+.playhead:before{
+ content:"";
+ position:absolute;
+ top:0;
+ left:-5px;
+ border-left:6px solid transparent;
+ border-right:6px solid transparent;
+ border-top:8px solid var(--red);
 }
 
-/* ================= SKILLS ================= */
+@keyframes playhead{
+ to{left:100%}
+}
 
-.skills-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    border-top:1px solid var(--line);
-    border-left:1px solid var(--line);
+.clip{
+ position:absolute;
+ height:38px;
+ border:1px solid #333;
+ background:#121212;
+ overflow:hidden;
+}
+
+.clip:after{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:repeating-linear-gradient(
+  90deg,
+  transparent 0 8px,
+  rgba(255,255,255,.05) 9px 10px
+ );
+}
+
+.clip1{
+ top:30px;
+ left:4%;
+ width:35%;
+}
+
+.clip2{
+ top:82px;
+ left:27%;
+ width:42%;
+}
+
+.clip3{
+ top:134px;
+ left:7%;
+ width:25%;
+ border-color:#59201c;
+}
+
+.clip4{
+ top:186px;
+ left:47%;
+ width:45%;
+}
+
+.wave{
+ position:absolute;
+ left:4%;
+ right:4%;
+ top:220px;
+ height:35px;
+ display:flex;
+ align-items:center;
+ gap:2px;
+}
+
+.wave i{
+ width:3px;
+ background:#444;
+ animation:wave .7s ease-in-out infinite alternate;
+}
+
+.wave i:nth-child(3n){
+ background:var(--red);
+}
+
+@keyframes wave{
+ from{height:4px}
+ to{height:30px}
+}
+
+/* =========================
+   SKILLS
+========================= */
+
+.skills{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ border-left:1px solid var(--line);
+ border-top:1px solid var(--line);
 }
 
 .skill{
-    min-height:300px;
-    padding:35px;
-    border-right:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    position:relative;
-    overflow:hidden;
-    transition:.6s;
+ height:330px;
+ padding:30px;
+ border-right:1px solid var(--line);
+ border-bottom:1px solid var(--line);
+ position:relative;
+ overflow:hidden;
+ transition:.5s;
 }
 
-.skill:before{
-    content:"";
-    position:absolute;
-    width:220px;
-    height:220px;
-    background:var(--accent);
-    border-radius:50%;
-    filter:blur(100px);
-    opacity:0;
-    right:-100px;
-    bottom:-100px;
-    transition:.6s;
+.skill-number{
+ color:#444;
+ font-size:10px;
+ letter-spacing:2px;
 }
 
-.skill:hover:before{
-    opacity:.16;
+.skill-shape{
+ position:absolute;
+ right:-50px;
+ top:-50px;
+ width:150px;
+ height:150px;
+ border:1px solid #222;
+ border-radius:50%;
+ transition:.7s;
 }
 
-.skill:hover{
-    background:#121212;
-}
-
-.skill-no{
-    color:#444;
-    font-size:11px;
-    letter-spacing:2px;
+.skill:hover .skill-shape{
+ transform:scale(2.5) rotate(90deg);
+ border-color:var(--red);
 }
 
 .skill h3{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:26px;
-    margin-top:90px;
-    margin-bottom:18px;
+ position:absolute;
+ bottom:75px;
+ left:30px;
+ font-family:"Space Grotesk";
+ font-size:27px;
 }
 
 .skill p{
-    color:#777;
-    font-size:13px;
-    line-height:1.7;
+ position:absolute;
+ bottom:30px;
+ left:30px;
+ right:30px;
+ color:#666;
+ font-size:11px;
+ line-height:1.6;
 }
 
-/* ================= TOOLS ================= */
+.skill:hover{
+ background:#0c0c0c;
+ transform:translateY(-10px);
+}
+
+/* =========================
+   TOOLS
+========================= */
 
 .tools{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
+ display:flex;
+ flex-wrap:wrap;
+ gap:12px;
 }
 
 .tool{
-    padding:18px 23px;
-    border:1px solid var(--line);
-    color:#aaa;
-    font-size:12px;
-    transition:.4s;
+ border:1px solid #292929;
+ padding:22px 27px;
+ color:#888;
+ font-size:11px;
+ transition:.5s;
+ position:relative;
+ overflow:hidden;
+}
+
+.tool:after{
+ content:"";
+ position:absolute;
+ width:5px;
+ height:5px;
+ background:var(--red);
+ border-radius:50%;
+ left:8px;
+ top:8px;
+ box-shadow:0 0 15px var(--red);
 }
 
 .tool:hover{
-    color:#fff;
-    border-color:var(--accent);
-    transform:translateY(-7px);
+ color:#fff;
+ border-color:var(--red);
+ transform:translateY(-8px) rotate(-1deg);
 }
 
-/* ================= EXPERIENCE ================= */
+/* =========================
+   EXPERIENCE
+========================= */
 
 .experience{
-    border-top:1px solid var(--line);
+ border-top:1px solid var(--line);
 }
 
 .job{
-    display:grid;
-    grid-template-columns:160px 1fr 120px;
-    align-items:center;
-    gap:40px;
-    padding:40px 0;
-    border-bottom:1px solid var(--line);
-    transition:.45s;
+ display:grid;
+ grid-template-columns:170px 1fr 120px;
+ align-items:center;
+ gap:30px;
+ padding:45px 0;
+ border-bottom:1px solid var(--line);
+ transition:.5s;
+ position:relative;
+ overflow:hidden;
+}
+
+.job:before{
+ content:"";
+ position:absolute;
+ left:-100%;
+ top:0;
+ width:100%;
+ height:100%;
+ background:linear-gradient(
+ 90deg,
+ rgba(255,59,48,.08),
+ transparent
+ );
+ transition:.6s;
+}
+
+.job:hover:before{
+ left:0;
 }
 
 .job:hover{
-    padding-left:20px;
-    background:linear-gradient(90deg,rgba(255,59,48,.05),transparent);
+ padding-left:30px;
 }
 
 .job-date{
-    color:#555;
-    font-size:10px;
-    letter-spacing:2px;
+ color:#555;
+ font-size:10px;
+ letter-spacing:2px;
 }
 
 .job-title{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:28px;
-    font-weight:600;
+ font-family:"Space Grotesk";
+ font-size:30px;
 }
 
 .job-place{
-    color:var(--accent2);
-    font-size:11px;
-    letter-spacing:1px;
-    margin-top:8px;
+ margin-top:8px;
+ color:var(--red);
+ font-size:11px;
+ letter-spacing:2px;
 }
 
 .job-type{
-    text-align:right;
-    color:#666;
-    font-size:10px;
-    letter-spacing:2px;
+ color:#444;
+ font-size:9px;
+ text-align:right;
 }
 
-/* ================= PHOTO ================= */
+/* =========================
+   BIG IDENTITY
+========================= */
 
-.photo-section{
-    position:relative;
+.identity{
+ height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ position:relative;
+ overflow:hidden;
 }
 
-.photo-stage{
-    max-width:700px;
-    margin-left:auto;
-    margin-right:auto;
-    position:relative;
+.identity-ring{
+ position:absolute;
+ width:600px;
+ height:600px;
+ border:1px solid #171717;
+ border-radius:50%;
+ animation:spin 20s linear infinite;
 }
 
-.photo-frame{
-    position:relative;
-    height:760px;
-    overflow:hidden;
-    cursor:none;
-    border:1px solid var(--line);
+.identity-ring:before{
+ content:"";
+ position:absolute;
+ inset:60px;
+ border:1px dashed #222;
+ border-radius:50%;
 }
 
-.photo-frame:before{
-    content:"";
-    position:absolute;
-    inset:20px;
-    border:1px solid rgba(255,255,255,.15);
-    z-index:2;
-    pointer-events:none;
-    transition:.6s;
+.identity-ring:after{
+ content:"";
+ position:absolute;
+ width:12px;
+ height:12px;
+ background:var(--red);
+ border-radius:50%;
+ top:-6px;
+ left:50%;
+ box-shadow:0 0 35px var(--red);
 }
 
-.photo-frame:after{
-    content:"CLICK TO EXPAND";
-    position:absolute;
-    right:40px;
-    top:40px;
-    z-index:4;
-    color:#fff;
-    font-size:9px;
-    letter-spacing:3px;
-    opacity:.7;
+.identity-text{
+ position:relative;
+ z-index:3;
+ text-align:center;
+ font-family:"Space Grotesk";
+ font-size:clamp(70px,14vw,210px);
+ line-height:.7;
+ letter-spacing:-14px;
+ font-weight:900;
 }
 
-.photo-frame:hover:before{
-    inset:10px;
-    border-color:rgba(255,59,48,.6);
+.identity-text .outline{
+ color:transparent;
+ -webkit-text-stroke:1px #444;
 }
 
-.photo-frame img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    filter:saturate(.8);
-    transition:1.2s cubic-bezier(.16,1,.3,1);
+.identity-text .red{
+ color:var(--red);
 }
 
-.photo-frame:hover img{
-    transform:scale(1.06);
-    filter:saturate(1);
+/* =========================
+   CV
+========================= */
+
+.cv{
+ border:1px solid #252525;
+ min-height:330px;
+ padding:65px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ position:relative;
+ overflow:hidden;
 }
 
-.photo-info{
-    position:absolute;
-    left:35px;
-    bottom:35px;
-    z-index:4;
-}
-
-.photo-info small{
-    color:var(--accent2);
-    font-size:9px;
-    letter-spacing:3px;
-}
-
-.photo-info h3{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:32px;
-    margin-top:8px;
-}
-
-/* ================= CV ================= */
-
-.cv-box{
-    border:1px solid var(--line);
-    padding:70px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:40px;
-    position:relative;
-    overflow:hidden;
-}
-
-.cv-box:before{
-    content:"CV";
-    position:absolute;
-    right:-20px;
-    bottom:-100px;
-    font-family:"Space Grotesk",sans-serif;
-    font-size:300px;
-    font-weight:900;
-    color:#111;
-    z-index:0;
+.cv:before{
+ content:"CV";
+ position:absolute;
+ right:-20px;
+ bottom:-130px;
+ font-family:"Space Grotesk";
+ font-size:350px;
+ font-weight:900;
+ color:#0d0d0d;
 }
 
 .cv-content{
-    position:relative;
-    z-index:2;
+ position:relative;
+ z-index:2;
 }
 
-.cv-content h2{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(40px,5vw,70px);
-    letter-spacing:-4px;
+.cv h2{
+ font-family:"Space Grotesk";
+ font-size:90px;
+ letter-spacing:-7px;
 }
 
-.cv-content p{
-    margin-top:15px;
-    color:#777;
+.cv p{
+ color:#666;
+ margin-top:10px;
 }
 
-/* ================= CONTACT ================= */
+/* =========================
+   CONTACT
+========================= */
 
 .contact{
-    min-height:75vh;
-    display:flex;
-    align-items:center;
+ min-height:100vh;
+ display:flex;
+ align-items:center;
 }
 
-.contact-inner{
-    width:100%;
+.contact h2{
+ font-family:"Space Grotesk";
+ font-size:clamp(70px,13vw,190px);
+ line-height:.72;
+ letter-spacing:-13px;
 }
 
-.contact-title{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(60px,10vw,150px);
-    line-height:.8;
-    letter-spacing:-9px;
+.contact h2 span{
+ color:var(--red);
 }
 
-.contact-title span{
-    color:var(--accent);
+.email{
+ display:inline-block;
+ margin-top:60px;
+ color:#777;
+ border-bottom:1px solid #333;
+ padding-bottom:12px;
+ transition:.4s;
 }
 
-.contact-email{
-    display:inline-block;
-    margin-top:55px;
-    color:#aaa;
-    text-decoration:none;
-    font-size:17px;
-    border-bottom:1px solid #555;
-    padding-bottom:10px;
-    transition:.35s;
+.email:hover{
+ color:#fff;
+ border-color:var(--red);
 }
 
-.contact-email:hover{
-    color:#fff;
-    border-color:var(--accent);
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+.reveal{
+ opacity:0;
+ transform:translateY(100px) scale(.96);
+ transition:
+ opacity 1.2s cubic-bezier(.16,1,.3,1),
+ transform 1.2s cubic-bezier(.16,1,.3,1);
 }
 
-/* ================= FOOTER ================= */
+.reveal.show{
+ opacity:1;
+ transform:translateY(0) scale(1);
+}
+
+/* =========================
+   FOOTER
+========================= */
 
 footer{
-    border-top:1px solid var(--line);
-    padding:30px 7vw;
-    display:flex;
-    justify-content:space-between;
-    color:#555;
-    font-size:10px;
-    letter-spacing:1px;
+ padding:30px 7vw;
+ border-top:1px solid var(--line);
+ display:flex;
+ justify-content:space-between;
+ color:#444;
+ font-size:9px;
+ letter-spacing:2px;
 }
 
-/* ================= VIEWER ================= */
-
-.viewer{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.97);
-    z-index:15000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:30px;
-    opacity:0;
-    visibility:hidden;
-    transition:.5s;
-}
-
-.viewer.open{
-    opacity:1;
-    visibility:visible;
-}
-
-.viewer img{
-    max-width:90vw;
-    max-height:90vh;
-    transform:scale(.7) rotate(-3deg);
-    opacity:0;
-    transition:.7s cubic-bezier(.16,1,.3,1);
-}
-
-.viewer.open img{
-    transform:scale(1) rotate(0);
-    opacity:1;
-}
-
-.viewer-close{
-    position:absolute;
-    right:35px;
-    top:25px;
-    font-size:45px;
-    color:#fff;
-    cursor:pointer;
-}
-
-/* ================= KEYFRAMES ================= */
-
-@keyframes loaderText{
-    from{
-        transform:translateY(100%);
-        opacity:0;
-    }
-    to{
-        transform:translateY(0);
-        opacity:1;
-    }
-}
-
-@keyframes loaderLine{
-    to{
-        width:150px;
-    }
-}
-
-@keyframes loaderOut{
-    to{
-        opacity:0;
-        visibility:hidden;
-    }
-}
-
-@keyframes heroIn{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes titleIn{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes glowMove{
-    from{
-        transform:translate(0,0);
-    }
-    to{
-        transform:translate(-100px,80px);
-    }
-}
-
-/* ================= MOBILE ================= */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:900px){
 
-    body{
-        cursor:auto;
-    }
+ body{
+  cursor:auto;
+ }
 
-    .cursor,
-    .cursor-ring{
-        display:none;
-    }
+ .cursor,
+ .cursor-ring{
+  display:none;
+ }
 
-    .menu{
-        display:none;
-    }
+ .links{
+  display:none;
+ }
 
-    .hero{
-        padding:130px 25px 70px;
-    }
+ .hero{
+  padding:130px 25px 70px;
+ }
 
-    .hero-title{
-        font-size:58px;
-        letter-spacing:-4px;
-    }
+ .hero-title{
+  font-size:65px;
+  letter-spacing:-6px;
+ }
 
-    .hero-bottom{
-        flex-direction:column;
-        align-items:flex-start;
-    }
+ .hud{
+  width:130px;
+  height:130px;
+  right:-30px;
+  top:20%;
+ }
 
-    .hero-actions{
-        flex-wrap:wrap;
-    }
+ .hero-bottom{
+  flex-direction:column;
+  align-items:flex-start;
+ }
 
-    .section{
-        padding:100px 25px;
-    }
+ .buttons{
+  width:100%;
+  flex-direction:column;
+ }
 
-    .section-head{
-        margin-bottom:45px;
-    }
+ .btn{
+  width:100%;
+ }
 
-    .about-layout{
-        grid-template-columns:1fr;
-        gap:55px;
-    }
+ .section{
+  padding:110px 25px;
+ }
 
-    .skills-grid{
-        grid-template-columns:1fr 1fr;
-    }
+ .about{
+  grid-template-columns:1fr;
+  gap:50px;
+ }
 
-    .job{
-        grid-template-columns:90px 1fr;
-        gap:20px;
-    }
+ .skills{
+  grid-template-columns:1fr 1fr;
+ }
 
-    .job-type{
-        display:none;
-    }
+ .job{
+  grid-template-columns:100px 1fr;
+ }
 
-    .photo-frame{
-        height:600px;
-    }
+ .job-type{
+  display:none;
+ }
 
-    .cv-box{
-        padding:45px 30px;
-        flex-direction:column;
-        align-items:flex-start;
-    }
+ .identity-ring{
+  width:350px;
+  height:350px;
+ }
 
-    footer{
-        flex-direction:column;
-        gap:10px;
-    }
+ .identity-text{
+  font-size:65px;
+  letter-spacing:-5px;
+ }
+
+ .cv{
+  padding:40px 25px;
+  flex-direction:column;
+  align-items:flex-start;
+ }
+
+ .cv h2{
+  font-size:65px;
+ }
+
+ footer{
+  flex-direction:column;
+  gap:12px;
+ }
+
 }
 
 @media(max-width:550px){
 
-    .hero-title{
-        font-size:48px;
-    }
+ .hero-title{
+  font-size:50px;
+ }
 
-    .hero-description{
-        font-size:14px;
-    }
+ .skills{
+  grid-template-columns:1fr;
+ }
 
-    .skills-grid{
-        grid-template-columns:1fr;
-    }
+ .timeline-area{
+  height:220px;
+ }
 
-    .skill{
-        min-height:240px;
-    }
+ .identity-text{
+  font-size:55px;
+ }
 
-    .skill h3{
-        margin-top:60px;
-    }
+ .contact h2{
+  font-size:65px;
+  letter-spacing:-6px;
+ }
 
-    .job{
-        grid-template-columns:1fr;
-    }
-
-    .photo-frame{
-        height:520px;
-    }
-
-    .contact-title{
-        font-size:62px;
-        letter-spacing:-5px;
-    }
+ .ticker-item{
+  font-size:28px;
+ }
 
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="noise"></div>
+<!-- LOADER -->
+
+<div class="loader" id="loader">
+
+ <div class="loader-box">
+
+  <div class="loader-name">
+   <span>SUBAS</span>
+  </div>
+
+  <div class="loader-percent" id="percent">
+   00%
+  </div>
+
+  <div class="loader-line">
+   <i></i>
+  </div>
+
+ </div>
+
+</div>
+
+
+<div class="progress"></div>
 
 <div class="cursor"></div>
 <div class="cursor-ring"></div>
 
+<div class="grid"></div>
 
-<!-- LOADER -->
-
-<div class="loader">
-    <div class="loader-inner">
-        <div class="loader-name">SUBAS</div>
-        <div class="loader-line"></div>
-    </div>
-</div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
 
 
 <!-- NAV -->
 
 <nav id="nav">
 
-<div class="nav">
+ <div class="nav">
 
-<div class="logo">
-SUBAS <b>GHIMIRE</b>
-</div>
+  <div class="logo">
+   SUBAS <b>GHIMIRE</b>
+  </div>
 
-<div class="menu">
-<a href="#about">About</a>
-<a href="#skills">Skills</a>
-<a href="#experience">Experience</a>
-<a href="#photo">Profile</a>
-<a href="#cv">CV</a>
-<a href="#contact">Contact</a>
-</div>
+  <div class="links">
+   <a href="#about">About</a>
+   <a href="#skills">Skills</a>
+   <a href="#experience">Experience</a>
+   <a href="#cv">CV</a>
+   <a href="#contact">Contact</a>
+  </div>
 
-</div>
+ </div>
 
 </nav>
 
@@ -1021,134 +1229,230 @@ SUBAS <b>GHIMIRE</b>
 
 <header class="hero">
 
-<div class="hero-grid"></div>
-<div class="hero-glow"></div>
+ <div class="hero-inner">
 
-<div class="hero-content">
+  <div class="kicker">
+   PROFESSIONAL VIDEO EDITOR
+  </div>
 
-<div class="eyebrow">
-<i></i>
-Professional Video Editor
-</div>
 
-<h1 class="hero-title">
+  <h1 class="hero-title">
 
-<span class="line">
-<span class="word a">VISUAL</span>
-</span>
+   <span class="title-line">
+    <span class="letter">V</span>
+    <span class="letter">I</span>
+    <span class="letter">S</span>
+    <span class="letter">U</span>
+    <span class="letter">A</span>
+    <span class="letter">L</span>
+   </span>
 
-<span class="line">
-<span class="word b">STORY</span><span class="word c">TELLER.</span>
-</span>
+   <span class="title-line">
+    <span class="letter">E</span>
+    <span class="letter">D</span>
+    <span class="letter red">I</span>
+    <span class="letter red">T</span>
+    <span class="letter red">O</span>
+    <span class="letter red">R</span>
+   </span>
 
-</h1>
+  </h1>
 
-<div class="hero-bottom">
 
-<p class="hero-description">
-I am Subas Ghimire, a Professional Video Editor
-currently working at Kantipur Television. I transform
-raw footage into polished visual stories through
-editing, motion, color and post-production.
-</p>
+  <div class="hud">
+   <div class="hud-label">
+    MOTION / 01
+   </div>
+  </div>
 
-<div class="hero-actions">
 
-<a href="#contact" class="btn btn-primary">
-<span>Let's Work</span>
-</a>
+  <div class="hero-bottom">
 
-<a href="#cv" class="btn btn-outline">
-<span>View CV</span>
-</a>
+   <p class="hero-text">
+    I am Subas Ghimire, a Professional Video Editor
+    currently working at Kantipur Television.
+    I transform footage into visual stories through
+    editing, motion graphics, color and post-production.
+   </p>
 
-</div>
 
-</div>
+   <div class="buttons">
 
-</div>
+    <a href="#experience" class="btn red">
+     <span>Explore Work</span>
+    </a>
 
-<div class="hero-index">
-SCROLL TO EXPLORE — 2026
-</div>
+    <a href="#cv" class="btn">
+     <span>View CV</span>
+    </a>
+
+   </div>
+
+  </div>
+
+ </div>
 
 </header>
+
+
+<!-- TICKER -->
+
+<div class="ticker">
+
+ <div class="ticker-track">
+
+  <div class="ticker-item">
+   VIDEO EDITING <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   MOTION GRAPHICS <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   POST PRODUCTION <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   COLOR <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   VIDEO EDITING <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   MOTION GRAPHICS <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   POST PRODUCTION <b>●</b>
+  </div>
+
+  <div class="ticker-item">
+   COLOR <b>●</b>
+  </div>
+
+ </div>
+
+</div>
 
 
 <!-- ABOUT -->
 
 <section class="section" id="about">
 
-<div class="section-head reveal">
+ <div class="section-head reveal">
 
-<div>
-<div class="kicker">01 / ABOUT</div>
-<h2 class="heading">
-THE PERSON<br>
-<em>BEHIND THE EDIT.</em>
-</h2>
-</div>
+  <div>
+   <div class="kicker">01 / ABOUT</div>
 
-<div class="section-number">
-SUBAS GHIMIRE
-</div>
+   <h2 class="heading">
+    BEHIND<br>
+    <span>THE CUT.</span>
+   </h2>
+  </div>
 
-</div>
+  <div class="number">
+   2026 / SUBAS
+  </div>
 
-
-<div class="about-layout">
-
-<div class="about-copy reveal">
-
-I am <strong>Subas Ghimire</strong>, a Professional
-Video Editor currently working at
-<strong>Kantipur Television.</strong>
-
-<br><br>
-
-My work is built around rhythm, composition,
-timing, motion, color and sound — turning
-ordinary footage into a clear and engaging
-visual experience.
-
-</div>
+ </div>
 
 
-<div class="about-details reveal">
+ <div class="about">
 
-<div class="detail">
-<small>NAME</small>
-<span>Subas Ghimire</span>
-</div>
+  <div class="about-big reveal">
 
-<div class="detail">
-<small>ROLE</small>
-<span>Professional Video Editor</span>
-</div>
+   I don't just<br>
+   cut footage.<br>
+   I <span>build stories.</span>
 
-<div class="detail">
-<small>CURRENT</small>
-<span>Kantipur Television</span>
-</div>
+  </div>
 
-<div class="detail">
-<small>LOCATION</small>
-<span>Kathmandu, Nepal</span>
-</div>
 
-<div class="detail">
-<small>EMAIL</small>
-<span>ghimiresubas347@gmail.com</span>
-</div>
+  <div class="about-text reveal">
 
-<div class="detail">
-<small>PHONE</small>
-<span>9766454587</span>
-</div>
+   Professional Video Editor with experience
+   across television production and visual
+   post-production.
 
-</div>
+   <br><br>
 
-</div>
+   My workflow combines precision editing,
+   motion graphics, visual rhythm, color,
+   sound and finishing.
+
+   <br><br>
+
+   The goal is simple:
+   make every frame communicate.
+
+  </div>
+
+ </div>
+
+</section>
+
+
+<!-- EDITOR TIMELINE -->
+
+<section class="section">
+
+ <div class="section-head reveal">
+
+  <div>
+   <div class="kicker">02 / EDIT SUITE</div>
+
+   <h2 class="heading">
+    INSIDE<br>
+    <span>THE TIMELINE.</span>
+   </h2>
+  </div>
+
+ </div>
+
+
+ <div class="timeline-box reveal">
+
+  <div class="timeline-top">
+
+   <span>EDITOR / SUBAS GHIMIRE</span>
+
+   <span class="timecode">
+    REC ● 00:24:18:07
+   </span>
+
+  </div>
+
+
+  <div class="timeline-area">
+
+   <div class="playhead"></div>
+
+   <div class="clip clip1"></div>
+   <div class="clip clip2"></div>
+   <div class="clip clip3"></div>
+   <div class="clip clip4"></div>
+
+   <div class="wave">
+
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+
+   </div>
+
+  </div>
+
+ </div>
 
 </section>
 
@@ -1157,87 +1461,117 @@ visual experience.
 
 <section class="section" id="skills">
 
-<div class="section-head reveal">
+ <div class="section-head reveal">
 
-<div>
-<div class="kicker">02 / EXPERTISE</div>
-<h2 class="heading">
-WHAT I<br>
-<em>DO.</em>
-</h2>
-</div>
+  <div>
 
-</div>
+   <div class="kicker">03 / EXPERTISE</div>
+
+   <h2 class="heading">
+    WHAT<br>
+    <span>I DO.</span>
+   </h2>
+
+  </div>
+
+ </div>
 
 
-<div class="skills-grid">
+ <div class="skills">
 
-<div class="skill reveal">
-<div class="skill-no">01</div>
-<h3>Video Editing</h3>
-<p>
-Story structure, precise cutting, pacing,
-sequencing and professional finishing.
-</p>
-</div>
+  <div class="skill reveal">
 
-<div class="skill reveal">
-<div class="skill-no">02</div>
-<h3>Motion Graphics</h3>
-<p>
-Dynamic titles, transitions, visual elements
-and motion-based storytelling.
-</p>
-</div>
+   <div class="skill-number">01</div>
+   <div class="skill-shape"></div>
 
-<div class="skill reveal">
-<div class="skill-no">03</div>
-<h3>Color</h3>
-<p>
-Color correction, grading and visual consistency
-for a polished final image.
-</p>
-</div>
+   <h3>Video Editing</h3>
 
-<div class="skill reveal">
-<div class="skill-no">04</div>
-<h3>Post Production</h3>
-<p>
-Audio, visual polish, finishing and
-professional delivery.
-</p>
-</div>
+   <p>
+    Story structure, pacing, rhythm,
+    precision cutting and final delivery.
+   </p>
 
-</div>
+  </div>
+
+
+  <div class="skill reveal">
+
+   <div class="skill-number">02</div>
+   <div class="skill-shape"></div>
+
+   <h3>Motion Graphics</h3>
+
+   <p>
+    Animated typography, graphics,
+    transitions and visual movement.
+   </p>
+
+  </div>
+
+
+  <div class="skill reveal">
+
+   <div class="skill-number">03</div>
+   <div class="skill-shape"></div>
+
+   <h3>Color</h3>
+
+   <p>
+    Color correction, grading and
+    visual consistency.
+   </p>
+
+  </div>
+
+
+  <div class="skill reveal">
+
+   <div class="skill-number">04</div>
+   <div class="skill-shape"></div>
+
+   <h3>Post Production</h3>
+
+   <p>
+    Audio, finishing, visual polish
+    and professional output.
+   </p>
+
+  </div>
+
+ </div>
 
 </section>
 
 
-<!-- TOOLS -->
+<!-- SOFTWARE -->
 
 <section class="section">
 
-<div class="section-head reveal">
+ <div class="section-head reveal">
 
-<div>
-<div class="kicker">03 / SOFTWARE</div>
-<h2 class="heading">
-MY<br>
-<em>TOOLS.</em>
-</h2>
-</div>
+  <div>
 
-</div>
+   <div class="kicker">04 / SOFTWARE</div>
 
-<div class="tools reveal">
+   <h2 class="heading">
+    MY<br>
+    <span>TOOLS.</span>
+   </h2>
 
-<div class="tool">Adobe Premiere Pro</div>
-<div class="tool">Adobe After Effects</div>
-<div class="tool">Adobe Photoshop</div>
-<div class="tool">Adobe Audition</div>
-<div class="tool">DaVinci Resolve</div>
+  </div>
 
-</div>
+ </div>
+
+
+ <div class="tools reveal">
+
+  <div class="tool">Adobe Premiere Pro</div>
+  <div class="tool">Adobe After Effects</div>
+  <div class="tool">Adobe Photoshop</div>
+  <div class="tool">Adobe Audition</div>
+  <div class="tool">DaVinci Resolve</div>
+
+ </div>
 
 </section>
 
@@ -1246,127 +1580,124 @@ MY<br>
 
 <section class="section" id="experience">
 
-<div class="section-head reveal">
+ <div class="section-head reveal">
 
-<div>
-<div class="kicker">04 / EXPERIENCE</div>
-<h2 class="heading">
-WHERE I'VE<br>
-<em>WORKED.</em>
-</h2>
-</div>
+  <div>
 
-</div>
+   <div class="kicker">05 / EXPERIENCE</div>
 
+   <h2 class="heading">
+    THE<br>
+    <span>JOURNEY.</span>
+   </h2>
 
-<div class="experience">
+  </div>
 
-<div class="job reveal">
-
-<div class="job-date">
-CURRENT
-</div>
-
-<div>
-<div class="job-title">
-Video Editor / Visual Editor
-</div>
-<div class="job-place">
-Kantipur Television
-</div>
-</div>
-
-<div class="job-type">
-PRESENT
-</div>
-
-</div>
+ </div>
 
 
-<div class="job reveal">
-
-<div class="job-date">
-4 MONTHS
-</div>
-
-<div>
-<div class="job-title">
-Video Editor
-</div>
-<div class="job-place">
-Global Television HD
-</div>
-</div>
-
-<div class="job-type">
-PAST
-</div>
-
-</div>
+ <div class="experience">
 
 
-<div class="job reveal">
+  <div class="job reveal">
 
-<div class="job-date">
-4 MONTHS
-</div>
+   <div class="job-date">
+    CURRENT
+   </div>
 
-<div>
-<div class="job-title">
-Video Editor
-</div>
-<div class="job-place">
-Janata Television
-</div>
-</div>
+   <div>
 
-<div class="job-type">
-PAST
-</div>
+    <div class="job-title">
+     Video Editor / Visual Editor
+    </div>
 
-</div>
+    <div class="job-place">
+     Kantipur Television
+    </div>
 
-</div>
+   </div>
+
+   <div class="job-type">
+    PRESENT
+   </div>
+
+  </div>
+
+
+  <div class="job reveal">
+
+   <div class="job-date">
+    4 MONTHS
+   </div>
+
+   <div>
+
+    <div class="job-title">
+     Video Editor
+    </div>
+
+    <div class="job-place">
+     Global Television HD
+    </div>
+
+   </div>
+
+   <div class="job-type">
+    PAST
+   </div>
+
+  </div>
+
+
+  <div class="job reveal">
+
+   <div class="job-date">
+    4 MONTHS
+   </div>
+
+   <div>
+
+    <div class="job-title">
+     Video Editor
+    </div>
+
+    <div class="job-place">
+     Janata Television
+    </div>
+
+   </div>
+
+   <div class="job-type">
+    PAST
+   </div>
+
+  </div>
+
+
+ </div>
 
 </section>
 
 
-<!-- PHOTO -->
+<!-- BIG IDENTITY -->
 
-<section class="section photo-section" id="photo">
+<section class="identity">
 
-<div class="section-head reveal">
+ <div class="identity-ring"></div>
 
-<div>
-<div class="kicker">05 / PROFILE</div>
-<h2 class="heading">
-ONE FRAME.<br>
-<em>ONE IDENTITY.</em>
-</h2>
-</div>
+ <div class="identity-text reveal">
 
-</div>
+  <span>SUBAS</span><br>
 
+  <span class="outline">
+   GHIMIRE
+  </span><br>
 
-<div class="photo-stage reveal">
+  <span class="red">
+   EDITOR.
+  </span>
 
-<div class="photo-frame" onclick="openViewer()">
-
-<img
-src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
-alt="Subas Ghimire">
-
-<div class="photo-info">
-
-<small>PROFESSIONAL VIDEO EDITOR</small>
-
-<h3>Subas Ghimire</h3>
-
-</div>
-
-</div>
-
-</div>
+ </div>
 
 </section>
 
@@ -1375,34 +1706,37 @@ alt="Subas Ghimire">
 
 <section class="section" id="cv">
 
-<div class="cv-box reveal">
+ <div class="cv reveal">
 
-<div class="cv-content">
+  <div class="cv-content">
 
-<div class="kicker">
-06 / RESUME
-</div>
+   <div class="kicker">
+    06 / RESUME
+   </div>
 
-<h2>
-MY CV.
-</h2>
+   <h2>
+    MY CV.
+   </h2>
 
-<p>
-View or download my professional CV.
-</p>
+   <p>
+    Professional profile and career information.
+   </p>
 
-</div>
+  </div>
 
-<a
-href="YOUR_GOOGLE_DRIVE_CV_LINK"
-target="_blank"
-class="btn btn-primary">
 
-<span>View / Download CV</span>
+  <a
+   href="YOUR_GOOGLE_DRIVE_CV_LINK"
+   target="_blank"
+   class="btn red">
 
-</a>
+   <span>
+    View / Download CV
+   </span>
 
-</div>
+  </a>
+
+ </div>
 
 </section>
 
@@ -1411,185 +1745,283 @@ class="btn btn-primary">
 
 <section class="section contact" id="contact">
 
-<div class="contact-inner reveal">
+ <div class="reveal">
 
-<div class="kicker">
-07 / CONTACT
-</div>
+  <div class="kicker">
+   07 / CONTACT
+  </div>
 
-<h2 class="contact-title">
-LET'S<br>
-MAKE <span>IMPACT.</span>
-</h2>
+  <h2>
+   LET'S<br>
+   MAKE <span>IMPACT.</span>
+  </h2>
 
-<a
-class="contact-email"
-href="mailto:ghimiresubas347@gmail.com">
+  <a
+   href="mailto:ghimiresubas347@gmail.com"
+   class="email">
 
-ghimiresubas347@gmail.com
+   ghimiresubas347@gmail.com
 
-</a>
+  </a>
 
-</div>
+ </div>
 
 </section>
 
 
-<!-- FOOTER -->
-
 <footer>
 
-<div>
-© 2026 SUBAS GHIMIRE
-</div>
+ <div>
+  © 2026 SUBAS GHIMIRE
+ </div>
 
-<div>
-PROFESSIONAL VIDEO EDITOR
-</div>
+ <div>
+  PROFESSIONAL VIDEO EDITOR
+ </div>
 
 </footer>
 
 
-<!-- IMAGE VIEWER -->
-
-<div class="viewer" id="viewer">
-
-<div class="viewer-close" onclick="closeViewer()">
-×
-</div>
-
-<img
-src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
-alt="Subas Ghimire">
-
-</div>
-
-
 <script>
 
-/* ================= CURSOR ================= */
+/* =========================
+   LOADER COUNTER
+========================= */
 
-const cursor = document.querySelector(".cursor");
-const ring = document.querySelector(".cursor-ring");
+let num=0;
+
+const counter=setInterval(()=>{
+
+ num++;
+
+ document.getElementById("percent").innerText=
+  String(num).padStart(2,"0")+"%";
+
+ if(num>=100){
+
+  clearInterval(counter);
+
+  setTimeout(()=>{
+
+   document.getElementById("loader")
+   .classList.add("hide");
+
+  },500);
+
+ }
+
+},25);
+
+
+/* =========================
+   CURSOR
+========================= */
+
+const cursor=document.querySelector(".cursor");
+const ring=document.querySelector(".cursor-ring");
 
 document.addEventListener("mousemove",(e)=>{
 
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top = e.clientY + "px";
+ cursor.style.left=e.clientX+"px";
+ cursor.style.top=e.clientY+"px";
 
-    ring.animate(
-        {
-            left:e.clientX+"px",
-            top:e.clientY+"px"
-        },
-        {
-            duration:450,
-            fill:"forwards"
-        }
-    );
-
-});
-
-
-document.querySelectorAll("a,.photo-frame,.skill,.tool").forEach(el=>{
-
-    el.addEventListener("mouseenter",()=>{
-
-        ring.style.width="65px";
-        ring.style.height="65px";
-
-    });
-
-    el.addEventListener("mouseleave",()=>{
-
-        ring.style.width="38px";
-        ring.style.height="38px";
-
-    });
+ ring.animate(
+  {
+   left:e.clientX+"px",
+   top:e.clientY+"px"
+  },
+  {
+   duration:350,
+   fill:"forwards"
+  }
+ );
 
 });
 
 
-/* ================= NAV ================= */
+document.querySelectorAll(
+ "a,.skill,.tool,.job,.clip"
+).forEach(el=>{
+
+ el.addEventListener("mouseenter",()=>{
+  document.body.classList.add("hover");
+ });
+
+ el.addEventListener("mouseleave",()=>{
+  document.body.classList.remove("hover");
+ });
+
+});
+
+
+/* =========================
+   NAV
+========================= */
 
 window.addEventListener("scroll",()=>{
 
-    const nav=document.getElementById("nav");
-
-    if(window.scrollY>50){
-        nav.classList.add("scrolled");
-    }else{
-        nav.classList.remove("scrolled");
-    }
+ document.getElementById("nav")
+ .classList.toggle(
+  "scrolled",
+  window.scrollY>50
+ );
 
 });
 
 
-/* ================= SCROLL REVEAL ================= */
+/* =========================
+   PAGE PROGRESS
+========================= */
 
-const observer=new IntersectionObserver(
+window.addEventListener("scroll",()=>{
 
-(entries)=>{
+ const max=
+ document.body.scrollHeight-window.innerHeight;
 
-    entries.forEach(entry=>{
+ const value=
+ (window.scrollY/max)*100;
 
-        if(entry.isIntersecting){
+ document.querySelector(".progress")
+ .style.width=value+"%";
 
-            entry.target.classList.add("active");
+});
 
-        }
 
-    });
+/* =========================
+   SCROLL REVEAL
+========================= */
 
-},
-{
-    threshold:.12
-}
+const observer=
+new IntersectionObserver(
+
+ entries=>{
+
+  entries.forEach(entry=>{
+
+   if(entry.isIntersecting){
+
+    entry.target.classList.add("show");
+
+   }
+
+  });
+
+ },
+ {
+  threshold:.12
+ }
 
 );
 
 
-document.querySelectorAll(".reveal").forEach(el=>{
-    observer.observe(el);
+document.querySelectorAll(".reveal")
+.forEach(el=>observer.observe(el));
+
+
+/* =========================
+   MAGNETIC BUTTONS
+========================= */
+
+document.querySelectorAll(".btn")
+.forEach(btn=>{
+
+ btn.addEventListener("mousemove",(e)=>{
+
+  const r=btn.getBoundingClientRect();
+
+  const x=
+   e.clientX-r.left-r.width/2;
+
+  const y=
+   e.clientY-r.top-r.height/2;
+
+  btn.style.transform=
+   `translate(${x*.12}px,${y*.12}px)`;
+
+ });
+
+ btn.addEventListener("mouseleave",()=>{
+
+  btn.style.transform="translate(0,0)";
+
+ });
+
 });
 
 
-/* ================= PHOTO VIEWER ================= */
+/* =========================
+   MOUSE PARALLAX
+========================= */
 
-function openViewer(){
+document.addEventListener("mousemove",(e)=>{
 
-    document
-    .getElementById("viewer")
-    .classList.add("open");
+ const x=
+ (e.clientX/window.innerWidth-.5)*2;
 
-}
+ const y=
+ (e.clientY/window.innerHeight-.5)*2;
 
+ document.querySelector(".hud").style.transform=
+  `translate(${x*20}px,${y*20}px)`;
 
-function closeViewer(){
+ document.querySelector(".orb1").style.transform=
+  `translate(${x*50}px,${y*50}px)`;
 
-    document
-    .getElementById("viewer")
-    .classList.remove("open");
-
-}
-
-
-document
-.getElementById("viewer")
-.addEventListener("click",(e)=>{
-
-    if(e.target.id==="viewer"){
-        closeViewer();
-    }
+ document.querySelector(".orb2").style.transform=
+  `translate(${x*-40}px,${y*-40}px)`;
 
 });
 
 
-document.addEventListener("keydown",(e)=>{
+/* =========================
+   SCROLL IDENTITY MOTION
+========================= */
 
-    if(e.key==="Escape"){
-        closeViewer();
-    }
+window.addEventListener("scroll",()=>{
+
+ const identity=
+ document.querySelector(".identity-text");
+
+ const ring=
+ document.querySelector(".identity-ring");
+
+ if(identity){
+
+  const rect=
+   identity.getBoundingClientRect();
+
+  const move=
+   (window.innerHeight/2-rect.top)*.08;
+
+  identity.style.transform=
+   `translateY(${move}px)`;
+
+ }
+
+ if(ring){
+
+  ring.style.transform=
+   `rotate(${window.scrollY*.08}deg)`;
+
+ }
+
+});
+
+
+/* =========================
+   RANDOM WAVEFORM
+========================= */
+
+const waves=
+document.querySelectorAll(".wave i");
+
+waves.forEach((bar,i)=>{
+
+ bar.style.animationDelay=
+  (i*.035)+"s";
+
+ bar.style.height=
+  (Math.random()*30+4)+"px";
 
 });
 
