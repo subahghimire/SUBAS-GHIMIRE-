@@ -13,27 +13,21 @@
     box-sizing:border-box;
 }
 
-html{
-    scroll-behavior:smooth;
-}
-
 body{
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, sans-serif;
     background:#0b0b0b;
-    color:#fff;
-    line-height:1.6;
+    color:white;
 }
 
-/* NAVBAR */
 nav{
     position:sticky;
     top:0;
-    z-index:1000;
-    background:rgba(10,10,10,.96);
+    z-index:10;
+    background:#101010;
     border-bottom:1px solid #292929;
 }
 
-.nav-container{
+.nav{
     max-width:1200px;
     margin:auto;
     padding:18px 25px;
@@ -43,191 +37,102 @@ nav{
 }
 
 .logo{
-    font-size:24px;
-    font-weight:800;
-    letter-spacing:1px;
+    font-size:23px;
+    font-weight:bold;
 }
 
 .logo span{
     color:#e50914;
 }
 
-.nav-links{
+.links{
     display:flex;
-    gap:30px;
+    gap:25px;
 }
 
-.nav-links a{
+.links a{
     color:#ccc;
     text-decoration:none;
-    font-size:14px;
-    font-weight:600;
 }
 
-.nav-links a:hover{
-    color:#e50914;
-}
-
-/* HERO */
 .hero{
-    min-height:680px;
+    min-height:600px;
     display:flex;
     align-items:center;
-    position:relative;
-    overflow:hidden;
-    background:
-        radial-gradient(circle at 75% 35%,rgba(229,9,20,.18),transparent 30%),
-        #0b0b0b;
+    background:#0b0b0b;
 }
 
-.hero-container{
+.container{
     max-width:1200px;
     width:100%;
     margin:auto;
-    padding:90px 25px;
+    padding:80px 25px;
 }
 
-.small-title{
+.red{
     color:#e50914;
-    font-size:14px;
-    font-weight:bold;
-    letter-spacing:3px;
-    margin-bottom:18px;
 }
 
 .hero h1{
-    font-size:72px;
-    line-height:1.05;
-    max-width:850px;
-    margin-bottom:25px;
-}
-
-.hero h1 span{
-    color:#e50914;
+    font-size:65px;
+    max-width:800px;
+    margin:20px 0;
 }
 
 .hero p{
+    color:#999;
     max-width:650px;
-    color:#aaa;
     font-size:18px;
-    margin-bottom:35px;
 }
 
 .btn{
     display:inline-block;
-    padding:14px 27px;
+    margin-top:30px;
+    padding:14px 25px;
     background:#e50914;
-    color:#fff;
+    color:white;
     text-decoration:none;
-    font-weight:bold;
     border-radius:4px;
-    margin-right:10px;
 }
 
-.btn.secondary{
-    background:transparent;
-    border:1px solid #555;
-}
-
-.btn:hover{
-    opacity:.85;
-}
-
-/* GENERAL */
-.section{
+section{
     max-width:1200px;
     margin:auto;
-    padding:90px 25px;
+    padding:80px 25px;
 }
 
-.section-head{
-    margin-bottom:40px;
+h2{
+    font-size:40px;
+    margin:10px 0 35px;
 }
 
-.section-head small{
-    color:#e50914;
-    font-weight:bold;
-    letter-spacing:2px;
-}
-
-.section-head h2{
-    font-size:42px;
-    margin-top:8px;
-}
-
-/* ABOUT */
-.about-grid{
+.about{
     display:grid;
-    grid-template-columns:1.2fr 1fr;
-    gap:60px;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
 }
 
-.about-text p{
-    color:#aaa;
-    font-size:16px;
-    margin-bottom:18px;
+p{
+    color:#999;
+    line-height:1.8;
 }
 
-.info-box{
-    border:1px solid #292929;
-    padding:28px;
-    background:#111;
-}
-
-.info-row{
-    padding:15px 0;
-    border-bottom:1px solid #292929;
-}
-
-.info-row:last-child{
-    border-bottom:none;
-}
-
-.info-row strong{
-    display:block;
-    color:#e50914;
-    font-size:13px;
-    margin-bottom:3px;
-}
-
-.info-row span{
-    color:#ddd;
-}
-
-/* SKILLS */
 .skills{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:18px;
+    gap:20px;
 }
 
-.skill{
+.card{
     background:#111;
     border:1px solid #292929;
-    padding:30px 22px;
-    transition:.2s;
+    padding:30px;
 }
 
-.skill:hover{
-    border-color:#e50914;
+.card h3{
+    margin:12px 0;
 }
 
-.skill-number{
-    color:#e50914;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.skill h3{
-    margin:12px 0 8px;
-}
-
-.skill p{
-    color:#888;
-    font-size:14px;
-}
-
-/* SOFTWARE */
 .software{
     display:flex;
     flex-wrap:wrap;
@@ -235,219 +140,87 @@ nav{
 }
 
 .software span{
-    padding:13px 20px;
+    padding:14px 20px;
     border:1px solid #333;
     background:#111;
-    color:#ddd;
 }
 
-/* VIDEO */
-.video-grid{
+.photos{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:22px;
-}
-
-.video-card{
-    background:#111;
-    border:1px solid #292929;
-    overflow:hidden;
-}
-
-.video-box{
-    height:220px;
-    background:linear-gradient(135deg,#1b1b1b,#333,#111);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    position:relative;
-}
-
-.play{
-    width:62px;
-    height:62px;
-    background:#e50914;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    padding-left:4px;
-}
-
-.video-card h3{
-    padding:18px 20px 5px;
-}
-
-.video-card p{
-    padding:0 20px 20px;
-    color:#777;
-    font-size:14px;
-}
-
-/* PHOTO */
-.photo-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
+    gap:20px;
 }
 
 .photo{
     height:280px;
-    background:linear-gradient(135deg,#191919,#3a3a3a,#101010);
+    background:#151515;
     border:1px solid #292929;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:#777;
-    font-size:14px;
-    position:relative;
     overflow:hidden;
 }
 
-.photo::after{
-    content:"PHOTO";
-    position:absolute;
-    bottom:15px;
-    left:18px;
-    color:#aaa;
-    font-size:12px;
-    letter-spacing:2px;
+.photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
 }
 
-/* EXPERIENCE */
 .experience{
     border-left:2px solid #e50914;
-    padding-left:30px;
+    padding-left:25px;
 }
 
-.exp-item{
-    margin-bottom:35px;
-}
-
-.exp-item:last-child{
-    margin-bottom:0;
-}
-
-.exp-item .year{
-    color:#e50914;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.exp-item h3{
-    margin:6px 0;
-    font-size:22px;
-}
-
-.exp-item p{
-    color:#888;
-}
-
-/* CONTACT */
-.contact-box{
+.contact{
     background:#111;
     border:1px solid #292929;
-    padding:45px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:30px;
+    padding:40px;
 }
 
-.contact-box h2{
-    font-size:34px;
-}
-
-.contact-box p{
-    color:#888;
-    margin-top:8px;
-}
-
-/* FOOTER */
 footer{
-    border-top:1px solid #292929;
-    padding:30px 25px;
     text-align:center;
+    padding:30px;
+    border-top:1px solid #292929;
     color:#666;
-    font-size:13px;
 }
 
-/* MOBILE */
-@media(max-width:900px){
+@media(max-width:800px){
 
-    .hero h1{
-        font-size:52px;
-    }
-
-    .about-grid{
-        grid-template-columns:1fr;
-    }
-
-    .skills{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .video-grid,
-    .photo-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .contact-box{
-        flex-direction:column;
-        align-items:flex-start;
-    }
-}
-
-@media(max-width:600px){
-
-    .nav-container{
+    .nav{
         flex-direction:column;
         gap:15px;
     }
 
-    .nav-links{
-        gap:15px;
+    .links{
         flex-wrap:wrap;
         justify-content:center;
-    }
-
-    .hero{
-        min-height:580px;
     }
 
     .hero h1{
         font-size:42px;
     }
 
-    .hero p{
-        font-size:16px;
-    }
-
-    .section{
-        padding:65px 20px;
-    }
-
-    .section-head h2{
-        font-size:32px;
-    }
-
-    .skills,
-    .video-grid,
-    .photo-grid{
+    .about{
         grid-template-columns:1fr;
     }
 
-    .photo{
-        height:300px;
+    .skills{
+        grid-template-columns:1fr 1fr;
     }
 
-    .contact-box{
-        padding:30px;
+    .photos{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:550px){
+
+    .skills,
+    .photos{
+        grid-template-columns:1fr;
     }
 
-    .contact-box h2{
-        font-size:27px;
+    .hero h1{
+        font-size:36px;
     }
 }
 </style>
@@ -455,372 +228,228 @@ footer{
 
 <body>
 
-<!-- NAVIGATION -->
 <nav>
-    <div class="nav-container">
+<div class="nav">
 
-        <div class="logo">
-            SUBAS <span>GHIMIRE</span>
-        </div>
+<div class="logo">
+SUBAS <span>GHIMIRE</span>
+</div>
 
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#skills">Skills</a>
-            <a href="#video">Video</a>
-            <a href="#photo">Photo</a>
-            <a href="#experience">Experience</a>
-            <a href="#contact">Contact</a>
-        </div>
+<div class="links">
+<a href="#about">About</a>
+<a href="#skills">Skills</a>
+<a href="#photo">Photo</a>
+<a href="#experience">Experience</a>
+<a href="#contact">Contact</a>
+</div>
 
-    </div>
+</div>
 </nav>
 
 
-<!-- HERO -->
-<section class="hero" id="home">
+<div class="hero">
 
-    <div class="hero-container">
+<div class="container">
 
-        <div class="small-title">
-            PROFESSIONAL VIDEO EDITOR
-        </div>
+<div class="red">PROFESSIONAL VIDEO EDITOR</div>
 
-        <h1>
-            I CREATE <span>VISUAL STORIES</span>
-            THAT CONNECT.
-        </h1>
+<h1>
+I CREATE <span class="red">VISUAL STORIES</span>
+THAT CONNECT.
+</h1>
 
-        <p>
-            Video Editor focused on professional editing,
-            visual storytelling, post-production and creative
-            video presentation.
-        </p>
+<p>
+Professional Video Editor focused on creative editing,
+visual storytelling and post-production.
+</p>
 
-        <a href="#video" class="btn">
-            VIEW MY WORK
-        </a>
+<a href="#contact" class="btn">CONTACT ME</a>
 
-        <a href="#contact" class="btn secondary">
-            CONTACT ME
-        </a>
+</div>
 
-    </div>
-
-</section>
+</div>
 
 
-<!-- ABOUT -->
-<section class="section" id="about">
+<section id="about">
 
-    <div class="section-head">
-        <small>ABOUT ME</small>
-        <h2>Who I Am</h2>
-    </div>
+<div class="red">ABOUT ME</div>
 
-    <div class="about-grid">
+<h2>Who I Am</h2>
 
-        <div class="about-text">
+<div class="about">
 
-            <p>
-                I am Subas Ghimire, a professional Video Editor
-                passionate about transforming raw footage into
-                engaging and meaningful visual stories.
-            </p>
+<div>
 
-            <p>
-                My focus is on clean editing, strong storytelling,
-                timing, color, sound and professional post-production.
-            </p>
+<p>
+I am Subas Ghimire, a professional Video Editor
+focused on transforming raw footage into engaging
+and meaningful visual stories.
+</p>
 
-            <p>
-                I enjoy working with different types of visual
-                content and creating polished final productions.
-            </p>
+<br>
 
-        </div>
+<p>
+My work focuses on clean editing, timing,
+color, sound and professional post-production.
+</p>
 
-        <div class="info-box">
+</div>
 
-            <div class="info-row">
-                <strong>NAME</strong>
-                <span>Subas Ghimire</span>
-            </div>
+<div class="card">
 
-            <div class="info-row">
-                <strong>PROFESSION</strong>
-                <span>Video Editor</span>
-            </div>
+<h3>NAME</h3>
+<p>Subas Ghimire</p>
 
-            <div class="info-row">
-                <strong>LOCATION</strong>
-                <span>Kathmandu, Nepal</span>
-            </div>
+<br>
 
-            <div class="info-row">
-                <strong>EMAIL</strong>
-                <span>ghimiresubas347@gmail.com</span>
-            </div>
+<h3>PROFESSION</h3>
+<p>Video Editor</p>
 
-            <div class="info-row">
-                <strong>PHONE</strong>
-                <span>9766454587</span>
-            </div>
+<br>
 
-        </div>
+<h3>LOCATION</h3>
+<p>Kathmandu, Nepal</p>
 
-    </div>
+<br>
+
+<h3>EMAIL</h3>
+<p>ghimiresubas347@gmail.com</p>
+
+<br>
+
+<h3>PHONE</h3>
+<p>9766454587</p>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- SKILLS -->
-<section class="section" id="skills">
+<section id="skills">
 
-    <div class="section-head">
-        <small>WHAT I DO</small>
-        <h2>Skills</h2>
-    </div>
+<div class="red">WHAT I DO</div>
 
-    <div class="skills">
+<h2>Skills</h2>
 
-        <div class="skill">
-            <div class="skill-number">01</div>
-            <h3>Video Editing</h3>
-            <p>
-                Professional cutting, pacing and storytelling.
-            </p>
-        </div>
+<div class="skills">
 
-        <div class="skill">
-            <div class="skill-number">02</div>
-            <h3>Color Grading</h3>
-            <p>
-                Color correction and cinematic visual finishing.
-            </p>
-        </div>
+<div class="card">
+<h3>Video Editing</h3>
+<p>Professional cutting, pacing and storytelling.</p>
+</div>
 
-        <div class="skill">
-            <div class="skill-number">03</div>
-            <h3>Motion Graphics</h3>
-            <p>
-                Titles, graphics and motion-based visual elements.
-            </p>
-        </div>
+<div class="card">
+<h3>Color Grading</h3>
+<p>Color correction and visual finishing.</p>
+</div>
 
-        <div class="skill">
-            <div class="skill-number">04</div>
-            <h3>Post Production</h3>
-            <p>
-                Complete finishing and professional delivery.
-            </p>
-        </div>
+<div class="card">
+<h3>Motion Graphics</h3>
+<p>Titles, graphics and motion elements.</p>
+</div>
 
-    </div>
+<div class="card">
+<h3>Post Production</h3>
+<p>Professional finishing and delivery.</p>
+</div>
+
+</div>
 
 </section>
 
 
-<!-- SOFTWARE -->
-<section class="section">
+<section>
 
-    <div class="section-head">
-        <small>TOOLS</small>
-        <h2>Software</h2>
-    </div>
+<div class="red">TOOLS</div>
 
-    <div class="software">
+<h2>Software</h2>
 
-        <span>Adobe Premiere Pro</span>
-        <span>Adobe After Effects</span>
-        <span>Adobe Photoshop</span>
-        <span>Adobe Audition</span>
-        <span>DaVinci Resolve</span>
+<div class="software">
 
-    </div>
+<span>Adobe Premiere Pro</span>
+<span>Adobe After Effects</span>
+<span>Adobe Photoshop</span>
+<span>Adobe Audition</span>
+<span>DaVinci Resolve</span>
+
+</div>
 
 </section>
 
 
-<!-- VIDEO -->
-<section class="section" id="video">
+<section id="photo">
 
-    <div class="section-head">
-        <small>SELECTED WORK</small>
-        <h2>Video</h2>
-    </div>
+<div class="red">MY WORK</div>
 
-    <div class="video-grid">
+<h2>Photo</h2>
 
-        <div class="video-card">
+<div class="photos">
 
-            <div class="video-box">
-                <div class="play">▶</div>
-            </div>
+<div class="photo">
+<img src="subas.jpg" alt="Subas Ghimire">
+</div>
 
-            <h3>Video Editing</h3>
+<div class="photo">
+<img src="subas.jpg" alt="Subas Ghimire">
+</div>
 
-            <p>
-                Professional video editing and visual storytelling.
-            </p>
+<div class="photo">
+<img src="subas.jpg" alt="Subas Ghimire">
+</div>
 
-        </div>
-
-
-        <div class="video-card">
-
-            <div class="video-box">
-                <div class="play">▶</div>
-            </div>
-
-            <h3>Creative Production</h3>
-
-            <p>
-                Creative editing with strong visual presentation.
-            </p>
-
-        </div>
-
-
-        <div class="video-card">
-
-            <div class="video-box">
-                <div class="play">▶</div>
-            </div>
-
-            <h3>Post Production</h3>
-
-            <p>
-                Polished post-production and finishing.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- PHOTO -->
-<section class="section" id="photo">
+<section id="experience">
 
-    <div class="section-head">
-        <small>VISUALS</small>
-        <h2>Photo</h2>
-    </div>
+<div class="red">CAREER</div>
 
-    <div class="photo-grid">
+<h2>Experience</h2>
 
-        <div class="photo">YOUR PHOTO 01</div>
+<div class="experience">
 
-        <div class="photo">YOUR PHOTO 02</div>
+<h3>Video Editor</h3>
 
-        <div class="photo">YOUR PHOTO 03</div>
+<p>
+Professional video editing and post-production work.
+</p>
 
-        <div class="photo">YOUR PHOTO 04</div>
-
-        <div class="photo">YOUR PHOTO 05</div>
-
-        <div class="photo">YOUR PHOTO 06</div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- EXPERIENCE -->
-<section class="section" id="experience">
+<section id="contact">
 
-    <div class="section-head">
-        <small>CAREER</small>
-        <h2>Experience</h2>
-    </div>
+<div class="contact">
 
-    <div class="experience">
+<div class="red">GET IN TOUCH</div>
 
-        <div class="exp-item">
+<h2>Let's Work Together.</h2>
 
-            <div class="year">CURRENT</div>
+<p>
+Email: ghimiresubas347@gmail.com
+</p>
 
-            <h3>Video Editor</h3>
+<p>
+Phone: 9766454587
+</p>
 
-            <p>
-                Professional video editing and post-production work.
-            </p>
+<a class="btn" href="mailto:ghimiresubas347@gmail.com">
+EMAIL ME
+</a>
 
-        </div>
-
-
-        <div class="exp-item">
-
-            <div class="year">PREVIOUS EXPERIENCE</div>
-
-            <h3>Video Editor</h3>
-
-            <p>
-                Video editing, production support and
-                post-production experience.
-            </p>
-
-        </div>
-
-
-        <div class="exp-item">
-
-            <div class="year">EARLIER EXPERIENCE</div>
-
-            <h3>Video Editor</h3>
-
-            <p>
-                Editing and visual production experience.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-<!-- CONTACT -->
-<section class="section" id="contact">
-
-    <div class="contact-box">
-
-        <div>
-
-            <small style="color:#e50914;font-weight:bold;">
-                GET IN TOUCH
-            </small>
-
-            <h2>Let's Work Together.</h2>
-
-            <p>
-                Available for professional video editing
-                and creative post-production work.
-            </p>
-
-        </div>
-
-        <div>
-
-            <a class="btn"
-               href="mailto:ghimiresubas347@gmail.com">
-                EMAIL ME
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- FOOTER -->
 <footer>
-
-    © 2026 Subas Ghimire — Professional Video Editor
-
+© 2026 Subas Ghimire — Professional Video Editor
 </footer>
 
 </body>
