@@ -19,16 +19,18 @@ html{
 
 body{
     font-family:Arial, sans-serif;
-    background:#0b0b0b;
+    background:#080808;
     color:#fff;
+    overflow-x:hidden;
 }
 
 nav{
     position:sticky;
     top:0;
-    z-index:100;
-    background:#101010;
+    z-index:1000;
+    background:rgba(10,10,10,.95);
     border-bottom:1px solid #292929;
+    backdrop-filter:blur(10px);
 }
 
 .nav{
@@ -43,6 +45,7 @@ nav{
 .logo{
     font-size:23px;
     font-weight:bold;
+    letter-spacing:1px;
 }
 
 .logo span,
@@ -58,6 +61,7 @@ nav{
 .links a{
     color:#ccc;
     text-decoration:none;
+    transition:.3s;
 }
 
 .links a:hover{
@@ -65,10 +69,24 @@ nav{
 }
 
 .hero{
-    min-height:600px;
+    min-height:650px;
     display:flex;
     align-items:center;
-    background:#0b0b0b;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:#e50914;
+    opacity:.06;
+    border-radius:50%;
+    right:-150px;
+    top:80px;
+    animation:float 6s ease-in-out infinite;
 }
 
 .container{
@@ -78,11 +96,16 @@ nav{
     padding:80px 25px;
 }
 
+.hero-content{
+    animation:slideUp 1.2s ease forwards;
+}
+
 .hero h1{
     font-size:65px;
-    max-width:850px;
+    max-width:900px;
     margin:20px 0;
     line-height:1.05;
+    animation:textReveal 1.3s ease forwards;
 }
 
 .hero p{
@@ -90,26 +113,46 @@ nav{
     max-width:650px;
     font-size:18px;
     line-height:1.8;
+    animation:fadeIn 2s ease forwards;
 }
 
 .btn{
     display:inline-block;
     margin-top:30px;
-    padding:14px 25px;
+    padding:15px 28px;
     background:#e50914;
-    color:#fff;
+    color:white;
     text-decoration:none;
     border-radius:4px;
+    transition:.35s;
+}
+
+.btn:hover{
+    transform:translateY(-5px);
+    box-shadow:0 12px 30px rgba(229,9,20,.3);
 }
 
 section{
     max-width:1200px;
     margin:auto;
-    padding:80px 25px;
+    padding:90px 25px;
+}
+
+section > .red,
+section > h2,
+section > .about,
+section > .skills,
+section > .software,
+section > .photos,
+section > .experience,
+section > .contact{
+    animation:scrollReveal linear both;
+    animation-timeline:view();
+    animation-range:entry 10% cover 30%;
 }
 
 h2{
-    font-size:40px;
+    font-size:42px;
     margin:10px 0 35px;
 }
 
@@ -128,6 +171,12 @@ p{
     background:#111;
     border:1px solid #292929;
     padding:30px;
+    transition:.4s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:#e50914;
 }
 
 .card h3{
@@ -140,6 +189,10 @@ p{
     gap:20px;
 }
 
+.skills .card{
+    min-height:190px;
+}
+
 .software{
     display:flex;
     flex-wrap:wrap;
@@ -150,6 +203,12 @@ p{
     padding:14px 20px;
     border:1px solid #333;
     background:#111;
+    transition:.35s;
+}
+
+.software span:hover{
+    transform:translateY(-6px);
+    border-color:#e50914;
 }
 
 .photos{
@@ -159,10 +218,39 @@ p{
 }
 
 .photo{
-    height:350px;
+    height:380px;
     background:#151515;
     border:1px solid #292929;
     overflow:hidden;
+    cursor:pointer;
+    position:relative;
+    transition:.5s;
+}
+
+.photo::after{
+    content:"VIEW PHOTO";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:18px;
+    text-align:center;
+    background:linear-gradient(transparent,rgba(0,0,0,.9));
+    color:#fff;
+    opacity:0;
+    transform:translateY(20px);
+    transition:.4s;
+}
+
+.photo:hover{
+    transform:translateY(-10px);
+    border-color:#e50914;
+    box-shadow:0 20px 50px rgba(0,0,0,.5);
+}
+
+.photo:hover::after{
+    opacity:1;
+    transform:translateY(0);
 }
 
 .photo img{
@@ -170,25 +258,146 @@ p{
     height:100%;
     object-fit:cover;
     display:block;
+    transition:transform .8s ease;
+}
+
+.photo:hover img{
+    transform:scale(1.08);
 }
 
 .experience{
     border-left:2px solid #e50914;
     padding-left:25px;
+    transition:.4s;
+}
+
+.experience:hover{
+    padding-left:35px;
 }
 
 .contact{
     background:#111;
     border:1px solid #292929;
-    padding:40px;
+    padding:45px;
+    transition:.4s;
+}
+
+.contact:hover{
+    border-color:#e50914;
 }
 
 footer{
     text-align:center;
-    padding:30px;
+    padding:35px;
     border-top:1px solid #292929;
     color:#666;
 }
+
+
+/* PHOTO POPUP */
+
+.photo-viewer{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:5000;
+    opacity:0;
+    visibility:hidden;
+    transition:.4s;
+    padding:30px;
+}
+
+.photo-viewer.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.photo-viewer img{
+    max-width:90%;
+    max-height:85vh;
+    object-fit:contain;
+    transform:scale(.6);
+    transition:.5s cubic-bezier(.2,.8,.2,1);
+}
+
+.photo-viewer.active img{
+    transform:scale(1);
+}
+
+.close{
+    position:absolute;
+    top:25px;
+    right:35px;
+    font-size:40px;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.close:hover{
+    color:#e50914;
+    transform:rotate(90deg);
+}
+
+
+/* ANIMATIONS */
+
+@keyframes slideUp{
+    from{
+        opacity:0;
+        transform:translateY(70px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+
+@keyframes textReveal{
+    from{
+        opacity:0;
+        transform:translateX(-70px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+@keyframes scrollReveal{
+    from{
+        opacity:0;
+        transform:translateY(70px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-30px);
+    }
+}
+
+
+/* MOBILE */
 
 @media(max-width:800px){
 
@@ -200,10 +409,11 @@ footer{
     .links{
         flex-wrap:wrap;
         justify-content:center;
+        gap:15px;
     }
 
     .hero h1{
-        font-size:42px;
+        font-size:45px;
     }
 
     .about{
@@ -229,9 +439,14 @@ footer{
     .hero h1{
         font-size:36px;
     }
+
+    h2{
+        font-size:32px;
+    }
 }
 </style>
 </head>
+
 
 <body>
 
@@ -254,11 +469,15 @@ SUBAS <span>GHIMIRE</span>
 </nav>
 
 
+<!-- HERO -->
+
 <div class="hero">
 
-<div class="container">
+<div class="container hero-content">
 
-<div class="red">PROFESSIONAL VIDEO EDITOR</div>
+<div class="red">
+PROFESSIONAL VIDEO EDITOR
+</div>
 
 <h1>
 I CREATE <span class="red">VISUAL STORIES</span>
@@ -270,12 +489,16 @@ Professional Video Editor focused on creative editing,
 visual storytelling and professional post-production.
 </p>
 
-<a href="#contact" class="btn">CONTACT ME</a>
+<a href="#contact" class="btn">
+CONTACT ME
+</a>
 
 </div>
 
 </div>
 
+
+<!-- ABOUT -->
 
 <section id="about">
 
@@ -334,6 +557,8 @@ color, sound and professional post-production.
 </section>
 
 
+<!-- SKILLS -->
+
 <section id="skills">
 
 <div class="red">WHAT I DO</div>
@@ -344,28 +569,38 @@ color, sound and professional post-production.
 
 <div class="card">
 <h3>Video Editing</h3>
-<p>Professional cutting, pacing and visual storytelling.</p>
+<p>
+Professional cutting, pacing and visual storytelling.
+</p>
 </div>
 
 <div class="card">
 <h3>Color Grading</h3>
-<p>Color correction and professional visual finishing.</p>
+<p>
+Color correction and professional visual finishing.
+</p>
 </div>
 
 <div class="card">
 <h3>Motion Graphics</h3>
-<p>Titles, graphics and motion design elements.</p>
+<p>
+Titles, graphics and motion design elements.
+</p>
 </div>
 
 <div class="card">
 <h3>Post Production</h3>
-<p>Professional finishing, audio and final delivery.</p>
+<p>
+Professional finishing, audio and final delivery.
+</p>
 </div>
 
 </div>
 
 </section>
 
+
+<!-- SOFTWARE -->
 
 <section>
 
@@ -386,6 +621,8 @@ color, sound and professional post-production.
 </section>
 
 
+<!-- PHOTO -->
+
 <section id="photo">
 
 <div class="red">MY PHOTO</div>
@@ -394,22 +631,27 @@ color, sound and professional post-production.
 
 <div class="photos">
 
-<div class="photo">
-<img src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg" alt="Subas Ghimire">
+<div class="photo" onclick="openPhoto(this)">
+<img src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+alt="Subas Ghimire">
 </div>
 
-<div class="photo">
-<img src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg" alt="Subas Ghimire">
+<div class="photo" onclick="openPhoto(this)">
+<img src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+alt="Subas Ghimire">
 </div>
 
-<div class="photo">
-<img src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg" alt="Subas Ghimire">
+<div class="photo" onclick="openPhoto(this)">
+<img src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+alt="Subas Ghimire">
 </div>
 
 </div>
 
 </section>
 
+
+<!-- EXPERIENCE -->
 
 <section id="experience">
 
@@ -423,3 +665,87 @@ color, sound and professional post-production.
 
 <p>
 Professional video editing and post-production experience,
+with a focus on clean visuals, storytelling and quality finishing.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section id="contact">
+
+<div class="contact">
+
+<div class="red">GET IN TOUCH</div>
+
+<h2>Let's Work Together.</h2>
+
+<p>
+Email: ghimiresubas347@gmail.com
+</p>
+
+<p>
+Phone: 9766454587
+</p>
+
+<a class="btn" href="mailto:ghimiresubas347@gmail.com">
+EMAIL ME
+</a>
+
+</div>
+
+</section>
+
+
+<footer>
+© 2026 Subas Ghimire — Professional Video Editor
+</footer>
+
+
+<!-- PHOTO POPUP -->
+
+<div class="photo-viewer" id="photoViewer">
+
+<div class="close" onclick="closePhoto()">
+×
+</div>
+
+<img id="viewerImage" src="" alt="Subas Ghimire">
+
+</div>
+
+
+<script>
+
+function openPhoto(element){
+
+    const image = element.querySelector("img").src;
+
+    document.getElementById("viewerImage").src = image;
+
+    document.getElementById("photoViewer")
+    .classList.add("active");
+}
+
+function closePhoto(){
+
+    document.getElementById("photoViewer")
+    .classList.remove("active");
+}
+
+document.getElementById("photoViewer")
+.addEventListener("click", function(e){
+
+    if(e.target === this){
+        closePhoto();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
