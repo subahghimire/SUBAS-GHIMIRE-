@@ -1,3 +1,8 @@
+from flask import Flask, render_template_string
+
+app = Flask(__name__)
+
+HTML = r'''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +12,7 @@
 <title>Subas Ghimire | Professional Video Editor</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -25,6 +31,7 @@ body{
 }
 
 /* NAVBAR */
+
 nav{
     position:fixed;
     top:0;
@@ -72,6 +79,7 @@ nav{
 }
 
 /* HERO */
+
 .hero{
     min-height:100vh;
     display:flex;
@@ -127,8 +135,14 @@ nav{
     animation:titleReveal 1s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-.one{animation-delay:.35s!important;}
-.two{animation-delay:.55s!important;}
+.one{
+    animation-delay:.35s!important;
+}
+
+.two{
+    animation-delay:.55s!important;
+}
+
 .three{
     animation-delay:.75s!important;
     color:#ff4b3e;
@@ -168,18 +182,15 @@ nav{
 .btn-main{
     background:#ff4b3e;
     color:white;
-    box-shadow:0 12px 35px rgba(255,75,62,.18);
 }
 
 .btn-main:hover{
     transform:translateY(-6px);
-    box-shadow:0 18px 45px rgba(255,75,62,.3);
 }
 
 .btn-outline{
     color:white;
     border:1px solid #3b3d42;
-    background:rgba(255,255,255,.02);
 }
 
 .btn-outline:hover{
@@ -187,7 +198,8 @@ nav{
     transform:translateY(-6px);
 }
 
-/* SECTIONS */
+/* SECTION */
+
 section{
     max-width:1250px;
     margin:auto;
@@ -210,9 +222,7 @@ section{
 .reveal{
     opacity:0;
     transform:translateY(70px);
-    transition:
-    opacity 1s ease,
-    transform 1s cubic-bezier(.16,1,.3,1);
+    transition:1s;
 }
 
 .reveal.show{
@@ -221,11 +231,11 @@ section{
 }
 
 /* ABOUT */
+
 .about-grid{
     display:grid;
     grid-template-columns:1.2fr .8fr;
     gap:70px;
-    align-items:start;
 }
 
 .about-text p{
@@ -237,19 +247,8 @@ section{
 
 .info-box{
     padding:35px;
-    background:linear-gradient(145deg,#121419,#0e0f12);
+    background:#101115;
     border:1px solid #25272c;
-    position:relative;
-}
-
-.info-box::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:0;
-    width:3px;
-    height:100%;
-    background:#ff4b3e;
 }
 
 .info-row{
@@ -274,6 +273,7 @@ section{
 }
 
 /* SKILLS */
+
 .skills{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -295,13 +295,10 @@ section{
 
 .skill-number{
     color:#555960;
-    font-size:13px;
-    letter-spacing:2px;
 }
 
 .skill-card h3{
     margin:35px 0 15px;
-    font-size:21px;
 }
 
 .skill-card p{
@@ -310,6 +307,7 @@ section{
 }
 
 /* SOFTWARE */
+
 .software{
     display:flex;
     flex-wrap:wrap;
@@ -330,6 +328,7 @@ section{
 }
 
 /* PHOTO */
+
 .photo-area{
     max-width:560px;
 }
@@ -348,7 +347,7 @@ section{
     height:100%;
     object-fit:cover;
     display:block;
-    transition:1s cubic-bezier(.16,1,.3,1);
+    transition:1s;
 }
 
 .photo-card:hover img{
@@ -357,7 +356,6 @@ section{
 
 .photo-caption{
     position:absolute;
-    z-index:3;
     bottom:0;
     left:0;
     width:100%;
@@ -377,13 +375,13 @@ section{
 }
 
 /* EXPERIENCE */
+
 .experience-list{
     display:grid;
     gap:25px;
 }
 
 .experience-box{
-    border-left:2px solid #ff4b3e;
     padding:28px 35px;
     background:#101115;
     border:1px solid #24262b;
@@ -396,7 +394,7 @@ section{
     border-color:#ff4b3e;
 }
 
-.experience-box .year{
+.year{
     color:#ff6257;
     font-size:12px;
     letter-spacing:3px;
@@ -410,7 +408,6 @@ section{
 
 .experience-box h4{
     color:#bfc1c6;
-    font-size:15px;
     margin-bottom:12px;
 }
 
@@ -420,11 +417,10 @@ section{
 }
 
 /* CONTACT */
+
 .contact-box{
     padding:60px;
-    background:
-    radial-gradient(circle at 90% 10%,rgba(255,75,62,.12),transparent 30%),
-    #101115;
+    background:#101115;
     border:1px solid #292b30;
 }
 
@@ -440,15 +436,16 @@ section{
 }
 
 /* FOOTER */
+
 footer{
     border-top:1px solid #202226;
-    padding:35px 30px;
+    padding:35px;
     text-align:center;
     color:#5f6268;
-    font-size:13px;
 }
 
-/* PHOTO VIEWER */
+/* VIEWER */
+
 .viewer{
     position:fixed;
     inset:0;
@@ -457,7 +454,6 @@ footer{
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:30px;
     opacity:0;
     visibility:hidden;
     transition:.45s;
@@ -471,10 +467,9 @@ footer{
 .viewer img{
     max-width:90%;
     max-height:88vh;
-    object-fit:contain;
     transform:scale(.65);
     opacity:0;
-    transition:.55s cubic-bezier(.16,1,.3,1);
+    transition:.55s;
 }
 
 .viewer.active img{
@@ -487,11 +482,11 @@ footer{
     top:25px;
     right:35px;
     font-size:42px;
-    color:#fff;
     cursor:pointer;
 }
 
 /* ANIMATION */
+
 @keyframes titleReveal{
     to{
         opacity:1;
@@ -507,10 +502,6 @@ footer{
 }
 
 @keyframes labelIn{
-    from{
-        opacity:0;
-        transform:translateX(-30px);
-    }
     to{
         opacity:1;
         transform:translateX(0);
@@ -518,11 +509,8 @@ footer{
 }
 
 /* MOBILE */
-@media(max-width:900px){
 
-    .links{
-        gap:15px;
-    }
+@media(max-width:900px){
 
     .about-grid{
         grid-template-columns:1fr;
@@ -531,13 +519,10 @@ footer{
     .skills{
         grid-template-columns:1fr 1fr;
     }
+
 }
 
 @media(max-width:600px){
-
-    .nav{
-        padding:16px 20px;
-    }
 
     .links{
         display:none;
@@ -574,13 +559,14 @@ footer{
     .contact-box h2{
         font-size:36px;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- NAVIGATION -->
 <nav>
 <div class="nav">
 
@@ -601,7 +587,6 @@ SUBAS <span>GHIMIRE</span>
 </nav>
 
 
-<!-- HERO -->
 <header class="hero">
 
 <div class="hero-content">
@@ -640,7 +625,6 @@ VIEW / DOWNLOAD CV
 </header>
 
 
-<!-- ABOUT -->
 <section id="about">
 
 <div class="section-label reveal">
@@ -711,7 +695,6 @@ to create engaging and professional videos.
 </section>
 
 
-<!-- SKILLS -->
 <section id="skills">
 
 <div class="section-label reveal">
@@ -727,44 +710,31 @@ What I Do
 <div class="skill-card reveal">
 <div class="skill-number">01</div>
 <h3>Video Editing</h3>
-<p>
-Precise cutting, pacing, sequencing and
-visual storytelling.
-</p>
+<p>Precise cutting, pacing, sequencing and visual storytelling.</p>
 </div>
 
 <div class="skill-card reveal">
 <div class="skill-number">02</div>
 <h3>Color Grading</h3>
-<p>
-Color correction and professional visual
-finishing.
-</p>
+<p>Color correction and professional visual finishing.</p>
 </div>
 
 <div class="skill-card reveal">
 <div class="skill-number">03</div>
 <h3>Motion Graphics</h3>
-<p>
-Titles, transitions, graphics and
-motion elements.
-</p>
+<p>Titles, transitions, graphics and motion elements.</p>
 </div>
 
 <div class="skill-card reveal">
 <div class="skill-number">04</div>
 <h3>Post Production</h3>
-<p>
-Audio, finishing, visual polish and
-final delivery.
-</p>
+<p>Audio, finishing, visual polish and final delivery.</p>
 </div>
 
 </div>
 </section>
 
 
-<!-- SOFTWARE -->
 <section id="software">
 
 <div class="section-label reveal">
@@ -787,7 +757,6 @@ Software
 </section>
 
 
-<!-- PHOTO -->
 <section id="photo">
 
 <div class="section-label reveal">
@@ -803,15 +772,12 @@ My Photo
 <div class="photo-card" onclick="openPhoto()">
 
 <img
-src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+src="/static/SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
 alt="Subas Ghimire">
 
 <div class="photo-caption">
-
 <span>PROFESSIONAL VIDEO EDITOR</span>
-
 <h3>Subas Ghimire</h3>
-
 </div>
 
 </div>
@@ -819,7 +785,6 @@ alt="Subas Ghimire">
 </section>
 
 
-<!-- EXPERIENCE -->
 <section id="experience">
 
 <div class="section-label reveal">
@@ -833,58 +798,39 @@ Experience
 <div class="experience-list">
 
 <div class="experience-box reveal">
-
 <div class="year">CURRENT</div>
-
 <h3>Video Editor / Visual Editor</h3>
-
 <h4>Kantipur Television</h4>
-
 <p>
 Currently working as a Video Editor / Visual Editor,
-focused on professional video editing and
-post-production.
+focused on professional video editing and post-production.
 </p>
-
 </div>
 
-
 <div class="experience-box reveal">
-
 <div class="year">4 MONTHS</div>
-
 <h3>Video Editor</h3>
-
 <h4>Global Television HD</h4>
-
 <p>
 Professional experience in video editing,
 post-production and visual finishing.
 </p>
-
 </div>
 
-
 <div class="experience-box reveal">
-
 <div class="year">4 MONTHS</div>
-
 <h3>Video Editor</h3>
-
 <h4>Janata Television</h4>
-
 <p>
 Experience in television video editing and
 post-production workflow.
 </p>
-
 </div>
 
 </div>
 </section>
 
 
-<!-- CONTACT -->
 <section id="contact">
 
 <div class="contact-box reveal">
@@ -912,13 +858,11 @@ EMAIL ME
 </section>
 
 
-<!-- FOOTER -->
 <footer>
 © 2026 Subas Ghimire — Professional Video Editor
 </footer>
 
 
-<!-- PHOTO VIEWER -->
 <div class="viewer" id="viewer">
 
 <div class="close" onclick="closePhoto()">
@@ -926,15 +870,13 @@ EMAIL ME
 </div>
 
 <img
-src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+src="/static/SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
 alt="Subas Ghimire">
 
 </div>
 
 
 <script>
-
-/* SCROLL ANIMATION */
 
 const reveals = document.querySelectorAll(".reveal");
 
@@ -955,8 +897,6 @@ reveals.forEach(item=>{
 });
 
 
-/* PHOTO POPUP */
-
 function openPhoto(){
 
     document
@@ -964,6 +904,7 @@ function openPhoto(){
     .classList.add("active");
 
 }
+
 
 function closePhoto(){
 
@@ -973,18 +914,6 @@ function closePhoto(){
 
 }
 
-document
-.getElementById("viewer")
-.addEventListener("click",function(e){
-
-    if(e.target === this){
-        closePhoto();
-    }
-
-});
-
-
-/* ESCAPE */
 
 document.addEventListener("keydown",function(e){
 
@@ -998,3 +927,13 @@ document.addEventListener("keydown",function(e){
 
 </body>
 </html>
+'''
+
+
+@app.route("/")
+def home():
+    return render_template_string(HTML)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
