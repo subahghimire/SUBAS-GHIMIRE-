@@ -1,17 +1,22 @@
-from flask import Flask, render_template_string
-
-app = Flask(__name__)
-
-HTML = r'''
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Subas Ghimire | Professional Video Editor</title>
+<title>SUBAS GHIMIRE — Professional Video Editor</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+    --bg:#070707;
+    --card:#101010;
+    --text:#f5f5f5;
+    --muted:#858585;
+    --line:rgba(255,255,255,.10);
+    --accent:#ff3b30;
+    --accent2:#ff735c;
+}
 
 *{
     margin:0;
@@ -24,540 +29,945 @@ html{
 }
 
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#090a0c;
-    color:#f5f5f5;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,Arial,sans-serif;
     overflow-x:hidden;
+    cursor:none;
 }
 
-/* NAVBAR */
+/* ================= CURSOR ================= */
+
+.cursor{
+    position:fixed;
+    width:9px;
+    height:9px;
+    background:#fff;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:10000;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
+}
+
+.cursor-ring{
+    position:fixed;
+    width:38px;
+    height:38px;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    transition:
+        width .25s ease,
+        height .25s ease,
+        background .25s ease;
+}
+
+/* ================= LOADER ================= */
+
+.loader{
+    position:fixed;
+    inset:0;
+    z-index:20000;
+    background:#050505;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:loaderOut 1s 2.4s forwards;
+    pointer-events:none;
+}
+
+.loader-inner{
+    text-align:center;
+    overflow:hidden;
+}
+
+.loader-name{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(40px,8vw,100px);
+    font-weight:800;
+    letter-spacing:-5px;
+    animation:loaderText 1.2s ease forwards;
+}
+
+.loader-line{
+    height:2px;
+    width:0;
+    background:var(--accent);
+    margin:20px auto 0;
+    animation:loaderLine 1.2s .5s forwards;
+}
+
+/* ================= NOISE ================= */
+
+.noise{
+    position:fixed;
+    inset:0;
+    z-index:9998;
+    pointer-events:none;
+    opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+/* ================= NAV ================= */
 
 nav{
     position:fixed;
     top:0;
     left:0;
     width:100%;
-    z-index:999;
-    background:rgba(9,10,12,.85);
-    backdrop-filter:blur(18px);
-    border-bottom:1px solid rgba(255,255,255,.08);
+    z-index:9000;
+    padding:25px 4vw;
+    transition:.5s;
+}
+
+nav.scrolled{
+    background:rgba(7,7,7,.78);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line);
+    padding:17px 4vw;
 }
 
 .nav{
-    max-width:1250px;
-    margin:auto;
-    padding:20px 30px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 }
 
 .logo{
-    font-size:22px;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:20px;
     font-weight:800;
     letter-spacing:2px;
 }
 
-.logo span{
-    color:#ff4b3e;
+.logo b{
+    color:var(--accent);
 }
 
-.links{
+.menu{
     display:flex;
     gap:30px;
 }
 
-.links a{
-    color:#bdbdbd;
+.menu a{
+    position:relative;
+    color:#aaa;
     text-decoration:none;
-    font-size:14px;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    transition:.3s;
+}
+
+.menu a:after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-8px;
+    width:0;
+    height:1px;
+    background:var(--accent);
     transition:.35s;
 }
 
-.links a:hover{
-    color:#ff4b3e;
+.menu a:hover{
+    color:#fff;
 }
 
-/* HERO */
+.menu a:hover:after{
+    width:100%;
+}
+
+/* ================= HERO ================= */
 
 .hero{
     min-height:100vh;
+    position:relative;
     display:flex;
     align-items:center;
-    position:relative;
     overflow:hidden;
-    background:
-    radial-gradient(circle at 80% 35%,rgba(255,75,62,.13),transparent 28%),
-    linear-gradient(135deg,#090a0c,#111318);
+    padding:140px 7vw 80px;
+}
+
+.hero-grid{
+    position:absolute;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:80px 80px;
+    mask-image:linear-gradient(to bottom,#000,transparent);
+}
+
+.hero-glow{
+    position:absolute;
+    width:600px;
+    height:600px;
+    border-radius:50%;
+    background:var(--accent);
+    filter:blur(180px);
+    opacity:.09;
+    right:-200px;
+    top:100px;
+    animation:glowMove 8s ease-in-out infinite alternate;
 }
 
 .hero-content{
-    max-width:1250px;
+    position:relative;
+    z-index:3;
     width:100%;
+    max-width:1400px;
     margin:auto;
-    padding:150px 30px 100px;
+}
+
+.eyebrow{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    color:var(--accent2);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    opacity:0;
+    transform:translateY(30px);
+    animation:heroIn 1s 2.7s forwards;
+}
+
+.eyebrow i{
+    display:block;
+    width:45px;
+    height:1px;
+    background:var(--accent);
+}
+
+.hero-title{
+    margin-top:28px;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(65px,10vw,155px);
+    line-height:.82;
+    letter-spacing:-8px;
+    font-weight:800;
+}
+
+.hero-title .line{
+    display:block;
+    overflow:hidden;
+}
+
+.hero-title .word{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(120%);
+    animation:titleIn 1.2s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.hero-title .a{
+    animation-delay:2.75s;
+}
+
+.hero-title .b{
+    animation-delay:2.95s;
+}
+
+.hero-title .c{
+    animation-delay:3.15s;
+    color:var(--accent);
+}
+
+.hero-bottom{
+    margin-top:55px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:40px;
+    max-width:1150px;
+}
+
+.hero-description{
+    max-width:560px;
+    color:#929292;
+    font-size:16px;
+    line-height:1.9;
+    opacity:0;
+    transform:translateY(25px);
+    animation:heroIn 1s 3.4s forwards;
+}
+
+.hero-actions{
+    display:flex;
+    gap:12px;
+    opacity:0;
+    transform:translateY(25px);
+    animation:heroIn 1s 3.6s forwards;
+}
+
+.btn{
+    position:relative;
+    overflow:hidden;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:52px;
+    padding:0 25px;
+    border:1px solid var(--line);
+    text-decoration:none;
+    color:#fff;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    transition:.45s;
+}
+
+.btn span{
     position:relative;
     z-index:2;
 }
 
-.hero-label{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    color:#ff6257;
-    font-size:14px;
-    font-weight:bold;
-    letter-spacing:4px;
-    opacity:0;
-    animation:labelIn 1s .2s forwards;
+.btn-primary{
+    background:var(--accent);
+    border-color:var(--accent);
 }
 
-.hero-label::before{
+.btn-primary:before{
     content:"";
-    width:45px;
-    height:2px;
-    background:#ff4b3e;
+    position:absolute;
+    inset:0;
+    background:#fff;
+    transform:translateY(100%);
+    transition:.45s;
 }
 
-.hero h1{
-    max-width:1000px;
-    font-size:clamp(50px,7vw,92px);
-    line-height:.98;
-    letter-spacing:-4px;
-    margin:30px 0;
-    overflow:hidden;
+.btn-primary:hover{
+    color:#000;
 }
 
-.hero h1 span{
-    display:inline-block;
-    opacity:0;
-    transform:translateY(110%);
-    animation:titleReveal 1s cubic-bezier(.16,1,.3,1) forwards;
-}
-
-.one{
-    animation-delay:.35s!important;
-}
-
-.two{
-    animation-delay:.55s!important;
-}
-
-.three{
-    animation-delay:.75s!important;
-    color:#ff4b3e;
-}
-
-.hero-text{
-    max-width:650px;
-    color:#9b9da2;
-    font-size:18px;
-    line-height:1.8;
-    opacity:0;
-    transform:translateY(25px);
-    animation:fadeUp 1s 1s forwards;
-}
-
-.hero-buttons{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    margin-top:35px;
-    opacity:0;
-    transform:translateY(25px);
-    animation:fadeUp 1s 1.2s forwards;
-}
-
-.btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:15px 26px;
-    border-radius:4px;
-    text-decoration:none;
-    font-weight:bold;
-    transition:.4s;
-}
-
-.btn-main{
-    background:#ff4b3e;
-    color:white;
-}
-
-.btn-main:hover{
-    transform:translateY(-6px);
-}
-
-.btn-outline{
-    color:white;
-    border:1px solid #3b3d42;
+.btn-primary:hover:before{
+    transform:translateY(0);
 }
 
 .btn-outline:hover{
-    border-color:#ff4b3e;
-    transform:translateY(-6px);
+    border-color:var(--accent);
+    transform:translateY(-5px);
 }
 
-/* SECTION */
+/* ================= SIDE INDEX ================= */
 
-section{
-    max-width:1250px;
-    margin:auto;
-    padding:110px 30px;
-}
-
-.section-label{
-    color:#ff6257;
-    font-size:13px;
+.hero-index{
+    position:absolute;
+    right:4vw;
+    bottom:45px;
+    writing-mode:vertical-rl;
+    color:#444;
+    font-size:10px;
     letter-spacing:4px;
-    font-weight:bold;
 }
 
-.section-title{
-    font-size:48px;
-    margin:12px 0 45px;
-    letter-spacing:-2px;
+/* ================= GENERAL ================= */
+
+.section{
+    max-width:1400px;
+    margin:auto;
+    padding:150px 7vw;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:70px;
+    gap:30px;
+}
+
+.kicker{
+    color:var(--accent);
+    font-size:10px;
+    letter-spacing:4px;
+    font-weight:800;
+}
+
+.heading{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(45px,6vw,82px);
+    letter-spacing:-5px;
+    line-height:.9;
+    margin-top:15px;
+}
+
+.heading em{
+    color:#444;
+    font-style:normal;
+}
+
+.section-number{
+    color:#444;
+    font-size:12px;
+    letter-spacing:3px;
 }
 
 .reveal{
     opacity:0;
-    transform:translateY(70px);
-    transition:1s;
+    transform:translateY(80px);
+    transition:
+        opacity 1s cubic-bezier(.16,1,.3,1),
+        transform 1s cubic-bezier(.16,1,.3,1);
 }
 
-.reveal.show{
+.reveal.active{
     opacity:1;
     transform:translateY(0);
 }
 
-/* ABOUT */
+/* ================= ABOUT ================= */
 
-.about-grid{
+.about-layout{
     display:grid;
-    grid-template-columns:1.2fr .8fr;
-    gap:70px;
+    grid-template-columns:1fr 1fr;
+    gap:100px;
 }
 
-.about-text p{
-    color:#9a9ca1;
-    font-size:17px;
-    line-height:1.9;
-    margin-bottom:22px;
+.about-copy{
+    color:#999;
+    font-size:20px;
+    line-height:1.8;
 }
 
-.info-box{
-    padding:35px;
-    background:#101115;
-    border:1px solid #25272c;
+.about-copy strong{
+    color:#fff;
 }
 
-.info-row{
-    padding:18px 0;
-    border-bottom:1px solid #24262b;
+.about-details{
+    border-top:1px solid var(--line);
 }
 
-.info-row:last-child{
-    border-bottom:none;
+.detail{
+    padding:25px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    gap:30px;
 }
 
-.info-row strong{
-    display:block;
-    font-size:11px;
-    color:#666a72;
+.detail small{
+    color:#555;
+    font-size:9px;
     letter-spacing:2px;
-    margin-bottom:7px;
 }
 
-.info-row span{
-    color:#e6e6e6;
+.detail span{
+    color:#ddd;
+    font-size:14px;
+    text-align:right;
 }
 
-/* SKILLS */
+/* ================= SKILLS ================= */
 
-.skills{
+.skills-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:18px;
+    border-top:1px solid var(--line);
+    border-left:1px solid var(--line);
 }
 
-.skill-card{
-    min-height:210px;
-    padding:30px;
-    background:#101115;
-    border:1px solid #24262b;
-    transition:.45s;
+.skill{
+    min-height:300px;
+    padding:35px;
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+    transition:.6s;
 }
 
-.skill-card:hover{
-    transform:translateY(-12px);
-    border-color:#ff4b3e;
+.skill:before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    background:var(--accent);
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:0;
+    right:-100px;
+    bottom:-100px;
+    transition:.6s;
 }
 
-.skill-number{
-    color:#555960;
+.skill:hover:before{
+    opacity:.16;
 }
 
-.skill-card h3{
-    margin:35px 0 15px;
+.skill:hover{
+    background:#121212;
 }
 
-.skill-card p{
-    color:#80838a;
+.skill-no{
+    color:#444;
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+.skill h3{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:26px;
+    margin-top:90px;
+    margin-bottom:18px;
+}
+
+.skill p{
+    color:#777;
+    font-size:13px;
     line-height:1.7;
 }
 
-/* SOFTWARE */
+/* ================= TOOLS ================= */
 
-.software{
+.tools{
     display:flex;
     flex-wrap:wrap;
-    gap:14px;
+    gap:12px;
 }
 
-.software span{
-    padding:15px 22px;
-    background:#101115;
-    border:1px solid #292b30;
-    color:#c9cbd0;
-    transition:.35s;
+.tool{
+    padding:18px 23px;
+    border:1px solid var(--line);
+    color:#aaa;
+    font-size:12px;
+    transition:.4s;
 }
 
-.software span:hover{
-    transform:translateY(-6px);
-    border-color:#ff4b3e;
+.tool:hover{
+    color:#fff;
+    border-color:var(--accent);
+    transform:translateY(-7px);
 }
 
-/* PHOTO */
+/* ================= EXPERIENCE ================= */
 
-.photo-area{
-    max-width:560px;
+.experience{
+    border-top:1px solid var(--line);
 }
 
-.photo-card{
+.job{
+    display:grid;
+    grid-template-columns:160px 1fr 120px;
+    align-items:center;
+    gap:40px;
+    padding:40px 0;
+    border-bottom:1px solid var(--line);
+    transition:.45s;
+}
+
+.job:hover{
+    padding-left:20px;
+    background:linear-gradient(90deg,rgba(255,59,48,.05),transparent);
+}
+
+.job-date{
+    color:#555;
+    font-size:10px;
+    letter-spacing:2px;
+}
+
+.job-title{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:28px;
+    font-weight:600;
+}
+
+.job-place{
+    color:var(--accent2);
+    font-size:11px;
+    letter-spacing:1px;
+    margin-top:8px;
+}
+
+.job-type{
+    text-align:right;
+    color:#666;
+    font-size:10px;
+    letter-spacing:2px;
+}
+
+/* ================= PHOTO ================= */
+
+.photo-section{
     position:relative;
-    height:600px;
-    overflow:hidden;
-    cursor:pointer;
-    background:#111;
-    border:1px solid #292b30;
 }
 
-.photo-card img{
+.photo-stage{
+    max-width:700px;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+}
+
+.photo-frame{
+    position:relative;
+    height:760px;
+    overflow:hidden;
+    cursor:none;
+    border:1px solid var(--line);
+}
+
+.photo-frame:before{
+    content:"";
+    position:absolute;
+    inset:20px;
+    border:1px solid rgba(255,255,255,.15);
+    z-index:2;
+    pointer-events:none;
+    transition:.6s;
+}
+
+.photo-frame:after{
+    content:"CLICK TO EXPAND";
+    position:absolute;
+    right:40px;
+    top:40px;
+    z-index:4;
+    color:#fff;
+    font-size:9px;
+    letter-spacing:3px;
+    opacity:.7;
+}
+
+.photo-frame:hover:before{
+    inset:10px;
+    border-color:rgba(255,59,48,.6);
+}
+
+.photo-frame img{
     width:100%;
     height:100%;
     object-fit:cover;
     display:block;
-    transition:1s;
+    filter:saturate(.8);
+    transition:1.2s cubic-bezier(.16,1,.3,1);
 }
 
-.photo-card:hover img{
-    transform:scale(1.07);
+.photo-frame:hover img{
+    transform:scale(1.06);
+    filter:saturate(1);
 }
 
-.photo-caption{
+.photo-info{
     position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    padding:35px;
-    background:linear-gradient(transparent,rgba(0,0,0,.9));
+    left:35px;
+    bottom:35px;
+    z-index:4;
 }
 
-.photo-caption span{
-    color:#ff6257;
-    font-size:11px;
+.photo-info small{
+    color:var(--accent2);
+    font-size:9px;
     letter-spacing:3px;
 }
 
-.photo-caption h3{
+.photo-info h3{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:32px;
     margin-top:8px;
-    font-size:26px;
 }
 
-/* EXPERIENCE */
+/* ================= CV ================= */
 
-.experience-list{
-    display:grid;
-    gap:25px;
+.cv-box{
+    border:1px solid var(--line);
+    padding:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    position:relative;
+    overflow:hidden;
 }
 
-.experience-box{
-    padding:28px 35px;
-    background:#101115;
-    border:1px solid #24262b;
-    border-left:2px solid #ff4b3e;
-    transition:.4s;
+.cv-box:before{
+    content:"CV";
+    position:absolute;
+    right:-20px;
+    bottom:-100px;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:300px;
+    font-weight:900;
+    color:#111;
+    z-index:0;
 }
 
-.experience-box:hover{
-    transform:translateX(10px);
-    border-color:#ff4b3e;
+.cv-content{
+    position:relative;
+    z-index:2;
 }
 
-.year{
-    color:#ff6257;
-    font-size:12px;
-    letter-spacing:3px;
-    font-weight:bold;
+.cv-content h2{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(40px,5vw,70px);
+    letter-spacing:-4px;
 }
 
-.experience-box h3{
-    font-size:27px;
-    margin:10px 0;
+.cv-content p{
+    margin-top:15px;
+    color:#777;
 }
 
-.experience-box h4{
-    color:#bfc1c6;
-    margin-bottom:12px;
+/* ================= CONTACT ================= */
+
+.contact{
+    min-height:75vh;
+    display:flex;
+    align-items:center;
 }
 
-.experience-box p{
-    color:#8c8f95;
-    line-height:1.8;
+.contact-inner{
+    width:100%;
 }
 
-/* CONTACT */
-
-.contact-box{
-    padding:60px;
-    background:#101115;
-    border:1px solid #292b30;
+.contact-title{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(60px,10vw,150px);
+    line-height:.8;
+    letter-spacing:-9px;
 }
 
-.contact-box h2{
-    font-size:52px;
-    margin:15px 0;
+.contact-title span{
+    color:var(--accent);
 }
 
-.contact-box p{
-    color:#8f9298;
-    line-height:1.8;
-    margin-bottom:25px;
+.contact-email{
+    display:inline-block;
+    margin-top:55px;
+    color:#aaa;
+    text-decoration:none;
+    font-size:17px;
+    border-bottom:1px solid #555;
+    padding-bottom:10px;
+    transition:.35s;
 }
 
-/* FOOTER */
+.contact-email:hover{
+    color:#fff;
+    border-color:var(--accent);
+}
+
+/* ================= FOOTER ================= */
 
 footer{
-    border-top:1px solid #202226;
-    padding:35px;
-    text-align:center;
-    color:#5f6268;
+    border-top:1px solid var(--line);
+    padding:30px 7vw;
+    display:flex;
+    justify-content:space-between;
+    color:#555;
+    font-size:10px;
+    letter-spacing:1px;
 }
 
-/* VIEWER */
+/* ================= VIEWER ================= */
 
 .viewer{
     position:fixed;
     inset:0;
-    z-index:5000;
-    background:rgba(0,0,0,.94);
+    background:rgba(0,0,0,.97);
+    z-index:15000;
     display:flex;
     align-items:center;
     justify-content:center;
+    padding:30px;
     opacity:0;
     visibility:hidden;
-    transition:.45s;
+    transition:.5s;
 }
 
-.viewer.active{
+.viewer.open{
     opacity:1;
     visibility:visible;
 }
 
 .viewer img{
-    max-width:90%;
-    max-height:88vh;
-    transform:scale(.65);
+    max-width:90vw;
+    max-height:90vh;
+    transform:scale(.7) rotate(-3deg);
     opacity:0;
-    transition:.55s;
+    transition:.7s cubic-bezier(.16,1,.3,1);
 }
 
-.viewer.active img{
-    transform:scale(1);
+.viewer.open img{
+    transform:scale(1) rotate(0);
     opacity:1;
 }
 
-.close{
+.viewer-close{
     position:absolute;
-    top:25px;
     right:35px;
-    font-size:42px;
+    top:25px;
+    font-size:45px;
+    color:#fff;
     cursor:pointer;
 }
 
-/* ANIMATION */
+/* ================= KEYFRAMES ================= */
 
-@keyframes titleReveal{
+@keyframes loaderText{
+    from{
+        transform:translateY(100%);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+@keyframes loaderLine{
+    to{
+        width:150px;
+    }
+}
+
+@keyframes loaderOut{
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+
+@keyframes heroIn{
     to{
         opacity:1;
         transform:translateY(0);
     }
 }
 
-@keyframes fadeUp{
+@keyframes titleIn{
     to{
         opacity:1;
         transform:translateY(0);
     }
 }
 
-@keyframes labelIn{
+@keyframes glowMove{
+    from{
+        transform:translate(0,0);
+    }
     to{
-        opacity:1;
-        transform:translateX(0);
+        transform:translate(-100px,80px);
     }
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media(max-width:900px){
 
-    .about-grid{
-        grid-template-columns:1fr;
+    body{
+        cursor:auto;
     }
 
-    .skills{
-        grid-template-columns:1fr 1fr;
-    }
-
-}
-
-@media(max-width:600px){
-
-    .links{
+    .cursor,
+    .cursor-ring{
         display:none;
     }
 
-    section{
-        padding:75px 20px;
+    .menu{
+        display:none;
     }
 
-    .hero-content{
-        padding:130px 20px 80px;
+    .hero{
+        padding:130px 25px 70px;
     }
 
-    .hero h1{
+    .hero-title{
+        font-size:58px;
+        letter-spacing:-4px;
+    }
+
+    .hero-bottom{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .hero-actions{
+        flex-wrap:wrap;
+    }
+
+    .section{
+        padding:100px 25px;
+    }
+
+    .section-head{
+        margin-bottom:45px;
+    }
+
+    .about-layout{
+        grid-template-columns:1fr;
+        gap:55px;
+    }
+
+    .skills-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .job{
+        grid-template-columns:90px 1fr;
+        gap:20px;
+    }
+
+    .job-type{
+        display:none;
+    }
+
+    .photo-frame{
+        height:600px;
+    }
+
+    .cv-box{
+        padding:45px 30px;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    footer{
+        flex-direction:column;
+        gap:10px;
+    }
+}
+
+@media(max-width:550px){
+
+    .hero-title{
         font-size:48px;
     }
 
-    .skills{
+    .hero-description{
+        font-size:14px;
+    }
+
+    .skills-grid{
         grid-template-columns:1fr;
     }
 
-    .section-title{
-        font-size:36px;
+    .skill{
+        min-height:240px;
     }
 
-    .photo-card{
-        height:500px;
+    .skill h3{
+        margin-top:60px;
     }
 
-    .contact-box{
-        padding:35px 25px;
+    .job{
+        grid-template-columns:1fr;
     }
 
-    .contact-box h2{
-        font-size:36px;
+    .photo-frame{
+        height:520px;
+    }
+
+    .contact-title{
+        font-size:62px;
+        letter-spacing:-5px;
     }
 
 }
@@ -567,310 +977,489 @@ footer{
 
 <body>
 
-<nav>
+<div class="noise"></div>
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+
+<!-- LOADER -->
+
+<div class="loader">
+    <div class="loader-inner">
+        <div class="loader-name">SUBAS</div>
+        <div class="loader-line"></div>
+    </div>
+</div>
+
+
+<!-- NAV -->
+
+<nav id="nav">
+
 <div class="nav">
 
 <div class="logo">
-SUBAS <span>GHIMIRE</span>
+SUBAS <b>GHIMIRE</b>
 </div>
 
-<div class="links">
+<div class="menu">
 <a href="#about">About</a>
 <a href="#skills">Skills</a>
-<a href="#software">Tools</a>
-<a href="#photo">Photo</a>
 <a href="#experience">Experience</a>
+<a href="#photo">Profile</a>
+<a href="#cv">CV</a>
 <a href="#contact">Contact</a>
 </div>
 
 </div>
+
 </nav>
 
 
+<!-- HERO -->
+
 <header class="hero">
+
+<div class="hero-grid"></div>
+<div class="hero-glow"></div>
 
 <div class="hero-content">
 
-<div class="hero-label">
-PROFESSIONAL VIDEO EDITOR
+<div class="eyebrow">
+<i></i>
+Professional Video Editor
 </div>
 
-<h1>
-<span class="one">I CREATE</span><br>
-<span class="two">VISUAL</span>
-<span class="three"> STORIES.</span>
+<h1 class="hero-title">
+
+<span class="line">
+<span class="word a">VISUAL</span>
+</span>
+
+<span class="line">
+<span class="word b">STORY</span><span class="word c">TELLER.</span>
+</span>
+
 </h1>
 
-<p class="hero-text">
-Professional Video Editor focused on creative editing,
-visual storytelling, motion graphics, color and
-high-quality post-production.
+<div class="hero-bottom">
+
+<p class="hero-description">
+I am Subas Ghimire, a Professional Video Editor
+currently working at Kantipur Television. I transform
+raw footage into polished visual stories through
+editing, motion, color and post-production.
 </p>
 
-<div class="hero-buttons">
+<div class="hero-actions">
 
-<a href="#contact" class="btn btn-main">
-LET'S WORK TOGETHER
+<a href="#contact" class="btn btn-primary">
+<span>Let's Work</span>
 </a>
 
-<a href="YOUR_GOOGLE_DRIVE_CV_LINK"
-target="_blank"
-class="btn btn-outline">
-VIEW / DOWNLOAD CV
+<a href="#cv" class="btn btn-outline">
+<span>View CV</span>
 </a>
 
 </div>
 
 </div>
+
+</div>
+
+<div class="hero-index">
+SCROLL TO EXPLORE — 2026
+</div>
+
 </header>
 
 
-<section id="about">
+<!-- ABOUT -->
 
-<div class="section-label reveal">
-ABOUT ME
-</div>
+<section class="section" id="about">
 
-<h2 class="section-title reveal">
-Who I Am
+<div class="section-head reveal">
+
+<div>
+<div class="kicker">01 / ABOUT</div>
+<h2 class="heading">
+THE PERSON<br>
+<em>BEHIND THE EDIT.</em>
 </h2>
+</div>
 
-<div class="about-grid">
-
-<div class="about-text reveal">
-
-<p>
-I am Subas Ghimire, a Professional Video Editor
-currently working at Kantipur Television.
-</p>
-
-<p>
-With professional experience in television video
-editing and post-production, I focus on turning
-raw footage into polished visual stories.
-</p>
-
-<p>
-My approach combines precise editing, rhythm,
-visual composition, color, sound and motion
-to create engaging and professional videos.
-</p>
+<div class="section-number">
+SUBAS GHIMIRE
+</div>
 
 </div>
 
-<div class="info-box reveal">
 
-<div class="info-row">
-<strong>NAME</strong>
+<div class="about-layout">
+
+<div class="about-copy reveal">
+
+I am <strong>Subas Ghimire</strong>, a Professional
+Video Editor currently working at
+<strong>Kantipur Television.</strong>
+
+<br><br>
+
+My work is built around rhythm, composition,
+timing, motion, color and sound — turning
+ordinary footage into a clear and engaging
+visual experience.
+
+</div>
+
+
+<div class="about-details reveal">
+
+<div class="detail">
+<small>NAME</small>
 <span>Subas Ghimire</span>
 </div>
 
-<div class="info-row">
-<strong>PROFESSION</strong>
+<div class="detail">
+<small>ROLE</small>
 <span>Professional Video Editor</span>
 </div>
 
-<div class="info-row">
-<strong>CURRENT WORKPLACE</strong>
+<div class="detail">
+<small>CURRENT</small>
 <span>Kantipur Television</span>
 </div>
 
-<div class="info-row">
-<strong>LOCATION</strong>
+<div class="detail">
+<small>LOCATION</small>
 <span>Kathmandu, Nepal</span>
 </div>
 
-<div class="info-row">
-<strong>EMAIL</strong>
+<div class="detail">
+<small>EMAIL</small>
 <span>ghimiresubas347@gmail.com</span>
 </div>
 
-<div class="info-row">
-<strong>PHONE</strong>
+<div class="detail">
+<small>PHONE</small>
 <span>9766454587</span>
 </div>
 
 </div>
+
 </div>
+
 </section>
 
 
-<section id="skills">
+<!-- SKILLS -->
 
-<div class="section-label reveal">
-EXPERTISE
+<section class="section" id="skills">
+
+<div class="section-head reveal">
+
+<div>
+<div class="kicker">02 / EXPERTISE</div>
+<h2 class="heading">
+WHAT I<br>
+<em>DO.</em>
+</h2>
 </div>
 
-<h2 class="section-title reveal">
-What I Do
-</h2>
+</div>
 
-<div class="skills">
 
-<div class="skill-card reveal">
-<div class="skill-number">01</div>
+<div class="skills-grid">
+
+<div class="skill reveal">
+<div class="skill-no">01</div>
 <h3>Video Editing</h3>
-<p>Precise cutting, pacing, sequencing and visual storytelling.</p>
+<p>
+Story structure, precise cutting, pacing,
+sequencing and professional finishing.
+</p>
 </div>
 
-<div class="skill-card reveal">
-<div class="skill-number">02</div>
-<h3>Color Grading</h3>
-<p>Color correction and professional visual finishing.</p>
-</div>
-
-<div class="skill-card reveal">
-<div class="skill-number">03</div>
+<div class="skill reveal">
+<div class="skill-no">02</div>
 <h3>Motion Graphics</h3>
-<p>Titles, transitions, graphics and motion elements.</p>
+<p>
+Dynamic titles, transitions, visual elements
+and motion-based storytelling.
+</p>
 </div>
 
-<div class="skill-card reveal">
-<div class="skill-number">04</div>
+<div class="skill reveal">
+<div class="skill-no">03</div>
+<h3>Color</h3>
+<p>
+Color correction, grading and visual consistency
+for a polished final image.
+</p>
+</div>
+
+<div class="skill reveal">
+<div class="skill-no">04</div>
 <h3>Post Production</h3>
-<p>Audio, finishing, visual polish and final delivery.</p>
+<p>
+Audio, visual polish, finishing and
+professional delivery.
+</p>
 </div>
 
 </div>
+
 </section>
 
 
-<section id="software">
+<!-- TOOLS -->
 
-<div class="section-label reveal">
-TOOLS
-</div>
+<section class="section">
 
-<h2 class="section-title reveal">
-Software
+<div class="section-head reveal">
+
+<div>
+<div class="kicker">03 / SOFTWARE</div>
+<h2 class="heading">
+MY<br>
+<em>TOOLS.</em>
 </h2>
-
-<div class="software reveal">
-
-<span>Adobe Premiere Pro</span>
-<span>Adobe After Effects</span>
-<span>Adobe Photoshop</span>
-<span>Adobe Audition</span>
-<span>DaVinci Resolve</span>
+</div>
 
 </div>
+
+<div class="tools reveal">
+
+<div class="tool">Adobe Premiere Pro</div>
+<div class="tool">Adobe After Effects</div>
+<div class="tool">Adobe Photoshop</div>
+<div class="tool">Adobe Audition</div>
+<div class="tool">DaVinci Resolve</div>
+
+</div>
+
 </section>
 
 
-<section id="photo">
+<!-- EXPERIENCE -->
 
-<div class="section-label reveal">
-PROFILE
+<section class="section" id="experience">
+
+<div class="section-head reveal">
+
+<div>
+<div class="kicker">04 / EXPERIENCE</div>
+<h2 class="heading">
+WHERE I'VE<br>
+<em>WORKED.</em>
+</h2>
 </div>
 
-<h2 class="section-title reveal">
-My Photo
+</div>
+
+
+<div class="experience">
+
+<div class="job reveal">
+
+<div class="job-date">
+CURRENT
+</div>
+
+<div>
+<div class="job-title">
+Video Editor / Visual Editor
+</div>
+<div class="job-place">
+Kantipur Television
+</div>
+</div>
+
+<div class="job-type">
+PRESENT
+</div>
+
+</div>
+
+
+<div class="job reveal">
+
+<div class="job-date">
+4 MONTHS
+</div>
+
+<div>
+<div class="job-title">
+Video Editor
+</div>
+<div class="job-place">
+Global Television HD
+</div>
+</div>
+
+<div class="job-type">
+PAST
+</div>
+
+</div>
+
+
+<div class="job reveal">
+
+<div class="job-date">
+4 MONTHS
+</div>
+
+<div>
+<div class="job-title">
+Video Editor
+</div>
+<div class="job-place">
+Janata Television
+</div>
+</div>
+
+<div class="job-type">
+PAST
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PHOTO -->
+
+<section class="section photo-section" id="photo">
+
+<div class="section-head reveal">
+
+<div>
+<div class="kicker">05 / PROFILE</div>
+<h2 class="heading">
+ONE FRAME.<br>
+<em>ONE IDENTITY.</em>
 </h2>
+</div>
 
-<div class="photo-area reveal">
+</div>
 
-<div class="photo-card" onclick="openPhoto()">
+
+<div class="photo-stage reveal">
+
+<div class="photo-frame" onclick="openViewer()">
 
 <img
-src="/static/SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
 alt="Subas Ghimire">
 
-<div class="photo-caption">
-<span>PROFESSIONAL VIDEO EDITOR</span>
+<div class="photo-info">
+
+<small>PROFESSIONAL VIDEO EDITOR</small>
+
 <h3>Subas Ghimire</h3>
+
 </div>
 
 </div>
+
 </div>
+
 </section>
 
 
-<section id="experience">
+<!-- CV -->
 
-<div class="section-label reveal">
-CAREER
-</div>
+<section class="section" id="cv">
 
-<h2 class="section-title reveal">
-Experience
-</h2>
+<div class="cv-box reveal">
 
-<div class="experience-list">
+<div class="cv-content">
 
-<div class="experience-box reveal">
-<div class="year">CURRENT</div>
-<h3>Video Editor / Visual Editor</h3>
-<h4>Kantipur Television</h4>
-<p>
-Currently working as a Video Editor / Visual Editor,
-focused on professional video editing and post-production.
-</p>
-</div>
-
-<div class="experience-box reveal">
-<div class="year">4 MONTHS</div>
-<h3>Video Editor</h3>
-<h4>Global Television HD</h4>
-<p>
-Professional experience in video editing,
-post-production and visual finishing.
-</p>
-</div>
-
-<div class="experience-box reveal">
-<div class="year">4 MONTHS</div>
-<h3>Video Editor</h3>
-<h4>Janata Television</h4>
-<p>
-Experience in television video editing and
-post-production workflow.
-</p>
-</div>
-
-</div>
-</section>
-
-
-<section id="contact">
-
-<div class="contact-box reveal">
-
-<div class="section-label">
-CONTACT
+<div class="kicker">
+06 / RESUME
 </div>
 
 <h2>
-Let's Work Together.
+MY CV.
 </h2>
 
 <p>
-Have a project, production or editing requirement?
-Let's create something professional.
+View or download my professional CV.
 </p>
 
+</div>
+
 <a
-href="mailto:ghimiresubas347@gmail.com"
-class="btn btn-main">
-EMAIL ME
+href="YOUR_GOOGLE_DRIVE_CV_LINK"
+target="_blank"
+class="btn btn-primary">
+
+<span>View / Download CV</span>
+
 </a>
 
 </div>
+
 </section>
 
 
+<!-- CONTACT -->
+
+<section class="section contact" id="contact">
+
+<div class="contact-inner reveal">
+
+<div class="kicker">
+07 / CONTACT
+</div>
+
+<h2 class="contact-title">
+LET'S<br>
+MAKE <span>IMPACT.</span>
+</h2>
+
+<a
+class="contact-email"
+href="mailto:ghimiresubas347@gmail.com">
+
+ghimiresubas347@gmail.com
+
+</a>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
 <footer>
-© 2026 Subas Ghimire — Professional Video Editor
+
+<div>
+© 2026 SUBAS GHIMIRE
+</div>
+
+<div>
+PROFESSIONAL VIDEO EDITOR
+</div>
+
 </footer>
 
 
+<!-- IMAGE VIEWER -->
+
 <div class="viewer" id="viewer">
 
-<div class="close" onclick="closePhoto()">
+<div class="viewer-close" onclick="closeViewer()">
 ×
 </div>
 
 <img
-src="/static/SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
+src="SUBASH_GHIMIRE_13407010099907_profile_pic.jpg"
 alt="Subas Ghimire">
 
 </div>
@@ -878,47 +1467,128 @@ alt="Subas Ghimire">
 
 <script>
 
-const reveals = document.querySelectorAll(".reveal");
+/* ================= CURSOR ================= */
 
-const observer = new IntersectionObserver(
-(entries)=>{
-    entries.forEach(entry=>{
-        if(entry.isIntersecting){
-            entry.target.classList.add("show");
+const cursor = document.querySelector(".cursor");
+const ring = document.querySelector(".cursor-ring");
+
+document.addEventListener("mousemove",(e)=>{
+
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+
+    ring.animate(
+        {
+            left:e.clientX+"px",
+            top:e.clientY+"px"
+        },
+        {
+            duration:450,
+            fill:"forwards"
         }
+    );
+
+});
+
+
+document.querySelectorAll("a,.photo-frame,.skill,.tool").forEach(el=>{
+
+    el.addEventListener("mouseenter",()=>{
+
+        ring.style.width="65px";
+        ring.style.height="65px";
+
     });
+
+    el.addEventListener("mouseleave",()=>{
+
+        ring.style.width="38px";
+        ring.style.height="38px";
+
+    });
+
+});
+
+
+/* ================= NAV ================= */
+
+window.addEventListener("scroll",()=>{
+
+    const nav=document.getElementById("nav");
+
+    if(window.scrollY>50){
+        nav.classList.add("scrolled");
+    }else{
+        nav.classList.remove("scrolled");
+    }
+
+});
+
+
+/* ================= SCROLL REVEAL ================= */
+
+const observer=new IntersectionObserver(
+
+(entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target.classList.add("active");
+
+        }
+
+    });
+
 },
 {
-    threshold:0.12
+    threshold:.12
+}
+
+);
+
+
+document.querySelectorAll(".reveal").forEach(el=>{
+    observer.observe(el);
 });
 
-reveals.forEach(item=>{
-    observer.observe(item);
-});
 
+/* ================= PHOTO VIEWER ================= */
 
-function openPhoto(){
+function openViewer(){
 
     document
     .getElementById("viewer")
-    .classList.add("active");
+    .classList.add("open");
 
 }
 
 
-function closePhoto(){
+function closeViewer(){
 
     document
     .getElementById("viewer")
-    .classList.remove("active");
+    .classList.remove("open");
 
 }
 
 
-document.addEventListener("keydown",function(e){
+document
+.getElementById("viewer")
+.addEventListener("click",(e)=>{
 
-    if(e.key === "Escape"){
-        closePhoto();
+    if(e.target.id==="viewer"){
+        closeViewer();
+    }
+
+});
+
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Escape"){
+        closeViewer();
     }
 
 });
@@ -927,13 +1597,3 @@ document.addEventListener("keydown",function(e){
 
 </body>
 </html>
-'''
-
-
-@app.route("/")
-def home():
-    return render_template_string(HTML)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
