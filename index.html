@@ -48,6 +48,21 @@
             letter-spacing: 8px;
             animation: cinematicZoom 2s ease-out forwards;
             text-shadow: 0 5px 15px rgba(0,0,0,0.9);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* "Khatra" Name Click Animation */
+        .khatra-active {
+            animation: khatraExplode 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        @keyframes khatraExplode {
+            0% { transform: scale(1) rotate(0deg); letter-spacing: 8px; filter: hue-rotate(0deg); }
+            25% { transform: scale(1.3) rotate(-3deg) skewX(15deg); letter-spacing: 20px; filter: blur(2px) hue-rotate(90deg); color: #fff; text-shadow: 0 0 30px #ff2020, 0 0 60px #ff2020; }
+            50% { transform: scale(0.8) rotate(3deg) skewX(-15deg); letter-spacing: 2px; filter: blur(0px) hue-rotate(180deg); color: var(--accent); }
+            75% { transform: scale(1.1) rotate(-1deg); letter-spacing: 12px; filter: hue-rotate(270deg); color: #fff; }
+            100% { transform: scale(1) rotate(0deg); letter-spacing: 8px; filter: hue-rotate(360deg); color: var(--text); }
         }
 
         .hero h2 {
@@ -108,15 +123,6 @@
             position: relative;
             overflow: hidden;
         }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-            transition: left 0.6s ease;
-        }
 
         .card:hover {
             transform: translateX(15px);
@@ -124,10 +130,6 @@
             border-left: 5px solid #fff;
         }
         
-        .card:hover::before {
-            left: 100%;
-        }
-
         .job-title {
             font-size: 1.6rem;
             font-weight: bold;
@@ -163,12 +165,64 @@
         .skills-list li:hover {
             background: #2a2a2a;
         }
+
+        /* Photo Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease;
+            filter: grayscale(40%);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+            box-shadow: 0 10px 25px rgba(255, 32, 32, 0.3);
+            z-index: 2;
+        }
+
+        /* Video Section */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .video-wrapper {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .video-wrapper p {
+            margin-top: 10px;
+            margin-bottom: 0;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
     <header class="hero">
-        <h1>Subas Ghimire</h1>
+        <!-- क्लिक गर्दा प्ले हुने 'Khatra' एनिमेसन -->
+        <h1 id="myName" onclick="playKhatraMotion()">Subas Ghimire</h1>
         <h2>Video Editor / Visual Editor</h2>
     </header>
 
@@ -181,23 +235,54 @@
 
         <div class="section reveal">
             <h3>Professional Experience</h3>
-
             <div class="card">
                 <div class="job-title">Video Editor</div>
                 <div class="company">Kantipur Television | Current</div>
                 <p>Handling professional television production and broadcast video editing tasks.</p>
             </div>
-
             <div class="card">
                 <div class="job-title">Video Editor</div>
                 <div class="company">Global Television HD | 4 Months</div>
                 <p>Worked on television content, news, and daily program editing.</p>
             </div>
-
             <div class="card">
                 <div class="job-title">Video Editor</div>
                 <div class="company">Janata Television | 4 Months</div>
                 <p>Collaborated on video editing for various television programs and shows.</p>
+            </div>
+        </div>
+
+        <!-- फोटो ग्यालरी सेक्सन (ड्राइभबाट निकालिएका ४ वटा फोटो) -->
+        <div class="section reveal">
+            <h3>My Gallery</h3>
+            <div class="gallery">
+                <img src="https://drive.google.com/uc?export=view&id=1QIHtv-NOHxMoybIp0i79rkbpyO52t3Qh" alt="Subas Gallery 1">
+                <img src="https://drive.google.com/uc?export=view&id=1Opf3-vPrLwAbU_rAB3s9C6DQAjNG6hHP" alt="Subas Gallery 2">
+                <img src="https://drive.google.com/uc?export=view&id=1LREDC-lcje8lbTSNx70K8GL9nX9rqpmf" alt="Subas Gallery 3">
+                <img src="https://drive.google.com/uc?export=view&id=1awZsIKlC5JO8voSpsjusB3R75lX_B8C-" alt="Subas Gallery 4">
+            </div>
+        </div>
+
+        <!-- भिडियो सेक्सन -->
+        <div class="section reveal">
+            <h3>Kantipur Works</h3>
+            <div class="video-grid">
+                <div class="video-wrapper">
+                    <video controls>
+                        <!-- तलको kantipur_video1.mp4 मेटाएर पछि आफ्नो भिडियोको लिङ्क राख्नुहोला -->
+                        <source src="kantipur_video1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>Kantipur Production - 1</p>
+                </div>
+                <div class="video-wrapper">
+                    <video controls>
+                        <!-- तलको kantipur_video2.mp4 मेटाएर पछि आफ्नो भिडियोको लिङ्क राख्नुहोला -->
+                        <source src="kantipur_video2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>Kantipur Production - 2</p>
+                </div>
             </div>
         </div>
 
@@ -212,8 +297,9 @@
         
     </div>
 
-    <!-- JavaScript for Scroll Motion -->
+    <!-- JavaScript for Scroll and Click Motion -->
     <script>
+        // तल स्क्रोल गर्दा आउने मोसन
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -226,7 +312,15 @@
             }
         }
         window.addEventListener("scroll", reveal);
-        reveal(); // Trigger once on load
+        reveal();
+
+        // नाममा क्लिक गर्दा आउने "Khatra" मोसन
+        function playKhatraMotion() {
+            const nameEl = document.getElementById("myName");
+            nameEl.classList.remove("khatra-active");
+            void nameEl.offsetWidth; // Trigger reflow
+            nameEl.classList.add("khatra-active");
+        }
     </script>
 
 </body>
