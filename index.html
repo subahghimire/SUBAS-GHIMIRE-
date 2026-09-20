@@ -1384,6 +1384,31 @@ footer{
 .gallery-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:2px}
 @media(max-width:800px){.gallery-head{display:block}.gallery-note{margin-top:20px}.gallery-grid{grid-template-columns:1fr;grid-template-rows:420px 250px 250px 250px}.gallery-card:nth-child(1){grid-row:auto}.gallery-card::after{opacity:1;transform:none}}
 @media(max-width:520px){.gallery-grid{grid-template-rows:350px 220px 220px 220px}.gallery-card{border-radius:24px}}
+
+/* MODERN GALLERY CONTROLS */
+.gallery-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 30px;padding:10px;border:1px solid var(--line);border-radius:22px;background:var(--surface);backdrop-filter:blur(14px)}
+.gallery-toolbar-note{color:var(--muted);font-size:9px;font-weight:800;letter-spacing:1.4px;padding-left:10px}
+.gallery-mode{display:flex;gap:5px;padding:4px;border:1px solid var(--line);border-radius:16px;background:var(--surface-2)}
+.gallery-mode button{border:0;border-radius:11px;background:transparent;color:var(--muted);padding:10px 14px;font-size:9px;font-weight:900;letter-spacing:1.2px;cursor:pointer;transition:.3s}
+.gallery-mode button.active{background:var(--text);color:var(--bg);box-shadow:0 6px 18px var(--shadow)}
+.gallery-grid.modern{grid-template-columns:1.35fr .65fr;grid-template-rows:250px 250px;gap:12px}
+.gallery-grid.modern .gallery-card:nth-child(1){grid-row:span 2;border-radius:34px}
+.gallery-grid.modern .gallery-card{border-radius:24px}
+.gallery-grid.modern .gallery-card:nth-child(2){transform:translateY(8px)}
+.gallery-grid.modern .gallery-card:nth-child(3){transform:translateY(-8px)}
+.gallery-grid.modern .gallery-card:nth-child(4){grid-column:1/-1;height:120px;display:none}
+.gallery-grid.modern.extra-visible .gallery-card:nth-child(4){display:block;grid-column:1/-1;height:170px;transform:none}
+.gallery-add{margin-top:16px;display:flex;justify-content:center}
+.gallery-add button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:100px;padding:13px 20px;font-size:9px;font-weight:900;letter-spacing:1.4px;cursor:pointer;transition:.3s}
+.gallery-add button:hover{background:var(--accent);color:#050505;transform:translateY(-2px)}
+.gallery-editor{display:none;margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:24px;background:var(--surface);grid-template-columns:1fr 1fr;gap:12px}
+.gallery-editor.open{display:grid}
+.gallery-editor label{font-size:9px;color:var(--muted);font-weight:800;letter-spacing:1px}
+.gallery-editor input{width:100%;margin-top:8px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--text);outline:none}
+.gallery-editor .full{grid-column:1/-1}
+.gallery-editor .save{border:0;border-radius:14px;background:var(--accent);color:#050505;font-weight:900;cursor:pointer;padding:13px}
+.gallery-editor small{grid-column:1/-1;color:var(--muted);line-height:1.7;font-size:9px}
+@media(max-width:800px){.gallery-toolbar{align-items:stretch;flex-direction:column}.gallery-toolbar-note{padding:4px}.gallery-grid.modern{grid-template-columns:1fr;grid-template-rows:360px 230px 230px}.gallery-grid.modern .gallery-card:nth-child(1){grid-row:auto}.gallery-grid.modern .gallery-card:nth-child(2),.gallery-grid.modern .gallery-card:nth-child(3){transform:none}.gallery-grid.modern .gallery-card:nth-child(4){grid-column:auto}.gallery-grid.modern.extra-visible{grid-template-rows:360px 230px 230px 170px}.gallery-editor{grid-template-columns:1fr}.gallery-editor .full{grid-column:auto}}
 </style>
 </head>
 
@@ -1641,7 +1666,8 @@ footer{
     </div>
     <p class="gallery-note reveal">A clean collection of selected moments. Tap any photo to open it in fullscreen.</p>
   </div>
-  <div class="gallery-grid">
+  <div class="gallery-toolbar"><span class="gallery-toolbar-note">GALLERY DISPLAY</span><div class="gallery-mode"><button class="active" id="galleryOn">ON</button><button id="galleryOff">OFF</button></div></div>
+  <div class="gallery-grid modern" id="galleryGrid">
     <div class="gallery-card reveal">
       <img src="IMG-20251212-WA0008.jpg" alt="Subas Ghimire — Gallery 01" loading="lazy" decoding="async">
       <div class="gallery-info"><div><small>GALLERY 01</small><strong>SUBAS GHIMIRE</strong></div><span>PHOTO</span></div>
@@ -1650,12 +1676,19 @@ footer{
       <img src="IMG-20260718-WA0001.jpg" alt="Subas Ghimire — Gallery 02" loading="lazy" decoding="async">
       <div class="gallery-info"><div><small>GALLERY 02</small><strong>PORTRAIT</strong></div><span>PHOTO</span></div>
     </div>
-    <div class="gallery-card placeholder reveal">
+    <div class="gallery-card placeholder reveal" id="galleryPlaceholder3">
       <div class="gallery-placeholder">PHOTO 03 — READY</div>
     </div>
-    <div class="gallery-card placeholder reveal">
+    <div class="gallery-card placeholder reveal" id="galleryPlaceholder4">
       <div class="gallery-placeholder">PHOTO 04 — READY</div>
     </div>
+  </div>
+  <div class="gallery-add"><button id="galleryAddBtn">+ ADD PHOTO FROM THIS DEVICE</button></div>
+  <div class="gallery-editor" id="galleryEditor">
+    <label>PHOTO 03<input id="galleryInput3" type="file" accept="image/*"></label>
+    <label>PHOTO 04<input id="galleryInput4" type="file" accept="image/*"></label>
+    <small>Choose photos from your phone. They will appear immediately in the gallery. Browser storage can keep the selected images on this device, but it does not upload them to GitHub automatically.</small>
+    <button class="save full" id="gallerySaveBtn">SAVE ON THIS DEVICE</button>
   </div>
 </section>
 
@@ -2475,6 +2508,40 @@ toolModalClose.addEventListener("click",closeToolModal);
 toolModal.addEventListener("click",function(e){if(e.target===toolModal)closeToolModal();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&toolModal.classList.contains("open"))closeToolModal();});
 
+
+
+/* =========================================================
+   GALLERY ON / OFF + LOCAL PHOTO ADD
+========================================================= */
+const galleryGrid=document.getElementById("galleryGrid");
+const galleryOn=document.getElementById("galleryOn");
+const galleryOff=document.getElementById("galleryOff");
+const galleryAddBtn=document.getElementById("galleryAddBtn");
+const galleryEditor=document.getElementById("galleryEditor");
+const galleryInput3=document.getElementById("galleryInput3");
+const galleryInput4=document.getElementById("galleryInput4");
+const gallerySaveBtn=document.getElementById("gallerySaveBtn");
+function setGalleryMode(on){
+  galleryGrid.style.display=on?"grid":"none";
+  galleryAddBtn.style.display=on?"inline-flex":"none";
+  galleryEditor.style.display="none";
+  galleryOn.classList.toggle("active",on); galleryOff.classList.toggle("active",!on);
+  localStorage.setItem("subas-gallery",on?"on":"off");
+}
+galleryOn.addEventListener("click",()=>setGalleryMode(true));
+galleryOff.addEventListener("click",()=>setGalleryMode(false));
+galleryAddBtn.addEventListener("click",()=>galleryEditor.classList.toggle("open"));
+function showLocalPhoto(input,id){
+  const file=input.files&&input.files[0]; if(!file)return;
+  const holder=document.getElementById(id); holder.classList.remove("placeholder"); holder.innerHTML="";
+  const img=document.createElement("img"); img.alt="Subas Ghimire gallery photo"; img.src=URL.createObjectURL(file); holder.appendChild(img);
+  const info=document.createElement("div"); info.className="gallery-info"; info.innerHTML='<div><small>GALLERY</small><strong>NEW PHOTO</strong></div><span>PHOTO</span>'; holder.appendChild(info);
+  holder.onclick=function(){photoLightboxImage.src=img.src;photoLightboxImage.alt=img.alt;photoLightbox.classList.add("open");photoLightbox.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";};
+}
+galleryInput3.addEventListener("change",()=>showLocalPhoto(galleryInput3,"galleryPlaceholder3"));
+galleryInput4.addEventListener("change",()=>showLocalPhoto(galleryInput4,"galleryPlaceholder4"));
+gallerySaveBtn.addEventListener("click",()=>{localStorage.setItem("subas-gallery-saved","1");galleryEditor.classList.remove("open");galleryAddBtn.textContent="✓ PHOTOS SAVED ON THIS DEVICE";});
+if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 </script>
 
 </body>
