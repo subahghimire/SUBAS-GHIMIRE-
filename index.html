@@ -840,6 +840,29 @@ section{
   font-size:10px;
 }
 
+.tool{cursor:pointer}
+.tool-modal{
+  position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.tool-modal.open{display:flex}
+.tool-modal-card{
+  width:min(680px,94vw);padding:34px;border:1px solid var(--line);border-radius:30px;
+  background:var(--bg);box-shadow:0 30px 100px rgba(0,0,0,.5);position:relative
+}
+.tool-modal-close{
+  position:absolute;right:18px;top:18px;width:40px;height:40px;border:1px solid var(--line);
+  border-radius:50%;background:var(--surface);color:var(--text);font-size:22px;cursor:pointer
+}
+.tool-modal-icon{
+  width:72px;height:72px;border:1px solid var(--line);border-radius:18px;display:flex;
+  align-items:center;justify-content:center;background:var(--surface);margin-bottom:22px
+}
+.tool-modal-icon img{width:50px;height:50px;object-fit:contain}
+.tool-modal-card h3{font-size:clamp(28px,5vw,48px);letter-spacing:-.05em}
+.tool-modal-card p{margin-top:16px;color:var(--muted);font-size:14px;line-height:1.8}
+.tool-modal-tag{display:inline-block;margin-top:22px;padding:9px 13px;border:1px solid var(--line);border-radius:100px;color:var(--accent);font-size:9px;font-weight:800;letter-spacing:1.5px}
+
 /* =========================================================
    SKILLS
 ========================================================= */
@@ -1318,6 +1341,19 @@ footer{
   <div class="hint">TAP OUTSIDE OR × TO CLOSE</div>
 </div>
 
+
+
+
+<!-- SOFTWARE INTRO MODAL -->
+<div class="tool-modal" id="toolModal" aria-hidden="true">
+  <div class="tool-modal-card">
+    <button class="tool-modal-close" id="toolModalClose" aria-label="Close">×</button>
+    <div class="tool-modal-icon"><img id="toolModalIcon" src="" alt=""></div>
+    <h3 id="toolModalTitle"></h3>
+    <p id="toolModalText"></p>
+    <span class="tool-modal-tag" id="toolModalTag"></span>
+  </div>
+</div>
 
 <!-- =========================================================
      NAVIGATION
@@ -2271,6 +2307,35 @@ document
     );
 
   });
+
+
+/* SOFTWARE INTRO MENU */
+const toolModal=document.getElementById("toolModal");
+const toolModalClose=document.getElementById("toolModalClose");
+const toolModalIcon=document.getElementById("toolModalIcon");
+const toolModalTitle=document.getElementById("toolModalTitle");
+const toolModalText=document.getElementById("toolModalText");
+const toolModalTag=document.getElementById("toolModalTag");
+const toolData={
+  "Adobe Premiere Pro":{text:"A professional video editing software used to cut, arrange and refine footage, audio and visual elements. It is widely used for fast, polished video production.",tag:"VIDEO EDITING"},
+  "Adobe After Effects":{text:"A motion graphics and visual effects software used to create animations, titles, transitions, compositing and dynamic visual effects.",tag:"MOTION GRAPHICS & VFX"},
+  "Adobe Photoshop":{text:"A powerful image editing and design tool used for photo retouching, thumbnails, graphics, visual assets and creative compositions.",tag:"VISUAL DESIGN"},
+  "DaVinci Resolve":{text:"A professional post-production platform combining video editing, color grading, visual effects, motion graphics and audio finishing in one application.",tag:"EDITING & COLOR"}
+};
+document.querySelectorAll(".tool").forEach(function(tool){
+  tool.addEventListener("click",function(){
+    const title=tool.querySelector(".tool-name").textContent.trim();
+    const data=toolData[title]; if(!data)return;
+    const img=tool.querySelector("img");
+    toolModalIcon.src=img?img.src:""; toolModalIcon.alt=title;
+    toolModalTitle.textContent=title; toolModalText.textContent=data.text; toolModalTag.textContent=data.tag;
+    toolModal.classList.add("open"); toolModal.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden";
+  });
+});
+function closeToolModal(){toolModal.classList.remove("open");toolModal.setAttribute("aria-hidden","true");document.body.style.overflow="";}
+toolModalClose.addEventListener("click",closeToolModal);
+toolModal.addEventListener("click",function(e){if(e.target===toolModal)closeToolModal();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&toolModal.classList.contains("open"))closeToolModal();});
 
 </script>
 
