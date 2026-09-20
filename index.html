@@ -108,6 +108,12 @@ body.light{
   box-sizing:border-box;
 }
 
+html.theme-no-transition *,
+html.theme-no-transition *::before,
+html.theme-no-transition *::after{
+  transition:none !important;
+}
+
 html{
   scroll-behavior:smooth;
 }
@@ -492,9 +498,6 @@ body.light .theme-knob{
 body.light .theme-icon.moon{opacity:.4;transform:translateY(-50%) scale(.85)}
 body.light .theme-icon.sun{opacity:1;transform:translateY(-50%) scale(1.05)}
 
-.theme-btn:hover{
-  transform:rotate(20deg) scale(1.06);
-}
 
 .nav-contact{
   color:var(--text);
@@ -2222,51 +2225,6 @@ below with your
 
 
 <script>
-
-/* =========================================================
-   DARK / LIGHT THEME
-========================================================= */
-
-const themeButton =
-  document.getElementById("themeToggle");
-
-const savedTheme =
-  localStorage.getItem("subas-theme");
-
-
-if(savedTheme === "light"){
-
-  document.body.classList.add("light");
-
-  themeButton.textContent = "☾";
-
-}else{
-
-  themeButton.textContent = "☀";
-
-}
-
-
-themeButton.addEventListener(
-  "click",
-  function(){
-
-    document.body.classList.toggle("light");
-
-    const isLight =
-      document.body.classList.contains("light");
-
-    themeButton.textContent =
-      isLight ? "☾" : "☀";
-
-    localStorage.setItem(
-      "subas-theme",
-      isLight ? "light" : "dark"
-    );
-
-  }
-);
-
 
 /* =========================================================
    CUSTOM CURSOR
