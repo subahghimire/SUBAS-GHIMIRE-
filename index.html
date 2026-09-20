@@ -1493,6 +1493,13 @@ footer{
 .gallery-editor .save{border:0;border-radius:14px;background:var(--accent);color:#050505;font-weight:900;cursor:pointer;padding:13px}
 .gallery-editor small{grid-column:1/-1;color:var(--muted);line-height:1.7;font-size:9px}
 @media(max-width:800px){.gallery-toolbar{align-items:stretch;flex-direction:column}.gallery-toolbar-note{padding:4px}.gallery-grid.modern{grid-template-columns:1fr;grid-template-rows:360px 230px 230px}.gallery-grid.modern .gallery-card:nth-child(1){grid-row:auto}.gallery-grid.modern .gallery-card:nth-child(2),.gallery-grid.modern .gallery-card:nth-child(3){transform:none}.gallery-grid.modern .gallery-card:nth-child(4){grid-column:auto}.gallery-grid.modern.extra-visible{grid-template-rows:360px 230px 230px 170px}.gallery-editor{grid-template-columns:1fr}.gallery-editor .full{grid-column:auto}}
+
+/* AI PORTFOLIO ASSISTANT */
+.ai-fab{position:fixed;right:22px;bottom:22px;z-index:900;width:58px;height:58px;border:1px solid var(--line);border-radius:50%;background:var(--text);color:var(--bg);font-weight:900;cursor:pointer;box-shadow:0 16px 40px rgba(0,0,0,.28);transition:.25s ease}.ai-fab:hover{transform:translateY(-4px) scale(1.04)}
+.ai-panel{position:fixed;right:22px;bottom:92px;z-index:899;width:min(390px,calc(100vw - 28px));height:520px;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.4)}.ai-panel.open{display:flex}
+.ai-head{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:1px solid var(--line)}.ai-head strong{font-size:13px;letter-spacing:.08em}.ai-head span{display:block;color:var(--muted);font-size:10px;margin-top:4px}.ai-close{border:0;background:transparent;color:var(--text);font-size:22px;cursor:pointer}
+.ai-messages{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}.ai-msg{max-width:86%;padding:11px 13px;border-radius:15px;font-size:12px;line-height:1.55}.ai-msg.bot{align-self:flex-start;background:var(--surface)}.ai-msg.user{align-self:flex-end;background:var(--text);color:var(--bg)}
+.ai-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.ai-form input{min-width:0;flex:1;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--text);padding:12px;font:inherit;outline:none}.ai-form button{border:0;border-radius:14px;background:var(--accent);color:#111;padding:0 15px;font-weight:900;cursor:pointer}@media(max-width:600px){.ai-fab{right:14px;bottom:14px}.ai-panel{right:14px;bottom:84px;height:calc(100vh - 110px);max-height:560px}}
 </style>
 </head>
 
@@ -2561,7 +2568,16 @@ galleryInput3.addEventListener("change",()=>showLocalPhoto(galleryInput3,"galler
 galleryInput4.addEventListener("change",()=>showLocalPhoto(galleryInput4,"galleryPlaceholder4"));
 gallerySaveBtn.addEventListener("click",()=>{localStorage.setItem("subas-gallery-saved","1");galleryEditor.classList.remove("open");galleryAddBtn.textContent="✓ PHOTOS SAVED ON THIS DEVICE";});
 if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
+
+/* AI PORTFOLIO ASSISTANT - LOCAL MODE */
+const aiFab=document.getElementById("aiFab"),aiPanel=document.getElementById("aiPanel"),aiClose=document.getElementById("aiClose"),aiForm=document.getElementById("aiForm"),aiInput=document.getElementById("aiInput"),aiMessages=document.getElementById("aiMessages");
+aiFab.addEventListener("click",()=>{aiPanel.classList.toggle("open");aiPanel.setAttribute("aria-hidden",String(!aiPanel.classList.contains("open")));if(aiPanel.classList.contains("open"))aiInput.focus()});aiClose.addEventListener("click",()=>{aiPanel.classList.remove("open");aiPanel.setAttribute("aria-hidden","true")});
+function aiReply(q){const s=q.toLowerCase();if(/skill|edit|video|editor|experience/.test(s))return"Subas Ghimire is a Video Editor / Visual Editor focused on professional video editing, visual storytelling and post-production.";if(/premiere|after effects|photoshop|davinci|resolve|tool/.test(s))return"Subas works with Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.";if(/kantipur/.test(s))return"Subas currently works as a Video Editor at Kantipur Television.";if(/global|janata|previous/.test(s))return"His portfolio includes previous television editing experience.";if(/contact|email|mail|hire|reach/.test(s))return"Use the Contact section to reach Subas by email or social links.";if(/about|who|subas/.test(s))return"Subas Ghimire is a Video Editor / Visual Editor. Explore the About, Tools, Work and Experience sections.";return"Try asking about Subas skills, tools, experience, work or contact.";}
+aiForm.addEventListener("submit",e=>{e.preventDefault();const q=aiInput.value.trim();if(!q)return;const u=document.createElement("div");u.className="ai-msg user";u.textContent=q;aiMessages.appendChild(u);aiInput.value="";setTimeout(()=>{const b=document.createElement("div");b.className="ai-msg bot";b.textContent=aiReply(q);aiMessages.appendChild(b);aiMessages.scrollTop=aiMessages.scrollHeight},250);aiMessages.scrollTop=aiMessages.scrollHeight});
 </script>
 
+
+<button class="ai-fab" id="aiFab" aria-label="Open AI portfolio assistant">AI</button>
+<div class="ai-panel" id="aiPanel" aria-hidden="true"><div class="ai-head"><div><strong>AI PORTFOLIO ASSISTANT</strong><span>Ask about Subas, skills, experience or work.</span></div><button class="ai-close" id="aiClose" aria-label="Close AI assistant">×</button></div><div class="ai-messages" id="aiMessages"><div class="ai-msg bot">Hi! I am Subas portfolio assistant. Ask about video editing, tools, experience or contact.</div></div><form class="ai-form" id="aiForm"><input id="aiInput" autocomplete="off" placeholder="Ask something..." aria-label="Ask the AI assistant"><button type="submit">SEND</button></form></div>
 </body>
 </html>
