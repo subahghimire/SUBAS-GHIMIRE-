@@ -1359,6 +1359,31 @@ footer{
   }
 
 }
+
+/* =========================================================
+   PREMIUM PHOTO GALLERY
+========================================================= */
+.gallery-section{padding-top:90px}
+.gallery-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:55px}
+.gallery-note{max-width:330px;color:var(--muted);font-size:12px;line-height:1.8}
+.gallery-grid{display:grid;grid-template-columns:1.15fr .85fr;grid-template-rows:300px 300px;gap:16px}
+.gallery-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;background:var(--surface);cursor:zoom-in;isolation:isolate;box-shadow:0 25px 70px var(--shadow);transform:translateZ(0)}
+.gallery-card:nth-child(1){grid-row:span 2}
+.gallery-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .6s ease}
+.gallery-card::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.72));opacity:.75;transition:.5s}
+.gallery-card::after{content:"↗";position:absolute;right:20px;top:20px;z-index:3;width:42px;height:42px;border:1px solid rgba(255,255,255,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,.18);backdrop-filter:blur(8px);font-size:17px;transform:translateY(-8px);opacity:0;transition:.4s}
+.gallery-card:hover img{transform:scale(1.08);filter:saturate(1.08)}
+.gallery-card:hover::after{opacity:1;transform:translateY(0)}
+.gallery-card:hover::before{opacity:.9}
+.gallery-info{position:absolute;left:22px;right:22px;bottom:20px;z-index:2;display:flex;align-items:end;justify-content:space-between;gap:15px;color:#fff}
+.gallery-info small{display:block;margin-bottom:6px;font-size:8px;font-weight:800;letter-spacing:2px;opacity:.75}
+.gallery-info strong{font-size:17px;letter-spacing:-.03em}
+.gallery-info span{font-size:9px;font-weight:800;letter-spacing:1px;opacity:.7}
+.gallery-card.placeholder{cursor:default;background:radial-gradient(circle at 70% 20%,var(--accent-soft),transparent 35%),var(--surface)}
+.gallery-card.placeholder::after{content:"+";opacity:1;transform:none;color:var(--accent);border-color:var(--line)}
+.gallery-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:2px}
+@media(max-width:800px){.gallery-head{display:block}.gallery-note{margin-top:20px}.gallery-grid{grid-template-columns:1fr;grid-template-rows:420px 250px 250px 250px}.gallery-card:nth-child(1){grid-row:auto}.gallery-card::after{opacity:1;transform:none}}
+@media(max-width:520px){.gallery-grid{grid-template-rows:350px 220px 220px 220px}.gallery-card{border-radius:24px}}
 </style>
 </head>
 
@@ -1415,6 +1440,7 @@ footer{
   <div class="nav-links">
     <a href="#home">HOME</a>
     <a href="#about">ABOUT</a>
+    <a href="#gallery">GALLERY</a>
     <a href="#tools">TOOLS</a>
     <a href="#work">WORK</a>
     <a href="#experience">EXPERIENCE</a>
@@ -1601,6 +1627,36 @@ footer{
 
   </div>
 
+</section>
+
+
+<!-- =========================================================
+     PHOTO GALLERY
+========================================================= -->
+<section class="gallery-section" id="gallery">
+  <div class="gallery-head">
+    <div>
+      <div class="section-label reveal">03 / GALLERY</div>
+      <h2 class="section-title reveal">VISUAL<br>STORY.</h2>
+    </div>
+    <p class="gallery-note reveal">A clean collection of selected moments. Tap any photo to open it in fullscreen.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-card reveal">
+      <img src="IMG-20251212-WA0008.jpg" alt="Subas Ghimire — Gallery 01" loading="lazy" decoding="async">
+      <div class="gallery-info"><div><small>GALLERY 01</small><strong>SUBAS GHIMIRE</strong></div><span>PHOTO</span></div>
+    </div>
+    <div class="gallery-card reveal">
+      <img src="IMG-20260718-WA0001.jpg" alt="Subas Ghimire — Gallery 02" loading="lazy" decoding="async">
+      <div class="gallery-info"><div><small>GALLERY 02</small><strong>PORTRAIT</strong></div><span>PHOTO</span></div>
+    </div>
+    <div class="gallery-card placeholder reveal">
+      <div class="gallery-placeholder">PHOTO 03 — READY</div>
+    </div>
+    <div class="gallery-card placeholder reveal">
+      <div class="gallery-placeholder">PHOTO 04 — READY</div>
+    </div>
+  </div>
 </section>
 
 
