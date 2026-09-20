@@ -861,6 +861,30 @@ section{
 .tool-modal-icon img{width:50px;height:50px;object-fit:contain}
 .tool-modal-card h3{font-size:clamp(28px,5vw,48px);letter-spacing:-.05em}
 .tool-modal-card p{margin-top:16px;color:var(--muted);font-size:14px;line-height:1.8}
+
+.tool-modal-video{
+  margin-top:26px;
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:#000;
+}
+.tool-modal-video iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+.tool-video-label{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.5px;
+}
+
 .tool-modal-tag{display:inline-block;margin-top:22px;padding:9px 13px;border:1px solid var(--line);border-radius:100px;color:var(--accent);font-size:9px;font-weight:800;letter-spacing:1.5px}
 
 /* =========================================================
@@ -1352,6 +1376,12 @@ footer{
     <h3 id="toolModalTitle"></h3>
     <p id="toolModalText"></p>
     <span class="tool-modal-tag" id="toolModalTag"></span>
+
+    <div class="tool-modal-video">
+      <iframe id="toolModalVideo" src="" title="Software introduction video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div class="tool-video-label">20-SECOND YOUTUBE PREVIEW</div>
+
   </div>
 </div>
 
@@ -2316,11 +2346,12 @@ const toolModalIcon=document.getElementById("toolModalIcon");
 const toolModalTitle=document.getElementById("toolModalTitle");
 const toolModalText=document.getElementById("toolModalText");
 const toolModalTag=document.getElementById("toolModalTag");
+const toolModalVideo=document.getElementById("toolModalVideo");
 const toolData={
-  "Adobe Premiere Pro":{text:"A professional video editing software used to cut, arrange and refine footage, audio and visual elements. It is widely used for fast, polished video production.",tag:"VIDEO EDITING"},
-  "Adobe After Effects":{text:"A motion graphics and visual effects software used to create animations, titles, transitions, compositing and dynamic visual effects.",tag:"MOTION GRAPHICS & VFX"},
-  "Adobe Photoshop":{text:"A powerful image editing and design tool used for photo retouching, thumbnails, graphics, visual assets and creative compositions.",tag:"VISUAL DESIGN"},
-  "DaVinci Resolve":{text:"A professional post-production platform combining video editing, color grading, visual effects, motion graphics and audio finishing in one application.",tag:"EDITING & COLOR"}
+  "Adobe Premiere Pro":{text:"A professional video editing software used to cut, arrange and refine footage, audio and visual elements. It is widely used for fast, polished video production.",tag:"VIDEO EDITING",video:"MqwlW76sFCM"},
+  "Adobe After Effects":{text:"A motion graphics and visual effects software used to create animations, titles, transitions, compositing and dynamic visual effects.",tag:"MOTION GRAPHICS & VFX",video:"MA2kVwJPBkg"},
+  "Adobe Photoshop":{text:"A powerful image editing and design tool used for photo retouching, thumbnails, graphics, visual assets and creative compositions.",tag:"VISUAL DESIGN",video:"gV_1TisKa2c"},
+  "DaVinci Resolve":{text:"A professional post-production platform combining video editing, color grading, visual effects, motion graphics and audio finishing in one application.",tag:"EDITING & COLOR",video:"63Ln33O4p4c"}
 };
 document.querySelectorAll(".tool").forEach(function(tool){
   tool.addEventListener("click",function(){
@@ -2329,10 +2360,11 @@ document.querySelectorAll(".tool").forEach(function(tool){
     const img=tool.querySelector("img");
     toolModalIcon.src=img?img.src:""; toolModalIcon.alt=title;
     toolModalTitle.textContent=title; toolModalText.textContent=data.text; toolModalTag.textContent=data.tag;
+    toolModalVideo.src="https://www.youtube.com/embed/"+data.video+"?start=0&end=20&rel=0&modestbranding=1";
     toolModal.classList.add("open"); toolModal.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden";
   });
 });
-function closeToolModal(){toolModal.classList.remove("open");toolModal.setAttribute("aria-hidden","true");document.body.style.overflow="";}
+function closeToolModal(){toolModal.classList.remove("open");toolModal.setAttribute("aria-hidden","true");document.body.style.overflow="";toolModalVideo.src="";}
 toolModalClose.addEventListener("click",closeToolModal);
 toolModal.addEventListener("click",function(e){if(e.target===toolModal)closeToolModal();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&toolModal.classList.contains("open"))closeToolModal();});
