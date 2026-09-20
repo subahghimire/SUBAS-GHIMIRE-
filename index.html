@@ -417,16 +417,80 @@ nav{
 }
 
 .theme-btn{
-  width:40px;
-  height:40px;
+  --toggle-w:78px;
+  --toggle-h:42px;
+  width:var(--toggle-w);
+  height:var(--toggle-h);
+  padding:3px;
   border:1px solid var(--line);
-  border-radius:50%;
+  border-radius:999px;
   background:var(--surface);
   color:var(--text);
   cursor:pointer;
-  font-size:15px;
-  transition:.3s;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  transition:transform .3s ease,border-color .3s ease,background .35s ease,box-shadow .35s ease;
 }
+.theme-btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(120deg,transparent 15%,rgba(255,255,255,.16) 50%,transparent 85%);
+  transform:translateX(-130%);
+  transition:transform .65s ease;
+  pointer-events:none;
+}
+.theme-btn:hover::before{transform:translateX(130%)}
+.theme-btn:hover{
+  transform:translateY(-1px) scale(1.03);
+  border-color:var(--accent);
+  box-shadow:0 8px 28px var(--accent-soft);
+}
+.theme-btn:active{transform:scale(.96)}
+.theme-btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.theme-track{
+  width:100%;
+  height:100%;
+  display:block;
+  position:relative;
+  border-radius:inherit;
+}
+.theme-knob{
+  position:absolute;
+  width:34px;
+  height:34px;
+  left:1px;
+  top:1px;
+  border-radius:50%;
+  background:var(--text);
+  box-shadow:0 4px 14px var(--shadow),0 0 0 1px var(--line);
+  transition:left .45s cubic-bezier(.68,-.55,.27,1.55),background .35s ease,box-shadow .35s ease;
+  z-index:2;
+}
+.theme-icon{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:1;
+  width:22px;
+  text-align:center;
+  font-size:14px;
+  font-weight:800;
+  line-height:1;
+  transition:opacity .3s ease,transform .4s ease,color .35s ease;
+  pointer-events:none;
+}
+.theme-icon.sun{right:7px;color:var(--accent);opacity:.45}
+.theme-icon.moon{left:7px;color:var(--muted);opacity:1}
+body.light .theme-knob{
+  left:39px;
+  background:var(--accent);
+  box-shadow:0 4px 16px var(--accent-soft),0 0 18px var(--accent-soft);
+}
+body.light .theme-icon.moon{opacity:.4;transform:translateY(-50%) scale(.85)}
+body.light .theme-icon.sun{opacity:1;transform:translateY(-50%) scale(1.05)}
 
 .theme-btn:hover{
   transform:rotate(20deg) scale(1.06);
@@ -1475,14 +1539,13 @@ footer{
 
     <!-- DARK / LIGHT SWITCH -->
 
-    <button
-      class="theme-btn"
-      id="themeToggle"
-      aria-label="Toggle theme"
-      title="Toggle theme"
-    >
-      ☀
-    </button>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle color theme" aria-pressed="false" title="Toggle light / dark mode">
+  <span class="theme-track">
+    <span class="theme-icon moon">☾</span>
+    <span class="theme-icon sun">☀</span>
+    <span class="theme-knob"></span>
+  </span>
+</button>
 
     <a
       class="nav-contact magnetic"
@@ -2039,62 +2102,43 @@ footer{
           PREVIOUS
         </div>
 
-        <div>
+    /* =========================================================
+   DARK / LIGHT THEME — ADVANCED TOGGLE
+========================================================= */
 
-          <h3>
-            Janata Television
-          </h3>
+const themeButton = document.getElementById("themeToggle");
 
-          <p>
-            Video Editor
-          </p>
+function applyTheme(theme, animate = true){
+  const isLight = theme === "light";
+  if(!animate) document.documentElement.classList.add("theme-no-transition");
+  document.body.classList.toggle("light", isLight);
+  themeButton.setAttribute("aria-pressed", String(isLight));
+  themeButton.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+  themeButton.setAttribute("title", isLight ? "Switch to dark mode" : "Switch to light mode");
+  localStorage.setItem("subas-theme", isLight ? "light" : "dark");
+  if(!animate){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      document.documentElement.classList.remove("theme-no-transition");
+    }));
+  }
+}
 
-        </div>
+const savedTheme = localStorage.getItem("subas-theme");
+const preferredTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+applyTheme(preferredTheme, false);
 
-      </div>
+themeButton.addEventListener("click", function(){
+  const nextTheme = document.body.classList.contains("light") ? "dark" : "light";
+  applyTheme(nextTheme, true);
+  if(navigator.vibrate) navigator.vibrate(10);
+});
 
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     CONTACT
-========================================================= -->
-
-<section
-  class="contact"
-  id="contact"
->
-
-  <div class="section-label reveal">
-    07 / CONTACT
-  </div>
-
-  <h2 class="section-title reveal">
-    HAVE A PROJECT<br>
-    IN MIND?
-  </h2>
+window.matchMedia("(prefers-color-scheme: light)").addEventListener?.("change", function(e){
+  if(!localStorage.getItem("subas-theme")) applyTheme(e.matches ? "light" : "dark", true);
+});
 
 
-  <!-- EXACT EMAIL -->
-
-  <a
-    class="email reveal"
-    href="mailto:ghimiresubas347@gmail.com"
-  >
-    ghimiresubas347@gmail.com
-  </a>
-
-
-  <div class="socials reveal">
-
-    <!--
-      FACEBOOK:
-      Replace the link below with your
+below with your
       actual Facebook profile/page URL.
     -->
 
