@@ -8,6 +8,69 @@
 <title>Subas Ghimire — Video Editor</title>
 
 <style>
+/* PHOTO FULLSCREEN */
+.photo{
+  cursor:zoom-in;
+}
+.photo img{
+  cursor:zoom-in;
+}
+.photo-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  background:rgba(0,0,0,.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.photo-lightbox.open{
+  display:flex;
+  opacity:1;
+}
+.photo-lightbox img{
+  max-width:94vw;
+  max-height:90vh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:20px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  transform:scale(.92);
+  transition:transform .3s ease;
+}
+.photo-lightbox.open img{
+  transform:scale(1);
+}
+.photo-lightbox .close{
+  position:absolute;
+  top:22px;
+  right:22px;
+  width:46px;
+  height:46px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:25px;
+  line-height:1;
+  cursor:pointer;
+}
+.photo-lightbox .hint{
+  position:absolute;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%);
+  color:rgba(255,255,255,.65);
+  font-size:10px;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
 /* =========================================================
    SUBAS GHIMIRE — ADVANCED PORTFOLIO
    ONE FILE VERSION
@@ -1213,6 +1276,12 @@ footer{
 
 <div class="grain"></div>
 
+<div class="photo-lightbox" id="photoLightbox" aria-hidden="true">
+  <button class="close" id="photoLightboxClose" aria-label="Close image">×</button>
+  <img id="photoLightboxImage" src="" alt="Subas Ghimire">
+  <div class="hint">TAP OUTSIDE OR × TO CLOSE</div>
+</div>
+
 
 <!-- =========================================================
      NAVIGATION
@@ -2122,6 +2191,48 @@ revealElements.forEach(
 
   }
 );
+
+
+/* =========================================================
+   PHOTO FULLSCREEN
+========================================================= */
+
+const photoLightbox = document.getElementById("photoLightbox");
+const photoLightboxImage = document.getElementById("photoLightboxImage");
+const photoLightboxClose = document.getElementById("photoLightboxClose");
+
+document.querySelectorAll(".photo img").forEach(function(img){
+  img.addEventListener("click", function(){
+    photoLightboxImage.src = this.src;
+    photoLightboxImage.alt = this.alt || "Subas Ghimire";
+    photoLightbox.classList.add("open");
+    photoLightbox.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  });
+});
+
+function closePhotoLightbox(){
+  photoLightbox.classList.remove("open");
+  photoLightbox.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+  setTimeout(function(){
+    photoLightboxImage.src = "";
+  }, 250);
+}
+
+photoLightboxClose.addEventListener("click", closePhotoLightbox);
+
+photoLightbox.addEventListener("click", function(e){
+  if(e.target === photoLightbox){
+    closePhotoLightbox();
+  }
+});
+
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && photoLightbox.classList.contains("open")){
+    closePhotoLightbox();
+  }
+});
 
 
 /* =========================================================
