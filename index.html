@@ -1103,10 +1103,25 @@ body.light .work-visual span{
 }
 
 .timeline-year{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
   color:var(--accent);
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:1px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  padding:7px 10px;
+  border:1px solid var(--accent);
+  border-radius:999px;
+  background:rgba(255,255,255,.035);
+  box-shadow:0 0 18px rgba(255,255,255,.04);
+  transition:.3s ease;
+}
+
+.timeline-item:hover .timeline-year{
+  transform:translateX(4px);
+  box-shadow:0 0 22px rgba(255,255,255,.08);
 }
 
 .timeline-item h3{
