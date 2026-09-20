@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://subahghimire.github.io/SUBAS-GHIMIRE-/sitemap.xml
