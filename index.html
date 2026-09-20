@@ -434,6 +434,9 @@ nav{
 
 .nav-contact{
   color:var(--text);
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
   text-decoration:none;
   font-size:10px;
   font-weight:800;
@@ -443,9 +446,23 @@ nav{
   transition:.3s;
 }
 
+.nav-contact::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  background:linear-gradient(90deg,transparent,rgba(215,255,63,.75),transparent);
+  transform:translateX(-120%);
+  transition:transform .7s ease;
+  z-index:-1;
+}
+.nav-contact:hover::before{
+  transform:translateX(120%);
+}
 .nav-contact:hover{
   background:var(--text);
   color:var(--bg);
+  transform:scale(1.04);
 }
 
 /* =========================================================
@@ -1418,7 +1435,8 @@ footer{
 
     <a
       class="nav-contact magnetic"
-      href="#contact"
+      href="tel:+9779800000000"
+      aria-label="Call Subas Ghimire"
     >
       CONTACT
     </a>
