@@ -305,6 +305,24 @@ body{
   to{transform:translate(90px,90px)}
 }
 
+.motion-bg::before{
+  content:"";
+  position:absolute;
+  inset:-3%;
+  background-image:url("IMG-20251212-WA0008.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:.20;
+  filter:blur(1.5px);
+  transform:scale(1.04);
+  animation:bgPhotoMove 18s ease-in-out infinite alternate;
+}
+@keyframes bgPhotoMove{
+  0%{transform:scale(1.04) translate3d(0,0,0)}
+  100%{transform:scale(1.10) translate3d(-1%,1%,0)}
+}
+
 .motion-bg::after{
   content:"";
   position:absolute;
