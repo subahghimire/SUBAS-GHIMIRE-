@@ -159,7 +159,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     return c;
   }
   async function searchInternetArchive(q){
-    const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent('mediatype:movies AND fulltext:('+q+')')+'&fl[]=identifier&fl[]=title&rows=24&output=json';
+    const terms=q.trim().split(/\s+/).filter(Boolean).slice(0,6);const query='mediatype:movies AND ('+terms.map(w=>'title:'+JSON.stringify(w)+' OR description:'+JSON.stringify(w)+' OR subject:'+JSON.stringify(w)).join(' OR ')+')';const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent(query)+'&fl[]=identifier&fl[]=title&rows=30&output=json';
     const r=await fetch(u,{mode:'cors'});if(!r.ok)throw 0;const d=await r.json(),out=[];
     for(const x of d.response?.docs||[]){
       try{
@@ -172,7 +172,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     return out;
   }
   async function searchCommons(q){
-    const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(q+' filetype:video')+'&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|mediatype';
+    const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=6&gsrlimit=100&prop=imageinfo&iiprop=url|mime|mediatype';
     const r=await fetch(u,{mode:'cors'});if(!r.ok)throw 0;const d=await r.json();
     return Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:(p.title||'').replace(/^File:/,''),url:i.url||'',mime:i.mime||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||'')}}).filter(v=>v.url&&String(v.mime).startsWith('video/'));
   }
