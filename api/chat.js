@@ -13,16 +13,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return res.status(200).json({
-        reply: "AI assistant is being configured. Please try again shortly.",
-        interactionId: null
+        reply: "AI is not connected yet. Please check the GEMINI_API_KEY environment variable.",
       });
     }
 
-    const instructions = [
+    const systemInstruction = [
       "You are the AI assistant on Subas Ghimire's personal portfolio website.",
       "Answer normal questions naturally and helpfully. You can answer general questions, simple calculations, explanations, writing help, and casual questions.",
       "For personal facts about Subas, only use these known facts: Subas Ghimire is a Video Editor / Visual Editor; he currently works as a Video Editor at Kantipur Television; previous television editing experience includes Global Television HD and Janata Television; tools include Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.",
@@ -32,54 +31,54 @@ export default async function handler(req, res) {
       "Keep replies concise and conversational."
     ].join(" ");
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + apiKey
-      },
-      body: JSON.stringify({
-        model: "gpt-5.6-luna",
-        instructions,
-        input: message,
-        max_output_tokens: 500
-      })
-    });
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: systemInstruction }]
+          },
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: message }]
+            }
+          ],
+          generationConfig: {
+            maxOutputTokens: 500,
+            temperature: 0.7
+          }
+        })
+      }
+    );
 
-    const raw = await response.text();
-    let data = {};
-
-    try {
-      data = raw ? JSON.parse(raw) : {};
-    } catch {
-      data = {};
-    }
+    const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI API:", response.status, raw);
+      console.error("Gemini API:", response.status, JSON.stringify(data));
       return res.status(200).json({
-        reply: "I’m ready to help. Please try your question again.",
-        interactionId: null
+        reply: "AI service ma problem aayo. Please try again in a moment."
       });
     }
 
     const reply =
-      data?.output_text ||
-      data?.output
-        ?.flatMap(item => item?.content || [])
-        ?.find(item => item?.type === "output_text")
-        ?.text ||
-      "I’m ready to help. Please ask me anything.";
+      data?.candidates?.[0]?.content?.parts
+        ?.map(part => part?.text || "")
+        .join("")
+        .trim();
 
     return res.status(200).json({
-      reply,
-      interactionId: data?.id || null
+      reply: reply || "I’m ready to help. Please ask me something."
     });
   } catch (error) {
-    console.error("OpenAI API error:", error);
+    console.error("Gemini API error:", error);
     return res.status(200).json({
-      reply: "I’m ready to help. Please try your question again.",
-      interactionId: null
+      reply: "AI service temporarily unavailable. Please try again."
     });
   }
 }
