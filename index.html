@@ -1500,6 +1500,10 @@ footer{
 .ai-head{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:1px solid var(--line)}.ai-head strong{font-size:13px;letter-spacing:.08em}.ai-head span{display:block;color:var(--muted);font-size:10px;margin-top:4px}.ai-close{border:0;background:transparent;color:var(--text);font-size:22px;cursor:pointer}
 .ai-messages{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}.ai-msg{max-width:86%;padding:11px 13px;border-radius:15px;font-size:12px;line-height:1.55}.ai-msg.bot{align-self:flex-start;background:var(--surface)}.ai-msg.user{align-self:flex-end;background:var(--text);color:var(--bg)}
 .ai-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.ai-form input{min-width:0;flex:1;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--text);padding:12px;font:inherit;outline:none}.ai-form button{border:0;border-radius:14px;background:var(--accent);color:#111;padding:0 15px;font-weight:900;cursor:pointer}@media(max-width:600px){.ai-fab{right:14px;bottom:14px}.ai-panel{right:14px;bottom:84px;height:calc(100vh - 110px);max-height:560px}}
+
+/* AI VIDEO GENERATOR */
+.video-fab{position:fixed;right:92px;bottom:22px;z-index:900;height:58px;padding:0 18px;border:1px solid var(--line);border-radius:30px;background:var(--accent);color:#111;font-weight:900;font-size:10px;letter-spacing:1.2px;cursor:pointer;box-shadow:0 16px 40px rgba(0,0,0,.28);transition:.25s ease}.video-fab:hover{transform:translateY(-4px)}
+.video-panel{position:fixed;right:22px;bottom:92px;z-index:898;width:min(430px,calc(100vw - 28px));max-height:calc(100vh - 115px);display:none;flex-direction:column;overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.4)}.video-panel.open{display:flex}.video-head{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:1px solid var(--line)}.video-head strong{font-size:13px;letter-spacing:.08em}.video-head span{display:block;color:var(--muted);font-size:10px;margin-top:4px}.video-close{border:0;background:transparent;color:var(--text);font-size:22px;cursor:pointer}.video-body{padding:16px}.video-body label{display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:1px;margin:12px 0 7px}.video-body textarea{width:100%;min-height:120px;resize:vertical;border:1px solid var(--line);border-radius:15px;background:var(--surface);color:var(--text);padding:13px;font:inherit;outline:none}.video-options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.video-options select{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;outline:none}.video-generate{width:100%;margin-top:14px;border:0;border-radius:14px;background:var(--accent);color:#111;padding:13px;font-weight:900;cursor:pointer}.video-status{margin-top:12px;color:var(--muted);font-size:10px;line-height:1.5}.video-result{display:none;margin-top:14px}.video-result.open{display:block}.video-result video{width:100%;border-radius:16px;background:#000}.video-download{display:block;text-align:center;margin-top:9px;padding:11px;border-radius:13px;background:var(--text);color:var(--bg);text-decoration:none;font-size:10px;font-weight:900}.video-cost{margin-top:9px;color:var(--muted);font-size:9px;line-height:1.5}@media(max-width:600px){.video-fab{right:82px;bottom:14px;padding:0 13px}.video-panel{right:14px;bottom:84px}}
 </style>
 </head>
 
@@ -2569,7 +2573,41 @@ galleryInput4.addEventListener("change",()=>showLocalPhoto(galleryInput4,"galler
 gallerySaveBtn.addEventListener("click",()=>{localStorage.setItem("subas-gallery-saved","1");galleryEditor.classList.remove("open");galleryAddBtn.textContent="✓ PHOTOS SAVED ON THIS DEVICE";});
 if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
-/* AI PORTFOLIO ASSISTANT - GEMINI API */
+
+/* AI VIDEO GENERATOR - VEO 3.1 */
+document.addEventListener("DOMContentLoaded",function(){
+  const fab=document.getElementById("videoFab"),panel=document.getElementById("videoPanel"),close=document.getElementById("videoClose"),generate=document.getElementById("videoGenerate"),prompt=document.getElementById("videoPrompt"),model=document.getElementById("videoModel"),ratio=document.getElementById("videoRatio"),resolution=document.getElementById("videoResolution"),status=document.getElementById("videoStatus"),result=document.getElementById("videoResult"),preview=document.getElementById("videoPreview"),download=document.getElementById("videoDownload");
+  if(!fab||!panel||!close||!generate)return;
+  fab.addEventListener("click",()=>{panel.classList.toggle("open");panel.setAttribute("aria-hidden",String(!panel.classList.contains("open")));if(panel.classList.contains("open"))prompt.focus();});
+  close.addEventListener("click",()=>{panel.classList.remove("open");panel.setAttribute("aria-hidden","true");});
+  generate.addEventListener("click",async()=>{
+    const text=prompt.value.trim(); if(!text){status.textContent="Please enter a video prompt.";prompt.focus();return;}
+    generate.disabled=true;generate.textContent="STARTING...";result.classList.remove("open");preview.removeAttribute("src");status.textContent="Starting Veo video generation...";
+    try{
+      const start=await fetch("/api/video",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:text,model:model.value,aspectRatio:ratio.value,resolution:resolution.value})});
+      const startData=await start.json(); if(!start.ok)throw new Error(startData?.error||"Could not start video generation.");
+      const operation=startData.operation; if(!operation)throw new Error("No video operation was returned.");
+      let done=false;
+      for(let i=0;i<60&&!done;i++){
+        await new Promise(r=>setTimeout(r,10000));
+        status.textContent="Generating video... "+Math.round(((i+1)/60)*100)+"% (this is an estimate)";
+        const check=await fetch("/api/video?operation="+encodeURIComponent(operation)); const data=await check.json();
+        if(!check.ok)throw new Error(data?.error||"Could not check video status.");
+        done=!!data.done;
+        if(data.error)throw new Error(data.error);
+        if(done&&data.ready){
+          status.textContent="Video ready. Loading preview...";
+          const blobResponse=await fetch("/api/video?operation="+encodeURIComponent(operation)+"&download=1");
+          if(!blobResponse.ok){const e=await blobResponse.json().catch(()=>({}));throw new Error(e.error||"Could not download generated video.");}
+          const blob=await blobResponse.blob(); const url=URL.createObjectURL(blob); preview.src=url; download.href=url; result.classList.add("open"); status.textContent="Done — your AI video is ready."; break;
+        }
+      }
+      if(!done)throw new Error("Generation is taking longer than expected. Please try again or check later.");
+    }catch(error){status.textContent="Video error: "+(error?.message||"Video generation failed.");console.error(error);}
+    finally{generate.disabled=false;generate.textContent="GENERATE VIDEO";}
+  });
+});
+\n/* AI PORTFOLIO ASSISTANT - GEMINI API */
 document.addEventListener("DOMContentLoaded", function(){
   const aiFab=document.getElementById("aiFab");
   const aiPanel=document.getElementById("aiPanel");
@@ -2653,5 +2691,23 @@ document.addEventListener("DOMContentLoaded", function(){
 
 <button class="ai-fab" id="aiFab" aria-label="Open AI portfolio assistant">AI</button>
 <div class="ai-panel" id="aiPanel" aria-hidden="true"><div class="ai-head"><div><strong>AI PORTFOLIO ASSISTANT</strong><span>Ask about Subas, skills, experience or work.</span></div><button class="ai-close" id="aiClose" aria-label="Close AI assistant">×</button></div><div class="ai-messages" id="aiMessages"><div class="ai-msg bot">Hi! I am Subas portfolio assistant. Ask about video editing, tools, experience or contact.</div></div><form class="ai-form" id="aiForm"><input id="aiInput" autocomplete="off" placeholder="Ask something..." aria-label="Ask the AI assistant"><button type="submit">SEND</button></form></div>
+
+<button class="video-fab" id="videoFab" aria-label="Open AI video generator">VIDEO AI</button>
+<div class="video-panel" id="videoPanel" aria-hidden="true">
+  <div class="video-head"><div><strong>AI VIDEO GENERATOR</strong><span>Powered by Google Veo 3.1</span></div><button class="video-close" id="videoClose" aria-label="Close video generator">×</button></div>
+  <div class="video-body">
+    <label for="videoPrompt">VIDEO PROMPT</label>
+    <textarea id="videoPrompt" placeholder="Example: A cinematic wide shot of an old man building a wooden motorcycle in a rural workshop, detailed step-by-step construction, natural movement, dramatic lighting."></textarea>
+    <div class="video-options">
+      <div><label for="videoModel">MODEL</label><select id="videoModel"><option value="veo-3.1-fast-generate-preview">Veo 3.1 Fast — faster</option><option value="veo-3.1-lite-generate-preview">Veo 3.1 Lite — lower cost</option><option value="veo-3.1-generate-preview">Veo 3.1 — quality</option></select></div>
+      <div><label for="videoRatio">RATIO</label><select id="videoRatio"><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Vertical</option></select></div>
+    </div>
+    <label for="videoResolution">RESOLUTION</label><select id="videoResolution" style="width:100%;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;outline:none"><option value="720p">720p</option><option value="1080p">1080p</option></select>
+    <button class="video-generate" id="videoGenerate">GENERATE VIDEO</button>
+    <div class="video-status" id="videoStatus">Video generation takes some time. Your Gemini API key must have paid Gemini API access for Veo.</div>
+    <div class="video-result" id="videoResult"><video id="videoPreview" controls playsinline></video><a class="video-download" id="videoDownload" href="#" download="subas-ai-video.mp4">DOWNLOAD MP4</a></div>
+    <div class="video-cost">Veo 3.1 pricing is usage-based. Fast 720p is currently $0.10/second; Lite 720p is $0.05/second. </div>
+  </div>
+</div>
 </body>
 </html>
