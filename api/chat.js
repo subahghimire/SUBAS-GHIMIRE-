@@ -1,4 +1,13 @@
 export default async function handler(req, res) {
+  // Allow the GitHub Pages frontend to call this Vercel API.
+  res.setHeader("Access-Control-Allow-Origin", "https://subahghimire.github.io");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -12,7 +21,9 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: "GEMINI_API_KEY is not configured in Vercel." });
+      return res.status(500).json({
+        error: "GEMINI_API_KEY is not configured in Vercel."
+      });
     }
 
     const systemInstruction = [
@@ -54,6 +65,7 @@ export default async function handler(req, res) {
 
     const raw = await response.text();
     let data = {};
+
     try {
       data = raw ? JSON.parse(raw) : {};
     } catch {
