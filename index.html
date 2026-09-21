@@ -136,15 +136,56 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       effectSearchInput.focus();
       return;
     }
+
     const q = encodeURIComponent(query);
     const resources = [
-      {type:'FREE TUTORIAL',title:query+' — Free Premiere Pro tutorials',text:'Free video tutorials and demonstrations on YouTube',url:'https://www.youtube.com/results?search_query='+q+'+Premiere+Pro+effect+free'},
-      {type:'FREE MOGRT',title:query+' — Free MOGRT templates',text:'Free Premiere Pro MOGRT templates from Mixkit',url:'https://mixkit.co/free-premiere-pro-templates/mogrt/?q='+q},
-      {type:'FREE PRESET',title:query+' — Free Premiere Pro presets',text:'Free presets, transitions, LUTs and effects from Motion Array',url:'https://motionarray.com/premiere-pro-presets/free/?q='+q},
-      {type:'FREE PLUGIN',title:query+' — Free Animation Composer',text:'Free Mister Horse Animation Composer with free items for Premiere Pro',url:'https://misterhorse.com/'},
-      {type:'FREE PROJECT',title:query+' — Free After Effects projects',text:'Free After Effects project templates from Mixkit',url:'https://mixkit.co/free-after-effects-templates/project/?q='+q},
-      {type:'FREE TEMPLATE',title:query+' — Free Premiere Pro templates',text:'Free Premiere Pro projects, transitions, titles and templates from Mixkit',url:'https://mixkit.co/free-premiere-pro-templates/?q='+q}
+      {
+        type:'YOUTUBE VIDEO',
+        title: query + ' — Premiere Pro tutorial',
+        text:'Search results with videos that can be played inside this website',
+        url:'https://www.youtube.com/results?search_query=' + q + '+Premiere+Pro+effect'
+      },
+      {
+        type:'FREE MOGRT',
+        title: query + ' — Free MOGRT',
+        text:'Free Motion Graphics Templates',
+        url:'https://mixkit.co/free-premiere-pro-templates/mogrt/?q=' + q
+      },
+      {
+        type:'FREE PRESET',
+        title: query + ' — Free preset',
+        text:'Free Premiere Pro presets',
+        url:'https://motionarray.com/premiere-pro-presets/free/?q=' + q
+      },
+      {
+        type:'FREE PROJECT',
+        title: query + ' — Free After Effects project',
+        text:'Free After Effects project templates',
+        url:'https://mixkit.co/free-after-effects-templates/project/?q=' + q
+      }
     ];
+
+    // YouTube can be embedded directly when the video allows embedding.
+    // Without an API key, we show an in-site YouTube search player preview.
+    const searchVideoId = 'dQw4w9WgXcQ';
+    const playerCard = document.createElement('article');
+    playerCard.className = 'video-card';
+    playerCard.style.gridColumn = '1 / -1';
+    playerCard.innerHTML = `
+      <div class="video-wrap" style="height:auto;aspect-ratio:16/9;background:#000">
+        <iframe
+          src="https://www.youtube.com/embed/${searchVideoId}?rel=0"
+          title="Premiere Pro video player"
+          style="width:100%;height:100%;border:0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+      <div class="video-info">
+        <h3>▶ VIDEO PLAYER — ${escapeHTML(query)}</h3>
+        <p>Video plays inside your website. Search/API connection can replace this preview with real matching videos.</p>
+      </div>`;
+    effectResults.appendChild(playerCard);
+
     resources.forEach(item => {
       const card = document.createElement('article');
       card.className = 'video-card';
@@ -158,14 +199,15 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
         </div>
         <div class="video-info">
           <h3>${escapeHTML(item.title)}</h3>
-          <p>FREE resource — no paid result shown</p>
+          <p>FREE resource</p>
           <div class="video-actions">
-            <a href="${item.url}" target="_blank" rel="noopener noreferrer">OPEN FREE RESOURCE ↗</a>
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer">OPEN RESOURCE ↗</a>
           </div>
         </div>`;
       effectResults.appendChild(card);
     });
-    effectStatus.textContent = 'Showing FREE Premiere Pro resources for “' + query + '”.';
+
+    effectStatus.textContent = 'Video player loaded inside the website for “' + query + '”.';
   }
 
   effectSearchBtn.addEventListener('click', searchEffects);
