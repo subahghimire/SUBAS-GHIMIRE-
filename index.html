@@ -2603,37 +2603,59 @@ if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
 
 
-/* AI VIDEO GENERATOR - VEO 3.1 */
+
+/* FREE DAILY VIDEO LIMIT + GENERATED HISTORY */
+.video-free-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);font-size:10px;font-weight:800;letter-spacing:.7px}
+.video-free-count{color:var(--accent)}
+.video-history-btn{width:100%;margin-top:9px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;font-weight:800;font-size:10px;letter-spacing:1px;cursor:pointer}
+.video-history-btn:hover{border-color:var(--accent);background:var(--surface-2)}
+.video-history{display:none;margin-top:12px;max-height:260px;overflow:auto;gap:10px}
+.video-history.open{display:grid}
+.video-history-item{padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.video-history-item video{width:100%;border-radius:10px;display:block}
+.video-history-item small{display:block;margin-top:8px;color:var(--muted);font-size:9px}
+
+/* AI VIDEO GENERATOR - VEO 3.1 — 2 FREE DAILY GENERATIONS */
 document.addEventListener("DOMContentLoaded",function(){
-  const fab=document.getElementById("videoFab"),panel=document.getElementById("videoPanel"),close=document.getElementById("videoClose"),generate=document.getElementById("videoGenerate"),prompt=document.getElementById("videoPrompt"),model=document.getElementById("videoModel"),ratio=document.getElementById("videoRatio"),resolution=document.getElementById("videoResolution"),status=document.getElementById("videoStatus"),result=document.getElementById("videoResult"),preview=document.getElementById("videoPreview"),download=document.getElementById("videoDownload");
+  const fab=document.getElementById("videoFab"),panel=document.getElementById("videoPanel"),close=document.getElementById("videoClose"),generate=document.getElementById("videoGenerate"),prompt=document.getElementById("videoPrompt"),model=document.getElementById("videoModel"),ratio=document.getElementById("videoRatio"),resolution=document.getElementById("videoResolution"),status=document.getElementById("videoStatus"),result=document.getElementById("videoResult"),preview=document.getElementById("videoPreview"),download=document.getElementById("videoDownload"),freeCount=document.getElementById("videoFreeCount"),historyBtn=document.getElementById("videoHistoryBtn"),history=document.getElementById("videoHistory");
   if(!fab||!panel||!close||!generate)return;
+
+  const DAY=86400000, LIMIT=2, usageKey="subas-video-daily";
+  function usage(){const d=JSON.parse(localStorage.getItem(usageKey)||"null");if(!d||Date.now()-d.day>=DAY)return {day:Date.now(),count:0};return d}
+  function saveUsage(u){localStorage.setItem(usageKey,JSON.stringify(u));updateCount()}
+  function updateCount(){const u=usage(),left=Math.max(0,LIMIT-u.count);if(freeCount)freeCount.textContent=left+" / 2 LEFT";generate.disabled=left<=0;generate.textContent=left<=0?"DAILY LIMIT REACHED":"GENERATE VIDEO"}
+  updateCount();
+
   fab.addEventListener("click",()=>{panel.classList.toggle("open");panel.setAttribute("aria-hidden",String(!panel.classList.contains("open")));if(panel.classList.contains("open"))prompt.focus();});
   close.addEventListener("click",()=>{panel.classList.remove("open");panel.setAttribute("aria-hidden","true");});
+
+  async function openDB(){return new Promise((resolve,reject)=>{const q=indexedDB.open("subas-video-history",1);q.onupgradeneeded=()=>q.result.createObjectStore("videos",{keyPath:"id"});q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)})}
+  async function saveGenerated(blob,promptText){try{const db=await openDB();const tx=db.transaction("videos","readwrite");tx.objectStore("videos").put({id:Date.now(),blob,prompt:promptText,date:new Date().toLocaleString()});tx.oncomplete=renderHistory}catch(e){console.warn("History save failed",e)}}
+  async function renderHistory(){if(!history)return;history.innerHTML="";try{const db=await openDB();const tx=db.transaction("videos","readonly"),store=tx.objectStore("videos"),req=store.getAll();req.onsuccess=()=>{req.result.sort((a,b)=>b.id-a.id).slice(0,8).forEach(v=>{const el=document.createElement("div");el.className="video-history-item";const vid=document.createElement("video");vid.controls=true;vid.playsInline=true;vid.src=URL.createObjectURL(v.blob);const small=document.createElement("small");small.textContent=v.date+" — "+(v.prompt||"Generated video").slice(0,90);el.append(vid,small);history.appendChild(el)})}}catch(e){history.innerHTML="<small>Generated history is unavailable in this browser.</small>"}}
+  if(historyBtn)historyBtn.addEventListener("click",()=>{history.classList.toggle("open");if(history.classList.contains("open"))renderHistory()});
+
   generate.addEventListener("click",async()=>{
     const text=prompt.value.trim(); if(!text){status.textContent="Please enter a video prompt.";prompt.focus();return;}
-    generate.disabled=true;generate.textContent="STARTING...";result.classList.remove("open");preview.removeAttribute("src");status.textContent="Starting Veo video generation...";
+    const u=usage(); if(u.count>=LIMIT){status.textContent="Today's 2 free generations are finished. Your limit resets automatically tomorrow.";updateCount();return;}
+    generate.disabled=true;generate.textContent="STARTING...";result.classList.remove("open");preview.removeAttribute("src");status.textContent="Starting video generation...";
     try{
       const start=await fetch("/api/video",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:text,model:model.value,aspectRatio:ratio.value,resolution:resolution.value})});
       const startData=await start.json(); if(!start.ok)throw new Error(startData?.error||"Could not start video generation.");
       const operation=startData.operation; if(!operation)throw new Error("No video operation was returned.");
       let done=false;
       for(let i=0;i<60&&!done;i++){
-        await new Promise(r=>setTimeout(r,10000));
-        status.textContent="Generating video... "+Math.round(((i+1)/60)*100)+"% (this is an estimate)";
-        const check=await fetch("/api/video?operation="+encodeURIComponent(operation)); const data=await check.json();
-        if(!check.ok)throw new Error(data?.error||"Could not check video status.");
-        done=!!data.done;
-        if(data.error)throw new Error(data.error);
+        await new Promise(r=>setTimeout(r,10000));status.textContent="Generating video... "+Math.round(((i+1)/60)*100)+"% (estimate)";
+        const check=await fetch("/api/video?operation="+encodeURIComponent(operation));const data=await check.json();if(!check.ok)throw new Error(data?.error||"Could not check video status.");
+        done=!!data.done;if(data.error)throw new Error(data.error);
         if(done&&data.ready){
-          status.textContent="Video ready. Loading preview...";
-          const blobResponse=await fetch("/api/video?operation="+encodeURIComponent(operation)+"&download=1");
-          if(!blobResponse.ok){const e=await blobResponse.json().catch(()=>({}));throw new Error(e.error||"Could not download generated video.");}
-          const blob=await blobResponse.blob(); const url=URL.createObjectURL(blob); preview.src=url; download.href=url; result.classList.add("open"); status.textContent="Done — your AI video is ready."; break;
+          const blobResponse=await fetch("/api/video?operation="+encodeURIComponent(operation)+"&download=1");if(!blobResponse.ok){const e=await blobResponse.json().catch(()=>({}));throw new Error(e.error||"Could not download generated video.")}
+          const blob=await blobResponse.blob();const url=URL.createObjectURL(blob);preview.src=url;download.href=url;result.classList.add("open");
+          u.count++;saveUsage(u);await saveGenerated(blob,text);status.textContent="Done — video generated. "+Math.max(0,LIMIT-u.count)+" free generation(s) left today.";break;
         }
       }
-      if(!done)throw new Error("Generation is taking longer than expected. Please try again or check later.");
-    }catch(error){status.textContent="Video error: "+(error?.message||"Video generation failed.");console.error(error);}
-    finally{generate.disabled=false;generate.textContent="GENERATE VIDEO";}
+      if(!done)throw new Error("Generation is taking longer than expected. Please try again later.");
+    }catch(error){status.textContent="Video error: "+(error?.message||"Video generation failed.");console.error(error)}
+    finally{updateCount();if(u.count<LIMIT){generate.disabled=false;generate.textContent="GENERATE VIDEO"}}
   });
 });
 
@@ -2757,8 +2779,11 @@ document.addEventListener("DOMContentLoaded", function(){
       <div><label for="videoRatio">RATIO</label><select id="videoRatio"><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Vertical</option></select></div>
     </div>
     <label for="videoResolution">RESOLUTION</label><select id="videoResolution" style="width:100%;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;outline:none"><option value="720p">720p</option><option value="1080p">1080p</option></select>
+    <div class="video-free-bar"><span>FREE DAILY GENERATIONS</span><span class="video-free-count" id="videoFreeCount">2 / 2 LEFT</span></div>
     <button class="video-generate" id="videoGenerate">GENERATE VIDEO</button>
-    <div class="video-status" id="videoStatus">Video generation takes some time. Your Gemini API key must have paid Gemini API access for Veo.</div>
+    <button class="video-history-btn" id="videoHistoryBtn">GENERATED VIDEOS</button>
+    <div class="video-history" id="videoHistory"></div>
+    <div class="video-status" id="videoStatus">You have 2 free generations per day on this device.</div>
     <div class="video-result" id="videoResult"><video id="videoPreview" controls playsinline></video><a class="video-download" id="videoDownload" href="#" download="subas-ai-video.mp4">DOWNLOAD MP4</a></div>
     <div class="video-cost">Veo 3.1 pricing is usage-based. Fast 720p is currently $0.10/second; Lite 720p is $0.05/second. </div>
   </div>
