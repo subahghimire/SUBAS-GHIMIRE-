@@ -104,8 +104,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     try {
       // Search Wikimedia Commons for actual video files. No API key required.
       const url = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search' +
-        '&gsrsearch=' + encodeURIComponent(query + ' filetype:video') +
-        '&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|size|extmetadata' +
+        '&gsrsearch=' + encodeURIComponent(query) +
+        '&gsrnamespace=6&gsrlimit=100&prop=imageinfo&iiprop=url|mime|size|extmetadata' +
         '&iiurlwidth=640&format=json&origin=*';
 
       const response = await fetch(url);
