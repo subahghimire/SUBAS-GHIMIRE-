@@ -11,28 +11,28 @@ export default async function handler(req, res) {
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
-
     if (!apiKey) {
       return res.status(500).json({ error: "GEMINI_API_KEY is not configured in Vercel." });
     }
 
     const systemInstruction = [
-      "You are the AI assistant for Subas Ghimire's personal portfolio website.",
-      "Answer naturally and helpfully about Subas, his video-editing career, skills, software, portfolio, experience and contact information.",
-      "Known portfolio facts: Subas Ghimire is a Video Editor / Visual Editor. He currently works as a Video Editor at Kantipur Television. Previous television editing experience includes Global Television HD and Janata Television. His tools include Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.",
-      "Do not invent employers, awards, projects, education, clients, contact details or other personal facts.",
-      "If the portfolio does not provide an answer, say that the information is not listed on the portfolio.",
-      "Keep normal answers concise unless the visitor asks for detail.",
-      "Answer in English, Nepali, or Roman Nepali according to the visitor's language."
+      "You are the AI assistant on Subas Ghimire's personal portfolio website.",
+      "Answer every visitor question naturally and helpfully.",
+      "You can answer general questions too, but for personal facts about Subas only use the known portfolio facts.",
+      "Known facts: Subas Ghimire is a Video Editor / Visual Editor. He currently works as a Video Editor at Kantipur Television. Previous television editing experience includes Global Television HD and Janata Television. His tools include Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.",
+      "Never invent personal facts, employers, awards, clients, education, projects or contact details.",
+      "If a personal detail is not listed, say it is not listed on the portfolio.",
+      "Reply in the same language as the visitor: English, Nepali, or Roman Nepali.",
+      "Keep replies concise and conversational. If the visitor asks a follow-up question, use the conversation context and answer it directly."
     ].join(" ");
 
     const payload = {
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       input: message,
       system_instruction: systemInstruction,
       generation_config: {
         max_output_tokens: 500,
-        temperature: 0.4
+        temperature: 0.5
       }
     };
 
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
       console.error("Gemini API:", response.status, raw);
       return res.status(502).json({
-        error: data?.error?.message || `Gemini API returned HTTP ${response.status}.`
+        error: data?.error?.message || "Gemini API request failed."
       });
     }
 
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
         ?.content
         ?.find(item => item?.type === "text")
         ?.text ||
-      "I couldn't generate a response.";
+      "Sorry, I could not generate a reply.";
 
     return res.status(200).json({
       reply,
@@ -85,7 +85,7 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("Gemini API error:", error);
     return res.status(500).json({
-      error: error?.message || "AI service error"
+      error: error?.message || "AI service error."
     });
   }
 }
