@@ -76,7 +76,7 @@ async function searchVideos(){
     if(!file)return;
     const card=document.createElement('article');card.className='video-card';
     const safeTitle=(v.url?.split('/').pop()||'Pexels video').replace(/-/g,' ');
-    card.innerHTML='<video controls playsinline preload="metadata" poster="'+(v.image||'')+'" src="'+file.link+'"></video><div class="video-info"><h3>'+safeTitle+'</h3><p>By '+(v.user?.name||'Pexels contributor')+'</p><div class="video-actions"><a href="'+file.link+'" target="_blank" rel="noopener" download>⬇ DOWNLOAD</a><a class="secondary-link" href="'+v.url+'" target="_blank" rel="noopener">SOURCE ↗</a></div><div class="video-credit">Video provided by <a href="https://www.pexels.com/" target="_blank" rel="noopener">Pexels</a></div></div>';
+    card.innerHTML='<video controls playsinline preload="metadata" poster="'+(v.image||'')+'" src="'+file.link+'"></video><div class="video-info"><h3>'+safeTitle+'</h3><p>By '+(v.user?.name||'Pexels contributor')+'</p><div class="video-actions"><button type="button" class="play-btn">▶ PLAY</button><a href="'+file.link+'" target="_blank" rel="noopener" download>⬇ DOWNLOAD</a><a class="secondary-link" href="'+v.url+'" target="_blank" rel="noopener">SOURCE ↗</a></div><div class="video-credit">Video provided by <a href="https://www.pexels.com/" target="_blank" rel="noopener">Pexels</a></div></div>';
     results.appendChild(card);\n    const playBtn=card.querySelector(".play-btn"), video=card.querySelector("video");\n    playBtn.onclick=()=>{ if(video.paused){video.play();playBtn.textContent="⏸ PAUSE"}else{video.pause();playBtn.textContent="▶ PLAY"} };\n    video.onended=()=>playBtn.textContent="▶ PLAY";
   });
  }catch(e){status.textContent=e.message;results.innerHTML=''}
