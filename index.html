@@ -79,7 +79,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   const status = document.getElementById('videoStatus');
   const results = document.getElementById('videoResults');
 
-  function escapeHTML(value) {
+    // Only one video can play at a time.\n  let activeVideoPlayer = null;\n  function stopActiveVideo() {\n    if (!activeVideoPlayer) return;\n    if (activeVideoPlayer.tagName === 'IFRAME') { activeVideoPlayer.src = 'about:blank'; }\n    else if (typeof activeVideoPlayer.pause === 'function') { activeVideoPlayer.pause(); activeVideoPlayer.currentTime = 0; }\n    activeVideoPlayer = null;\n  }\n\n  function escapeHTML(value) {
     const div = document.createElement('div');
     div.textContent = value;
     return div.innerHTML;
