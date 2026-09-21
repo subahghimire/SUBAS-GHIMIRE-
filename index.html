@@ -114,8 +114,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
         <p>By ${author}</p>
         <div class="video-actions">
           <button type="button" class="play-btn">▶ PLAY</button>
-          <a href="${src}" target="_blank" rel="noopener">⬇ DOWNLOAD</a>
-          <a class="secondary-link" href="${source}" target="_blank" rel="noopener">SOURCE ↗</a>
+          <a href="${src}" target="_blank" rel="noopener">OPEN ↗</a>
+          <button type="button" class="download-video">⬇ DOWNLOAD</button>
         </div>
         <div class="video-credit">Video provided by <a href="https://www.pexels.com/" target="_blank" rel="noopener">Pexels</a></div>
       </div>`;
@@ -124,7 +124,36 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
     const videoEl = card.querySelector('video');
     const playBtn = card.querySelector('.play-btn');
+    const downloadBtn = card.querySelector('.download-video');
     const centerPlay = card.querySelector('.video-center-play');
+
+    downloadBtn.addEventListener('click', async () => {
+      const originalText = downloadBtn.textContent;
+      downloadBtn.textContent = 'DOWNLOADING...';
+      downloadBtn.disabled = true;
+      try {
+        const response = await fetch(file.link);
+        if (!response.ok) throw new Error('Download failed');
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'pexels-video-' + (video.id || Date.now()) + '.mp4';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+        downloadBtn.textContent = '✓ DOWNLOADED';
+      } catch (_) {
+        window.open(file.link, '_blank', 'noopener');
+        downloadBtn.textContent = 'OPEN TO DOWNLOAD';
+      } finally {
+        setTimeout(() => {
+          downloadBtn.textContent = originalText;
+          downloadBtn.disabled = false;
+        }, 2500);
+      }
+    });
 
     const syncButtons = () => {
       const playing = !videoEl.paused && !videoEl.ended;
