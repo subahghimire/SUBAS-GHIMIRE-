@@ -2659,107 +2659,6 @@ if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
 
 
-/* AI VIDEO STUDIO TABS + REAL GENERATED VIDEO LIBRARY */
-document.addEventListener("DOMContentLoaded",function(){
-  const a=document.getElementById("agentTab");
-  const g=document.getElementById("generatedTab");
-  const grid=document.getElementById("agentGrid");
-  const panel=document.getElementById("generatedPanel");
-  const note=document.getElementById("agentNote");
-  if(!a||!g||!grid||!panel)return;
-
-  function openVideoDB(){
-    return new Promise((resolve,reject)=>{
-      const q=indexedDB.open("subas-video-history",1);
-      q.onupgradeneeded=()=>q.result.createObjectStore("videos",{keyPath:"id"});
-      q.onsuccess=()=>resolve(q.result);
-      q.onerror=()=>reject(q.error);
-    });
-  }
-
-  function makeEmpty(){
-    panel.innerHTML='<div class="generated-empty"><strong>NO GENERATED VIDEOS YET</strong><span>Generate a video from VIDEO AI and it will appear here automatically.</span><button type="button" id="openVideoGeneratorFromHistory">OPEN VIDEO AI</button></div>';
-    const b=document.getElementById("openVideoGeneratorFromHistory");
-    if(b)b.addEventListener("click",()=>{
-      const fab=document.getElementById("videoFab");
-      if(fab)fab.click();
-    });
-  }
-
-  async function renderGenerated(){
-    panel.innerHTML='<div class="generated-loading">LOADING GENERATED VIDEOS…</div>';
-    try{
-      const db=await openVideoDB();
-      const tx=db.transaction("videos","readonly");
-      const req=tx.objectStore("videos").getAll();
-      req.onsuccess=()=>{
-        const items=(req.result||[]).sort((x,y)=>y.id-x.id);
-        if(!items.length){makeEmpty();return;}
-
-        const wrap=document.createElement("div");
-        wrap.className="generated-library";
-        const head=document.createElement("div");
-        head.className="generated-library-head";
-        head.innerHTML='<div><strong>YOUR GENERATED VIDEOS</strong><span>Saved on this device</span></div><button type="button" id="clearGeneratedVideos">CLEAR ALL</button>';
-        wrap.appendChild(head);
-
-        const cards=document.createElement("div");
-        cards.className="generated-library-grid";
-
-        items.slice(0,20).forEach(v=>{
-          const card=document.createElement("article");
-          card.className="generated-video-card";
-          const video=document.createElement("video");
-          video.controls=true;video.playsInline=true;video.preload="metadata";
-          video.src=URL.createObjectURL(v.blob);
-          const info=document.createElement("div");
-          info.className="generated-video-info";
-          const prompt=document.createElement("div");
-          prompt.className="generated-video-prompt";
-          prompt.textContent=v.prompt||"Generated video";
-          const date=document.createElement("small");
-          date.textContent=v.date||"";
-          const actions=document.createElement("div");
-          actions.className="generated-video-actions";
-          const dl=document.createElement("a");
-          dl.href=video.src;dl.download="subas-ai-video-"+v.id+".mp4";dl.textContent="DOWNLOAD MP4";
-          actions.appendChild(dl);
-          info.append(prompt,date,actions);
-          card.append(video,info);
-          cards.appendChild(card);
-        });
-        wrap.appendChild(cards);
-        panel.replaceChildren(wrap);
-
-        const clear=document.getElementById("clearGeneratedVideos");
-        if(clear)clear.addEventListener("click",async()=>{
-          if(!confirm("Delete all generated videos saved on this device?"))return;
-          const db2=await openVideoDB();
-          const tx2=db2.transaction("videos","readwrite");
-          tx2.objectStore("videos").clear();
-          tx2.oncomplete=renderGenerated;
-        });
-      };
-      req.onerror=makeEmpty;
-    }catch(e){
-      panel.innerHTML='<div class="generated-empty"><strong>HISTORY UNAVAILABLE</strong><span>This browser does not allow local generated-video storage.</span></div>';
-    }
-  }
-
-  a.addEventListener("click",()=>{
-    a.classList.add("active");g.classList.remove("active");
-    grid.style.display="grid";panel.classList.remove("open");
-    if(note)note.style.display="block";
-  });
-
-  g.addEventListener("click",()=>{
-    g.classList.add("active");a.classList.remove("active");
-    grid.style.display="none";panel.classList.add("open");
-    if(note)note.style.display="none";
-    renderGenerated();
-  });
-});
-
 /* AI VIDEO GENERATOR - VEO 3.1 — 2 FREE DAILY GENERATIONS */
 document.addEventListener("DOMContentLoaded",function(){
   const fab=document.getElementById("videoFab"),panel=document.getElementById("videoPanel"),close=document.getElementById("videoClose"),generate=document.getElementById("videoGenerate"),prompt=document.getElementById("videoPrompt"),model=document.getElementById("videoModel"),ratio=document.getElementById("videoRatio"),resolution=document.getElementById("videoResolution"),status=document.getElementById("videoStatus"),result=document.getElementById("videoResult"),preview=document.getElementById("videoPreview"),download=document.getElementById("videoDownload"),freeCount=document.getElementById("videoFreeCount"),historyBtn=document.getElementById("videoHistoryBtn"),history=document.getElementById("videoHistory");
@@ -2893,12 +2792,8 @@ document.addEventListener("DOMContentLoaded", function(){
 <div class="ai-agents-wrap" aria-label="AI agents">
   <div class="ai-agents-card">
     <div class="ai-agents-head">
-      <div><div class="ai-agents-title">AI VIDEO STUDIO</div><span class="ai-agents-sub">CHOOSE A TOOL OR VIEW YOUR GENERATED VIDEOS</span></div>
+      <div><div class="ai-agents-title">AI VIDEO STUDIO</div><span class="ai-agents-sub">CHOOSE YOUR AI VIDEO GENERATION PLATFORM</span></div>
       <span class="veo-badge">VIDEO AI</span>
-    </div>
-    <div class="ai-studio-tabs">
-      <button class="ai-studio-tab active" id="agentTab">AI AGENTS</button>
-      <button class="ai-studio-tab" id="generatedTab">GENERATED</button>
     </div>
     <div class="ai-agent-grid" id="agentGrid">
       <a class="ai-agent ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">
@@ -2914,12 +2809,10 @@ document.addEventListener("DOMContentLoaded", function(){
         <span class="ai-agent-icon">𝕏</span><span class="ai-agent-name">GROK</span><span class="ai-agent-tag">X AI</span>
       </a>
     </div>
-    <div class="generated-panel" id="generatedPanel"><div class="generated-empty">No generated videos yet.<br><span>Videos you generate from VIDEO AI will appear here.</span></div></div>
-    <div class="ai-agents-note" id="agentNote">Select an agent to open its official website.</div>
+    <div class="ai-agents-note">Select an agent to open its official website.</div>
   </div>
 </div>
-</div>
-<div class="video-panel" id="videoPanel" aria-hidden="true">
+<div class="video-panel"/> id="videoPanel" aria-hidden="true">
   <div class="video-head"><div><strong>AI VIDEO GENERATOR</strong><span>Powered by Google Veo 3.1</span></div><button class="video-close" id="videoClose" aria-label="Close video generator">×</button></div>
   <div class="video-body">
     <label for="videoPrompt">VIDEO PROMPT</label>
