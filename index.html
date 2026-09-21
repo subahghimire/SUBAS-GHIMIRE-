@@ -93,166 +93,87 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     const query = searchInput.value.trim();
     if (!query) {
       results.innerHTML = '';
-      status.textContent = 'Type something to search.';
+      status.textContent = 'Type a keyword to search videos.';
       searchInput.focus();
       return;
     }
 
-    if (!append) {
-      videoPage = 1;
-      lastVideoQuery = query;
-      results.innerHTML = '';
-    }
-
-    status.textContent = append ? 'Loading more videos…' : 'Searching videos for “' + query + '”…';
+    if (!append) results.innerHTML = '';
+    status.textContent = 'Searching videos for “' + query + '”…';
 
     try {
-      // Use the saved YouTube Data API key from this browser. The key is never written to GitHub.
-      const savedKey = localStorage.getItem('subasYouTubeApiKey') || '';
-      if (savedKey) {
-        const terms = [...new Set([
-          query,
-          query + ' video',
-          query + ' free video'
-        ])];
-        const requests = terms.map(term => fetch(
-          'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=50&order=relevance&q=' +
-          encodeURIComponent(term) + '&key=' + encodeURIComponent(savedKey)
-        ).then(async response => {
-          const data = await response.json();
-          if (!response.ok || data.error) throw new Error(data.error?.message || 'YouTube search failed');
-          return data.items || [];
-        }));
-        const datasets = await Promise.all(requests);
-        const seen = new Set();
-        const items = datasets.flat().filter(item => {
-          const id = item.id?.videoId;
-          if (!id || seen.has(id)) return false;
-          seen.add(id);
-          return true;
-        }).slice((videoPage - 1) * 50, videoPage * 50);
+      // Search Wikimedia Commons for actual video files. No API key required.
+      const url = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search' +
+        '&gsrsearch=' + encodeURIComponent(query + ' filetype:video') +
+        '&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|size|extmetadata' +
+        '&iiurlwidth=640&format=json&origin=*';
 
-        if (!items.length && !append) {
-          results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO NEPALI VIDEO FOUND</h3><p>Try another keyword or search in Nepali/English.</p></div></article>';
-          status.textContent = 'No matching videos found.';
-          return;
-        }
+      const response = await fetch(url);
+      const data = await response.json();
+      if (!response.ok || data.error) throw new Error(data.error?.info || 'Video search failed');
 
-        items.forEach(item => {
-          const videoId = item.id.videoId;
-          const title = item.snippet?.title || 'Video';
-          const channel = item.snippet?.channelTitle || 'YouTube channel';
-          const thumb = item.snippet?.thumbnails?.high?.url || item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || '';
-          const published = item.snippet?.publishedAt ? new Date(item.snippet.publishedAt).toLocaleDateString() : '';
-
-          const card = document.createElement('article');
-          card.className = 'video-card';
-          card.innerHTML = `
-            <div class="video-wrap" style="height:auto;aspect-ratio:16/9;background:#000">
-              <img src="${thumb}" alt="${escapeHTML(title)}" style="width:100%;height:100%;object-fit:cover;display:block">
-              <button class="video-center-play" type="button" aria-label="Play video">▶</button>
-            </div>
-            <div class="video-info">
-              <h3>${escapeHTML(title)}</h3>
-              <p>▶ ${escapeHTML(channel)} ${published ? ' • ' + escapeHTML(published) : ''}</p>
-              <div class="video-actions">
-                <button type="button" class="play-video-btn">PLAY HERE</button>
-                <a href="https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}" target="_blank" rel="noopener noreferrer" class="secondary-link">YOUTUBE ↗</a>
-              </div>
-            </div>`;
-
-          const playHere = () => {
-            const wrap = card.querySelector('.video-wrap');
-            wrap.innerHTML = `
-              <iframe src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?rel=0"
-                title="${escapeHTML(title)}"
-                style="width:100%;height:100%;border:0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>`;
-          };
-          card.querySelector('.video-center-play').addEventListener('click', playHere);
-          card.querySelector('.play-video-btn').addEventListener('click', playHere);
-          results.appendChild(card);
-        });
-
-        videoPage += 1;
-        const oldMore = document.getElementById('videoShowMoreWrap');
-        if (oldMore) oldMore.remove();
-        const more = document.createElement('div');
-        more.id = 'videoShowMoreWrap';
-        more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
-        more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load more matching videos</div>';
-        results.appendChild(more);
-        more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
-        status.textContent = 'Showing matching YouTube videos for “' + lastVideoQuery + '”.';
-        return;
-      }
-
-      // No YouTube key: search Wikimedia Commons for actual video files.
-      // This fallback works without an API key.
-      const searchTerms = [...new Set([
-        query,
-        query + ' video'
-      ])];
-      const requests = searchTerms.map(term => fetch(
-        'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' +
-        encodeURIComponent(term) +
-        '&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*'
-      ).then(async response => {
-        const data = await response.json();
-        if (!response.ok || data.error) throw new Error(data.error?.info || 'Free video search failed');
-        return data;
-      }));
-      const datasets = await Promise.all(requests);
-      const seen = new Set();
-      const pages = datasets.flatMap(data => Object.values(data.query?.pages || {})).filter(page => {
-        if (!page.pageid || seen.has(page.pageid)) return false;
-        seen.add(page.pageid);
-        return true;
-      });
-      const videoPages = pages.filter(page => {
+      const pages = Object.values(data.query?.pages || {});
+      const videos = pages.filter(page => {
         const info = page.imageinfo?.[0];
-        const mime = info?.mime || '';
+        const mime = (info?.mime || '').toLowerCase();
         const title = page.title || '';
         return mime.startsWith('video/') || /\.(mp4|webm|ogv|ogg|mov)$/i.test(title);
       });
 
-      if (!videoPages.length && !append) {
-        results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO FREE VIDEO FOUND</h3><p>Try English keywords such as car, nature, rain, drone, mountain or city.</p></div></article>';
-        status.textContent = 'No matching free video files found for “' + query + '”.';
+      if (!videos.length) {
+        results.innerHTML = `
+          <article class="video-card" style="grid-column:1/-1">
+            <div class="video-info">
+              <h3>NO VIDEO FOUND</h3>
+              <p>Try keywords like nature, mountain, city, rain, car, bike, football or drone.</p>
+            </div>
+          </article>`;
+        status.textContent = 'No downloadable video files found for “' + query + '”.';
         return;
       }
 
-      videoPages.forEach(page => {
-        const info = page.imageinfo?.[0];
-        const videoUrl = info?.url;
-        const thumb = info?.thumburl || '';
+      videos.forEach(page => {
+        const info = page.imageinfo?.[0] || {};
+        const videoUrl = info.url;
         if (!videoUrl) return;
+
         const title = (page.title || 'Free video').replace(/^File:/, '');
+        const mime = info.mime || 'video/mp4';
+        const thumb = info.thumburl || info.url || '';
+
         const card = document.createElement('article');
         card.className = 'video-card';
-        card.innerHTML = `<div class="video-wrap"><video controls preload="metadata" poster="${thumb}" playsinline><source src="${videoUrl}" type="${info?.mime || 'video/mp4'}"></video></div><div class="video-info"><h3>${escapeHTML(title)}</h3><p>FREE VIDEO • Wikimedia Commons</p><div class="video-actions"><a href="${videoUrl}" target="_blank" rel="noopener noreferrer">▶️ OPEN VIDEO</a><a href="${videoUrl}" download class="secondary-link">⬇️ DOWNLOAD FREE</a></div></div>`;
+        card.innerHTML = `
+          <div class="video-wrap" style="aspect-ratio:16/9;background:#000">
+            <video controls preload="metadata" playsinline poster="${thumb}">
+              <source src="${videoUrl}" type="${mime}">
+            </video>
+          </div>
+          <div class="video-info">
+            <h3>${escapeHTML(title)}</h3>
+            <p>FREE VIDEO • Wikimedia Commons</p>
+            <div class="video-actions">
+              <a href="${videoUrl}" target="_blank" rel="noopener noreferrer">▶ OPEN VIDEO</a>
+              <a href="${videoUrl}" download class="secondary-link">⬇ DOWNLOAD VIDEO</a>
+            </div>
+            <div class="video-credit">
+              Source: <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>
+            </div>
+          </div>`;
         results.appendChild(card);
       });
 
-      videoPage += 1;
-      const oldMore = document.getElementById('videoShowMoreWrap');
-      if (oldMore) oldMore.remove();
-      const more = document.createElement('div');
-      more.id = 'videoShowMoreWrap';
-      more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
-      more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button>';
-      results.appendChild(more);
-      more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
-      status.textContent = 'Showing free downloadable video files for “' + query + '”.';
+      status.textContent = 'Showing ' + videos.length + ' free downloadable video(s) for “' + query + '”.';
 
     } catch (error) {
-      status.textContent = 'Could not load videos right now. Try the search again.';
-      const errorCard = document.createElement('article');
-      errorCard.className = 'video-card';
-      errorCard.style.gridColumn = '1 / -1';
-      errorCard.innerHTML = '<div class="video-info"><h3>SEARCH TEMPORARILY UNAVAILABLE</h3><p>' + escapeHTML(error.message || 'Please try again.') + '</p></div>';
-      if (!append) results.appendChild(errorCard);
+      results.innerHTML = `
+        <article class="video-card" style="grid-column:1/-1">
+          <div class="video-info">
+            <h3>VIDEO SEARCH ERROR</h3>
+            <p>${escapeHTML(error.message || 'Please try again.')}</p>
+          </div>
+        </article>`;
+      status.textContent = 'Video search could not connect. Try again.';
     }
   }
   searchBtn.addEventListener('click', () => searchVideos(false));
@@ -262,11 +183,10 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     const value = searchInput.value.trim();
     if (!value) {
       results.innerHTML = '';
-      status.textContent = 'Start typing to search free videos.';
+      status.textContent = 'Start typing to search free downloadable videos.';
       return;
     }
-    status.textContent = 'Searching free videos for “' + value + '”…';
-    searchTimer = setTimeout(() => searchVideos(false), 350);
+    searchTimer = setTimeout(() => searchVideos(false), 600);
   });
   searchInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') searchVideos(false);
