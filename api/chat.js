@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ error: "GEMINI_API_KEY is not configured" });
+      return res.status(500).json({ error: "GEMINI_API_KEY is not configured in Vercel." });
     }
 
     const systemInstruction = [
@@ -27,12 +27,12 @@ export default async function handler(req, res) {
     ].join(" ");
 
     const payload = {
-      model: "gemini-3.8-flash",
+      model: "gemini-2.5-flash",
       input: message,
       system_instruction: systemInstruction,
       generation_config: {
-        thinking_level: "low",
-        max_output_tokens: 500
+        max_output_tokens: 500,
+        temperature: 0.4
       }
     };
 
@@ -52,11 +52,18 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const raw = await response.text();
+    let data = {};
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch {
+      data = {};
+    }
 
     if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.error?.message || "Gemini API request failed"
+      console.error("Gemini API:", response.status, raw);
+      return res.status(502).json({
+        error: data?.error?.message || `Gemini API returned HTTP ${response.status}.`
       });
     }
 
@@ -66,7 +73,9 @@ export default async function handler(req, res) {
         ?.slice()
         .reverse()
         .find(step => step?.type === "model_output")
-        ?.content?.find(item => item?.type === "text")?.text ||
+        ?.content
+        ?.find(item => item?.type === "text")
+        ?.text ||
       "I couldn't generate a response.";
 
     return res.status(200).json({
@@ -75,6 +84,8 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Gemini API error:", error);
-    return res.status(500).json({ error: "AI service error" });
+    return res.status(500).json({
+      error: error?.message || "AI service error"
+    });
   }
 }
