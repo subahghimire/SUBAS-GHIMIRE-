@@ -188,19 +188,25 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
         return;
       }
 
-      // No local YouTube key: keep the free Wikimedia search as a fallback.
-      const romanToNepali = { maya:'माया', love:'माया', prem:'प्रेम', pyar:'प्यार', geet:'गीत', git:'गीत', song:'गीत', nepali:'नेपाली', keta:'केटा', keti:'केटी', gau:'गाउँ', gaun:'गाउँ', pahad:'पहाड', himal:'हिमाल', pani:'पानी', barsa:'वर्षा', badal:'बादल', phool:'फूल', ful:'फूल', man:'मन', mutu:'मुटु' };
-      const nepaliWord = romanToNepali[query.toLowerCase()] || '';
-      const searchTerms = [...new Set([query + ' filetype:video', nepaliWord ? nepaliWord + ' filetype:video' : '', (query.toLowerCase() === 'maya' || query.toLowerCase() === 'love' || query.toLowerCase() === 'prem' || query.toLowerCase() === 'song' || query.toLowerCase() === 'geet') ? 'Nepali song filetype:video' : ''].filter(Boolean))];
-      const requests = searchTerms.map(term => fetch('https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' + encodeURIComponent(term) + '&gsrnamespace=6&gsrlimit=50&gsroffset=' + ((videoPage - 1) * 50) + '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*').then(async response => {
+      // No YouTube key: search Wikimedia Commons for actual video files.
+      // This fallback works without an API key.
+      const searchTerms = [...new Set([
+        query,
+        query + ' video'
+      ])];
+      const requests = searchTerms.map(term => fetch(
+        'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' +
+        encodeURIComponent(term) +
+        '&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*'
+      ).then(async response => {
         const data = await response.json();
-        if (!response.ok || data.error) throw new Error(data.error?.info || 'Video search failed');
+        if (!response.ok || data.error) throw new Error(data.error?.info || 'Free video search failed');
         return data;
       }));
       const datasets = await Promise.all(requests);
       const seen = new Set();
       const pages = datasets.flatMap(data => Object.values(data.query?.pages || {})).filter(page => {
-        if (seen.has(page.pageid)) return false;
+        if (!page.pageid || seen.has(page.pageid)) return false;
         seen.add(page.pageid);
         return true;
       });
@@ -208,19 +214,19 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
         const info = page.imageinfo?.[0];
         const mime = info?.mime || '';
         const title = page.title || '';
-        return mime.startsWith('video/') || /\\.(mp4|webm|ogv|ogg|mov)$/i.test(title);
+        return mime.startsWith('video/') || /\.(mp4|webm|ogv|ogg|mov)$/i.test(title);
       });
 
       if (!videoPages.length && !append) {
-        results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO FREE VIDEO FOUND</h3><p>Try another keyword such as nature, car, rain, drone, mountain or city.</p></div></article>';
-        status.textContent = 'No matching free video files found.';
+        results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO FREE VIDEO FOUND</h3><p>Try English keywords such as car, nature, rain, drone, mountain or city.</p></div></article>';
+        status.textContent = 'No matching free video files found for “' + query + '”.';
         return;
       }
 
       videoPages.forEach(page => {
         const info = page.imageinfo?.[0];
         const videoUrl = info?.url;
-        const thumb = info?.thumburl || info?.url;
+        const thumb = info?.thumburl || '';
         if (!videoUrl) return;
         const title = (page.title || 'Free video').replace(/^File:/, '');
         const card = document.createElement('article');
@@ -238,7 +244,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button>';
       results.appendChild(more);
       more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
-      status.textContent = 'Showing free video files. Save a YouTube API key in this browser to search YouTube videos.';
+      status.textContent = 'Showing free downloadable video files for “' + query + '”.';
+
     } catch (error) {
       status.textContent = 'Could not load videos right now. Try the search again.';
       const errorCard = document.createElement('article');
