@@ -141,162 +141,24 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
 <script>
 (()=> {
-  const input=document.getElementById('siteVideoSearch');
-  const button=document.getElementById('siteVideoSearchBtn');
-  const status=document.getElementById('siteVideoStatus');
-  const results=document.getElementById('siteVideoResults');
+  const input=document.getElementById('siteVideoSearch'),button=document.getElementById('siteVideoSearchBtn'),status=document.getElementById('siteVideoStatus'),results=document.getElementById('siteVideoResults'),keyInput=document.getElementById('youtubeApiKey'),saveKey=document.getElementById('saveYoutubeKey');
   if(!input||!button||!status||!results)return;
-
-  const esc=(v)=>{const d=document.createElement('div');d.textContent=v||'';return d.innerHTML};
-  const safeName=(v)=>String(v||'video').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,70)||'video';
-
-  async function downloadFile(url,name,btn){
-    const old=btn.textContent; btn.textContent='DOWNLOADING…'; btn.disabled=true;
-    try{
-      const res=await fetch(url,{mode:'cors'});
-      if(!res.ok)throw new Error('download failed');
-      const blob=await res.blob(), objectUrl=URL.createObjectURL(blob);
-      const a=document.createElement('a'); a.href=objectUrl; a.download=name;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(()=>URL.revokeObjectURL(objectUrl),3000);
-      btn.textContent='✓ DOWNLOADED';
-    }catch(e){
-      window.open(url,'_blank','noopener,noreferrer');
-      btn.textContent='OPEN FILE';
-    }
-    setTimeout(()=>{btn.textContent=old;btn.disabled=false},1800);
-  }
-
-  function makeSectionTitle(text){
-    const h=document.createElement('div');
-    h.style='grid-column:1/-1;font-size:11px;font-weight:800;letter-spacing:1.5px;padding-top:8px';
-    h.textContent=text; return h;
-  }
-
-  function archiveCard(v){
-    const c=document.createElement('article'); c.className='video-card';
-    const title=v.title||v.identifier||'Free video';
-    c.innerHTML='<div class="video-wrap"><video controls playsinline preload="metadata" style="width:100%;height:210px;object-fit:contain;background:#000"><source src="'+esc(v.url)+'" type="'+esc(v.mime||'video/mp4')+'"></video></div>'+
-      '<div class="video-info"><h3>'+esc(title)+'</h3><p>INTERNET ARCHIVE • FREE/PUBLIC SOURCE</p><div class="video-actions"><button class="download-btn" type="button">⬇ DOWNLOAD</button><a class="secondary-link" href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';
-    const btn=c.querySelector('button'); btn.onclick=()=>downloadFile(v.url,'Subas-'+safeName(title)+'.mp4',btn);
-    return c;
-  }
-
-  function commonsCard(v){
-    const c=document.createElement('article'); c.className='video-card';
-    const title=(v.title||'Wikimedia video').replace(/^File:/i,'').replace(/.[^.]+$/,'').replace(/[_-]+/g,' ');
-    c.innerHTML='<div class="video-wrap"><video controls playsinline preload="metadata" style="width:100%;height:210px;object-fit:contain;background:#000"><source src="'+esc(v.url)+'" type="'+esc(v.mime||'video/mp4')+'"></video></div>'+
-      '<div class="video-info"><h3>'+esc(title)+'</h3><p>WIKIMEDIA COMMONS • FREE/PUBLIC SOURCE</p><div class="video-actions"><button class="download-btn" type="button">⬇ DOWNLOAD</button><a class="secondary-link" href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';
-    const btn=c.querySelector('button');
-    const ext=((v.url.match(/\.([a-z0-9]+)(?:\?|$)/i)||[])[1]||'mp4');
-    btn.onclick=()=>downloadFile(v.url,'Subas-'+safeName(title)+'.'+ext,btn);
-    return c;
-  }
-
-  async function searchInternetArchive(q){
-    const api='https://archive.org/advancedsearch.php?q='+encodeURIComponent('mediatype:movies AND fulltext:('+q+')')+
-      '&fl[]=identifier&fl[]=title&rows=20&page=1&output=json';
-    const res=await fetch(api,{mode:'cors'});
-    if(!res.ok)throw new Error('archive search failed');
-    const data=await res.json(), docs=data.response?.docs||[], out=[];
-    for(const item of docs.slice(0,24)){
-      if(!item.identifier)continue;
-      try{
-        const m=await (await fetch('https://archive.org/metadata/'+encodeURIComponent(item.identifier),{mode:'cors'})).json();
-        const files=(m.files||[]).filter(f=>{
-          const n=String(f.name||'');
-          const fmt=String(f.format||'').toLowerCase();
-          return /\.(mp4|webm|ogv)$/i.test(n)||fmt.includes('mpeg4')||fmt.includes('h.264')||fmt.includes('webm')||fmt.includes('ogg video');
-        }).sort((a,b)=>Number(b.size||0)-Number(a.size||0));
-        const file=files.find(f=>/\.mp4$/i.test(f.name||''))||files[0];
-        if(file)out.push({
-          identifier:item.identifier,title:item.title||item.identifier,
-          url:'https://archive.org/download/'+encodeURIComponent(item.identifier)+'/'+encodeURIComponent(file.name),
-          page:'https://archive.org/details/'+encodeURIComponent(item.identifier),
-          mime:/webm/i.test(file.name||'')?'video/webm':'video/mp4'
-        });
-      }catch(e){}
-    }
-    return out;
-  }
-
-  async function searchCommons(q){
-    const api='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*'+
-      '&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=6&gsrlimit=100'+
-      '&prop=imageinfo&iiprop=url|mime|mediatype';
-    const res=await fetch(api,{mode:'cors'});
-    if(!res.ok)throw new Error('commons search failed');
-    const data=await res.json(), pages=Object.values(data.query?.pages||{});
-    return pages.map(p=>{
-      const info=p.imageinfo?.[0]||{};
-      return {title:p.title||'',url:info.url||'',mime:info.mime||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||'')};
-    }).filter(v=>v.url&&(String(v.mime).startsWith('video/')||/\.(mp4|webm|ogv)$/i.test(v.url)));
-  }
-
-  function sourceSearchLinks(q){
-    const links=[
-      ['Pexels Videos','https://www.pexels.com/search/videos/'+encodeURIComponent(q)+'/'],
-      ['Pixabay Videos','https://pixabay.com/videos/search/'+encodeURIComponent(q)+'/'],
-      ['Mixkit Videos','https://mixkit.co/free-stock-video/'+encodeURIComponent(q.replace(/\s+/g,'-'))+'/'],
-      ['Coverr Videos','https://coverr.co/search?q='+encodeURIComponent(q)]
-    ];
-    const wrap=document.createElement('div');
-    wrap.className='source-grid'; wrap.style='grid-column:1/-1;margin-top:4px';
-    links.forEach(([name,url])=>{
-      const a=document.createElement('a'); a.className='source-card'; a.href=url; a.target='_blank'; a.rel='noopener noreferrer';
-      a.innerHTML='<strong>'+esc(name)+'</strong><span>Free stock video search</span><small>OPEN SOURCE ↗</small>';
-      wrap.appendChild(a);
-    });
-    return wrap;
-  }
-
-  async function search(){
-    const q=input.value.trim();
-    if(!q){results.innerHTML='';status.textContent='Type any keyword to search.';return}
-    results.innerHTML='';
-    status.textContent='Loading many videos for “'+q+'”…';
-    button.disabled=true;
-
-    const [archive,commons]=await Promise.allSettled([searchInternetArchive(q),searchCommons(q)]);
-    const av=archive.status==='fulfilled'?archive.value:[], cv=commons.status==='fulfilled'?commons.value:[];
-    const seen=new Set();
-    const all=[...av,...cv].filter(v=>v.url&&!seen.has(v.url)&&seen.add(v.url)).slice(0,48);
-
-    if(all.length){
-      results.appendChild(makeSectionTitle('VIDEO RESULTS — PREVIEW + DOWNLOAD'));
-      all.forEach(v=>results.appendChild(av.includes(v)?archiveCard(v):commonsCard(v)));
-    }else{
-      const msg=document.createElement('div'); msg.className='source-note'; msg.style.gridColumn='1/-1';
-      msg.innerHTML='<strong>No direct playable files found yet.</strong> Try another word or one of the free sources below.';
-      results.appendChild(msg);
-    }
-    results.appendChild(makeSectionTitle('MORE FREE VIDEO SOURCES'));
-    results.appendChild(sourceSearchLinks(q));
-    status.textContent='Showing '+all.length+' playable video'+(all.length===1?'':'s')+' for “'+q+'”';
-    button.disabled=false;
-  }
-
-
-  document.querySelectorAll('[data-video-q]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.videoQ; input.dispatchEvent(new Event('input',{bubbles:true}));}));
-  button.onclick=search;
-  input.onkeydown=e=>{if(e.key==='Enter')search()};
-  let timer;
-  let searchVersion=0;
-  input.oninput=()=>{
-    clearTimeout(timer);
-    const q=input.value.trim();
-    searchVersion++;
-    if(!q){
-      results.innerHTML='';
-      status.textContent='Type any keyword to search.';
-      return;
-    }
-    status.textContent='Searching “'+q+'”…';
-    const version=searchVersion;
-    timer=setTimeout(async()=>{
-      if(version!==searchVersion)return;
-      await search();
-    },220);
-  };
+  const esc=v=>{const d=document.createElement('div');d.textContent=v||'';return d.innerHTML};
+  const safeName=v=>String(v||'video').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,70)||'video';
+  const getKey=()=>localStorage.getItem('subas_youtube_api_key')||'';
+  if(keyInput)keyInput.value=getKey();
+  if(saveKey)saveKey.onclick=()=>{const key=keyInput.value.trim();if(!key){status.textContent='Paste your YouTube API key first.';return}localStorage.setItem('subas_youtube_api_key',key);saveKey.textContent='SAVED ✓';status.textContent='YouTube API key saved on this device.';setTimeout(()=>saveKey.textContent='SAVE KEY',1600);if(input.value.trim())search()};
+  async function downloadFile(url,name,btn){const old=btn.textContent;btn.textContent='DOWNLOADING…';btn.disabled=true;try{const res=await fetch(url,{mode:'cors'});if(!res.ok)throw 0;const blob=await res.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);btn.textContent='✓ DOWNLOADED'}catch(e){window.open(url,'_blank','noopener,noreferrer');btn.textContent='OPEN FILE'}setTimeout(()=>{btn.textContent=old;btn.disabled=false},1800)}
+  function title(text){const h=document.createElement('div');h.style='grid-column:1/-1;font-size:11px;font-weight:800;letter-spacing:1.5px;padding-top:8px';h.textContent=text;return h}
+  function youtubeCard(v){const c=document.createElement('article');c.className='video-card';c.innerHTML='<div class="video-wrap" style="aspect-ratio:16/9;background:#000"><iframe src="https://www.youtube.com/embed/'+encodeURIComponent(v.id)+'?playsinline=1&rel=0" title="'+esc(v.title)+'" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;height:100%;border:0"></iframe></div><div class="video-info"><h3>'+esc(v.title)+'</h3><p>YOUTUBE • '+esc(v.channel)+' • PLAY WITH SOUND</p><div class="video-actions"><a href="https://www.youtube.com/watch?v='+encodeURIComponent(v.id)+'" target="_blank" rel="noopener">YOUTUBE ↗</a><a class="secondary-link" href="https://www.youtube.com/watch?v='+encodeURIComponent(v.id)+'" target="_blank" rel="noopener">WATCH ↗</a></div></div>';return c}
+  function fileCard(v,source){const c=document.createElement('article');c.className='video-card';const t=v.title||v.identifier||'Free video';c.innerHTML='<div class="video-wrap"><video controls playsinline preload="metadata" style="width:100%;height:210px;object-fit:contain;background:#000"><source src="'+esc(v.url)+'" type="'+esc(v.mime||'video/mp4')+'"></video></div><div class="video-info"><h3>'+esc(t)+'</h3><p>'+source+' • FREE/PUBLIC SOURCE</p><div class="video-actions"><button class="download-btn" type="button">⬇ DOWNLOAD</button><a class="secondary-link" href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';const b=c.querySelector('button');const ext=((v.url.match(/\.([a-z0-9]+)(?:\?|$)/i)||[])[1]||'mp4');b.onclick=()=>downloadFile(v.url,'Subas-'+safeName(t)+'.'+ext,b);return c}
+  async function searchYouTube(q){const key=getKey();if(!key)return [];const u='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=12&q='+encodeURIComponent(q)+'&key='+encodeURIComponent(key);const r=await fetch(u,{mode:'cors'}),d=await r.json();if(!r.ok||d.error)throw new Error(d.error?.message||'YouTube API error');return(d.items||[]).map(x=>({id:x.id?.videoId,title:x.snippet?.title||'YouTube video',channel:x.snippet?.channelTitle||'YouTube'})).filter(x=>x.id)}
+  async function searchInternetArchive(q){const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent('mediatype:movies AND fulltext:('+q+')')+'&fl[]=identifier&fl[]=title&rows=10&output=json',r=await fetch(u,{mode:'cors'});if(!r.ok)throw 0;const d=await r.json(),out=[];for(const x of d.response?.docs||[]){try{const m=await(await fetch('https://archive.org/metadata/'+encodeURIComponent(x.identifier),{mode:'cors'})).json(),fs=(m.files||[]).filter(f=>/\.(mp4|webm|ogv)$/i.test(f.name||'')).sort((a,b)=>Number(b.size||0)-Number(a.size||0)),f=fs.find(f=>/\.mp4$/i.test(f.name||''))||fs[0];if(f)out.push({identifier:x.identifier,title:x.title||x.identifier,url:'https://archive.org/download/'+encodeURIComponent(x.identifier)+'/'+encodeURIComponent(f.name),page:'https://archive.org/details/'+encodeURIComponent(x.identifier),mime:/webm/i.test(f.name||'')?'video/webm':'video/mp4'})}catch(e){}}return out}
+  async function searchCommons(q){const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|mediatype',r=await fetch(u,{mode:'cors'});if(!r.ok)throw 0;const d=await r.json();return Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:p.title||'',url:i.url||'',mime:i.mime||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||'')}}).filter(v=>v.url&&(String(v.mime).startsWith('video/')||/\.(mp4|webm|ogv)$/i.test(v.url)))}
+  function sourceLinks(q){const wrap=document.createElement('div');wrap.className='source-grid';wrap.style='grid-column:1/-1';[['Pexels Videos','https://www.pexels.com/search/videos/'+encodeURIComponent(q)+'/'],['Pixabay Videos','https://pixabay.com/videos/search/'+encodeURIComponent(q)+'/'],['Mixkit Videos','https://mixkit.co/free-stock-video/'+encodeURIComponent(q.replace(/\s+/g,'-'))+'/'],['Coverr Videos','https://coverr.co/search?q='+encodeURIComponent(q)]].forEach(([n,u])=>{const a=document.createElement('a');a.className='source-card';a.href=u;a.target='_blank';a.rel='noopener';a.innerHTML='<strong>'+n+'</strong><span>Free stock video search</span><small>OPEN SOURCE ↗</small>';wrap.appendChild(a)});return wrap}
+  async function search(){const q=input.value.trim();if(!q){results.innerHTML='';status.textContent='Type any keyword to search.';return}results.innerHTML='';status.textContent='Searching “'+q+'”…';button.disabled=true;const [yt,ar,co]=await Promise.allSettled([searchYouTube(q),searchInternetArchive(q),searchCommons(q)]),yv=yt.status==='fulfilled'?yt.value:[],av=ar.status==='fulfilled'?ar.value:[],cv=co.status==='fulfilled'?co.value:[];if(yv.length){results.appendChild(title('YOUTUBE RESULTS — DIRECT PLAY + SOUND'));yv.forEach(v=>results.appendChild(youtubeCard(v)))}if(av.length||cv.length){results.appendChild(title('FREE/PUBLIC FILE RESULTS — PREVIEW + DOWNLOAD'));const seen=new Set();[...av.map(v=>({...v,_s:'INTERNET ARCHIVE'})),...cv.map(v=>({...v,_s:'WIKIMEDIA COMMONS'}))].filter(v=>v.url&&!seen.has(v.url)&&seen.add(v.url)).slice(0,24).forEach(v=>results.appendChild(fileCard(v,v._s)))}if(!yv.length&&!av.length&&!cv.length){const m=document.createElement('div');m.className='source-note';m.style.gridColumn='1/-1';m.innerHTML=getKey()?'<strong>No videos found.</strong> Try another keyword.':'<strong>YouTube is not connected.</strong> Paste your API key above and press SAVE KEY.';results.appendChild(m)}results.appendChild(title('MORE VIDEO SOURCES'));results.appendChild(sourceLinks(q));status.textContent='Found '+(yv.length+av.length+cv.length)+' video results for “'+q+'”';button.disabled=false}
+  document.querySelectorAll('[data-video-q]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.videoQ;input.dispatchEvent(new Event('input',{bubbles:true}))}));
+  document.querySelectorAll('[data-video-cat]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-video-cat]').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(input.value.trim())search()}));
+  button.onclick=search;input.onkeydown=e=>{if(e.key==='Enter')search()};let timer;input.oninput=()=>{clearTimeout(timer);if(!input.value.trim()){results.innerHTML='';status.textContent='Type any keyword to search.';return}status.textContent='Searching “'+input.value.trim()+'”…';timer=setTimeout(search,280)};
 })();
 </script>
