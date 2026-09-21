@@ -34,7 +34,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
 <section class="section" id="effects">
 <div class="section-head"><small>05 / PREMIERE PRO</small><h2>EFFECT<br>SEARCH.</h2></div>
-<p class="assets-intro">Search only FREE Premiere Pro effects, presets, MOGRTs and After Effects project templates. No paid resources are shown.</p>
+<p class="assets-intro">Search real YouTube Premiere Pro tutorials inside this website, plus FREE MOGRTs, presets and After Effects project templates. No paid resources are shown.</p>
 <div class="video-search">
   <input id="effectSearch" type="search" placeholder="Search effect... e.g. zoom, blur, shake, glitch" aria-label="Search Premiere Pro effect">
   <button id="effectSearchBtn" class="download-btn" type="button">SEARCH EFFECT</button>
@@ -128,7 +128,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     if (e.key === 'Enter') searchVideos();
   });
 
-  function searchEffects() {
+  async function searchEffects() {
     const query = effectSearchInput.value.trim();
     effectResults.innerHTML = '';
     if (!query) {
@@ -165,26 +165,100 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       }
     ];
 
-    // YouTube can be embedded directly when the video allows embedding.
-    // Without an API key, we show an in-site YouTube search player preview.
-    const searchVideoId = 'dQw4w9WgXcQ';
-    const playerCard = document.createElement('article');
-    playerCard.className = 'video-card';
-    playerCard.style.gridColumn = '1 / -1';
-    playerCard.innerHTML = `
-      <div class="video-wrap" style="height:auto;aspect-ratio:16/9;background:#000">
-        <iframe
-          src="https://www.youtube.com/embed/${searchVideoId}?rel=0"
-          title="Premiere Pro video player"
-          style="width:100%;height:100%;border:0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
-      </div>
-      <div class="video-info">
-        <h3>▶ VIDEO PLAYER — ${escapeHTML(query)}</h3>
-        <p>Video plays inside your website. Search/API connection can replace this preview with real matching videos.</p>
-      </div>`;
-    effectResults.appendChild(playerCard);
+    // Real YouTube search: the API key is stored only in this browser.
+    // It is NOT written into GitHub/source code.
+    const savedKey = localStorage.getItem('subasYouTubeApiKey') || '';
+    if (!savedKey) {
+      const setup = document.createElement('article');
+      setup.className = 'video-card';
+      setup.style.gridColumn = '1 / -1';
+      setup.innerHTML = `
+        <div class="video-info">
+          <h3>🔑 CONNECT YOUTUBE SEARCH</h3>
+          <p>Paste your YouTube Data API v3 key below. It stays in this browser and is not saved in the website code.</p>
+          <div class="video-search" style="margin-top:12px">
+            <input id="youtubeApiKeyInput" type="password" placeholder="Paste YouTube API key here" aria-label="YouTube API key">
+            <button id="youtubeApiKeySave" class="download-btn" type="button">SAVE KEY</button>
+          </div>
+        </div>`;
+      effectResults.appendChild(setup);
+      document.getElementById('youtubeApiKeySave').addEventListener('click', () => {
+        const key = document.getElementById('youtubeApiKeyInput').value.trim();
+        if (!key) return;
+        localStorage.setItem('subasYouTubeApiKey', key);
+        searchEffects();
+      });
+      effectStatus.textContent = 'Paste your YouTube Data API v3 key once to load real matching videos.';
+      return;
+    }
+
+    effectStatus.textContent = 'Searching YouTube for real Premiere Pro videos…';
+
+    try {
+      const apiUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=6&q=' +
+        encodeURIComponent(query + ' Premiere Pro effect tutorial') + '&key=' + encodeURIComponent(savedKey);
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error?.message || 'YouTube API request failed');
+      }
+
+      const items = (data.items || []).filter(item => item.id && item.id.videoId);
+      if (!items.length) {
+        effectStatus.textContent = 'No matching YouTube videos found.';
+      } else {
+        items.forEach((item, index) => {
+          const videoId = item.id.videoId;
+          const title = item.snippet?.title || 'Premiere Pro tutorial';
+          const channel = item.snippet?.channelTitle || 'YouTube';
+          const thumb = item.snippet?.thumbnails?.high?.url || item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || '';
+
+          const card = document.createElement('article');
+          card.className = 'video-card';
+          card.innerHTML = `
+            <div class="video-wrap" style="height:auto;aspect-ratio:16/9;background:#000">
+              <img src="${thumb}" alt="${escapeHTML(title)}" style="width:100%;height:100%;object-fit:cover;display:block">
+              <button class="video-center-play" type="button" aria-label="Play ${escapeHTML(title)}">▶</button>
+            </div>
+            <div class="video-info">
+              <h3>${escapeHTML(title)}</h3>
+              <p>${escapeHTML(channel)}</p>
+              <div class="video-actions">
+                <button type="button" class="play-video-btn">PLAY HERE</button>
+                <a href="https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}" target="_blank" rel="noopener noreferrer" class="secondary-link">YOUTUBE ↗</a>
+              </div>
+            </div>`;
+
+          const playHere = () => {
+            const wrap = card.querySelector('.video-wrap');
+            wrap.innerHTML = `
+              <iframe
+                src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?rel=0"
+                title="${escapeHTML(title)}"
+                style="width:100%;height:100%;border:0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>`;
+          };
+          card.querySelector('.video-center-play').addEventListener('click', playHere);
+          card.querySelector('.play-video-btn').addEventListener('click', playHere);
+          effectResults.appendChild(card);
+        });
+        effectStatus.textContent = 'Showing real YouTube results for “' + query + '”. Click PLAY HERE to watch inside your website.';
+      }
+    } catch (error) {
+      effectStatus.textContent = 'YouTube search error: ' + error.message;
+      const retry = document.createElement('article');
+      retry.className = 'video-card';
+      retry.style.gridColumn = '1 / -1';
+      retry.innerHTML = `<div class="video-info"><h3>API CONNECTION ERROR</h3><p>Check that YouTube Data API v3 is enabled and the key restriction allows this website.</p><button class="download-btn" type="button" id="youtubeResetKey">RESET SAVED KEY</button></div>`;
+      effectResults.appendChild(retry);
+      document.getElementById('youtubeResetKey').addEventListener('click', () => {
+        localStorage.removeItem('subasYouTubeApiKey');
+        searchEffects();
+      });
+      return;
+    }
 
     resources.forEach(item => {
       const card = document.createElement('article');
