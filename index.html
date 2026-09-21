@@ -230,26 +230,16 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     // It is NOT written into GitHub/source code.
     const savedKey = localStorage.getItem('subasYouTubeApiKey') || '';
     if (!savedKey) {
+      effectStatus.textContent = 'YouTube search is not connected on this browser yet.';
       const setup = document.createElement('article');
       setup.className = 'video-card';
       setup.style.gridColumn = '1 / -1';
       setup.innerHTML = `
         <div class="video-info">
-          <h3>🔑 CONNECT YOUTUBE SEARCH</h3>
-          <p>Paste your YouTube Data API v3 key below. It stays in this browser and is not saved in the website code.</p>
-          <div class="video-search" style="margin-top:12px">
-            <input id="youtubeApiKeyInput" type="password" placeholder="Paste YouTube API key here" aria-label="YouTube API key">
-            <button id="youtubeApiKeySave" class="download-btn" type="button">SAVE KEY</button>
-          </div>
+          <h3>YOUTUBE SEARCH UNAVAILABLE</h3>
+          <p>The API key is intentionally not shown or requested on the website.</p>
         </div>`;
       effectResults.appendChild(setup);
-      document.getElementById('youtubeApiKeySave').addEventListener('click', () => {
-        const key = document.getElementById('youtubeApiKeyInput').value.trim();
-        if (!key) return;
-        localStorage.setItem('subasYouTubeApiKey', key);
-        searchEffects();
-      });
-      effectStatus.textContent = 'Paste your YouTube Data API v3 key once to load real matching videos.';
       return;
     }
 
