@@ -34,14 +34,14 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
 <section class="section" id="effects">
 <div class="section-head"><small>05 / PREMIERE PRO</small><h2>EFFECT<br>SEARCH.</h2></div>
-<p class="assets-intro">Search Premiere Pro effects, presets and templates. Get suggested tutorials, MOGRT resources and After Effects project searches for your selected effect.</p>
+<p class="assets-intro">Search only FREE Premiere Pro effects, presets, MOGRTs and After Effects project templates. No paid resources are shown.</p>
 <div class="video-search">
   <input id="effectSearch" type="search" placeholder="Search effect... e.g. zoom, blur, shake, glitch" aria-label="Search Premiere Pro effect">
   <button id="effectSearchBtn" class="download-btn" type="button">SEARCH EFFECT</button>
 </div>
-<div id="effectStatus" class="video-status">Search an effect to get suggested resources.</div>
+<div id="effectStatus" class="video-status">Start typing to search FREE Premiere Pro resources.</div>
 <div id="effectResults" class="video-results"></div>
-<div class="source-note"><strong>File types:</strong> MOGRT works as a Motion Graphics Template in Premiere Pro; Adobe also provides downloadable example MOGRT projects. <a href="https://helpx.adobe.com/premiere/desktop/add-text-images/use-motion-graphics-templates/where-do-i-get-motion-graphics-templates.html" target="_blank" rel="noopener noreferrer">Adobe MOGRT guide ↗</a></div>
+<div class="source-note"><strong>FREE ONLY:</strong> Results are limited to free tutorials, presets, MOGRTs, Premiere Pro templates, free plugins and free After Effects projects. Availability can change on the source websites.</div>
 </section><section class="section" id="experience"><div class="section-head"><small>05 / EXPERIENCE</small><h2>WHERE<br>I'VE BEEN.</h2></div><div class="jobs"><div class="job"><time>2026 — NOW</time><div><h3>Kantipur Television</h3><p>Video Editor</p></div><span>TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Global Television HD</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Janata Television</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div></div></section>
 <section class="section contact" id="contact"><div class="section-head"><small>06 / CONTACT</small><h2>LET'S<br><span>TALK.</span></h2></div><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com ↗</a><div class="social"><a href="https://wa.me/9779766454587" target="_blank">WHATSAPP</a><a href="https://www.facebook.com/subas.ghimire.164384" target="_blank">FACEBOOK</a><a href="https://www.instagram.com/subas_ghimire__?stkn=bGprN3N6djF1YXVj" target="_blank">INSTAGRAM</a><a href="https://www.tiktok.com/" target="_blank">TIKTOK</a></div></div></section><footer><span>© 2026 SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR</span></footer>
 
@@ -136,72 +136,52 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       effectSearchInput.focus();
       return;
     }
-
     const q = encodeURIComponent(query);
     const resources = [
-      {
-        type:'TUTORIAL',
-        title: query + ' — Premiere Pro tutorial',
-        text:'Video tutorials and demonstrations',
-        url:'https://www.youtube.com/results?search_query=' + q + '+Premiere+Pro+effect'
-      },
-      {
-        type:'MOGRT',
-        title: query + ' — MOGRT templates',
-        text:'Search Motion Graphics Templates for Premiere Pro',
-        url:'https://stock.adobe.com/search?k=' + q + '+mogrt'
-      },
-      {
-        type:'PRESET',
-        title: query + ' — Premiere Pro presets',
-        text:'Search for Premiere Pro effect presets',
-        url:'https://www.google.com/search?q=' + q + '+Premiere+Pro+effect+preset+prfpset'
-      },
-      {
-        type:'AFTER EFFECTS',
-        title: query + ' — After Effects templates',
-        text:'Search After Effects project templates (.aep)',
-        url:'https://stock.adobe.com/search?k=' + q + '+After+Effects+template'
-      },
-      {
-        type:'FREE MOGRT',
-        title: query + ' — Free MOGRT',
-        text:'Find free Motion Graphics Template resources',
-        url:'https://www.google.com/search?q=' + q + '+free+MOGRT'
-      },
-      {
-        type:'DOWNLOAD',
-        title: query + ' — Adobe resources',
-        text:'Official Adobe resources and templates',
-        url:'https://www.google.com/search?q=site%3Ahelpx.adobe.com+' + q + '+Premiere'
-      }
+      {type:'FREE TUTORIAL',title:query+' — Free Premiere Pro tutorials',text:'Free video tutorials and demonstrations on YouTube',url:'https://www.youtube.com/results?search_query='+q+'+Premiere+Pro+effect+free'},
+      {type:'FREE MOGRT',title:query+' — Free MOGRT templates',text:'Free Premiere Pro MOGRT templates from Mixkit',url:'https://mixkit.co/free-premiere-pro-templates/mogrt/?q='+q},
+      {type:'FREE PRESET',title:query+' — Free Premiere Pro presets',text:'Free presets, transitions, LUTs and effects from Motion Array',url:'https://motionarray.com/premiere-pro-presets/free/?q='+q},
+      {type:'FREE PLUGIN',title:query+' — Free Animation Composer',text:'Free Mister Horse Animation Composer with free items for Premiere Pro',url:'https://misterhorse.com/'},
+      {type:'FREE PROJECT',title:query+' — Free After Effects projects',text:'Free After Effects project templates from Mixkit',url:'https://mixkit.co/free-after-effects-templates/project/?q='+q},
+      {type:'FREE TEMPLATE',title:query+' — Free Premiere Pro templates',text:'Free Premiere Pro projects, transitions, titles and templates from Mixkit',url:'https://mixkit.co/free-premiere-pro-templates/?q='+q}
     ];
-
     resources.forEach(item => {
       const card = document.createElement('article');
       card.className = 'video-card';
       card.innerHTML = `
-        <div class="video-wrap" style="height:155px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#160c24,#30124a)">
+        <div class="video-wrap" style="height:155px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#092016,#123b2b)">
           <div style="text-align:center;padding:18px">
-            <div style="font-size:30px;margin-bottom:10px">✦</div>
+            <div style="font-size:30px;margin-bottom:10px">✓</div>
             <strong style="font-size:12px">${item.type}</strong>
             <p style="color:#aaa;font-size:9px;margin-top:7px">${escapeHTML(item.text)}</p>
           </div>
         </div>
         <div class="video-info">
           <h3>${escapeHTML(item.title)}</h3>
-          <p>Premiere Pro / After Effects resource</p>
+          <p>FREE resource — no paid result shown</p>
           <div class="video-actions">
-            <a href="${item.url}" target="_blank" rel="noopener">OPEN ↗</a>
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer">OPEN FREE RESOURCE ↗</a>
           </div>
         </div>`;
       effectResults.appendChild(card);
     });
-
-    effectStatus.textContent = 'Suggested resources for “' + query + '”.';
+    effectStatus.textContent = 'Showing FREE Premiere Pro resources for “' + query + '”.';
   }
 
   effectSearchBtn.addEventListener('click', searchEffects);
+  let effectSearchTimer;
+  effectSearchInput.addEventListener('input', () => {
+    clearTimeout(effectSearchTimer);
+    const value = effectSearchInput.value.trim();
+    if (!value) {
+      effectResults.innerHTML = '';
+      effectStatus.textContent = 'Start typing to search FREE Premiere Pro resources.';
+      return;
+    }
+    effectStatus.textContent = 'Searching FREE resources for “' + value + '”…';
+    effectSearchTimer = setTimeout(searchEffects, 180);
+  });
+
   effectSearchInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') searchEffects();
   });
