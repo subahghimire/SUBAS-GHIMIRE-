@@ -104,27 +104,95 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       results.innerHTML = '';
     }
 
-    status.textContent = append ? 'Loading more free videos…' : 'Searching free videos for “' + query + '”…';
+    status.textContent = append ? 'Loading more Nepali YouTube videos…' : 'Searching Nepali YouTube channels for “' + query + '”…';
 
     try {
-      const romanToNepali = {
-        maya:'माया', love:'माया', prem:'प्रेम', pyar:'प्यार', geet:'गीत', git:'गीत', song:'गीत',
-        nepali:'नेपाली', keta:'केटा', keti:'केटी', gau:'गाउँ', gaun:'गाउँ', pahad:'पहाड', himal:'हिमाल',
-        pani:'पानी', barsa:'वर्षा', badal:'बादल', phool:'फूल', ful:'फूल', man:'मन', mutu:'मुटु'
-      };
-      const nepaliWord = romanToNepali[query.toLowerCase()] || '';
-      const searchTerms = [...new Set([
-        query + ' filetype:video',
-        nepaliWord ? nepaliWord + ' filetype:video' : '',
-        (query.toLowerCase() === 'maya' || query.toLowerCase() === 'love' || query.toLowerCase() === 'prem' || query.toLowerCase() === 'song' || query.toLowerCase() === 'geet') ? 'Nepali song filetype:video' : ''
-      ].filter(Boolean))];
+      // Use the saved YouTube Data API key from this browser. The key is never written to GitHub.
+      const savedKey = localStorage.getItem('subasYouTubeApiKey') || '';
+      if (savedKey) {
+        const terms = [...new Set([
+          query + ' Nepali',
+          query + ' नेपाली',
+          query + ' Nepal'
+        ])];
+        const requests = terms.map(term => fetch(
+          'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=50&order=relevance&q=' +
+          encodeURIComponent(term) + '&regionCode=NP&relevanceLanguage=ne&key=' + encodeURIComponent(savedKey)
+        ).then(async response => {
+          const data = await response.json();
+          if (!response.ok || data.error) throw new Error(data.error?.message || 'YouTube search failed');
+          return data.items || [];
+        }));
+        const datasets = await Promise.all(requests);
+        const seen = new Set();
+        const items = datasets.flat().filter(item => {
+          const id = item.id?.videoId;
+          if (!id || seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        }).slice((videoPage - 1) * 50, videoPage * 50);
 
-      const requests = searchTerms.map(term => fetch(
-        'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' +
-        encodeURIComponent(term) +
-        '&gsrnamespace=6&gsrlimit=50&gsroffset=' + ((videoPage - 1) * 50) +
-        '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*'
-      ).then(async response => {
+        if (!items.length && !append) {
+          results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO NEPALI VIDEO FOUND</h3><p>Try another keyword or search in Nepali/English.</p></div></article>';
+          status.textContent = 'No matching Nepali YouTube videos found.';
+          return;
+        }
+
+        items.forEach(item => {
+          const videoId = item.id.videoId;
+          const title = item.snippet?.title || 'Nepali video';
+          const channel = item.snippet?.channelTitle || 'Nepali YouTube channel';
+          const thumb = item.snippet?.thumbnails?.high?.url || item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || '';
+          const published = item.snippet?.publishedAt ? new Date(item.snippet.publishedAt).toLocaleDateString() : '';
+
+          const card = document.createElement('article');
+          card.className = 'video-card';
+          card.innerHTML = `
+            <div class="video-wrap" style="height:auto;aspect-ratio:16/9;background:#000">
+              <img src="${thumb}" alt="${escapeHTML(title)}" style="width:100%;height:100%;object-fit:cover;display:block">
+              <button class="video-center-play" type="button" aria-label="Play video">▶</button>
+            </div>
+            <div class="video-info">
+              <h3>${escapeHTML(title)}</h3>
+              <p>🇳🇵 ${escapeHTML(channel)} ${published ? ' • ' + escapeHTML(published) : ''}</p>
+              <div class="video-actions">
+                <button type="button" class="play-video-btn">PLAY HERE</button>
+                <a href="https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}" target="_blank" rel="noopener noreferrer" class="secondary-link">YOUTUBE ↗</a>
+              </div>
+            </div>`;
+
+          const playHere = () => {
+            const wrap = card.querySelector('.video-wrap');
+            wrap.innerHTML = `
+              <iframe src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?rel=0"
+                title="${escapeHTML(title)}"
+                style="width:100%;height:100%;border:0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>`;
+          };
+          card.querySelector('.video-center-play').addEventListener('click', playHere);
+          card.querySelector('.play-video-btn').addEventListener('click', playHere);
+          results.appendChild(card);
+        });
+
+        videoPage += 1;
+        const oldMore = document.getElementById('videoShowMoreWrap');
+        if (oldMore) oldMore.remove();
+        const more = document.createElement('div');
+        more.id = 'videoShowMoreWrap';
+        more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
+        more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE NEPALI VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load 50 more videos from Nepali YouTube search</div>';
+        results.appendChild(more);
+        more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
+        status.textContent = 'Showing Nepali YouTube results from many channels for “' + lastVideoQuery + '”.';
+        return;
+      }
+
+      // No local YouTube key: keep the free Wikimedia search as a fallback.
+      const romanToNepali = { maya:'माया', love:'माया', prem:'प्रेम', pyar:'प्यार', geet:'गीत', git:'गीत', song:'गीत', nepali:'नेपाली', keta:'केटा', keti:'केटी', gau:'गाउँ', gaun:'गाउँ', pahad:'पहाड', himal:'हिमाल', pani:'पानी', barsa:'वर्षा', badal:'बादल', phool:'फूल', ful:'फूल', man:'मन', mutu:'मुटु' };
+      const nepaliWord = romanToNepali[query.toLowerCase()] || '';
+      const searchTerms = [...new Set([query + ' filetype:video', nepaliWord ? nepaliWord + ' filetype:video' : '', (query.toLowerCase() === 'maya' || query.toLowerCase() === 'love' || query.toLowerCase() === 'prem' || query.toLowerCase() === 'song' || query.toLowerCase() === 'geet') ? 'Nepali song filetype:video' : ''].filter(Boolean))];
+      const requests = searchTerms.map(term => fetch('https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' + encodeURIComponent(term) + '&gsrnamespace=6&gsrlimit=50&gsroffset=' + ((videoPage - 1) * 50) + '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*').then(async response => {
         const data = await response.json();
         if (!response.ok || data.error) throw new Error(data.error?.info || 'Video search failed');
         return data;
@@ -145,7 +213,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
       if (!videoPages.length && !append) {
         results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO FREE VIDEO FOUND</h3><p>Try another keyword such as nature, car, rain, drone, mountain or city.</p></div></article>';
-        status.textContent = 'No matching free video files found for “' + query + '”.';
+        status.textContent = 'No matching free video files found.';
         return;
       }
 
@@ -154,46 +222,29 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
         const videoUrl = info?.url;
         const thumb = info?.thumburl || info?.url;
         if (!videoUrl) return;
-
         const title = (page.title || 'Free video').replace(/^File:/, '');
         const card = document.createElement('article');
         card.className = 'video-card';
-        card.innerHTML = `
-          <div class="video-wrap">
-            <video controls preload="metadata" poster="${thumb}" playsinline>
-              <source src="${videoUrl}" type="${info?.mime || 'video/mp4'}">
-            </video>
-          </div>
-          <div class="video-info">
-            <h3>${escapeHTML(title)}</h3>
-            <p>FREE VIDEO • Wikimedia Commons</p>
-            <div class="video-actions">
-              <a href="${videoUrl}" target="_blank" rel="noopener noreferrer">▶️ OPEN VIDEO</a>
-              <a href="${videoUrl}" download class="secondary-link">⬇️ DOWNLOAD FREE</a>
-            </div>
-            <div class="video-credit"><a href="https://commons.wikimedia.org/wiki/${encodeURIComponent(page.title.replace(/ /g,'_'))}" target="_blank" rel="noopener noreferrer">View source & license ↗</a></div>
-          </div>`;
+        card.innerHTML = `<div class="video-wrap"><video controls preload="metadata" poster="${thumb}" playsinline><source src="${videoUrl}" type="${info?.mime || 'video/mp4'}"></video></div><div class="video-info"><h3>${escapeHTML(title)}</h3><p>FREE VIDEO • Wikimedia Commons</p><div class="video-actions"><a href="${videoUrl}" target="_blank" rel="noopener noreferrer">▶️ OPEN VIDEO</a><a href="${videoUrl}" download class="secondary-link">⬇️ DOWNLOAD FREE</a></div></div>`;
         results.appendChild(card);
       });
 
       videoPage += 1;
       const oldMore = document.getElementById('videoShowMoreWrap');
       if (oldMore) oldMore.remove();
-
       const more = document.createElement('div');
       more.id = 'videoShowMoreWrap';
       more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
-      more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load 50 more free videos for this search</div>';
+      more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button>';
       results.appendChild(more);
-
       more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
-      status.textContent = 'Showing free videos for “' + lastVideoQuery + '”. Click SHOW MORE VIDEOS for more results.';
+      status.textContent = 'Showing free videos. Add the saved YouTube key in this browser to search Nepali channels.';
     } catch (error) {
       status.textContent = 'Could not load videos right now. Try the search again.';
       const errorCard = document.createElement('article');
       errorCard.className = 'video-card';
       errorCard.style.gridColumn = '1 / -1';
-      errorCard.innerHTML = '<div class="video-info"><h3>SEARCH TEMPORARILY UNAVAILABLE</h3><p>Please try the same keyword again. No API key is required.</p></div>';
+      errorCard.innerHTML = '<div class="video-info"><h3>SEARCH TEMPORARILY UNAVAILABLE</h3><p>' + escapeHTML(error.message || 'Please try again.') + '</p></div>';
       if (!append) results.appendChild(errorCard);
     }
   }
