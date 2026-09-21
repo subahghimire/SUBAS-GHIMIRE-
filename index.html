@@ -2700,7 +2700,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const loading=addAiMessage("Thinking...","bot");
 
     try{
-      const response=await fetch("/api/chat",{
+      const response=await fetch("https://subas-ghimire.vercel.app/api/chat",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
