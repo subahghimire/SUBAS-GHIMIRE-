@@ -184,9 +184,22 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   button.onclick=search;
   input.onkeydown=e=>{if(e.key==='Enter')search()};
   let timer;
+  let searchVersion=0;
   input.oninput=()=>{
     clearTimeout(timer);
-    if(input.value.trim().length>=2)timer=setTimeout(search,800);
+    const q=input.value.trim();
+    searchVersion++;
+    if(!q){
+      results.innerHTML='';
+      status.textContent='Type any keyword to search.';
+      return;
+    }
+    status.textContent='Searching “'+q+'”…';
+    const version=searchVersion;
+    timer=setTimeout(async()=>{
+      if(version!==searchVersion)return;
+      await search();
+    },220);
   };
 })();
 </script>
