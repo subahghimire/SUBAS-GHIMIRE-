@@ -137,6 +137,44 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     });
 
     status.textContent = 'Free results ready for “' + query + '” — choose Pixabay or Mixkit to preview and download.';
+
+    const more = document.createElement('div');
+    more.id = 'videoShowMoreWrap';
+    more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
+    more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Open more free results from Pixabay and Mixkit</div>';
+    results.appendChild(more);
+
+    let shown = 0;
+    const showMoreBtn = more.querySelector('#videoShowMore');
+    showMoreBtn.addEventListener('click', () => {
+      shown += 1;
+      const extra = document.createElement('article');
+      extra.className = 'video-card';
+      extra.innerHTML = `
+        <div class="video-wrap" style="height:210px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#101638,#080b18)">
+          <div style="text-align:center;padding:25px">
+            <div style="font-size:28px;margin-bottom:12px">🎥</div>
+            <strong style="font-size:18px">MORE ${shown}</strong>
+            <div style="color:#777;font-size:10px;margin-top:8px">More “${escapeHTML(query)}” videos</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>More ${escapeHTML(query)} Videos</h3>
+          <p>Find more free clips from Pixabay and Mixkit.</p>
+          <div class="video-actions">
+            <a href="https://pixabay.com/videos/search/${encodeURIComponent(query)}/?pagi=${shown + 1}" target="_blank" rel="noopener noreferrer">PIXABAY VIDEOS ↗</a>
+            <a href="https://mixkit.co/free-stock-video/search/?q=${q}&page=${shown + 1}" target="_blank" rel="noopener noreferrer" class="secondary-link">MIXKIT VIDEOS ↗</a>
+          </div>
+        </div>`;
+      results.insertBefore(extra, more);
+      if (shown >= 6) {
+        showMoreBtn.textContent = 'OPEN MORE FREE VIDEOS ↗';
+        showMoreBtn.onclick = () => {
+          window.open(pixabayUrl, '_blank', 'noopener,noreferrer');
+          window.open(mixkitUrl, '_blank', 'noopener,noreferrer');
+        };
+      }
+    });
   }
   searchBtn.addEventListener('click', searchVideos);
   // Live search: update the source results while the user is typing in the box.
