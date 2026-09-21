@@ -104,20 +104,20 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       results.innerHTML = '';
     }
 
-    status.textContent = append ? 'Loading more Nepali YouTube videos…' : 'Searching Nepali YouTube channels for “' + query + '”…';
+    status.textContent = append ? 'Loading more videos…' : 'Searching videos for “' + query + '”…';
 
     try {
       // Use the saved YouTube Data API key from this browser. The key is never written to GitHub.
       const savedKey = localStorage.getItem('subasYouTubeApiKey') || '';
       if (savedKey) {
         const terms = [...new Set([
-          query + ' Nepali',
-          query + ' नेपाली',
-          query + ' Nepal'
+          query,
+          query + ' video',
+          query + ' free video'
         ])];
         const requests = terms.map(term => fetch(
-          'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=50&order=relevance&q=' +
-          encodeURIComponent(term) + '&regionCode=NP&relevanceLanguage=ne&key=' + encodeURIComponent(savedKey)
+          'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=50&order=relevance&q=' +
+          encodeURIComponent(term) + '&key=' + encodeURIComponent(savedKey)
         ).then(async response => {
           const data = await response.json();
           if (!response.ok || data.error) throw new Error(data.error?.message || 'YouTube search failed');
@@ -134,14 +134,14 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
         if (!items.length && !append) {
           results.innerHTML = '<article class="video-card" style="grid-column:1/-1"><div class="video-info"><h3>NO NEPALI VIDEO FOUND</h3><p>Try another keyword or search in Nepali/English.</p></div></article>';
-          status.textContent = 'No matching Nepali YouTube videos found.';
+          status.textContent = 'No matching videos found.';
           return;
         }
 
         items.forEach(item => {
           const videoId = item.id.videoId;
-          const title = item.snippet?.title || 'Nepali video';
-          const channel = item.snippet?.channelTitle || 'Nepali YouTube channel';
+          const title = item.snippet?.title || 'Video';
+          const channel = item.snippet?.channelTitle || 'YouTube channel';
           const thumb = item.snippet?.thumbnails?.high?.url || item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || '';
           const published = item.snippet?.publishedAt ? new Date(item.snippet.publishedAt).toLocaleDateString() : '';
 
@@ -154,7 +154,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
             </div>
             <div class="video-info">
               <h3>${escapeHTML(title)}</h3>
-              <p>🇳🇵 ${escapeHTML(channel)} ${published ? ' • ' + escapeHTML(published) : ''}</p>
+              <p>▶ ${escapeHTML(channel)} ${published ? ' • ' + escapeHTML(published) : ''}</p>
               <div class="video-actions">
                 <button type="button" class="play-video-btn">PLAY HERE</button>
                 <a href="https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}" target="_blank" rel="noopener noreferrer" class="secondary-link">YOUTUBE ↗</a>
@@ -181,10 +181,10 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
         const more = document.createElement('div');
         more.id = 'videoShowMoreWrap';
         more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
-        more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE NEPALI VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load 50 more videos from Nepali YouTube search</div>';
+        more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load more matching videos</div>';
         results.appendChild(more);
         more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
-        status.textContent = 'Showing Nepali YouTube results from many channels for “' + lastVideoQuery + '”.';
+        status.textContent = 'Showing matching YouTube videos for “' + lastVideoQuery + '”.';
         return;
       }
 
@@ -238,7 +238,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button>';
       results.appendChild(more);
       more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
-      status.textContent = 'Showing free videos. Add the saved YouTube key in this browser to search Nepali channels.';
+      status.textContent = 'Showing free video files. Save a YouTube API key in this browser to search YouTube videos.';
     } catch (error) {
       status.textContent = 'Could not load videos right now. Try the search again.';
       const errorCard = document.createElement('article');
