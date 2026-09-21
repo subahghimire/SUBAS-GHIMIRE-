@@ -2637,7 +2637,7 @@ document.addEventListener("DOMContentLoaded", function(){
       loading.textContent=data.reply||"I couldn't generate a response.";
       if(data.interactionId) aiInteractionId=data.interactionId;
     }catch(error){
-      loading.textContent="Sorry, the AI assistant is temporarily unavailable.";
+      loading.textContent="AI error: "+(error?.message||"The AI assistant is temporarily unavailable.");
       console.error(error);
     }finally{
       aiInput.disabled=false;
