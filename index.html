@@ -22,7 +22,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 <section class="section" id="tools"><div class="section-head"><small>03 / SOFTWARE</small><h2>MY<br>TOOLS.</h2></div><div class="tools"><div class="tool"><strong>01</strong><h3>Adobe Premiere Pro</h3><p>VIDEO EDITING</p></div><div class="tool"><strong>02</strong><h3>Adobe After Effects</h3><p>MOTION / VFX</p></div><div class="tool"><strong>03</strong><h3>Adobe Photoshop</h3><p>VISUAL DESIGN</p></div><div class="tool"><strong>04</strong><h3>DaVinci Resolve</h3><p>EDITING / COLOR</p></div></div></section>
 <section class="section" id="assets">
 <div class="section-head"><small>04 / VIDEO SEARCH</small><h2>VIDEO<br>SEARCH.</h2></div>
-<p class="assets-intro">Search the same keyword across free video sources including Pixabay, Pexels, Mixkit and Videvo.</p>
+<p class="assets-intro">Search the same keyword across free video sources including Pixabay, Pexels, Mixkit, Videvo, Coverr, Videezy, Vidsplay, Life of Vids and Dareful.</p>
 <div class="video-search">
   <input id="videoSearch" type="search" placeholder="Search videos... e.g. car, nature, drone, rain" aria-label="Search videos">
   <button id="videoSearchBtn" class="download-btn" type="button">SEARCH</button>
@@ -79,6 +79,11 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       ['Pexels Videos','🎞️','https://www.pexels.com/search/videos/' + q + '/'],
       ['Mixkit','🎥','https://mixkit.co/free-stock-video/?q=' + q],
       ['Videvo','🎬','https://www.videvo.net/search/' + q + '/'],
+      ['Coverr','📹','https://coverr.co/search?q=' + q],
+      ['Videezy','🎞️','https://www.videezy.com/free-video/' + q],
+      ['Vidsplay','🎥','https://www.vidsplay.com/?s=' + q],
+      ['Life of Vids','🌿','https://www.lifeofvids.com/?s=' + q],
+      ['Dareful','🎬','https://www.dareful.com/?s=' + q],
           ];
 
     sources.forEach(([name, icon, url]) => {
