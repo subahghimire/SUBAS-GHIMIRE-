@@ -2569,11 +2569,65 @@ galleryInput4.addEventListener("change",()=>showLocalPhoto(galleryInput4,"galler
 gallerySaveBtn.addEventListener("click",()=>{localStorage.setItem("subas-gallery-saved","1");galleryEditor.classList.remove("open");galleryAddBtn.textContent="✓ PHOTOS SAVED ON THIS DEVICE";});
 if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
-/* AI PORTFOLIO ASSISTANT - LOCAL MODE */
+/* AI PORTFOLIO ASSISTANT - GEMINI API */
 const aiFab=document.getElementById("aiFab"),aiPanel=document.getElementById("aiPanel"),aiClose=document.getElementById("aiClose"),aiForm=document.getElementById("aiForm"),aiInput=document.getElementById("aiInput"),aiMessages=document.getElementById("aiMessages");
-aiFab.addEventListener("click",()=>{aiPanel.classList.toggle("open");aiPanel.setAttribute("aria-hidden",String(!aiPanel.classList.contains("open")));if(aiPanel.classList.contains("open"))aiInput.focus()});aiClose.addEventListener("click",()=>{aiPanel.classList.remove("open");aiPanel.setAttribute("aria-hidden","true")});
-function aiReply(q){const s=q.toLowerCase();if(/skill|edit|video|editor|experience/.test(s))return"Subas Ghimire is a Video Editor / Visual Editor focused on professional video editing, visual storytelling and post-production.";if(/premiere|after effects|photoshop|davinci|resolve|tool/.test(s))return"Subas works with Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.";if(/kantipur/.test(s))return"Subas currently works as a Video Editor at Kantipur Television.";if(/global|janata|previous/.test(s))return"His portfolio includes previous television editing experience.";if(/contact|email|mail|hire|reach/.test(s))return"Use the Contact section to reach Subas by email or social links.";if(/about|who|subas/.test(s))return"Subas Ghimire is a Video Editor / Visual Editor. Explore the About, Tools, Work and Experience sections.";return"Try asking about Subas skills, tools, experience, work or contact.";}
-aiForm.addEventListener("submit",e=>{e.preventDefault();const q=aiInput.value.trim();if(!q)return;const u=document.createElement("div");u.className="ai-msg user";u.textContent=q;aiMessages.appendChild(u);aiInput.value="";setTimeout(()=>{const b=document.createElement("div");b.className="ai-msg bot";b.textContent=aiReply(q);aiMessages.appendChild(b);aiMessages.scrollTop=aiMessages.scrollHeight},250);aiMessages.scrollTop=aiMessages.scrollHeight});
+let aiInteractionId=null;
+
+aiFab.addEventListener("click",()=>{aiPanel.classList.toggle("open");aiPanel.setAttribute("aria-hidden",String(!aiPanel.classList.contains("open")));if(aiPanel.classList.contains("open"))aiInput.focus()});
+aiClose.addEventListener("click",()=>{aiPanel.classList.remove("open");aiPanel.setAttribute("aria-hidden","true")});
+
+function addAiMessage(text,type="bot"){
+  const el=document.createElement("div");
+  el.className="ai-msg "+type;
+  el.textContent=text;
+  aiMessages.appendChild(el);
+  aiMessages.scrollTop=aiMessages.scrollHeight;
+  return el;
+}
+
+aiForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const q=aiInput.value.trim();
+  if(!q)return;
+
+  addAiMessage(q,"user");
+  aiInput.value="";
+  aiInput.disabled=true;
+  const sendButton=aiForm.querySelector("button");
+  sendButton.disabled=true;
+  sendButton.textContent="...";
+
+  const loading=addAiMessage("Thinking...","bot");
+
+  try{
+    const response=await fetch("/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        message:q,
+        previousInteractionId:aiInteractionId
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data?.error||"AI request failed");
+    }
+
+    loading.textContent=data.reply||"I couldn't generate a response.";
+    if(data.interactionId) aiInteractionId=data.interactionId;
+  }catch(error){
+    loading.textContent="Sorry, the AI assistant is temporarily unavailable.";
+    console.error(error);
+  }finally{
+    aiInput.disabled=false;
+    sendButton.disabled=false;
+    sendButton.textContent="SEND";
+    aiInput.focus();
+    aiMessages.scrollTop=aiMessages.scrollHeight;
+  }
+});
 </script>
 
 
