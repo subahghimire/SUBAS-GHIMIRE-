@@ -125,16 +125,8 @@ footer{border-top-color:var(--line);color:#687083}
 <section class="section video-search-v2" id="video-search">
 <div class="section-head"><small>07 / VIDEO SEARCH</small><h2>SEARCH.<br>PREVIEW.<br>DOWNLOAD.</h2></div>
 <div class="search-panel">
-  <div class="vs-search">
-    <input id="vsQuery" placeholder="Search any video — nature, car, football, news, drone..." autocomplete="off">
-    <button id="vsSearchBtn">SEARCH VIDEO</button>
-  </div>
-  <div class="vs-settings">
-    <input id="vsPexelsKey" type="password" placeholder="Pexels API key (optional)">
-    <input id="vsFreepikKey" type="password" placeholder="Freepik API key (optional)">
-    <input id="vsYoutubeKey" type="password" placeholder="YouTube API key (optional)">
-  </div>
-  <div class="vs-status" id="vsStatus">Search Pexels, Freepik and YouTube. Keys are stored only in this browser.</div>
+  <div class="vs-search"><input id="vsQuery" placeholder="Search any video — nature, car, football, news, drone..." autocomplete="off"><button id="vsSearchBtn">SEARCH VIDEO</button></div>
+  <div class="vs-status" id="vsStatus">No API key required — searching public video sources directly.</div>
   <div class="vs-results" id="vsResults"></div>
 </div>
 </section><section class="section" id="about"><div class="section-head"><small>01 / ABOUT</small><h2>WHO<br>I AM.</h2></div><div class="about-grid"><div><h3>Video Editor and Visual Editor focused on turning footage into clear, engaging visual stories.</h3></div><div><p>My work focuses on editing, visual storytelling, pacing and post-production for television and digital platforms. I work with professional editing and post-production tools to shape raw footage into polished visual content.</p><div class="facts"><div class="fact"><small>ROLE</small><b>Video Editor / Visual Editor</b></div><div class="fact"><small>LOCATION</small><b>Kathmandu, Nepal</b></div><div class="fact"><small>CURRENT</small><b>Kantipur Television</b></div><div class="fact"><small>FOCUS</small><b>Editing / Visuals</b></div></div></div></div></section>
@@ -229,6 +221,47 @@ footer{border-top-color:var(--line);color:#687083}
   document.querySelectorAll('[data-video-cat]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-video-cat]').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(input.value.trim())search()}));
   button.onclick=search;input.onkeydown=e=>{if(e.key==='Enter')search()};
   let timer;input.oninput=()=>{clearTimeout(timer);if(!input.value.trim()){results.innerHTML='';status.textContent='Type anything to search free videos.';return}status.textContent='Searching “'+input.value.trim()+'”…';timer=setTimeout(search,280)};
+})();
+</script><script>
+(()=>{
+  const items=document.querySelectorAll('[data-dash-tab]');
+  items.forEach(item=>item.addEventListener('click',()=>{
+    items.forEach(x=>x.classList.remove('active'));
+    item.classList.add('active');
+  }));
+})();
+</script<script id="video-search-v2-js">
+(()=>{
+const q=document.getElementById('vsQuery'),btn=document.getElementById('vsSearchBtn'),out=document.getElementById('vsResults'),status=document.getElementById('vsStatus');
+if(!q||!btn)return;
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function card(v){
+ const d=document.createElement('article');d.className='vs-card';
+ d.innerHTML='<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video><div class="vs-info"><h3>'+esc(v.title)+'</h3><p>'+esc(v.source)+' • PUBLIC VIDEO</p><div class="vs-quality"><select><option value="2160">4K</option><option value="1080">1080p</option><option value="720">720p</option></select></div><div class="vs-actions"><button>⬇ DOWNLOAD</button><a href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';
+ const dl=d.querySelector('button');dl.onclick=async()=>{const old=dl.textContent;dl.textContent='DOWNLOADING…';try{const r=await fetch(v.url,{mode:'cors'});if(!r.ok)throw 0;const b=await r.blob(),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='Subas-'+v.title.replace(/[^a-z0-9]+/gi,'-').slice(0,60)+'.mp4';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);dl.textContent='✓ SAVED';}catch(e){window.open(v.url,'_blank','noopener');dl.textContent='OPEN FILE'}setTimeout(()=>dl.textContent=old,1600)};return d;
+}
+async function commons(q){
+ const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(q+' filetype:video')+'&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url|mime|mediatype';
+ const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();
+ return Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:(p.title||'').replace(/^File:/,''),url:i.url||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||''),source:'Wikimedia Commons'}}).filter(x=>x.url&&String(x.url).match(/\.(mp4|webm|ogv|mov)(\?|$)/i));
+}
+async function archive(q){
+ const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent('mediatype:movies AND ('+q.split(/\s+/).slice(0,8).map(x=>'title:'+x+' OR subject:'+x).join(' AND ')+')')+'&fl[]=identifier&fl[]=title&rows=20&output=json';
+ const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json(),out=[];
+ for(const x of d.response?.docs||[]){try{const m=await(await fetch('https://archive.org/metadata/'+encodeURIComponent(x.identifier))).json();const f=(m.files||[]).filter(f=>/\.(mp4|webm|ogv)$/i.test(f.name||'')&&!/thumb|sample/i.test(f.name||'')).sort((a,b)=>Number(b.size||0)-Number(a.size||0))[0];if(f)out.push({title:x.title||x.identifier,url:'https://archive.org/download/'+encodeURIComponent(x.identifier)+'/'+encodeURIComponent(f.name),page:'https://archive.org/details/'+encodeURIComponent(x.identifier),source:'Internet Archive'})}catch(e){}}
+ return out;
+}
+function links(q){
+ const d=document.createElement('div');d.className='vs-source';d.innerHTML='<b>More sources for “'+esc(q)+'”</b><br><br><a href="https://mixkit.co/free-stock-video/" target="_blank">Mixkit ↗</a> &nbsp; <a href="https://www.freepik.com/search?query='+encodeURIComponent(q)+'&type=video" target="_blank">Freepik ↗</a> &nbsp; <a href="https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'" target="_blank">YouTube ↗</a> &nbsp; <a href="https://www.google.com/search?tbm=vid&q='+encodeURIComponent(q)+'" target="_blank">Google Videos ↗</a>';out.appendChild(d);
+}
+async function search(){
+ const query=q.value.trim();if(!query)return;out.innerHTML='';btn.disabled=true;status.textContent='Searching public videos for “'+query+'”…';
+ const rs=await Promise.allSettled([commons(query),archive(query)]);let n=0;
+ rs.forEach(r=>{if(r.status==='fulfilled')r.value.slice(0,20).forEach(v=>{out.appendChild(card(v));n++})});
+ if(!n){const m=document.createElement('div');m.className='vs-source';m.textContent='No direct playable public video found. Try another keyword.';out.appendChild(m)}
+ links(query);status.textContent=n+' direct playable public video(s) found — no API key required.';btn.disabled=false;
+}
+btn.onclick=search;q.onkeydown=e=>{if(e.key==='Enter')search()};
 })();
 </script><script>
 (()=>{
