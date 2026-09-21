@@ -109,7 +109,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     try {
       const api = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' +
         encodeURIComponent(query + ' filetype:video') +
-        '&gsrnamespace=6&gsrlimit=12&gsroffset=' + ((videoPage - 1) * 12) +
+        '&gsrnamespace=6&gsrlimit=50&gsroffset=' + ((videoPage - 1) * 50) +
         '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*';
 
       const response = await fetch(api);
@@ -164,7 +164,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       const more = document.createElement('div');
       more.id = 'videoShowMoreWrap';
       more.style.cssText = 'grid-column:1/-1;text-align:center;margin-top:8px';
-      more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load 12 more free videos for this search</div>';
+      more.innerHTML = '<button id="videoShowMore" class="download-btn" type="button" style="padding:13px 28px;cursor:pointer">SHOW MORE VIDEOS</button><div style="color:#666;font-size:9px;margin-top:8px">Load 50 more free videos for this search</div>';
       results.appendChild(more);
 
       more.querySelector('#videoShowMore').addEventListener('click', () => searchVideos(true));
