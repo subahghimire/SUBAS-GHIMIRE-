@@ -1,0 +1,35 @@
+name: Remove Free Plugin Section
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  remove-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove free plugin card
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          s = p.read_text(encoding="utf-8")
+          old = '''  <article class="source-card"><strong>⚡ FREE PLUGIN</strong><span>Animation Composer for After Effects</span><a class="download-btn" href="https://misterhorse.com/products/animation-composer/" target="_blank" rel="noopener noreferrer">GET PLUGIN ↗</a></article>
+'''
+          s = s.replace(old, "")
+          s = s.replace("free tutorials, presets, MOGRTs, Premiere Pro templates, free plugins and free After Effects projects.", "free tutorials, presets, MOGRTs, Premiere Pro templates and free After Effects projects.")
+          p.write_text(s, encoding="utf-8")
+          PY
+          if git diff --quiet -- index.html; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove free plugin from website"
+          git push
