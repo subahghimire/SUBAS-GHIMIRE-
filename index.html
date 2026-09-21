@@ -22,14 +22,14 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 <section class="section" id="tools"><div class="section-head"><small>03 / SOFTWARE</small><h2>MY<br>TOOLS.</h2></div><div class="tools"><div class="tool"><strong>01</strong><h3>Adobe Premiere Pro</h3><p>VIDEO EDITING</p></div><div class="tool"><strong>02</strong><h3>Adobe After Effects</h3><p>MOTION / VFX</p></div><div class="tool"><strong>03</strong><h3>Adobe Photoshop</h3><p>VISUAL DESIGN</p></div><div class="tool"><strong>04</strong><h3>DaVinci Resolve</h3><p>EDITING / COLOR</p></div></div></section>
 <section class="section" id="assets">
 <div class="section-head"><small>04 / VIDEO SEARCH</small><h2>VIDEO<br>SEARCH.</h2></div>
-<p class="assets-intro">Search and preview free stock videos directly from the website.</p>
+<p class="assets-intro">Search the same keyword across YouTube, Vimeo, Dailymotion, Pixabay, Pexels, Adobe Stock, Google Videos and Bing Videos.</p>
 <div class="video-search">
   <input id="videoSearch" type="search" placeholder="Search videos... e.g. car, nature, drone, rain" aria-label="Search videos">
   <button id="videoSearchBtn" class="download-btn" type="button">SEARCH</button>
 </div>
 <div id="videoStatus" class="video-status">Search any topic — no API key needed. Results open directly on Pixabay.</div>
 <div id="videoResults" class="video-results"></div>
-<div class="source-note"><strong>Pixabay</strong> provides a free API with video search. API keys have default rate limits, and Pixabay asks sites using the API to provide attribution. <a href="https://www.pixabay.com/" target="_blank" rel="noopener noreferrer">Videos provided by Pixabay ↗</a></div>
+<div class="source-note"><strong>Multi-source search:</strong> one search now gives direct video-search links for multiple major platforms. Some platforms do not allow third-party websites to display their search results directly inside another site, so each source opens its own live results page.</div>
 </section>
 
 <section class="section" id="effects">
@@ -73,26 +73,40 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       return;
     }
 
-    const pixabayUrl = 'https://pixabay.com/videos/search/' + encodeURIComponent(query) + '/';
-    const card = document.createElement('article');
-    card.className = 'video-card';
-    card.innerHTML = `
-      <div class="video-wrap" style="height:210px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b1028,#111a45)">
-        <div style="text-align:center;padding:20px">
-          <div style="font-size:42px;margin-bottom:12px">🎬</div>
-          <strong style="font-size:15px">Pixabay Videos</strong>
-          <p style="color:#888;font-size:10px;margin-top:7px">Videos related to “${escapeHTML(query)}”</p>
+    const q = encodeURIComponent(query);
+    const sources = [
+      ['YouTube','▶️','https://www.youtube.com/results?search_query=' + q],
+      ['Vimeo','🎬','https://vimeo.com/search?q=' + q],
+      ['Dailymotion','📺','https://www.dailymotion.com/search/' + q + '/videos'],
+      ['Pixabay Videos','🖼️','https://pixabay.com/videos/search/' + q + '/'],
+      ['Pexels Videos','🎞️','https://www.pexels.com/search/videos/' + q + '/'],
+      ['Adobe Stock Video','✨','https://stock.adobe.com/search/video?k=' + q],
+      ['Google Videos','🔎','https://www.google.com/search?tbm=vid&q=' + q],
+      ['Bing Videos','🌐','https://www.bing.com/videos/search?q=' + q]
+    ];
+
+    sources.forEach(([name, icon, url]) => {
+      const card = document.createElement('article');
+      card.className = 'video-card';
+      card.innerHTML = `
+        <div class="video-wrap" style="height:155px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b1028,#18245b)">
+          <div style="text-align:center;padding:18px">
+            <div style="font-size:38px;margin-bottom:10px">${icon}</div>
+            <strong style="font-size:14px">${name}</strong>
+            <p style="color:#888;font-size:9px;margin-top:7px">Search “${escapeHTML(query)}”</p>
+          </div>
         </div>
-      </div>
-      <div class="video-info">
-        <h3>${escapeHTML(query)} videos</h3>
-        <p>Free stock videos from Pixabay</p>
-        <div class="video-actions">
-          <a href="${pixabayUrl}" target="_blank" rel="noopener">OPEN VIDEOS ↗</a>
-        </div>
-      </div>`;
-    results.appendChild(card);
-    status.textContent = 'Found Pixabay video results for “' + query + '”.';
+        <div class="video-info">
+          <h3>${name}</h3>
+          <p>Open this platform's video results for your search</p>
+          <div class="video-actions">
+            <a href="${url}" target="_blank" rel="noopener noreferrer">OPEN VIDEOS ↗</a>
+          </div>
+        </div>`;
+      results.appendChild(card);
+    });
+
+    status.textContent = 'Showing video search sources for “' + query + '”.';
   }
 
   searchBtn.addEventListener('click', searchVideos);
