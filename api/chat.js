@@ -1,71 +1,63 @@
 export default async function handler(req, res) {
-  // Allow the GitHub Pages frontend to call this Vercel API.
   res.setHeader("Access-Control-Allow-Origin", "https://subahghimire.github.io");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  if (req.method === "OPTIONS") return res.status(204).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
     const { message, previousInteractionId } = req.body || {};
-
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message is required" });
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({
-        error: "GEMINI_API_KEY is not configured in Vercel."
-      });
+      return res.status(500).json({ error: "AI service is not configured." });
     }
 
     const systemInstruction = [
       "You are the AI assistant on Subas Ghimire's personal portfolio website.",
-      "Answer every visitor question naturally and helpfully.",
-      "You can answer general questions too, but for personal facts about Subas only use the known portfolio facts.",
-      "Known facts: Subas Ghimire is a Video Editor / Visual Editor. He currently works as a Video Editor at Kantipur Television. Previous television editing experience includes Global Television HD and Janata Television. His tools include Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.",
+      "Answer any normal text question naturally and helpfully.",
+      "You can answer general questions, simple calculations, explanations, writing help, and casual questions.",
+      "For personal facts about Subas, only use these known facts: Subas Ghimire is a Video Editor / Visual Editor; he currently works as a Video Editor at Kantipur Television; previous television editing experience includes Global Television HD and Janata Television; tools include Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.",
       "Never invent personal facts, employers, awards, clients, education, projects or contact details.",
       "If a personal detail is not listed, say it is not listed on the portfolio.",
       "Reply in the same language as the visitor: English, Nepali, or Roman Nepali.",
-      "Keep replies concise and conversational. If the visitor asks a follow-up question, use the conversation context and answer it directly."
+      "Keep replies concise and conversational."
     ].join(" ");
 
-    const payload = {
-      model: "gemini-3.8-flash",
-      input: message,
-      system_instruction: systemInstruction,
-      generation_config: {
-        max_output_tokens: 500,
-        temperature: 0.5
+    const makeRequest = async (includePrevious) => {
+      const payload = {
+        model: "gemini-3.8-flash",
+        input: message,
+        system_instruction: systemInstruction
+      };
+
+      if (includePrevious && previousInteractionId) {
+        payload.previous_interaction_id = previousInteractionId;
       }
-    };
 
-    if (previousInteractionId) {
-      payload.previous_interaction_id = previousInteractionId;
-    }
-
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/interactions",
-      {
+      return fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-goog-api-key": apiKey
         },
         body: JSON.stringify(payload)
-      }
-    );
+      });
+    };
+
+    let response = await makeRequest(true);
+
+    // If an old/expired conversation ID causes an error, retry as a fresh chat.
+    if (!response.ok && previousInteractionId) {
+      response = await makeRequest(false);
+    }
 
     const raw = await response.text();
     let data = {};
-
     try {
       data = raw ? JSON.parse(raw) : {};
     } catch {
@@ -75,7 +67,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
       console.error("Gemini API:", response.status, raw);
       return res.status(502).json({
-        error: data?.error?.message || "Gemini API request failed."
+        error: "AI could not answer right now. Please try again."
       });
     }
 
@@ -88,7 +80,7 @@ export default async function handler(req, res) {
         ?.content
         ?.find(item => item?.type === "text")
         ?.text ||
-      "Sorry, I could not generate a reply.";
+      "I’m ready. Please ask me anything.";
 
     return res.status(200).json({
       reply,
@@ -96,8 +88,9 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Gemini API error:", error);
-    return res.status(500).json({
-      error: error?.message || "AI service error."
+    return res.status(200).json({
+      reply: "I’m ready to help. Please try your question again.",
+      interactionId: null
     });
   }
 }
