@@ -2735,48 +2735,5 @@ document.addEventListener("DOMContentLoaded", function(){
 <button class="ai-fab" id="aiFab" aria-label="Open AI portfolio assistant">AI</button>
 <div class="ai-panel" id="aiPanel" aria-hidden="true"><div class="ai-head"><div><strong>AI PORTFOLIO ASSISTANT</strong><span>Ask about Subas, skills, experience or work.</span></div><button class="ai-close" id="aiClose" aria-label="Close AI assistant">×</button></div><div class="ai-messages" id="aiMessages"><div class="ai-msg bot">Hi! I am Subas portfolio assistant. Ask about video editing, tools, experience or contact.</div></div><form class="ai-form" id="aiForm"><input id="aiInput" autocomplete="off" placeholder="Ask something..." aria-label="Ask the AI assistant"><button type="submit">SEND</button></form></div>
 
-<button class="video-fab" id="videoFab" aria-label="Open AI video generator">VIDEO AI</button>
-<div class="ai-agents-wrap" aria-label="AI agents">
-  <div class="ai-agents-card">
-    <div class="ai-agents-head">
-      <div><div class="ai-agents-title">AI VIDEO STUDIO</div><span class="ai-agents-sub">CHOOSE YOUR AI VIDEO GENERATION PLATFORM</span></div>
-      <span class="veo-badge">VIDEO AI</span>
-    </div>
-    <div class="ai-agent-grid" id="agentGrid">
-      <a class="ai-agent ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">
-        <span class="ai-agent-icon">✦</span><span class="ai-agent-name">GEMINI</span><span class="ai-agent-tag">VEO 3.1</span>
-      </a>
-      <a class="ai-agent ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">
-        <span class="ai-agent-icon">◉</span><span class="ai-agent-name">CHATGPT</span><span class="ai-agent-tag">OPEN AI</span>
-      </a>
-      <a class="ai-agent ai-claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">
-        <span class="ai-agent-icon">✺</span><span class="ai-agent-name">CLAUDE</span><span class="ai-agent-tag">ANTHROPIC</span>
-      </a>
-      <a class="ai-agent ai-grok" href="https://grok.com/" target="_blank" rel="noopener noreferrer">
-        <span class="ai-agent-icon">𝕏</span><span class="ai-agent-name">GROK</span><span class="ai-agent-tag">X AI</span>
-      </a>
-    </div>
-    <div class="ai-agents-note">Select an agent to open its official website.</div>
-  </div>
-</div>
-<div class="video-panel"/> id="videoPanel" aria-hidden="true">
-  <div class="video-head"><div><strong>AI VIDEO GENERATOR</strong><span>Powered by Google Veo 3.1</span></div><button class="video-close" id="videoClose" aria-label="Close video generator">×</button></div>
-  <div class="video-body">
-    <label for="videoPrompt">VIDEO PROMPT</label>
-    <textarea id="videoPrompt" placeholder="Example: A cinematic wide shot of an old man building a wooden motorcycle in a rural workshop, detailed step-by-step construction, natural movement, dramatic lighting."></textarea>
-    <div class="video-options">
-      <div><label for="videoModel">MODEL</label><select id="videoModel"><option value="veo-3.1-fast-generate-preview">Veo 3.1 Fast — faster</option><option value="veo-3.1-lite-generate-preview">Veo 3.1 Lite — lower cost</option><option value="veo-3.1-generate-preview">Veo 3.1 — quality</option></select></div>
-      <div><label for="videoRatio">RATIO</label><select id="videoRatio"><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Vertical</option></select></div>
-    </div>
-    <label for="videoResolution">RESOLUTION</label><select id="videoResolution" style="width:100%;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;outline:none"><option value="720p">720p</option><option value="1080p">1080p</option></select>
-    <div class="video-free-bar"><span>FREE DAILY GENERATIONS</span><span class="video-free-count" id="videoFreeCount">2 / 2 LEFT</span></div>
-    <button class="video-generate" id="videoGenerate">GENERATE VIDEO</button>
-    <button class="video-history-btn" id="videoHistoryBtn">GENERATED VIDEOS</button>
-    <div class="video-history" id="videoHistory"></div>
-    <div class="video-status" id="videoStatus">You have 2 free generations per day on this device.</div>
-    <div class="video-result" id="videoResult"><video id="videoPreview" controls playsinline></video><a class="video-download" id="videoDownload" href="#" download="subas-ai-video.mp4">DOWNLOAD MP4</a></div>
-    <div class="video-cost">Veo 3.1 pricing is usage-based. Fast 720p is currently $0.10/second; Lite 720p is $0.05/second. </div>
-  </div>
-</div>
 </body>
 </html>
