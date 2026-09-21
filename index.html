@@ -1572,16 +1572,7 @@ footer{
   display:none !important;
 }
 
-/* CHATGPT-STYLE AI VIDEO STUDIO */
-.ai-agents-wrap{width:min(900px,92vw);margin:0 auto 30px;}
-.ai-agents-card{border:1px solid var(--line);border-radius:28px;background:var(--surface);overflow:hidden;box-shadow:0 25px 80px var(--shadow);}
-.ai-agents-head{padding:24px 26px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
-.ai-agents-title{font-size:19px;font-weight:800;letter-spacing:-.04em}.ai-agents-sub{display:block;margin-top:5px;color:var(--muted);font-size:10px}
-.veo-badge{font-size:9px;font-weight:800;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
-.ai-studio-tabs{display:flex;padding:8px;border-bottom:1px solid var(--line);gap:4px}.ai-studio-tab{flex:1;border:0;background:transparent;color:var(--muted);padding:11px;border-radius:10px;font-size:10px;font-weight:800;cursor:pointer}.ai-studio-tab.active{background:var(--surface-2);color:var(--text)}
-.ai-agent-grid{padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.ai-agent{padding:18px 12px;border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--text);background:rgba(255,255,255,.025);display:flex;flex-direction:column;align-items:center;gap:6px;transition:.25s}.ai-agent:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--surface-2)}.ai-agent-icon{font-size:21px}.ai-agent-name{font-size:11px;font-weight:800}.ai-agent-tag{font-size:8px;color:var(--muted)}
-.ai-agents-note{text-align:center;color:var(--muted);font-size:9px;padding:0 20px 20px}
-.generated-panel{padding:18px}.generated-empty{padding:55px 20px;text-align:center;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
+
 /* hide old floating generator; studio remains the main AI video UI */
 #videoFab,#videoPanel{display:none!important}
 @media(max-width:700px){.ai-agent-grid{grid-template-columns:repeat(2,1fr)}.ai-agents-head{align-items:flex-start;gap:15px}.ai-agents-title{font-size:16px}}
@@ -2658,50 +2649,6 @@ if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
 
 
-
-/* AI VIDEO GENERATOR - VEO 3.1 — 2 FREE DAILY GENERATIONS */
-document.addEventListener("DOMContentLoaded",function(){
-  const fab=document.getElementById("videoFab"),panel=document.getElementById("videoPanel"),close=document.getElementById("videoClose"),generate=document.getElementById("videoGenerate"),prompt=document.getElementById("videoPrompt"),model=document.getElementById("videoModel"),ratio=document.getElementById("videoRatio"),resolution=document.getElementById("videoResolution"),status=document.getElementById("videoStatus"),result=document.getElementById("videoResult"),preview=document.getElementById("videoPreview"),download=document.getElementById("videoDownload"),freeCount=document.getElementById("videoFreeCount"),historyBtn=document.getElementById("videoHistoryBtn"),history=document.getElementById("videoHistory");
-  if(!fab||!panel||!close||!generate)return;
-
-  const DAY=86400000, LIMIT=2, usageKey="subas-video-daily";
-  function usage(){const d=JSON.parse(localStorage.getItem(usageKey)||"null");if(!d||Date.now()-d.day>=DAY)return {day:Date.now(),count:0};return d}
-  function saveUsage(u){localStorage.setItem(usageKey,JSON.stringify(u));updateCount()}
-  function updateCount(){const u=usage(),left=Math.max(0,LIMIT-u.count);if(freeCount)freeCount.textContent=left+" / 2 LEFT";generate.disabled=left<=0;generate.textContent=left<=0?"DAILY LIMIT REACHED":"GENERATE VIDEO"}
-  updateCount();
-
-  fab.addEventListener("click",()=>{panel.classList.toggle("open");panel.setAttribute("aria-hidden",String(!panel.classList.contains("open")));if(panel.classList.contains("open"))prompt.focus();});
-  close.addEventListener("click",()=>{panel.classList.remove("open");panel.setAttribute("aria-hidden","true");});
-
-  async function openDB(){return new Promise((resolve,reject)=>{const q=indexedDB.open("subas-video-history",1);q.onupgradeneeded=()=>q.result.createObjectStore("videos",{keyPath:"id"});q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)})}
-  async function saveGenerated(blob,promptText){try{const db=await openDB();const tx=db.transaction("videos","readwrite");tx.objectStore("videos").put({id:Date.now(),blob,prompt:promptText,date:new Date().toLocaleString()});tx.oncomplete=renderHistory}catch(e){console.warn("History save failed",e)}}
-  async function renderHistory(){if(!history)return;history.innerHTML="";try{const db=await openDB();const tx=db.transaction("videos","readonly"),store=tx.objectStore("videos"),req=store.getAll();req.onsuccess=()=>{req.result.sort((a,b)=>b.id-a.id).slice(0,8).forEach(v=>{const el=document.createElement("div");el.className="video-history-item";const vid=document.createElement("video");vid.controls=true;vid.playsInline=true;vid.src=URL.createObjectURL(v.blob);const small=document.createElement("small");small.textContent=v.date+" — "+(v.prompt||"Generated video").slice(0,90);el.append(vid,small);history.appendChild(el)})}}catch(e){history.innerHTML="<small>Generated history is unavailable in this browser.</small>"}}
-  if(historyBtn)historyBtn.addEventListener("click",()=>{history.classList.toggle("open");if(history.classList.contains("open"))renderHistory()});
-
-  generate.addEventListener("click",async()=>{
-    const text=prompt.value.trim(); if(!text){status.textContent="Please enter a video prompt.";prompt.focus();return;}
-    const u=usage(); if(u.count>=LIMIT){status.textContent="Today's 2 free generations are finished. Your limit resets automatically tomorrow.";updateCount();return;}
-    generate.disabled=true;generate.textContent="STARTING...";result.classList.remove("open");preview.removeAttribute("src");status.textContent="Starting video generation...";
-    try{
-      const start=await fetch("/api/video",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:text,model:model.value,aspectRatio:ratio.value,resolution:resolution.value})});
-      const startData=await start.json(); if(!start.ok)throw new Error(startData?.error||"Could not start video generation.");
-      const operation=startData.operation; if(!operation)throw new Error("No video operation was returned.");
-      let done=false;
-      for(let i=0;i<60&&!done;i++){
-        await new Promise(r=>setTimeout(r,10000));status.textContent="Generating video... "+Math.round(((i+1)/60)*100)+"% (estimate)";
-        const check=await fetch("/api/video?operation="+encodeURIComponent(operation));const data=await check.json();if(!check.ok)throw new Error(data?.error||"Could not check video status.");
-        done=!!data.done;if(data.error)throw new Error(data.error);
-        if(done&&data.ready){
-          const blobResponse=await fetch("/api/video?operation="+encodeURIComponent(operation)+"&download=1");if(!blobResponse.ok){const e=await blobResponse.json().catch(()=>({}));throw new Error(e.error||"Could not download generated video.")}
-          const blob=await blobResponse.blob();const url=URL.createObjectURL(blob);preview.src=url;download.href=url;result.classList.add("open");
-          u.count++;saveUsage(u);await saveGenerated(blob,text);status.textContent="Done — video generated. "+Math.max(0,LIMIT-u.count)+" free generation(s) left today.";break;
-        }
-      }
-      if(!done)throw new Error("Generation is taking longer than expected. Please try again later.");
-    }catch(error){status.textContent="Video error: "+(error?.message||"Video generation failed.");console.error(error)}
-    finally{updateCount();if(u.count<LIMIT){generate.disabled=false;generate.textContent="GENERATE VIDEO"}}
-  });
-});
 
 /* AI PORTFOLIO ASSISTANT - GEMINI API */
 document.addEventListener("DOMContentLoaded", function(){
