@@ -54,6 +54,19 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     status.textContent = 'API key ready ✓ Search for a video.';
   }
 
+  // Automatically save the API key as soon as it is entered.
+  // This makes it available again after refresh without needing to press SAVE KEY.
+  keyInput.addEventListener('input', () => {
+    const key = keyInput.value.trim();
+    if (key) {
+      localStorage.setItem(STORAGE_KEY, key);
+      status.textContent = 'API key saved automatically ✓';
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+      status.textContent = 'Enter your Pexels API key once, then search.';
+    }
+  });
+
   saveKeyBtn.addEventListener('click', () => {
     const key = keyInput.value.trim();
     if (!key) {
@@ -62,7 +75,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       return;
     }
     localStorage.setItem(STORAGE_KEY, key);
-    status.textContent = 'API key saved ✓ It will remain on this browser unless site data is cleared.';
+    status.textContent = 'API key saved ✓ It will load automatically after refresh.';
   });
 
   function escapeHTML(value) {
