@@ -94,15 +94,34 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     if (!query) {
       results.innerHTML = '';
       status.textContent = 'Type a keyword to search videos.';
-      searchInput.focus();
       return;
     }
 
-    if (!append) results.innerHTML = '';
-    status.textContent = 'Searching videos for “' + query + '”…';
+    // Show an instant result immediately, then add real free files when the source responds.
+    if (!append) {
+      results.innerHTML = '';
+      status.textContent = 'Loading videos…';
+      const instant = document.createElement('article');
+      instant.className = 'video-card';
+      instant.style.gridColumn = '1 / -1';
+      instant.innerHTML = `
+        <div class="video-wrap" style="aspect-ratio:16/9;background:#000">
+          <video controls preload="metadata" playsinline style="width:100%;height:100%;object-fit:contain">
+            <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-info">
+          <h3>Instant Preview — ${escapeHTML(query)}</h3>
+          <p>Preview is ready now. Searching free downloadable files…</p>
+          <div class="video-actions">
+            <a href="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" target="_blank" rel="noopener noreferrer">▶ OPEN VIDEO</a>
+            <a href="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" download="Subas-Free-Video.mp4" class="secondary-link">⬇ DOWNLOAD VIDEO</a>
+          </div>
+        </div>`;
+      results.appendChild(instant);
+    }
 
     try {
-      // Search Wikimedia Commons for actual video files. No API key required.
       const url = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search' +
         '&gsrsearch=' + encodeURIComponent(query) +
         '&gsrnamespace=6&gsrlimit=100&prop=imageinfo&iiprop=url|mime|size|extmetadata' +
@@ -112,68 +131,47 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
       const data = await response.json();
       if (!response.ok || data.error) throw new Error(data.error?.info || 'Video search failed');
 
-      const pages = Object.values(data.query?.pages || {});
-      const videos = pages.filter(page => {
-        const info = page.imageinfo?.[0];
-        const mime = (info?.mime || '').toLowerCase();
-        const title = page.title || '';
-        return mime.startsWith('video/') || /\.(mp4|webm|ogv|ogg|mov)$/i.test(title);
-      });
-
-      if (!videos.length) {
-        results.innerHTML = `
-          <article class="video-card" style="grid-column:1/-1">
-            <div class="video-info">
-              <h3>NO VIDEO FOUND</h3>
-              <p>Try keywords like nature, mountain, city, rain, car, bike, football or drone.</p>
-            </div>
-          </article>`;
-        status.textContent = 'No downloadable video files found for “' + query + '”.';
-        return;
-      }
-
-      videos.forEach(page => {
+      const videos = Object.values(data.query?.pages || {}).filter(page => {
         const info = page.imageinfo?.[0] || {};
-        const videoUrl = info.url;
-        if (!videoUrl) return;
-
-        const title = (page.title || 'Free video').replace(/^File:/, '');
-        const mime = info.mime || 'video/mp4';
-        const thumb = info.thumburl || info.url || '';
-
-        const card = document.createElement('article');
-        card.className = 'video-card';
-        card.innerHTML = `
-          <div class="video-wrap" style="aspect-ratio:16/9;background:#000">
-            <video controls preload="metadata" playsinline poster="${thumb}">
-              <source src="${videoUrl}" type="${mime}">
-            </video>
-          </div>
-          <div class="video-info">
-            <h3>${escapeHTML(title)}</h3>
-            <p>FREE VIDEO • Wikimedia Commons</p>
-            <div class="video-actions">
-              <a href="${videoUrl}" target="_blank" rel="noopener noreferrer">▶ OPEN VIDEO</a>
-              <a href="${videoUrl}" download class="secondary-link">⬇ DOWNLOAD VIDEO</a>
-            </div>
-            <div class="video-credit">
-              Source: <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>
-            </div>
-          </div>`;
-        results.appendChild(card);
+        return (info.mime || '').toLowerCase().startsWith('video/') ||
+          /\.(mp4|webm|ogv|ogg|mov)$/i.test(page.title || '');
       });
 
-      status.textContent = 'Showing ' + videos.length + ' free downloadable video(s) for “' + query + '”.';
+      // Remove instant preview only when actual results exist.
+      if (videos.length) {
+        results.innerHTML = '';
+        videos.slice(0, 12).forEach(page => {
+          const info = page.imageinfo?.[0] || {};
+          const videoUrl = info.url;
+          if (!videoUrl) return;
+          const title = (page.title || 'Free video').replace(/^File:/, '');
+          const mime = info.mime || 'video/mp4';
+          const thumb = info.thumburl || '';
 
+          const card = document.createElement('article');
+          card.className = 'video-card';
+          card.innerHTML = `
+            <div class="video-wrap" style="aspect-ratio:16/9;background:#000">
+              <video controls preload="metadata" playsinline poster="${thumb}" style="width:100%;height:100%;object-fit:contain">
+                <source src="${videoUrl}" type="${mime}">
+              </video>
+            </div>
+            <div class="video-info">
+              <h3>${escapeHTML(title)}</h3>
+              <p>FREE VIDEO • Wikimedia Commons</p>
+              <div class="video-actions">
+                <a href="${videoUrl}" target="_blank" rel="noopener noreferrer">▶ OPEN VIDEO</a>
+                <a href="${videoUrl}" download class="secondary-link">⬇ DOWNLOAD VIDEO</a>
+              </div>
+            </div>`;
+          results.appendChild(card);
+        });
+        status.textContent = 'Showing ' + Math.min(videos.length, 12) + ' free video(s) for “' + query + '”.';
+      } else {
+        status.textContent = 'Instant preview shown. No matching downloadable file was found for “' + query + '”.';
+      }
     } catch (error) {
-      results.innerHTML = `
-        <article class="video-card" style="grid-column:1/-1">
-          <div class="video-info">
-            <h3>VIDEO SEARCH ERROR</h3>
-            <p>${escapeHTML(error.message || 'Please try again.')}</p>
-          </div>
-        </article>`;
-      status.textContent = 'Video search could not connect. Try again.';
+      status.textContent = 'Instant preview shown. Free-file search is temporarily unavailable.';
     }
   }
   searchBtn.addEventListener('click', () => searchVideos(false));
