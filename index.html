@@ -57,7 +57,7 @@ document.querySelectorAll('[data-q]').forEach(btn=>btn.addEventListener('click',
 <script>
 const keyInput=document.getElementById('pexelsKey'), saveKey=document.getElementById('saveKey'), searchInput=document.getElementById('videoSearch'), searchBtn=document.getElementById('videoSearchBtn'), results=document.getElementById('videoResults'), status=document.getElementById('videoStatus');
 keyInput.value=localStorage.getItem('subas_pexels_key')||'';
-saveKey.onclick=()=>{const k=keyInput.value.trim();if(k){localStorage.setItem('subas_pexels_key',k);status.textContent='API key saved on this device.';}};
+saveKey.onclick=()=>{const k=keyInput.value.trim();if(k){localStorage.setItem('subas_pexels_key',k);keyInput.value=k;status.textContent='API key saved ✓ It will stay after page refresh on this browser.';}else{status.textContent='Enter your Pexels API key first.';}};
 async function searchVideos(){
  const key=keyInput.value.trim()||localStorage.getItem('subas_pexels_key');
  const q=searchInput.value.trim();
