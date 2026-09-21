@@ -107,16 +107,35 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     status.textContent = append ? 'Loading more free videos…' : 'Searching free videos for “' + query + '”…';
 
     try {
-      const api = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' +
-        encodeURIComponent(query + ' filetype:video') +
+      const romanToNepali = {
+        maya:'माया', love:'माया', prem:'प्रेम', pyar:'प्यार', geet:'गीत', git:'गीत', song:'गीत',
+        nepali:'नेपाली', keta:'केटा', keti:'केटी', gau:'गाउँ', gaun:'गाउँ', pahad:'पहाड', himal:'हिमाल',
+        pani:'पानी', barsa:'वर्षा', badal:'बादल', phool:'फूल', ful:'फूल', man:'मन', mutu:'मुटु'
+      };
+      const nepaliWord = romanToNepali[query.toLowerCase()] || '';
+      const searchTerms = [...new Set([
+        query + ' filetype:video',
+        nepaliWord ? nepaliWord + ' filetype:video' : '',
+        (query.toLowerCase() === 'maya' || query.toLowerCase() === 'love' || query.toLowerCase() === 'prem' || query.toLowerCase() === 'song' || query.toLowerCase() === 'geet') ? 'Nepali song filetype:video' : ''
+      ].filter(Boolean))];
+
+      const requests = searchTerms.map(term => fetch(
+        'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=' +
+        encodeURIComponent(term) +
         '&gsrnamespace=6&gsrlimit=50&gsroffset=' + ((videoPage - 1) * 50) +
-        '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*';
-
-      const response = await fetch(api);
-      const data = await response.json();
-      if (!response.ok || data.error) throw new Error(data.error?.info || 'Video search failed');
-
-      const pages = Object.values(data.query?.pages || {});
+        '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=640&format=json&origin=*'
+      ).then(async response => {
+        const data = await response.json();
+        if (!response.ok || data.error) throw new Error(data.error?.info || 'Video search failed');
+        return data;
+      }));
+      const datasets = await Promise.all(requests);
+      const seen = new Set();
+      const pages = datasets.flatMap(data => Object.values(data.query?.pages || {})).filter(page => {
+        if (seen.has(page.pageid)) return false;
+        seen.add(page.pageid);
+        return true;
+      });
       const videoPages = pages.filter(page => {
         const info = page.imageinfo?.[0];
         const mime = info?.mime || '';
