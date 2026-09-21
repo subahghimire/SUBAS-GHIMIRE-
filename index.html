@@ -34,5 +34,68 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 <section class="section" id="experience"><div class="section-head"><small>04 / EXPERIENCE</small><h2>WHERE<br>I'VE BEEN.</h2></div><div class="jobs"><div class="job"><time>2026 — NOW</time><div><h3>Kantipur Television</h3><p>Video Editor</p></div><span>TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Global Television HD</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Janata Television</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div></div></section>
 <section class="section contact" id="contact"><div class="section-head"><small>05 / CONTACT</small><h2>LET'S<br><span>TALK.</span></h2></div><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com ↗</a><div class="social"><a href="https://wa.me/9779766454587" target="_blank">WHATSAPP</a><a href="https://www.facebook.com/subas.ghimire.164384" target="_blank">FACEBOOK</a><a href="https://www.instagram.com/subas_ghimire__?stkn=bGprN3N6djF1YXVj" target="_blank">INSTAGRAM</a><a href="https://www.tiktok.com/" target="_blank">TIKTOK</a></div></div></section><footer><span>© 2026 SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR</span></footer>
 <div class="ai"><div class="panel" id="panel"><div class="phead"><div><strong>AI ASSISTANT</strong><span>Ask about Subas, editing, tools or experience.</span></div><button class="close" id="close">×</button></div><div class="msgs" id="msgs"><div class="msg">Hi! I am Subas portfolio assistant. Ask me anything.</div></div><form class="form" id="form"><input id="input" placeholder="Ask something..." autocomplete="off"><button>SEND</button></form></div><button id="open">AI</button></div>
-<script>const panel=document.getElementById('panel'),open=document.getElementById('open'),close=document.getElementById('close'),form=document.getElementById('form'),input=document.getElementById('input'),msgs=document.getElementById('msgs');open.onclick=()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))input.focus()};close.onclick=()=>panel.classList.remove('open');form.onsubmit=async e=>{e.preventDefault();const q=input.value.trim();if(!q)return;const u=document.createElement('div');u.className='msg user';u.textContent=q;msgs.appendChild(u);input.value='';input.disabled=true;const b=form.querySelector('button');b.disabled=true;b.textContent='...';const a=document.createElement('div');a.className='msg';a.textContent='Thinking...';msgs.appendChild(a);msgs.scrollTop=msgs.scrollHeight;try{const r=await fetch('https://subas-ghimire.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const raw=await r.text();let d={};try{d=JSON.parse(raw)}catch{}a.textContent=d.reply||'I could not generate a response. Please try again.'}catch{a.textContent='AI service is temporarily unavailable. Please try again.'}finally{input.disabled=false;b.disabled=false;b.textContent='SEND';input.focus()}};</script>
+<script>
+const panel=document.getElementById('panel');
+const open=document.getElementById('open');
+const close=document.getElementById('close');
+const form=document.getElementById('form');
+const input=document.getElementById('input');
+const msgs=document.getElementById('msgs');
+
+open.onclick=()=>{
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')) input.focus();
+};
+close.onclick=()=>panel.classList.remove('open');
+
+form.onsubmit=async e=>{
+  e.preventDefault();
+  const q=input.value.trim();
+  if(!q) return;
+
+  const u=document.createElement('div');
+  u.className='msg user';
+  u.textContent=q;
+  msgs.appendChild(u);
+
+  input.value='';
+  input.disabled=true;
+  const b=form.querySelector('button');
+  b.disabled=true;
+  b.textContent='...';
+
+  const a=document.createElement('div');
+  a.className='msg';
+  a.textContent='Thinking...';
+  msgs.appendChild(a);
+  msgs.scrollTop=msgs.scrollHeight;
+
+  try{
+    const r=await fetch('https://subas-ghimire.vercel.app/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:q})
+    });
+
+    const raw=await r.text();
+    let d={};
+    try{d=JSON.parse(raw)}catch{}
+
+    if(!r.ok){
+      a.textContent=d.reply||d.error||'AI service returned an error. Please try again.';
+    }else{
+      a.textContent=d.reply||'I could not generate a response. Please try again.';
+    }
+  }catch(error){
+    console.error(error);
+    a.textContent='AI service is temporarily unavailable. Please try again.';
+  }finally{
+    input.disabled=false;
+    b.disabled=false;
+    b.textContent='SEND';
+    input.focus();
+    msgs.scrollTop=msgs.scrollHeight;
+  }
+};
+</script>
 </body></html>
