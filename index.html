@@ -171,7 +171,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     const res=await fetch(api,{mode:'cors'});
     if(!res.ok)throw new Error('archive search failed');
     const data=await res.json(), docs=data.response?.docs||[], out=[];
-    for(const item of docs.slice(0,12)){
+    for(const item of docs.slice(0,24)){
       if(!item.identifier)continue;
       try{
         const m=await (await fetch('https://archive.org/metadata/'+encodeURIComponent(item.identifier),{mode:'cors'})).json();
@@ -194,7 +194,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
   async function searchCommons(q){
     const api='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*'+
-      '&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=6&gsrlimit=50'+
+      '&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=6&gsrlimit=100'+
       '&prop=imageinfo&iiprop=url|mime|mediatype';
     const res=await fetch(api,{mode:'cors'});
     if(!res.ok)throw new Error('commons search failed');
@@ -225,27 +225,26 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   async function search(){
     const q=input.value.trim();
     if(!q){results.innerHTML='';status.textContent='Type any keyword to search.';return}
-    results.innerHTML=''; status.textContent='Searching free/public videos for “'+q+'”…'; button.disabled=true;
+    results.innerHTML='';
+    status.textContent='Loading many videos for “'+q+'”…';
+    button.disabled=true;
 
     const [archive,commons]=await Promise.allSettled([searchInternetArchive(q),searchCommons(q)]);
     const av=archive.status==='fulfilled'?archive.value:[], cv=commons.status==='fulfilled'?commons.value:[];
-
     const seen=new Set();
-    const all=[...av,...cv].filter(v=>v.url&&!seen.has(v.url)&&seen.add(v.url)).slice(0,24);
+    const all=[...av,...cv].filter(v=>v.url&&!seen.has(v.url)&&seen.add(v.url)).slice(0,48);
 
     if(all.length){
-      results.appendChild(makeSectionTitle('FREE / PUBLIC VIDEO RESULTS — PLAY + DOWNLOAD'));
+      results.appendChild(makeSectionTitle('VIDEO RESULTS — PREVIEW + DOWNLOAD'));
       all.forEach(v=>results.appendChild(av.includes(v)?archiveCard(v):commonsCard(v)));
     }else{
       const msg=document.createElement('div'); msg.className='source-note'; msg.style.gridColumn='1/-1';
-      msg.innerHTML='<strong>No direct free file found.</strong> Try the free stock-video sources below. Search results depend on what each source currently exposes through its public search/API.';
+      msg.innerHTML='<strong>No direct playable files found yet.</strong> Try another word or one of the free sources below.';
       results.appendChild(msg);
     }
-
     results.appendChild(makeSectionTitle('MORE FREE VIDEO SOURCES'));
     results.appendChild(sourceSearchLinks(q));
-
-    status.textContent='Found '+all.length+' playable free/public result'+(all.length===1?'':'s')+' for “'+q+'”.';
+    status.textContent='Showing '+all.length+' playable video'+(all.length===1?'':'s')+' for “'+q+'”';
     button.disabled=false;
   }
 
