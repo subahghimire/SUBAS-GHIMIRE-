@@ -55,8 +55,15 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       console.error("Gemini API error:", response.status, JSON.stringify(data));
+      const apiMessage = data?.error?.message || "";
+      if (response.status === 401 || response.status === 403) {
+        return res.status(200).json({ reply: "Gemini API key ko authentication/restriction problem cha. Vercel ko GEMINI_API_KEY check garnu parcha." });
+      }
+      if (response.status === 429) {
+        return res.status(200).json({ reply: "Gemini API ko usage limit पुगेको छ. Please try again later." });
+      }
       return res.status(200).json({
-        reply: "AI service ma problem aayo. Please try again in a moment."
+        reply: apiMessage ? "Gemini API error: " + apiMessage : "AI service ma problem aayo. Please try again in a moment."
       });
     }
 
