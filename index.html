@@ -1,46 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Subas Ghimire — Video Editor / Visual Editor portfolio.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Subas Ghimire — Video Editor / Visual Editor portfolio featuring editing work, experience, tools and selected projects.">
 <link rel="canonical" href="https://subahghimire.github.io/SUBAS-GHIMIRE-/">
-<title>SUBAS GHIMIRE — EDIT / VISUALS</title>
+<title>SUBAS GHIMIRE — VIDEO EDITOR</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#050505;color:#f4f4f2;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}a{color:inherit;text-decoration:none}button{font:inherit}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.045;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:70px 70px;z-index:0}
-.wrap{width:min(1280px,92%);margin:auto;position:relative;z-index:1}
-header{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;position:relative;z-index:10}.brand{font-size:15px;font-weight:900;letter-spacing:-.7px}.brand i{font-style:normal;color:#49a7ff}.nav{display:flex;gap:28px;font-size:9px;font-weight:800;letter-spacing:1.5px;color:#888}.nav a:hover{color:#fff}.menu{display:none}
-.hero{min-height:calc(100vh - 86px);display:grid;grid-template-columns:1fr 260px;align-items:center;gap:50px;padding:80px 0}.kicker{font-size:10px;letter-spacing:3px;color:#49a7ff;font-weight:800;margin-bottom:28px}.hero h1{font-size:clamp(72px,13vw,185px);line-height:.76;letter-spacing:-.095em;margin:0;font-weight:900}.hero h1 span{display:block;color:transparent;-webkit-text-stroke:1px #666}.hero-side{align-self:end;padding-bottom:25px}.hero-side p{color:#888;font-size:12px;line-height:1.8;margin:0 0 25px}.scroll{font-size:9px;letter-spacing:2px;color:#aaa}.scroll b{color:#49a7ff}
-.marquee{overflow:hidden;border-top:1px solid #222;border-bottom:1px solid #222;padding:18px 0;white-space:nowrap}.marquee div{display:inline-block;font-size:12px;font-weight:900;letter-spacing:4px;animation:move 18s linear infinite}@keyframes move{to{transform:translateX(-50%)}}.dot{color:#49a7ff;padding:0 28px}
-section{padding:130px 0}.section-head{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid #222;padding-bottom:20px;margin-bottom:45px}.index{font-size:10px;color:#49a7ff;font-weight:900}.section-head h2{font-size:clamp(48px,8vw,110px);line-height:.8;letter-spacing:-.08em;margin:0;text-align:right}
+:root{--bg:#050507;--panel:#0b0b10;--white:#fff;--muted:#8e8e9c;--line:rgba(255,255,255,.08);--blue:#4facfe;--cyan:#00e5ff;--purple:#9b7cff}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+html{scroll-behavior:smooth}body{background:radial-gradient(circle at 80% 20%,rgba(79,172,254,.08),transparent 30%),radial-gradient(circle at 20% 80%,rgba(155,124,255,.06),transparent 30%),var(--bg);color:#fff;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:70px 70px}
+a{color:inherit;text-decoration:none}.wrap{width:min(1280px,92%);margin:auto;position:relative;z-index:1}
+header{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;position:relative;z-index:10}.brand{font-size:16px;font-weight:900;letter-spacing:-.7px}.brand span{color:var(--cyan)}.nav{display:flex;gap:28px;font-size:9px;font-weight:800;letter-spacing:1.5px;color:#888}.nav a:hover{color:#fff}.menu{display:none}
+.hero{min-height:calc(100vh - 86px);display:grid;grid-template-columns:1fr 390px;align-items:center;gap:70px;padding:70px 0}.kicker{font-size:10px;letter-spacing:3px;color:var(--cyan);font-weight:800;margin-bottom:24px}.hero h1{font-size:clamp(65px,10vw,150px);line-height:.82;letter-spacing:-.085em;margin:0 0 28px;font-weight:900}.hero h1 span{display:block;color:transparent;-webkit-text-stroke:1px #666}.hero-description{color:var(--muted);max-width:550px;font-size:14px;line-height:1.8;margin-bottom:30px}.hero-description strong{color:#fff;font-weight:500}.buttons{display:flex;gap:12px;flex-wrap:wrap}.btn{padding:13px 22px;border-radius:6px;font-size:10px;font-weight:700;transition:.3s}.primary{border:1px solid rgba(79,172,254,.7);background:rgba(79,172,254,.08)}.primary:hover{background:rgba(79,172,254,.18);transform:translateY(-2px)}.secondary{border:1px solid var(--line);color:#aaa}.secondary:hover{color:#fff}
+.visual{position:relative;display:flex;justify-content:center}.visual-box{width:min(390px,100%);aspect-ratio:4/5;border-radius:14px;overflow:hidden;position:relative;background:linear-gradient(145deg,#11131b,#08080d);border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 70px rgba(79,172,254,.08)}.screen-title{position:absolute;top:16%;left:9%}.screen-title small{color:var(--cyan);font-size:8px;letter-spacing:3px}.screen-title h2{font-size:38px;margin-top:8px;line-height:1}.timeline{position:absolute;left:7%;right:7%;bottom:10%;height:31%;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.55);border-radius:8px;padding:10px}.timeline-top{height:45%;display:flex;gap:5px}.clip{flex:1;background:linear-gradient(135deg,#242b38,#10131a);border-radius:3px;border:1px solid rgba(255,255,255,.07)}.tracks{margin-top:8px;display:flex;flex-direction:column;gap:5px}.track{height:8px;background:linear-gradient(90deg,var(--cyan) 0 30%,rgba(255,255,255,.08) 30%);border-radius:2px;opacity:.7}.track:nth-child(2){background:linear-gradient(90deg,var(--purple) 0 55%,rgba(255,255,255,.08) 55%)}.float-card{position:absolute;right:-18px;bottom:30px;padding:14px 18px;border:1px solid rgba(255,255,255,.1);background:rgba(14,14,22,.88);backdrop-filter:blur(15px);border-radius:10px}.float-card small{color:#777;font-size:8px}.float-card strong{display:block;margin-top:3px;font-size:12px;color:var(--cyan)}
+.marquee{overflow:hidden;border-top:1px solid #222;border-bottom:1px solid #222;padding:17px 0;white-space:nowrap}.marquee div{display:inline-block;font-size:11px;font-weight:900;letter-spacing:4px;animation:move 18s linear infinite}@keyframes move{to{transform:translateX(-50%)}}.dot{color:var(--cyan);padding:0 28px}
+section{padding:120px 0}.section-head{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid #222;padding-bottom:20px;margin-bottom:45px}.index{font-size:10px;color:var(--cyan);font-weight:900}.section-head h2{font-size:clamp(45px,7vw,95px);line-height:.8;letter-spacing:-.08em;margin:0;text-align:right}
 .intro{display:grid;grid-template-columns:1fr 1fr;gap:100px}.intro-copy{font-size:clamp(25px,3.2vw,45px);line-height:1.12;letter-spacing:-.045em}.intro-copy strong{color:#fff}.intro-copy em{color:#666;font-style:normal}.meta{display:grid;grid-template-columns:1fr 1fr;align-content:start;border-top:1px solid #222}.meta div{padding:18px 0;border-bottom:1px solid #222}.meta small{display:block;color:#666;font-size:8px;letter-spacing:2px;margin-bottom:8px}.meta b{font-size:12px}
-.work-list{border-top:1px solid #222}.project{display:grid;grid-template-columns:70px 1fr 160px;gap:25px;align-items:center;padding:28px 0;border-bottom:1px solid #222;transition:.35s}.project:hover{padding-left:20px;background:#0b0b0b}.project .no{font-size:10px;color:#49a7ff;font-weight:900}.project h3{font-size:clamp(25px,4vw,48px);letter-spacing:-.055em;margin:0}.project p{font-size:10px;color:#777;margin:6px 0 0}.project .type{text-align:right;font-size:9px;letter-spacing:2px;color:#777}
-.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#222;border:1px solid #222}.skill{background:#080808;padding:28px;min-height:210px;transition:.3s}.skill:hover{background:#101010}.skill .num{font-size:10px;color:#49a7ff}.skill h3{margin:70px 0 8px;font-size:15px}.skill p{font-size:9px;color:#777}
-.jobs{border-top:1px solid #222}.job{display:grid;grid-template-columns:180px 1fr auto;gap:30px;padding:30px 0;border-bottom:1px solid #222}.job time{font-size:9px;color:#49a7ff;font-weight:800}.job h3{margin:0;font-size:25px;letter-spacing:-.03em}.job p{margin:7px 0 0;color:#777;font-size:11px}.job .tag{font-size:8px;color:#666;letter-spacing:1px}
-.contact{min-height:80vh;display:flex;flex-direction:column;justify-content:center}.contact h2{font-size:clamp(65px,14vw,190px);line-height:.78;letter-spacing:-.1em;margin:0}.contact h2 span{color:#49a7ff}.contact-row{display:flex;justify-content:space-between;align-items:end;margin-top:60px;border-top:1px solid #222;padding-top:25px}.email{font-size:15px}.social{display:flex;gap:20px;font-size:9px;letter-spacing:1.5px;color:#999}.social a:hover{color:#49a7ff}
+.work-list{border-top:1px solid #222}.project{display:grid;grid-template-columns:70px 1fr 160px;gap:25px;align-items:center;padding:28px 0;border-bottom:1px solid #222;transition:.35s}.project:hover{padding-left:20px;background:#0b0b0b}.project .no{font-size:10px;color:var(--cyan);font-weight:900}.project h3{font-size:clamp(24px,4vw,46px);letter-spacing:-.055em;margin:0}.project p{font-size:10px;color:#777;margin:6px 0 0}.project .type{text-align:right;font-size:9px;letter-spacing:2px;color:#777}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#222;border:1px solid #222}.skill{background:#080808;padding:28px;min-height:210px;transition:.3s}.skill:hover{background:#101010}.skill .num{font-size:10px;color:var(--cyan)}.skill h3{margin:70px 0 8px;font-size:15px}.skill p{font-size:9px;color:#777}
+.jobs{border-top:1px solid #222}.job{display:grid;grid-template-columns:180px 1fr auto;gap:30px;padding:30px 0;border-bottom:1px solid #222}.job time{font-size:9px;color:var(--cyan);font-weight:800}.job h3{margin:0;font-size:25px;letter-spacing:-.03em}.job p{margin:7px 0 0;color:#777;font-size:11px}.job .tag{font-size:8px;color:#666;letter-spacing:1px}
+.contact{min-height:75vh;display:flex;flex-direction:column;justify-content:center}.contact h2{font-size:clamp(65px,14vw,180px);line-height:.78;letter-spacing:-.1em;margin:0}.contact h2 span{color:var(--cyan)}.contact-row{display:flex;justify-content:space-between;align-items:end;margin-top:60px;border-top:1px solid #222;padding-top:25px}.email{font-size:15px}.social{display:flex;gap:20px;font-size:9px;letter-spacing:1.5px;color:#999}.social a:hover{color:var(--cyan)}
 footer{border-top:1px solid #222;padding:22px 0;display:flex;justify-content:space-between;color:#555;font-size:8px;letter-spacing:1px}
-.ai{position:fixed;right:24px;bottom:24px;z-index:50}.ai button{width:58px;height:58px;border:1px solid #49a7ff;border-radius:50%;background:#080808;color:#49a7ff;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 0 30px #000}.panel{position:absolute;right:0;bottom:72px;width:350px;height:470px;background:#090909;border:1px solid #282828;display:none;flex-direction:column;box-shadow:0 25px 80px #000}.panel.open{display:flex}.phead{padding:17px;border-bottom:1px solid #222;display:flex;justify-content:space-between}.phead strong{font-size:10px;letter-spacing:1px}.phead span{display:block;color:#666;font-size:8px;margin-top:5px}.x{background:none;border:0;color:#fff;cursor:pointer}.msgs{flex:1;overflow:auto;padding:15px}.msg{font-size:11px;line-height:1.6;padding:10px 12px;margin-bottom:9px;max-width:85%;background:#121212}.msg.u{margin-left:auto;background:#49a7ff;color:#000}.form{display:flex;padding:10px;border-top:1px solid #222;gap:7px}.form input{min-width:0;flex:1;background:#111;border:1px solid #292929;color:#fff;padding:11px;outline:none}.form button{background:#49a7ff;border:0;padding:0 14px;font-size:9px;font-weight:900}
+.ai{position:fixed;right:24px;bottom:24px;z-index:50}.ai>button{width:58px;height:58px;border:1px solid var(--cyan);border-radius:50%;background:#080808;color:var(--cyan);font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 0 30px #000}.panel{position:absolute;right:0;bottom:72px;width:350px;height:470px;background:#090909;border:1px solid #282828;display:none;flex-direction:column;box-shadow:0 25px 80px #000}.panel.open{display:flex}.phead{padding:17px;border-bottom:1px solid #222;display:flex;justify-content:space-between}.phead strong{font-size:10px;letter-spacing:1px}.phead span{display:block;color:#666;font-size:8px;margin-top:5px}.x{background:none;border:0;color:#fff;cursor:pointer}.msgs{flex:1;overflow:auto;padding:15px}.msg{font-size:11px;line-height:1.6;padding:10px 12px;margin-bottom:9px;max-width:85%;background:#121212}.msg.u{margin-left:auto;background:var(--cyan);color:#000}.form{display:flex;padding:10px;border-top:1px solid #222;gap:7px}.form input{min-width:0;flex:1;background:#111;border:1px solid #292929;color:#fff;padding:11px;outline:none}.form button{background:var(--cyan);border:0;padding:0 14px;font-size:9px;font-weight:900}
 @media(max-width:800px){.nav{display:none}.menu{display:block;font-size:9px;color:#888}.hero{grid-template-columns:1fr;min-height:85vh}.hero-side{max-width:420px}.intro{grid-template-columns:1fr;gap:50px}.skills{grid-template-columns:1fr 1fr}.project{grid-template-columns:40px 1fr}.project .type{display:none}.job{grid-template-columns:1fr;gap:8px}.job .tag{display:none}.contact-row{display:block}.social{margin-top:25px}.panel{width:min(350px,calc(100vw - 30px))}}
-@media(max-width:480px){.wrap{width:90%}section{padding:90px 0}.hero h1{font-size:67px}.skills{grid-template-columns:1fr}.email{font-size:12px}.contact h2{font-size:68px}}
+@media(max-width:480px){.wrap{width:90%}section{padding:90px 0}.hero h1{font-size:62px}.skills{grid-template-columns:1fr}.email{font-size:12px}.contact h2{font-size:68px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><a class="brand" href="#">SUBAS<span>.</span></a><nav class="nav"><a href="#about">ABOUT</a><a href="#work">WORK</a><a href="#skills">SKILLS</a><a href="#experience">EXPERIENCE</a></nav><a class="menu" href="#contact">CONTACT ↗</a></header>
-<section class="hero"><div><div class="kicker">VIDEO EDITOR / VISUAL EDITOR</div><h1>SUBAS<span>GHIMIRE.</span></h1></div><div class="hero-side"><p>Visual storytelling through editing, pacing, motion and post-production.</p><div class="scroll">SCROLL <b>↓</b></div></div></section>
+<header>
+<a class="brand" href="#home">SUBAS<span>.</span></a>
+<nav class="nav"><a href="#about">ABOUT</a><a href="#work">WORK</a><a href="#skills">TOOLS</a><a href="#experience">EXPERIENCE</a><a href="#contact">CONTACT</a></nav>
+<a class="menu" href="#contact">CONTACT ↗</a>
+</header>
+
+<section class="hero" id="home">
+<div>
+<div class="kicker">VIDEO EDITOR / VISUAL EDITOR</div>
+<h1>SUBAS<span>GHIMIRE.</span></h1>
+<p class="hero-description">I create <strong>clean, engaging and visual-driven edits</strong> for television and digital platforms — turning raw footage into meaningful visual stories through editing, pacing and post-production.</p>
+<div class="buttons"><a href="#work" class="btn primary">VIEW MY WORK →</a><a href="#contact" class="btn secondary">GET IN TOUCH</a></div>
 </div>
+<div class="visual">
+<div class="visual-box">
+<div class="screen-title"><small>EDIT / CREATE / STORY</small><h2>VISUAL<br>STORY.</h2></div>
+<div class="timeline"><div class="timeline-top"><div class="clip"></div><div class="clip"></div><div class="clip"></div><div class="clip"></div></div><div class="tracks"><div class="track"></div><div class="track"></div><div class="track"></div></div></div>
+</div>
+<div class="float-card"><small>CURRENT ROLE</small><strong>KANTIPUR TELEVISION</strong></div>
+</div>
+</section>
+</div>
+
 <div class="marquee"><div>EDITING <span class="dot">●</span> VISUALS <span class="dot">●</span> POST PRODUCTION <span class="dot">●</span> STORYTELLING <span class="dot">●</span> EDITING <span class="dot">●</span> VISUALS <span class="dot">●</span> POST PRODUCTION <span class="dot">●</span> STORYTELLING <span class="dot">●</span></div></div>
+
 <main class="wrap">
-<section id="about"><div class="section-head"><span class="index">01 / ABOUT</span><h2>WHO<br>I AM.</h2></div><div class="intro"><div class="intro-copy">I’m <strong>Subas Ghimire</strong> — a Video Editor and Visual Editor focused on turning footage into clear, engaging visual stories. <em>My work lives between television, editing and post-production.</em></div><div class="meta"><div><small>ROLE</small><b>Video Editor</b></div><div><small>FIELD</small><b>Television</b></div><div><small>LOCATION</small><b>Nepal</b></div><div><small>FOCUS</small><b>Editing / Visuals</b></div></div></div></section>
-<section id="work"><div class="section-head"><span class="index">02 / WORK</span><h2>SELECTED<br>WORK.</h2></div><div class="work-list"><article class="project"><span class="no">01</span><div><h3>Television Editing</h3><p>Editing and post-production for television content.</p></div><span class="type">TV / EDIT</span></article><article class="project"><span class="no">02</span><div><h3>Digital Video</h3><p>Focused cuts, pacing and visual storytelling.</p></div><span class="type">DIGITAL</span></article><article class="project"><span class="no">03</span><div><h3>Post Production</h3><p>Finishing footage with clean visual treatment.</p></div><span class="type">POST</span></article><article class="project"><span class="no">04</span><div><h3>Creative Editing</h3><p>Visual rhythm, structure and motion-focused edits.</p></div><span class="type">CREATIVE</span></article></div></section>
-<section id="skills"><div class="section-head"><span class="index">03 / SOFTWARE</span><h2>MY<br>TOOLS.</h2></div><div class="skills"><div class="skill"><span class="num">01</span><h3>Premiere Pro</h3><p>VIDEO EDITING</p></div><div class="skill"><span class="num">02</span><h3>After Effects</h3><p>MOTION / VFX</p></div><div class="skill"><span class="num">03</span><h3>Photoshop</h3><p>VISUAL DESIGN</p></div><div class="skill"><span class="num">04</span><h3>DaVinci Resolve</h3><p>EDITING / COLOR</p></div></div></section>
-<section id="experience"><div class="section-head"><span class="index">04 / EXPERIENCE</span><h2>WHERE<br>I'VE BEEN.</h2></div><div class="jobs"><div class="job"><time>2026 — NOW</time><div><h3>Kantipur Television</h3><p>Video Editor</p></div><span class="tag">TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Global Television HD</h3><p>Video Editor</p></div><span class="tag">TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Janata Television</h3><p>Video Editor</p></div><span class="tag">TELEVISION</span></div></div></section>
-<section id="contact" class="contact"><div class="section-head"><span class="index">05 / CONTACT</span><h2>LET'S<br><span>TALK.</span></h2></div><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com ↗</a><div class="social"><a href="https://wa.me/9779766454587">WHATSAPP</a><a href="https://www.facebook.com/subas.ghimire.164384">FACEBOOK</a><a href="https://www.instagram.com/subas_ghimire__?stkn=bGprN3N6djF1YXVj">INSTAGRAM</a><a href="https://www.tiktok.com/">TIKTOK</a></div></div></section>
+<section id="about">
+<div class="section-head"><span class="index">01 / ABOUT</span><h2>WHO<br>I AM.</h2></div>
+<div class="intro">
+<div class="intro-copy">I’m <strong>Subas Ghimire</strong> — a Video Editor and Visual Editor focused on turning footage into clear, engaging visual stories. <em>My work lives between television, editing and post-production.</em></div>
+<div class="meta">
+<div><small>ROLE</small><b>Video Editor / Visual Editor</b></div>
+<div><small>LOCATION</small><b>Kathmandu, Nepal</b></div>
+<div><small>CURRENT</small><b>Kantipur Television</b></div>
+<div><small>FOCUS</small><b>Editing / Visuals</b></div>
+</div>
+</div>
+</section>
+
+<section id="work">
+<div class="section-head"><span class="index">02 / WORK</span><h2>SELECTED<br>WORK.</h2></div>
+<div class="work-list">
+<article class="project"><span class="no">01</span><div><h3>Television Editing</h3><p>Editing and post-production for television content.</p></div><span class="type">TV / EDIT</span></article>
+<article class="project"><span class="no">02</span><div><h3>Digital Video</h3><p>Focused cuts, pacing and visual storytelling.</p></div><span class="type">DIGITAL</span></article>
+<article class="project"><span class="no">03</span><div><h3>Post Production</h3><p>Finishing footage with clean visual treatment.</p></div><span class="type">POST</span></article>
+<article class="project"><span class="no">04</span><div><h3>Creative Editing</h3><p>Visual rhythm, structure and motion-focused edits.</p></div><span class="type">CREATIVE</span></article>
+</div>
+</section>
+
+<section id="skills">
+<div class="section-head"><span class="index">03 / SOFTWARE</span><h2>MY<br>TOOLS.</h2></div>
+<div class="skills">
+<div class="skill"><span class="num">01</span><h3>Adobe Premiere Pro</h3><p>VIDEO EDITING</p></div>
+<div class="skill"><span class="num">02</span><h3>Adobe After Effects</h3><p>MOTION / VFX</p></div>
+<div class="skill"><span class="num">03</span><h3>Adobe Photoshop</h3><p>VISUAL DESIGN</p></div>
+<div class="skill"><span class="num">04</span><h3>DaVinci Resolve</h3><p>EDITING / COLOR</p></div>
+</div>
+</section>
+
+<section id="experience">
+<div class="section-head"><span class="index">04 / EXPERIENCE</span><h2>WHERE<br>I'VE BEEN.</h2></div>
+<div class="jobs">
+<div class="job"><time>2026 — NOW</time><div><h3>Kantipur Television</h3><p>Video Editor</p></div><span class="tag">TELEVISION</span></div>
+<div class="job"><time>PREVIOUS</time><div><h3>Global Television HD</h3><p>Video Editor — 4 months</p></div><span class="tag">TELEVISION</span></div>
+<div class="job"><time>PREVIOUS</time><div><h3>Janata Television</h3><p>Video Editor — 4 months</p></div><span class="tag">TELEVISION</span></div>
+</div>
+</section>
+
+<section id="contact" class="contact">
+<div class="section-head"><span class="index">05 / CONTACT</span><h2>LET'S<br><span>TALK.</span></h2></div>
+<div class="contact-row">
+<a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com ↗</a>
+<div class="social">
+<a href="https://wa.me/9779766454587" target="_blank">WHATSAPP</a>
+<a href="https://www.facebook.com/subas.ghimire.164384" target="_blank">FACEBOOK</a>
+<a href="https://www.instagram.com/subas_ghimire__?stkn=bGprN3N6djF1YXVj" target="_blank">INSTAGRAM</a>
+<a href="https://www.tiktok.com/" target="_blank">TIKTOK</a>
+</div>
+</div>
+</section>
 </main>
+
 <div class="wrap"><footer><span>© 2026 SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR</span></footer></div>
-<div class="ai"><div class="panel" id="panel"><div class="phead"><div><strong>AI ASSISTANT</strong><span>Ask about Subas or editing.</span></div><button class="x" id="close">×</button></div><div class="msgs" id="msgs"><div class="msg">Hi! I am Subas portfolio assistant. Ask about video editing, tools, experience or contact.</div></div><form class="form" id="form"><input id="input" placeholder="Ask something..." autocomplete="off"><button>SEND</button></form></div><button id="open">AI</button></div>
+
+<div class="ai">
+<div class="panel" id="panel">
+<div class="phead"><div><strong>AI ASSISTANT</strong><span>Ask about Subas, editing, tools or experience.</span></div><button class="x" id="close">×</button></div>
+<div class="msgs" id="msgs"><div class="msg">Hi! I am Subas portfolio assistant. Ask about video editing, tools, experience or contact.</div></div>
+<form class="form" id="form"><input id="input" placeholder="Ask something..." autocomplete="off"><button>SEND</button></form>
+</div>
+<button id="open">AI</button>
+</div>
+
 <script>
-const panel=document.getElementById('panel'),open=document.getElementById('open'),close=document.getElementById('close'),form=document.getElementById('form'),input=document.getElementById('input'),msgs=document.getElementById('msgs');open.onclick=()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))input.focus()};close.onclick=()=>panel.classList.remove('open');
-form.onsubmit=async e=>{e.preventDefault();let q=input.value.trim();if(!q)return;let u=document.createElement('div');u.className='msg u';u.textContent=q;msgs.appendChild(u);input.value='';input.disabled=true;let b=form.querySelector('button');b.disabled=true;b.textContent='...';let a=document.createElement('div');a.className='msg';a.textContent='Thinking...';msgs.appendChild(a);msgs.scrollTop=msgs.scrollHeight;try{let r=await fetch('https://subas-ghimire.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});let raw=await r.text(),d={};try{d=raw?JSON.parse(raw):{}}catch{}a.textContent=d.reply||'I’m ready to help. Please try again.'}catch{a.textContent='I’m ready to help. Please try again.'}finally{input.disabled=false;b.disabled=false;b.textContent='SEND';input.focus()}};
+const panel=document.getElementById('panel'),open=document.getElementById('open'),close=document.getElementById('close'),form=document.getElementById('form'),input=document.getElementById('input'),msgs=document.getElementById('msgs');
+open.onclick=()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))input.focus()};
+close.onclick=()=>panel.classList.remove('open');
+form.onsubmit=async e=>{
+e.preventDefault();
+const q=input.value.trim();if(!q)return;
+const u=document.createElement('div');u.className='msg u';u.textContent=q;msgs.appendChild(u);
+input.value='';input.disabled=true;
+const b=form.querySelector('button');b.disabled=true;b.textContent='...';
+const a=document.createElement('div');a.className='msg';a.textContent='Thinking...';msgs.appendChild(a);msgs.scrollTop=msgs.scrollHeight;
+try{
+const r=await fetch('https://subas-ghimire.vercel.app/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});
+const raw=await r.text();let d={};try{d=raw?JSON.parse(raw):{}}catch{}
+a.textContent=d.reply||'I could not generate a response. Please try again.';
+}catch{a.textContent='AI service is temporarily unavailable. Please try again.'}
+finally{input.disabled=false;b.disabled=false;b.textContent='SEND';input.focus()}
+};
 </script>
-</body></html>
+</body>
+</html>
