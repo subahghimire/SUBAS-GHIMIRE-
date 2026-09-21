@@ -1506,6 +1506,130 @@ footer{
 .video-panel{position:fixed;right:22px;bottom:92px;z-index:898;width:min(430px,calc(100vw - 28px));max-height:calc(100vh - 115px);display:none;flex-direction:column;overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.4)}.video-panel.open{display:flex}.video-head{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:1px solid var(--line)}.video-head strong{font-size:13px;letter-spacing:.08em}.video-head span{display:block;color:var(--muted);font-size:10px;margin-top:4px}.video-close{border:0;background:transparent;color:var(--text);font-size:22px;cursor:pointer}.video-body{padding:16px}.video-body label{display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:1px;margin:12px 0 7px}.video-body textarea{width:100%;min-height:120px;resize:vertical;border:1px solid var(--line);border-radius:15px;background:var(--surface);color:var(--text);padding:13px;font:inherit;outline:none}.video-options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.video-options select{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;outline:none}.video-generate{width:100%;margin-top:14px;border:0;border-radius:14px;background:var(--accent);color:#111;padding:13px;font-weight:900;cursor:pointer}.video-status{margin-top:12px;color:var(--muted);font-size:10px;line-height:1.5}.video-result{display:none;margin-top:14px}.video-result.open{display:block}.video-result video{width:100%;border-radius:16px;background:#000}.video-download{display:block;text-align:center;margin-top:9px;padding:11px;border-radius:13px;background:var(--text);color:var(--bg);text-decoration:none;font-size:10px;font-weight:900}.video-cost{margin-top:9px;color:var(--muted);font-size:9px;line-height:1.5}@media(max-width:600px){.video-fab{right:82px;bottom:14px;padding:0 13px}.video-panel{right:14px;bottom:84px}}
 
 .video-gemini-btn{position:fixed;right:22px;bottom:88px;z-index:900;border:1px solid var(--line);border-radius:30px;background:var(--surface);color:var(--text);padding:10px 15px;font-size:9px;font-weight:900;letter-spacing:1px;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.2);transition:.25s ease}.video-gemini-btn:hover{transform:translateY(-3px);background:var(--text);color:var(--bg)}@media(max-width:600px){.video-gemini-btn{right:14px;bottom:78px;font-size:8px}}
+
+/* PREMIUM GEMINI / VEO 3.1 */
+.video-gemini-wrap{
+  position:fixed;
+  right:24px;
+  bottom:92px;
+  z-index:900;
+  width:min(390px,calc(100vw - 32px));
+  padding:1px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#7c5cff,#35d6ff 42%,#d7ff3f 100%);
+  box-shadow:0 24px 70px rgba(0,0,0,.48),0 0 45px rgba(124,92,255,.18);
+}
+.video-gemini-card{
+  border-radius:23px;
+  padding:16px;
+  background:rgba(10,10,12,.94);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.video-gemini-top{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-bottom:14px;
+}
+.gemini-logo{
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(124,92,255,.22),rgba(53,214,255,.16));
+  border:1px solid rgba(255,255,255,.13);
+}
+.gemini-logo svg{width:23px;height:23px;display:block}
+.gemini-brand{
+  min-width:0;
+  flex:1;
+}
+.gemini-brand strong{
+  display:block;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+.gemini-brand span{
+  display:block;
+  margin-top:3px;
+  color:#a9a9ad;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.3px;
+}
+.veo-badge{
+  padding:6px 9px;
+  border-radius:999px;
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.07);
+  white-space:nowrap;
+}
+.video-gemini-prompt{
+  width:100%;
+  min-height:92px;
+  resize:vertical;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:15px;
+  outline:none;
+  color:#fff;
+  background:rgba(255,255,255,.055);
+  font:500 11px/1.6 Inter,Arial,sans-serif;
+  transition:.25s;
+}
+.video-gemini-prompt::placeholder{color:#77777c}
+.video-gemini-prompt:focus{
+  border-color:rgba(124,92,255,.75);
+  box-shadow:0 0 0 3px rgba(124,92,255,.10);
+}
+.video-gemini-actions{
+  display:grid;
+  grid-template-columns:1fr 1.35fr;
+  gap:8px;
+  margin-top:9px;
+}
+.video-gemini-copy,
+.video-gemini-open{
+  min-height:40px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.7px;
+  transition:.25s;
+}
+.video-gemini-copy{
+  border:1px solid rgba(255,255,255,.13);
+  color:#ddd;
+  background:rgba(255,255,255,.06);
+}
+.video-gemini-open{
+  border:0;
+  color:#050505;
+  background:linear-gradient(90deg,#d7ff3f,#8ff7c9);
+}
+.video-gemini-copy:hover,
+.video-gemini-open:hover{transform:translateY(-2px)}
+.video-gemini-note{
+  margin-top:9px;
+  color:#68686e;
+  font-size:8px;
+  line-height:1.5;
+  text-align:center;
+}
+@media(max-width:600px){
+  .video-gemini-wrap{right:16px;bottom:82px}
+}
+
 </style>
 </head>
 
@@ -2576,6 +2700,38 @@ gallerySaveBtn.addEventListener("click",()=>{localStorage.setItem("subas-gallery
 if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
 
+
+/* PREMIUM GEMINI PROMPT */
+const geminiPrompt=document.getElementById("geminiPrompt");
+const geminiCopy=document.getElementById("geminiCopy");
+const geminiOpen=document.getElementById("geminiOpen");
+if(geminiPrompt&&geminiCopy&&geminiOpen){
+  geminiCopy.addEventListener("click",async()=>{
+    const value=geminiPrompt.value.trim();
+    if(!value){geminiPrompt.focus();return;}
+    try{
+      await navigator.clipboard.writeText(value);
+      geminiCopy.textContent="COPIED ✓";
+      setTimeout(()=>geminiCopy.textContent="COPY PROMPT",1400);
+    }catch(e){
+      geminiPrompt.select();
+      document.execCommand("copy");
+      geminiCopy.textContent="COPIED ✓";
+      setTimeout(()=>geminiCopy.textContent="COPY PROMPT",1400);
+    }
+  });
+  geminiOpen.addEventListener("click",async()=>{
+    const value=geminiPrompt.value.trim();
+    if(value){
+      try{await navigator.clipboard.writeText(value);}catch(e){
+        geminiPrompt.select();
+        document.execCommand("copy");
+      }
+    }
+    window.open("https://gemini.google.com/","_blank","noopener,noreferrer");
+  });
+}
+
 /* AI VIDEO GENERATOR - VEO 3.1 */
 document.addEventListener("DOMContentLoaded",function(){
   const fab=document.getElementById("videoFab"),panel=document.getElementById("videoPanel"),close=document.getElementById("videoClose"),generate=document.getElementById("videoGenerate"),prompt=document.getElementById("videoPrompt"),model=document.getElementById("videoModel"),ratio=document.getElementById("videoRatio"),resolution=document.getElementById("videoResolution"),status=document.getElementById("videoStatus"),result=document.getElementById("videoResult"),preview=document.getElementById("videoPreview"),download=document.getElementById("videoDownload");
@@ -2695,7 +2851,30 @@ document.addEventListener("DOMContentLoaded", function(){
 <button class="ai-fab" id="aiFab" aria-label="Open AI portfolio assistant">AI</button>
 <div class="ai-panel" id="aiPanel" aria-hidden="true"><div class="ai-head"><div><strong>AI PORTFOLIO ASSISTANT</strong><span>Ask about Subas, skills, experience or work.</span></div><button class="ai-close" id="aiClose" aria-label="Close AI assistant">×</button></div><div class="ai-messages" id="aiMessages"><div class="ai-msg bot">Hi! I am Subas portfolio assistant. Ask about video editing, tools, experience or contact.</div></div><form class="ai-form" id="aiForm"><input id="aiInput" autocomplete="off" placeholder="Ask something..." aria-label="Ask the AI assistant"><button type="submit">SEND</button></form></div>
 
-<button class="video-fab" id="videoFab" aria-label="Open AI video generator">VIDEO AI</button><a class="video-gemini-btn" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Gemini for video generation">GENERATE WITH GEMINI ↗</a>
+<button class="video-fab" id="videoFab" aria-label="Open AI video generator">VIDEO AI</button>
+<div class="video-gemini-wrap" aria-label="Gemini Veo 3.1 video prompt">
+  <div class="video-gemini-card">
+    <div class="video-gemini-top">
+      <div class="gemini-logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none">
+          <path d="M24 3.5c1.9 10.2 10.3 18.6 20.5 20.5C34.3 25.9 25.9 34.3 24 44.5 22.1 34.3 13.7 25.9 3.5 24 13.7 22.1 22.1 13.7 24 3.5Z" fill="url(#geminiGradient)"/>
+          <defs><linearGradient id="geminiGradient" x1="7" y1="7" x2="41" y2="41" gradientUnits="userSpaceOnUse"><stop stop-color="#8E7CFF"/><stop offset=".5" stop-color="#4FC3FF"/><stop offset="1" stop-color="#D7FF3F"/></linearGradient></defs>
+        </svg>
+      </div>
+      <div class="gemini-brand">
+        <strong>GEMINI VIDEO</strong>
+        <span>GOOGLE AI STUDIO</span>
+      </div>
+      <div class="veo-badge">VEO 3.1</div>
+    </div>
+    <textarea id="geminiPrompt" class="video-gemini-prompt" placeholder="Describe the video you want to create..."></textarea>
+    <div class="video-gemini-actions">
+      <button type="button" class="video-gemini-copy" id="geminiCopy">COPY PROMPT</button>
+      <button type="button" class="video-gemini-open" id="geminiOpen">OPEN GEMINI ↗</button>
+    </div>
+    <div class="video-gemini-note">Your prompt is copied first, then Gemini opens in a new tab.</div>
+  </div>
+</div>
 <div class="video-panel" id="videoPanel" aria-hidden="true">
   <div class="video-head"><div><strong>AI VIDEO GENERATOR</strong><span>Powered by Google Veo 3.1</span></div><button class="video-close" id="videoClose" aria-label="Close video generator">×</button></div>
   <div class="video-body">
