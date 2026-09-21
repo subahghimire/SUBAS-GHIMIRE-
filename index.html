@@ -35,47 +35,36 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
 <script>
 (() => {
-  // Public demo video search: no API key box is shown.
-  // Uses sample video data so the search interface works immediately.
-  const demoVideos = [
-    {title:'Nature Landscape', author:'Demo Library', src:'https://videos.pexels.com/video-files/857195/857195-hd_1920_1080_30fps.mp4'},
-    {title:'City Traffic', author:'Demo Library', src:'https://videos.pexels.com/video-files/854228/854228-hd_1920_1080_30fps.mp4'},
-    {title:'Ocean Waves', author:'Demo Library', src:'https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_30fps.mp4'}
-  ];
+  // Key-free search: open the matching Pexels video search page for any topic.
+  function searchVideos() {
+    const query = searchInput.value.trim();
+    results.innerHTML = '';
+    if (!query) {
+      status.textContent = 'Type something to search.';
+      searchInput.focus();
+      return;
+    }
 
-  function renderDemoVideo(item) {
+    const pexelsUrl = 'https://www.pexels.com/search/videos/' + encodeURIComponent(query) + '/';
     const card = document.createElement('article');
     card.className = 'video-card';
-    const title = escapeHTML(item.title);
-    const author = escapeHTML(item.author);
-    const src = escapeHTML(item.src);
     card.innerHTML = `
-      <div class="video-wrap">
-        <video controls playsinline preload="metadata" src="${src}"></video>
-        <button class="video-center-play" type="button" aria-label="Play video">▶</button>
+      <div class="video-wrap" style="height:210px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b1028,#111a45)">
+        <div style="text-align:center;padding:20px">
+          <div style="font-size:42px;margin-bottom:12px">🎬</div>
+          <strong style="font-size:15px">Pexels Videos</strong>
+          <p style="color:#888;font-size:10px;margin-top:7px">Videos related to “${escapeHTML(query)}”</p>
+        </div>
       </div>
       <div class="video-info">
-        <h3>${title}</h3><p>By ${author}</p>
+        <h3>${escapeHTML(query)} videos</h3>
+        <p>Free stock videos from Pexels</p>
         <div class="video-actions">
-          <button type="button" class="play-btn">▶ PLAY</button>
-          <a href="${src}" target="_blank" rel="noopener">OPEN ↗</a>
-          <a href="${src}" download>⬇ DOWNLOAD</a>
+          <a href="${pexelsUrl}" target="_blank" rel="noopener">OPEN VIDEOS ↗</a>
         </div>
       </div>`;
     results.appendChild(card);
-    const v = card.querySelector('video'), p = card.querySelector('.play-btn'), center = card.querySelector('.video-center-play');
-    const sync = () => { const playing=!v.paused&&!v.ended; p.textContent=playing?'⏸ PAUSE':'▶ PLAY'; center.textContent=playing?'⏸':'▶'; center.classList.toggle('hidden',playing); };
-    const toggle = async () => { try { if(v.paused) await v.play(); else v.pause(); } catch(e){} sync(); };
-    p.addEventListener('click',toggle); center.addEventListener('click',toggle); v.addEventListener('play',sync); v.addEventListener('pause',sync); v.addEventListener('ended',sync);
-  }
-
-  function searchVideos() {
-    const query = searchInput.value.trim().toLowerCase();
-    results.innerHTML = '';
-    if (!query) { status.textContent='Type something to search.'; return; }
-    const matches = demoVideos.filter(v => (v.title+' '+v.author).toLowerCase().includes(query));
-    (matches.length ? matches : demoVideos).forEach(renderDemoVideo);
-    status.textContent = matches.length ? matches.length+' video(s) found.' : 'Showing available videos for "'+query+'".';
+    status.textContent = 'Found Pexels video results for “' + query + '”.';
   }
 
   searchBtn.addEventListener('click', searchVideos);
