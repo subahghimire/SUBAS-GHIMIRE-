@@ -22,16 +22,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 <section class="section" id="tools"><div class="section-head"><small>03 / SOFTWARE</small><h2>MY<br>TOOLS.</h2></div><div class="tools"><div class="tool"><strong>01</strong><h3>Adobe Premiere Pro</h3><p>VIDEO EDITING</p></div><div class="tool"><strong>02</strong><h3>Adobe After Effects</h3><p>MOTION / VFX</p></div><div class="tool"><strong>03</strong><h3>Adobe Photoshop</h3><p>VISUAL DESIGN</p></div><div class="tool"><strong>04</strong><h3>DaVinci Resolve</h3><p>EDITING / COLOR</p></div></div></section>
 
 
-<section class="section" id="video-search">
-<div class="section-head"><small>04 / VIDEO SEARCH</small><h2>VIDEO<br>SEARCH.</h2></div>
-<p class="assets-intro">Search any keyword and browse YouTube video results directly inside this website.</p>
-<div class="video-search">
-  <input id="siteVideoSearch" type="search" placeholder="Search videos... e.g. car, nature, football, news" aria-label="Search YouTube videos">
-  <button id="siteVideoSearchBtn" class="download-btn" type="button">SEARCH VIDEOS</button>
-</div>
-<div id="siteVideoStatus" class="video-status">Type anything to search YouTube videos.</div>
-<div id="siteVideoResults" class="video-results"></div>
-</section>
+<section class="section" id="video-search"><div class="section-head"><small>04 / FREE VIDEO SEARCH</small><h2>FREE<br>VIDEOS.</h2></div><p class="assets-intro">Search free/public-domain video files and play them directly here. Each result has its own player and download button.</p><div class="video-search"><input id="siteVideoSearch" type="search" placeholder="Search free videos... e.g. nature, car, rain, city" aria-label="Search free videos"><button id="siteVideoSearchBtn" class="download-btn" type="button">SEARCH VIDEOS</button></div><div class="quick-searches" id="freeVideoQuick"><button type="button">Nature</button><button type="button">Car</button><button type="button">Rain</button><button type="button">City</button><button type="button">Drone</button><button type="button">Mountain</button></div><div id="siteVideoStatus" class="video-status">Search a keyword to load playable free videos.</div><div id="siteVideoResults" class="video-results"></div><div class="source-note"><strong>FREE VIDEO SOURCE:</strong> Results are fetched from Internet Archive public-domain/Creative Commons collections. Always check the individual item license before commercial use.</div></section>
 
 <section class="section" id="effects">
 <div class="section-head"><small>05 / PREMIERE PRO</small><h2>EFFECT<br>SEARCH.</h2></div>
@@ -308,23 +299,45 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   const btn=document.getElementById('siteVideoSearchBtn');
   const status=document.getElementById('siteVideoStatus');
   const results=document.getElementById('siteVideoResults');
+  const quick=document.getElementById('freeVideoQuick');
   if(!input||!btn||!status||!results)return;
+  const esc=v=>{const d=document.createElement('div');d.textContent=v||'';return d.innerHTML;};
 
-  function showResults(){
+  async function searchFreeVideos(){
     const q=input.value.trim();
-    if(!q){results.innerHTML='';status.textContent='Type anything to search YouTube videos.';return;}
-    const search=encodeURIComponent(q);
-    results.innerHTML='<article class="video-card" style="grid-column:1/-1">'+
-      '<div class="video-wrap" style="aspect-ratio:16/9;background:#000">'+
-      '<iframe src="https://www.youtube.com/embed?listType=search&list='+search+'" '+
-      'title="YouTube search results for '+q.replace(/"/g,'&quot;')+'" '+
-      'style="width:100%;height:100%;border:0" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>'+
-      '</div><div class="video-info"><h3>YouTube results for “'+q.replace(/</g,'&lt;')+'”</h3>'+
-      '<p>Search results are loaded directly from YouTube.</p>'+
-      '<div class="video-actions"><a href="https://www.youtube.com/results?search_query='+search+'" target="_blank" rel="noopener noreferrer">OPEN YOUTUBE SEARCH ↗</a></div></div></article>';
-    status.textContent='Showing YouTube video search results for “'+q+'”.';
+    if(!q){results.innerHTML='';status.textContent='Type a keyword first.';return;}
+    results.innerHTML='';
+    status.textContent='Finding free playable videos for “'+q+'”…';
+    try{
+      const api='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q+' AND mediatype:movies')+'&fl[]=identifier&fl[]=title&rows=18&page=1&output=json';
+      const res=await fetch(api);
+      if(!res.ok)throw new Error('search failed');
+      const data=await res.json();
+      const docs=data?.response?.docs||[];
+      let count=0;
+      for(const item of docs){
+        if(count>=12)break;
+        try{
+          const mr=await fetch('https://archive.org/metadata/'+encodeURIComponent(item.identifier));
+          const meta=await mr.json();
+          const files=meta?.files||[];
+          const video=files.find(f=>/\.(mp4|webm|ogv)$/i.test(String(f.name||''))&&Number(f.size||0)>0);
+          if(!video)continue;
+          const url='https://archive.org/download/'+encodeURIComponent(item.identifier)+'/'+String(video.name).split('/').map(encodeURIComponent).join('/');
+          const card=document.createElement('article');
+          card.className='video-card';
+          card.innerHTML='<div class="video-wrap" style="aspect-ratio:16/9;background:#000"><video controls preload="metadata" playsinline style="width:100%;height:100%;object-fit:contain"><source src="'+url+'"></video></div><div class="video-info"><h3>'+esc(item.title||item.identifier)+'</h3><p>FREE VIDEO • INTERNET ARCHIVE</p><div class="video-actions"><a href="'+url+'" download>⬇ DOWNLOAD</a><a href="https://archive.org/details/'+encodeURIComponent(item.identifier)+'" target="_blank" rel="noopener noreferrer" class="secondary-link">SOURCE ↗</a></div></div>';
+          results.appendChild(card);
+          count++;
+        }catch(err){}
+      }
+      status.textContent=count?'Showing '+count+' playable free videos for “'+q+'”.':'No playable video files found. Try another keyword.';
+    }catch(err){
+      status.textContent='Could not load free videos right now. Try again.';
+    }
   }
-  btn.addEventListener('click',showResults);
-  input.addEventListener('keydown',e=>{if(e.key==='Enter')showResults();});
+  btn.addEventListener('click',searchFreeVideos);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')searchFreeVideos();});
+  quick.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{input.value=b.textContent.trim();searchFreeVideos();}));
 })();
 </script>
