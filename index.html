@@ -2570,63 +2570,83 @@ gallerySaveBtn.addEventListener("click",()=>{localStorage.setItem("subas-gallery
 if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
 /* AI PORTFOLIO ASSISTANT - GEMINI API */
-const aiFab=document.getElementById("aiFab"),aiPanel=document.getElementById("aiPanel"),aiClose=document.getElementById("aiClose"),aiForm=document.getElementById("aiForm"),aiInput=document.getElementById("aiInput"),aiMessages=document.getElementById("aiMessages");
-let aiInteractionId=null;
+document.addEventListener("DOMContentLoaded", function(){
+  const aiFab=document.getElementById("aiFab");
+  const aiPanel=document.getElementById("aiPanel");
+  const aiClose=document.getElementById("aiClose");
+  const aiForm=document.getElementById("aiForm");
+  const aiInput=document.getElementById("aiInput");
+  const aiMessages=document.getElementById("aiMessages");
+  let aiInteractionId=null;
 
-aiFab.addEventListener("click",()=>{aiPanel.classList.toggle("open");aiPanel.setAttribute("aria-hidden",String(!aiPanel.classList.contains("open")));if(aiPanel.classList.contains("open"))aiInput.focus()});
-aiClose.addEventListener("click",()=>{aiPanel.classList.remove("open");aiPanel.setAttribute("aria-hidden","true")});
-
-function addAiMessage(text,type="bot"){
-  const el=document.createElement("div");
-  el.className="ai-msg "+type;
-  el.textContent=text;
-  aiMessages.appendChild(el);
-  aiMessages.scrollTop=aiMessages.scrollHeight;
-  return el;
-}
-
-aiForm.addEventListener("submit",async e=>{
-  e.preventDefault();
-  const q=aiInput.value.trim();
-  if(!q)return;
-
-  addAiMessage(q,"user");
-  aiInput.value="";
-  aiInput.disabled=true;
-  const sendButton=aiForm.querySelector("button");
-  sendButton.disabled=true;
-  sendButton.textContent="...";
-
-  const loading=addAiMessage("Thinking...","bot");
-
-  try{
-    const response=await fetch("/api/chat",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        message:q,
-        previousInteractionId:aiInteractionId
-      })
-    });
-
-    const data=await response.json();
-
-    if(!response.ok){
-      throw new Error(data?.error||"AI request failed");
-    }
-
-    loading.textContent=data.reply||"I couldn't generate a response.";
-    if(data.interactionId) aiInteractionId=data.interactionId;
-  }catch(error){
-    loading.textContent="Sorry, the AI assistant is temporarily unavailable.";
-    console.error(error);
-  }finally{
-    aiInput.disabled=false;
-    sendButton.disabled=false;
-    sendButton.textContent="SEND";
-    aiInput.focus();
-    aiMessages.scrollTop=aiMessages.scrollHeight;
+  if(!aiFab || !aiPanel || !aiClose || !aiForm || !aiInput || !aiMessages){
+    console.error("AI assistant elements not found.");
+    return;
   }
+
+  aiFab.addEventListener("click",()=>{
+    aiPanel.classList.toggle("open");
+    aiPanel.setAttribute("aria-hidden",String(!aiPanel.classList.contains("open")));
+    if(aiPanel.classList.contains("open")) aiInput.focus();
+  });
+
+  aiClose.addEventListener("click",()=>{
+    aiPanel.classList.remove("open");
+    aiPanel.setAttribute("aria-hidden","true");
+  });
+
+  function addAiMessage(text,type="bot"){
+    const el=document.createElement("div");
+    el.className="ai-msg "+type;
+    el.textContent=text;
+    aiMessages.appendChild(el);
+    aiMessages.scrollTop=aiMessages.scrollHeight;
+    return el;
+  }
+
+  aiForm.addEventListener("submit",async e=>{
+    e.preventDefault();
+    const q=aiInput.value.trim();
+    if(!q)return;
+
+    addAiMessage(q,"user");
+    aiInput.value="";
+    aiInput.disabled=true;
+    const sendButton=aiForm.querySelector("button");
+    sendButton.disabled=true;
+    sendButton.textContent="...";
+
+    const loading=addAiMessage("Thinking...","bot");
+
+    try{
+      const response=await fetch("/api/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          message:q,
+          previousInteractionId:aiInteractionId
+        })
+      });
+
+      const data=await response.json();
+
+      if(!response.ok){
+        throw new Error(data?.error||"AI request failed");
+      }
+
+      loading.textContent=data.reply||"I couldn't generate a response.";
+      if(data.interactionId) aiInteractionId=data.interactionId;
+    }catch(error){
+      loading.textContent="Sorry, the AI assistant is temporarily unavailable.";
+      console.error(error);
+    }finally{
+      aiInput.disabled=false;
+      sendButton.disabled=false;
+      sendButton.textContent="SEND";
+      aiInput.focus();
+      aiMessages.scrollTop=aiMessages.scrollHeight;
+    }
+  });
 });
 </script>
 
