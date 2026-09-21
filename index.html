@@ -59,6 +59,17 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 .video-results .source-card small{font-size:8px}
 @media(max-width:850px){.video-results{grid-template-columns:1fr 1fr}.video-results .source-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.video-search-hero{padding-top:20px}.video-search-hero h2{letter-spacing:-3px}.video-search-box{padding:6px}.video-search-box button{padding:13px 12px}.video-search-box button b{display:none}.video-search-toolbar{align-items:flex-start;gap:10px}.auto-badge{font-size:7px}.video-results{grid-template-columns:1fr}.video-results .source-grid{grid-template-columns:1fr 1fr}}
+</style><style>
+.video-category-bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.video-cat{border:1px solid var(--line);background:rgba(255,255,255,.025);color:#8e96ad;padding:9px 13px;border-radius:999px;font-size:8px;font-weight:800;letter-spacing:.7px;cursor:pointer}
+.video-cat:hover,.video-cat.active{background:#5266ff;color:#fff;border-color:#5266ff}
+.youtube-key-box{display:flex;gap:8px;align-items:center;margin:0 0 20px;padding:10px;border:1px dashed rgba(82,102,255,.3);border-radius:12px;background:rgba(82,102,255,.04)}
+.youtube-key-box input{flex:1;min-width:180px;background:#0b0c14;border:1px solid var(--line);color:#fff;padding:10px 12px;border-radius:8px;outline:0;font-size:9px}
+.youtube-key-box button,.youtube-key-box a{border:0;background:#5266ff;color:#fff;padding:10px 12px;border-radius:8px;font-size:8px;font-weight:800;cursor:pointer}
+.youtube-key-box a{background:rgba(255,255,255,.06);color:#9ca8ff}
+.yt-video-frame{width:100%;aspect-ratio:16/9;border:0;display:block;background:#000}
+.yt-download-note{font-size:8px!important;color:#777!important;line-height:1.5}
+@media(max-width:560px){.youtube-key-box{flex-wrap:wrap}.youtube-key-box input{width:100%;min-width:100%}.youtube-key-box button,.youtube-key-box a{flex:1;text-align:center}}
 </style></head>
 <body>
 <nav><a class="logo" href="#home"><img class="profile-avatar" src="https://raw.githubusercontent.com/subahghimire/SUBAS-GHIMIRE-/main/SUBASH_GHIMIRE_13407010099907_profile_pic.jpg" alt="Subas Ghimire"><span>SUBAS GHIMIRE</span></a><div class="nav-links"><a href="#about">About</a><a href="#work">Work</a><a href="#tools">Tools</a><a href="#assets">Assets</a><a href="#effects">Effects</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div><div class="nav-actions"><a class="login" href="#contact">Let's talk</a><a class="btn secondary" href="CV/Subas_Ghimire_CV.html" target="_blank" rel="noopener">View CV</a><a class="btn primary" href="CV/Subas_Ghimire_CV.html" download>Download CV</a></div></nav>
@@ -72,7 +83,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 <div class="video-search-hero">
   <div class="video-search-kicker"><span class="live-dot"></span> FREE VIDEO SEARCH</div>
   <h2>SEARCH.<br><span>WATCH.</span><br>DOWNLOAD.</h2>
-  <p>Type anything. Every character updates the search automatically and brings playable free/public video results.</p>
+  <p>Type anything. Results update automatically. Browse free/public videos with sound, preview them here, and download when the source provides a downloadable file.</p>
   <div class="video-search-box">
     <span class="search-icon">⌕</span>
     <input id="siteVideoSearch" type="search" autocomplete="off" placeholder="Start typing anything… car, mountain, football, rain" aria-label="Search free videos">
@@ -87,6 +98,23 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
     <button type="button" data-video-q="rain">RAIN</button>
     <button type="button" data-video-q="Nepal">NEPAL</button>
   </div>
+</div>
+<div class="video-category-bar">
+  <button class="video-cat active" data-video-cat="all">ALL</button>
+  <button class="video-cat" data-video-cat="youtube">YOUTUBE</button>
+  <button class="video-cat" data-video-cat="nature">NATURE</button>
+  <button class="video-cat" data-video-cat="vehicles">VEHICLES</button>
+  <button class="video-cat" data-video-cat="people">PEOPLE</button>
+  <button class="video-cat" data-video-cat="food">FOOD</button>
+  <button class="video-cat" data-video-cat="sports">SPORTS</button>
+  <button class="video-cat" data-video-cat="news">NEWS</button>
+  <button class="video-cat" data-video-cat="animals">ANIMALS</button>
+  <button class="video-cat" data-video-cat="travel">TRAVEL</button>
+</div>
+<div class="youtube-key-box">
+  <input id="youtubeApiKey" type="password" placeholder="Optional: YouTube Data API key for live YouTube results">
+  <button id="saveYoutubeKey" type="button">SAVE KEY</button>
+  <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">GET API KEY ↗</a>
 </div>
 <div class="video-search-toolbar"><div><span class="toolbar-label">RESULTS</span><strong id="siteVideoStatus">Type to search…</strong></div><span class="auto-badge"><i></i> AUTO SEARCH</span></div>
 <div id="siteVideoResults" class="video-results"></div>
