@@ -1532,6 +1532,16 @@ footer{
 .ai-agents-note{text-align:center;color:#666;font-size:7px;margin-top:10px;letter-spacing:.4px}
 @media(max-width:600px){.ai-agents-wrap{right:16px;bottom:82px}.ai-agent-grid{grid-template-columns:repeat(2,1fr)}}
 
+
+.video-free-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);font-size:10px;font-weight:800;letter-spacing:.7px}
+.video-free-count{color:var(--accent)}
+.video-history-btn{width:100%;margin-top:9px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;font-weight:800;font-size:10px;letter-spacing:1px;cursor:pointer}
+.video-history-btn:hover{border-color:var(--accent);background:var(--surface-2)}
+.video-history{display:none;margin-top:12px;max-height:260px;overflow:auto;gap:10px}
+.video-history.open{display:grid}
+.video-history-item{padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.video-history-item video{width:100%;border-radius:10px;display:block}
+.video-history-item small{display:block;margin-top:8px;color:var(--muted);font-size:9px}
 </style>
 </head>
 
@@ -2604,16 +2614,7 @@ if(localStorage.getItem("subas-gallery")==="off") setGalleryMode(false);
 
 
 
-/* FREE DAILY VIDEO LIMIT + GENERATED HISTORY */
-.video-free-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);font-size:10px;font-weight:800;letter-spacing:.7px}
-.video-free-count{color:var(--accent)}
-.video-history-btn{width:100%;margin-top:9px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);padding:11px;font-weight:800;font-size:10px;letter-spacing:1px;cursor:pointer}
-.video-history-btn:hover{border-color:var(--accent);background:var(--surface-2)}
-.video-history{display:none;margin-top:12px;max-height:260px;overflow:auto;gap:10px}
-.video-history.open{display:grid}
-.video-history-item{padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
-.video-history-item video{width:100%;border-radius:10px;display:block}
-.video-history-item small{display:block;margin-top:8px;color:var(--muted);font-size:9px}
+
 
 /* AI VIDEO STUDIO TABS */
 document.addEventListener("DOMContentLoaded",function(){
