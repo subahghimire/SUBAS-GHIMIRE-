@@ -7,20 +7,24 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const { message, previousInteractionId } = req.body || {};
+    const { message } = req.body || {};
+
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
+
     if (!apiKey) {
-      return res.status(500).json({ error: "AI service is not configured." });
+      return res.status(200).json({
+        reply: "AI assistant is being configured. Please try again shortly.",
+        interactionId: null
+      });
     }
 
-    const systemInstruction = [
+    const instructions = [
       "You are the AI assistant on Subas Ghimire's personal portfolio website.",
-      "Answer any normal text question naturally and helpfully.",
-      "You can answer general questions, simple calculations, explanations, writing help, and casual questions.",
+      "Answer normal questions naturally and helpfully. You can answer general questions, simple calculations, explanations, writing help, and casual questions.",
       "For personal facts about Subas, only use these known facts: Subas Ghimire is a Video Editor / Visual Editor; he currently works as a Video Editor at Kantipur Television; previous television editing experience includes Global Television HD and Janata Television; tools include Adobe Premiere Pro, Adobe After Effects, Adobe Photoshop and DaVinci Resolve.",
       "Never invent personal facts, employers, awards, clients, education, projects or contact details.",
       "If a personal detail is not listed, say it is not listed on the portfolio.",
@@ -28,36 +32,23 @@ export default async function handler(req, res) {
       "Keep replies concise and conversational."
     ].join(" ");
 
-    const makeRequest = async (includePrevious) => {
-      const payload = {
-        model: "gemini-3.8-flash",
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+      },
+      body: JSON.stringify({
+        model: "gpt-5.6-luna",
+        instructions,
         input: message,
-        system_instruction: systemInstruction
-      };
-
-      if (includePrevious && previousInteractionId) {
-        payload.previous_interaction_id = previousInteractionId;
-      }
-
-      return fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": apiKey
-        },
-        body: JSON.stringify(payload)
-      });
-    };
-
-    let response = await makeRequest(true);
-
-    // If an old/expired conversation ID causes an error, retry as a fresh chat.
-    if (!response.ok && previousInteractionId) {
-      response = await makeRequest(false);
-    }
+        max_output_tokens: 500
+      })
+    });
 
     const raw = await response.text();
     let data = {};
+
     try {
       data = raw ? JSON.parse(raw) : {};
     } catch {
@@ -65,29 +56,27 @@ export default async function handler(req, res) {
     }
 
     if (!response.ok) {
-      console.error("Gemini API:", response.status, raw);
-      return res.status(502).json({
-        error: "AI could not answer right now. Please try again."
+      console.error("OpenAI API:", response.status, raw);
+      return res.status(200).json({
+        reply: "I’m ready to help. Please try your question again.",
+        interactionId: null
       });
     }
 
     const reply =
       data?.output_text ||
-      data?.steps
-        ?.slice()
-        .reverse()
-        .find(step => step?.type === "model_output")
-        ?.content
-        ?.find(item => item?.type === "text")
+      data?.output
+        ?.flatMap(item => item?.content || [])
+        ?.find(item => item?.type === "output_text")
         ?.text ||
-      "I’m ready. Please ask me anything.";
+      "I’m ready to help. Please ask me anything.";
 
     return res.status(200).json({
       reply,
       interactionId: data?.id || null
     });
   } catch (error) {
-    console.error("Gemini API error:", error);
+    console.error("OpenAI API error:", error);
     return res.status(200).json({
       reply: "I’m ready to help. Please try your question again.",
       interactionId: null
