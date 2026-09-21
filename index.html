@@ -27,7 +27,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   <input id="videoSearch" type="search" placeholder="Search videos... e.g. car, nature, drone, rain" aria-label="Search videos">
   <button id="videoSearchBtn" class="download-btn" type="button">SEARCH</button>
 </div>
-<div id="videoStatus" class="video-status">Enter your Pexels API key once, then search.</div>
+<div id="videoStatus" class="video-status">Search any topic — no API key needed. Results open directly on Pexels.</div>
 <div id="videoResults" class="video-results"></div>
 <div class="source-note"><strong>Pexels</strong> provides a free API with video search. API keys have default rate limits, and Pexels asks sites using the API to provide attribution. <a href="https://www.pexels.com/" target="_blank" rel="noopener noreferrer">Videos provided by Pexels ↗</a></div>
 </section><section class="section" id="experience"><div class="section-head"><small>05 / EXPERIENCE</small><h2>WHERE<br>I'VE BEEN.</h2></div><div class="jobs"><div class="job"><time>2026 — NOW</time><div><h3>Kantipur Television</h3><p>Video Editor</p></div><span>TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Global Television HD</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div><div class="job"><time>PREVIOUS</time><div><h3>Janata Television</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div></div></section>
@@ -35,6 +35,17 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
 <script>
 (() => {
+  const searchInput = document.getElementById('videoSearch');
+  const searchBtn = document.getElementById('videoSearchBtn');
+  const status = document.getElementById('videoStatus');
+  const results = document.getElementById('videoResults');
+
+  function escapeHTML(value) {
+    const div = document.createElement('div');
+    div.textContent = value;
+    return div.innerHTML;
+  }
+
   // Key-free search: open the matching Pexels video search page for any topic.
   function searchVideos() {
     const query = searchInput.value.trim();
