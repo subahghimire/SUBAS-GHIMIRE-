@@ -1571,6 +1571,20 @@ footer{
 #videoPanel{
   display:none !important;
 }
+
+/* CHATGPT-STYLE AI VIDEO STUDIO */
+.ai-agents-wrap{width:min(900px,92vw);margin:0 auto 30px;}
+.ai-agents-card{border:1px solid var(--line);border-radius:28px;background:var(--surface);overflow:hidden;box-shadow:0 25px 80px var(--shadow);}
+.ai-agents-head{padding:24px 26px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.ai-agents-title{font-size:19px;font-weight:800;letter-spacing:-.04em}.ai-agents-sub{display:block;margin-top:5px;color:var(--muted);font-size:10px}
+.veo-badge{font-size:9px;font-weight:800;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.ai-studio-tabs{display:flex;padding:8px;border-bottom:1px solid var(--line);gap:4px}.ai-studio-tab{flex:1;border:0;background:transparent;color:var(--muted);padding:11px;border-radius:10px;font-size:10px;font-weight:800;cursor:pointer}.ai-studio-tab.active{background:var(--surface-2);color:var(--text)}
+.ai-agent-grid{padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.ai-agent{padding:18px 12px;border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--text);background:rgba(255,255,255,.025);display:flex;flex-direction:column;align-items:center;gap:6px;transition:.25s}.ai-agent:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--surface-2)}.ai-agent-icon{font-size:21px}.ai-agent-name{font-size:11px;font-weight:800}.ai-agent-tag{font-size:8px;color:var(--muted)}
+.ai-agents-note{text-align:center;color:var(--muted);font-size:9px;padding:0 20px 20px}
+.generated-panel{padding:18px}.generated-empty{padding:55px 20px;text-align:center;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
+/* hide old floating generator; studio remains the main AI video UI */
+#videoFab,#videoPanel{display:none!important}
+@media(max-width:700px){.ai-agent-grid{grid-template-columns:repeat(2,1fr)}.ai-agents-head{align-items:flex-start;gap:15px}.ai-agents-title{font-size:16px}}
 </style>
 </head>
 
