@@ -2709,13 +2709,22 @@ document.addEventListener("DOMContentLoaded", function(){
         })
       });
 
-      const data=await response.json();
+      const raw=await response.text();
+      let data={};
+
+      try{
+        data=raw?JSON.parse(raw):{};
+      }catch(parseError){
+        throw new Error("AI server returned an invalid response. Please try again.");
+      }
 
       if(!response.ok){
+        // If an old conversation ID has expired or failed, start a fresh conversation.
+        aiInteractionId=null;
         throw new Error(data?.error||"AI request failed");
       }
 
-      loading.textContent=data.reply||"I couldn't generate a response.";
+      loading.textContent=data.reply||"Sorry, I couldn't generate a reply.";
       if(data.interactionId) aiInteractionId=data.interactionId;
     }catch(error){
       loading.textContent="AI error: "+(error?.message||"The AI assistant is temporarily unavailable.");
