@@ -111,6 +111,19 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   }
 
   searchBtn.addEventListener('click', searchVideos);
+  // Live search: update the source results while the user is typing in the box.
+  let searchTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    const value = searchInput.value.trim();
+    if (!value) {
+      results.innerHTML = '';
+      status.textContent = 'Start typing to search across all free video sources.';
+      return;
+    }
+    status.textContent = 'Searching free video sources for “' + value + '”…';
+    searchTimer = setTimeout(searchVideos, 180);
+  });
   searchInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') searchVideos();
   });
