@@ -119,31 +119,14 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
   }));
 })();
 </script><script id="video-search-v2-js">
-(()=> {
-  const q=document.getElementById('vsQuery'), btn=document.getElementById('vsSearchBtn'), out=document.getElementById('vsResults'), status=document.getElementById('vsStatus');
-  if(!q||!btn||!out||!status)return;
-  const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
-  const showLinks=x=>{const d=document.createElement('div');d.className='vs-source';d.innerHTML='<b>Search “'+esc(x)+'” directly:</b><br><br><a target="_blank" href="https://www.youtube.com/results?search_query='+encodeURIComponent(x)+'">YouTube ↗</a> &nbsp; <a target="_blank" href="https://www.google.com/search?tbm=vid&q='+encodeURIComponent(x)+'">Google Videos ↗</a> &nbsp; <a target="_blank" href="https://www.pexels.com/search/videos/'+encodeURIComponent(x)+'/">Pexels ↗</a> &nbsp; <a target="_blank" href="https://pixabay.com/videos/search/'+encodeURIComponent(x)+'/">Pixabay ↗</a>';out.appendChild(d)};
-  const card=v=>{const d=document.createElement('article');d.className='vs-card';d.innerHTML='<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video><div class="vs-info"><h3>'+esc(v.title)+'</h3><p>'+esc(v.source)+' • PREVIEW</p><div class="vs-actions"><button type="button">⬇ DOWNLOAD</button><a target="_blank" href="'+esc(v.page)+'">SOURCE ↗</a></div></div>';const video=d.querySelector("video"); video.addEventListener("play",()=>{document.querySelectorAll("#vsResults video").forEach(other=>{if(other!==video)other.pause()})}); d.querySelector("button").onclick=()=>{const a=document.createElement("a");a.href=v.url;a.download="Subas-"+String(v.title||"video").replace(/[^a-z0-9]+/gi,"-")+".mp4";a.target="_blank";document.body.appendChild(a);a.click();a.remove()};return d};
-  function sampleFallback(x){return [
-    {title:x+' — sample video search',url:'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',page:'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video',source:'Playable demo'},
-    {title:'Video preview — '+x,url:'https://www.w3schools.com/html/mov_bbb.mp4',page:'https://www.w3schools.com/html/html5_video.asp',source:'Playable demo'}
-  ];}
-  async function search(){
-    const x=q.value.trim(); if(!x){status.textContent='Type something first — e.g. car, football, nature';return}
-    btn.disabled=true;btn.textContent='SEARCHING…';out.innerHTML='';status.textContent='Searching “'+x+'”…';
-    let items=[];
-    try{
-      const url='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(x+' filetype:video')+'&gsrnamespace=6&gsrlimit=30&prop=imageinfo&iiprop=url|mime';
-      const r=await fetch(url);const d=await r.json();
-      items=Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:(p.title||'').replace(/^File:/,''),url:i.url,page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||''),source:'Wikimedia Commons',mime:i.mime}}).filter(v=>v.url&&/^video\//i.test(v.mime||''));
-    }catch(e){}
-    if(items.length){items.slice(0,20).forEach(v=>out.appendChild(card(v)));status.textContent='Found '+Math.min(items.length,20)+' video(s) for “'+x+'”.';}
-    else{status.textContent='No direct result from the public source. Your search is working — use the direct search links below.';showLinks(x);}
-    btn.disabled=false;btn.textContent='SEARCH VIDEO';
-  }
-  btn.addEventListener('click',search);q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}});
-})();
+(()=>{const q=document.getElementById('vsQuery'),btn=document.getElementById('vsSearchBtn'),out=document.getElementById('vsResults'),status=document.getElementById('vsStatus');if(!q||!btn||!out||!status)return;
+const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const card=v=>{const d=document.createElement('article');d.className='vs-card';d.innerHTML='<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video><div class="vs-info"><h3>'+esc(v.title)+'</h3><p>'+esc(v.source)+' • PREVIEW</p><div class="vs-actions"><button type="button">⬇ DOWNLOAD</button><a target="_blank" href="'+esc(v.page)+'">SOURCE ↗</a></div></div>';const video=d.querySelector('video');video.addEventListener('play',()=>document.querySelectorAll('#vsResults video').forEach(x=>{if(x!==video)x.pause()}));d.querySelector('button').onclick=()=>{const a=document.createElement('a');a.href=v.url;a.download='video.mp4';a.target='_blank';document.body.appendChild(a);a.click();a.remove()};return d};
+async function search(){const x=q.value.trim();if(!x){status.textContent='Type something first';return}btn.disabled=true;btn.textContent='SEARCHING…';out.innerHTML='';status.textContent='Searching “'+x+'”…';let items=[];
+try{const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(x+' filetype:video')+'&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url|mime';const d=await(await fetch(u)).json();items.push(...Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:(p.title||'').replace(/^File:/,''),url:i.url,page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||''),source:'Wikimedia Commons',mime:i.mime}}).filter(v=>v.url&&/^video\//i.test(v.mime||'')))}catch(e){}
+try{const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent('mediatype:movies AND '+x)+'&fl[]=identifier,title&rows=15&output=json';const d=await(await fetch(u)).json();for(const p of(d.response?.docs||[])){try{const m=await(await fetch('https://archive.org/metadata/'+encodeURIComponent(p.identifier))).json();const f=(m.files||[]).find(z=>z.name&&/\.(mp4|webm|ogv)$/i.test(z.name));if(f)items.push({title:p.title||p.identifier,url:'https://archive.org/download/'+encodeURIComponent(p.identifier)+'/'+f.name,page:'https://archive.org/details/'+encodeURIComponent(p.identifier),source:'Internet Archive'})}catch(e){}}}catch(e){}
+const seen=new Set();items=items.filter(v=>{if(seen.has(v.url))return false;seen.add(v.url);return true});if(items.length){items.slice(0,24).forEach(v=>out.appendChild(card(v)));status.textContent='Found '+Math.min(items.length,24)+' direct videos.'}else status.textContent='No direct video found. Try another keyword.';btn.disabled=false;btn.textContent='SEARCH VIDEO'}
+btn.addEventListener('click',search);q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}})})();
 </script><script>
 (()=>{
   const items=document.querySelectorAll('[data-dash-tab]');
