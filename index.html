@@ -112,129 +112,80 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:20px 7
 
 <script>
 (()=>{
-  const input=document.getElementById('siteVideoSearch'),button=document.getElementById('siteVideoSearchBtn'),status=document.getElementById('siteVideoStatus'),results=document.getElementById('siteVideoResults');
-  if(!input||!button||!status||!results)return;
-  const esc=v=>{const d=document.createElement('div');d.textContent=v||'';return d.innerHTML};
-  const safeName=v=>String(v||'video').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,70)||'video';
-  async function downloadFile(url,name,btn){
-    const old=btn.textContent;btn.textContent='DOWNLOADING…';btn.disabled=true;
-    try{
-      const res=await fetch(url,{mode:'cors'});if(!res.ok)throw 0;
-      const blob=await res.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');
-      a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
-      setTimeout(()=>URL.revokeObjectURL(u),3000);btn.textContent='✓ DOWNLOADED';
-    }catch(e){window.open(url,'_blank','noopener,noreferrer');btn.textContent='OPEN FILE'}
-    setTimeout(()=>{btn.textContent=old;btn.disabled=false},1800);
-  }
-  function title(text){const h=document.createElement('div');h.style='grid-column:1/-1;font-size:11px;font-weight:800;letter-spacing:1.5px;padding-top:8px';h.textContent=text;return h}
-  function fileCard(v,source){
-    const c=document.createElement('article');c.className='video-card';
-    const t=v.title||'Free video';
-    c.innerHTML='<div class="video-wrap"><video controls playsinline preload="metadata" style="width:100%;height:210px;object-fit:contain;background:#000"><source src="'+esc(v.url)+'" type="'+esc(v.mime||'video/mp4')+'"></video></div><div class="video-info"><h3>'+esc(t)+'</h3><p>'+source+' • FREE / PUBLIC • PREVIEW + DOWNLOAD</p><div class="video-actions"><button class="download-btn" type="button">⬇ DOWNLOAD</button><a class="secondary-link" href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';
-    c.querySelector('button').onclick=()=>downloadFile(v.url,'Subas-'+safeName(t)+'.'+((v.url.match(/\.([a-z0-9]+)(?:\?|$)/i)||[])[1]||'mp4'),c.querySelector('button'));
-    return c;
-  }
-  async function searchInternetArchive(q){
-    const clean=String(q||'').trim().replace(/["\\]/g,' ').replace(/\s+/g,' ');
-    if(!clean)return [];
-    const words=clean.split(' ').filter(Boolean).slice(0,8);
-    const term=words.map(w=>'"'+w+'"').join(' AND ');
-    const queries=[
-      'mediatype:movies AND title:('+term+')',
-      'mediatype:movies AND subject:('+term+')',
-      'mediatype:movies AND description:('+term+')',
-      'mediatype:movies AND ('+words.map(w=>'title:'+w+' OR subject:'+w+' OR description:'+w).join(' AND ')+')'
-    ];
-    const out=[],seen=new Set();
-    for(const query of queries){
-      try{
-        const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent(query)+'&fl[]=identifier&fl[]=title&rows=30&output=json';
-        const r=await fetch(u,{mode:'cors'});if(!r.ok)continue;
-        const d=await r.json();
-        for(const x of d.response?.docs||[]){
-          if(!x.identifier||seen.has(x.identifier))continue;
-          seen.add(x.identifier);
-          try{
-            const m=await(await fetch('https://archive.org/metadata/'+encodeURIComponent(x.identifier),{mode:'cors'})).json();
-            const fs=(m.files||[]).filter(f=>/\.(mp4|webm|ogv|mov)$/i.test(f.name||'')&&!/thumb|sample/i.test(f.name||'')).sort((a,b)=>Number(b.size||0)-Number(a.size||0));
-            const f=fs.find(f=>/\.mp4$/i.test(f.name||''))||fs[0];
-            if(f)out.push({title:x.title||x.identifier,url:'https://archive.org/download/'+encodeURIComponent(x.identifier)+'/'+encodeURIComponent(f.name),page:'https://archive.org/details/'+encodeURIComponent(x.identifier),mime:/webm/i.test(f.name||'')?'video/webm':'video/mp4'});
-          }catch(e){}
-        }
-      }catch(e){}
-      if(out.length>=30)break;
-    }
-    return out;
-  }
-  async function searchCommons(q){
-    const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(q+' filetype:video')+'&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|mediatype';
-    const r=await fetch(u,{mode:'cors'});if(!r.ok)throw 0;const d=await r.json();
-    return Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:(p.title||'').replace(/^File:/,''),url:i.url||'',mime:i.mime||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||'')}}).filter(v=>v.url&&String(v.mime).startsWith('video/'));
-  }
-  function sourceLinks(q){
-    const wrap=document.createElement('div');wrap.className='source-grid';wrap.style='grid-column:1/-1';
-    [['Pexels Videos','https://www.pexels.com/search/videos/'+encodeURIComponent(q)+'/'],['Pixabay Videos','https://pixabay.com/videos/search/'+encodeURIComponent(q)+'/'],['Mixkit Videos','https://mixkit.co/free-stock-video/'+encodeURIComponent(q.replace(/\s+/g,'-'))+'/'],['Coverr Videos','https://coverr.co/search?q='+encodeURIComponent(q)]].forEach(([n,u])=>{
-      const a=document.createElement('a');a.className='source-card';a.href=u;a.target='_blank';a.rel='noopener';
-      a.innerHTML='<strong>'+n+'</strong><span>Free stock video search</span><small>OPEN SOURCE ↗</small>';wrap.appendChild(a);
-    });return wrap;
-  }
-  async function search(){
-    const q=input.value.trim();if(!q){results.innerHTML='';status.textContent='Type anything to search free videos.';return}
-    results.innerHTML='';status.textContent='Searching free videos for “'+q+'”…';button.disabled=true;
-    const [ar,co]=await Promise.allSettled([searchInternetArchive(q),searchCommons(q)]);
-    const av=ar.status==='fulfilled'?ar.value:[],cv=co.status==='fulfilled'?co.value:[];
-    const all=[],seen=new Set();
-    [...av.map(v=>({...v,_s:'INTERNET ARCHIVE'})),...cv.map(v=>({...v,_s:'WIKIMEDIA COMMONS'}))].forEach(v=>{if(v.url&&!seen.has(v.url)){seen.add(v.url);all.push(v)}});
-    if(all.length){results.appendChild(title('FREE VIDEOS — DIRECT PREVIEW + DOWNLOAD'));all.slice(0,30).forEach(v=>results.appendChild(fileCard(v,v._s)));}
-    else {const m=document.createElement('div');m.className='source-note';m.style.gridColumn='1/-1';m.innerHTML='<strong>No direct free video found for this keyword.</strong> Try another word or use the free source links below.';results.appendChild(m);}
-    results.appendChild(title('MORE FREE VIDEO SOURCES'));results.appendChild(sourceLinks(q));
-    status.textContent='Found '+all.length+' direct free/public video files for “'+q+'”';button.disabled=false;
-  }
-  document.querySelectorAll('[data-video-q]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.videoQ;search()}));
-  document.querySelectorAll('[data-video-cat]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-video-cat]').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(input.value.trim())search()}));
-  button.onclick=search;input.onkeydown=e=>{if(e.key==='Enter')search()};
-  let timer;input.oninput=()=>{clearTimeout(timer);if(!input.value.trim()){results.innerHTML='';status.textContent='Type anything to search free videos.';return}status.textContent='Searching “'+input.value.trim()+'”…';timer=setTimeout(search,280)};
-})();
-</script><script>
-(()=>{
   const items=document.querySelectorAll('[data-dash-tab]');
   items.forEach(item=>item.addEventListener('click',()=>{
     items.forEach(x=>x.classList.remove('active'));
     item.classList.add('active');
   }));
 })();
-</script<script id="video-search-v2-js">
-(()=>{
-const q=document.getElementById('vsQuery'),btn=document.getElementById('vsSearchBtn'),out=document.getElementById('vsResults'),status=document.getElementById('vsStatus');
-if(!q||!btn)return;
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function card(v){
- const d=document.createElement('article');d.className='vs-card';
- d.innerHTML='<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video><div class="vs-info"><h3>'+esc(v.title)+'</h3><p>'+esc(v.source)+' • PUBLIC VIDEO</p><div class="vs-quality"><select><option value="2160">4K</option><option value="1080">1080p</option><option value="720">720p</option></select></div><div class="vs-actions"><button>⬇ DOWNLOAD</button><a href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';
- const dl=d.querySelector('button');dl.onclick=async()=>{const old=dl.textContent;dl.textContent='DOWNLOADING…';try{const r=await fetch(v.url,{mode:'cors'});if(!r.ok)throw 0;const b=await r.blob(),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='Subas-'+v.title.replace(/[^a-z0-9]+/gi,'-').slice(0,60)+'.mp4';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);dl.textContent='✓ SAVED';}catch(e){window.open(v.url,'_blank','noopener');dl.textContent='OPEN FILE'}setTimeout(()=>dl.textContent=old,1600)};return d;
-}
-async function commons(q){
- const u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(q+' filetype:video')+'&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url|mime|mediatype';
- const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();
- return Object.values(d.query?.pages||{}).map(p=>{const i=p.imageinfo?.[0]||{};return{title:(p.title||'').replace(/^File:/,''),url:i.url||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||''),source:'Wikimedia Commons'}}).filter(x=>x.url&&String(x.url).match(/\.(mp4|webm|ogv|mov)(\?|$)/i));
-}
-async function archive(q){
- const u='https://archive.org/advancedsearch.php?q='+encodeURIComponent('mediatype:movies AND ('+q.split(/\s+/).slice(0,8).map(x=>'title:'+x+' OR subject:'+x).join(' AND ')+')')+'&fl[]=identifier&fl[]=title&rows=20&output=json';
- const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json(),out=[];
- for(const x of d.response?.docs||[]){try{const m=await(await fetch('https://archive.org/metadata/'+encodeURIComponent(x.identifier))).json();const f=(m.files||[]).filter(f=>/\.(mp4|webm|ogv)$/i.test(f.name||'')&&!/thumb|sample/i.test(f.name||'')).sort((a,b)=>Number(b.size||0)-Number(a.size||0))[0];if(f)out.push({title:x.title||x.identifier,url:'https://archive.org/download/'+encodeURIComponent(x.identifier)+'/'+encodeURIComponent(f.name),page:'https://archive.org/details/'+encodeURIComponent(x.identifier),source:'Internet Archive'})}catch(e){}}
- return out;
-}
-function links(q){
- const d=document.createElement('div');d.className='vs-source';d.innerHTML='<b>More sources for “'+esc(q)+'”</b><br><br><a href="https://mixkit.co/free-stock-video/" target="_blank">Mixkit ↗</a> &nbsp; <a href="https://www.freepik.com/search?query='+encodeURIComponent(q)+'&type=video" target="_blank">Freepik ↗</a> &nbsp; <a href="https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'" target="_blank">YouTube ↗</a> &nbsp; <a href="https://www.google.com/search?tbm=vid&q='+encodeURIComponent(q)+'" target="_blank">Google Videos ↗</a>';out.appendChild(d);
-}
-async function search(){
- const query=q.value.trim();if(!query)return;out.innerHTML='';btn.disabled=true;status.textContent='Searching public videos for “'+query+'”…';
- const rs=await Promise.allSettled([commons(query),archive(query)]);let n=0;
- rs.forEach(r=>{if(r.status==='fulfilled')r.value.slice(0,20).forEach(v=>{out.appendChild(card(v));n++})});
- if(!n){const m=document.createElement('div');m.className='vs-source';m.textContent='No direct playable public video found. Try another keyword.';out.appendChild(m)}
- links(query);status.textContent=n+' direct playable public video(s) found — no API key required.';btn.disabled=false;
-}
-btn.onclick=search;q.onkeydown=e=>{if(e.key==='Enter')search()};
+</script><script id="video-search-v2-js">
+(()=> {
+  const q=document.getElementById('vsQuery'), btn=document.getElementById('vsSearchBtn'), out=document.getElementById('vsResults'), status=document.getElementById('vsStatus');
+  if(!q||!btn||!out||!status) return;
+  const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+  const slug=s=>String(s||'video').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,70)||'video';
+  function card(v){
+    const d=document.createElement('article'); d.className='vs-card';
+    d.innerHTML='<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video><div class="vs-info"><h3>'+esc(v.title)+'</h3><p>'+esc(v.source)+' • PLAYABLE VIDEO</p><div class="vs-actions"><button type="button">⬇ DOWNLOAD</button><a href="'+esc(v.page)+'" target="_blank" rel="noopener">SOURCE ↗</a></div></div>';
+    const dl=d.querySelector('button');
+    dl.onclick=async()=>{
+      const old=dl.textContent; dl.textContent='DOWNLOADING…'; dl.disabled=true;
+      try{
+        const r=await fetch(v.url,{mode:'cors'}); if(!r.ok) throw new Error('download');
+        const blob=await r.blob(), u=URL.createObjectURL(blob), a=document.createElement('a');
+        a.href=u; a.download='Subas-'+slug(v.title)+'.mp4'; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(u),3000); dl.textContent='✓ SAVED';
+      }catch(e){ window.open(v.url,'_blank','noopener,noreferrer'); dl.textContent='OPEN FILE'; }
+      setTimeout(()=>{dl.textContent=old;dl.disabled=false},1800);
+    };
+    return d;
+  }
+  async function commons(query){
+    const url='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(query+' filetype:video')+'&gsrnamespace=6&gsrlimit=50&prop=imageinfo&iiprop=url|mime|mediatype';
+    const r=await fetch(url); if(!r.ok) throw 0; const data=await r.json();
+    return Object.values(data.query?.pages||{}).map(p=>{
+      const i=p.imageinfo?.[0]||{};
+      return {title:(p.title||'').replace(/^File:/,''),url:i.url||'',page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title||''),source:'Wikimedia Commons'};
+    }).filter(v=>v.url&&/^video\//i.test(v.mime||''));
+  }
+  async function archive(query){
+    const terms=query.trim().split(/\s+/).filter(Boolean).slice(0,6);
+    const q1='mediatype:movies AND ('+terms.map(x=>'title:'+x).join(' OR ')+')';
+    const url='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q1)+'&fl[]=identifier&fl[]=title&rows=30&output=json';
+    const r=await fetch(url); if(!r.ok) throw 0; const data=await r.json(), out=[];
+    for(const item of data.response?.docs||[]){
+      try{
+        const m=await (await fetch('https://archive.org/metadata/'+encodeURIComponent(item.identifier))).json();
+        const files=(m.files||[]).filter(f=>/\.(mp4|webm|ogv|mov)$/i.test(f.name||'')&&!/thumb|sample|_files\//i.test(f.name||''));
+        const f=files.sort((a,b)=>Number(b.size||0)-Number(a.size||0))[0];
+        if(f) out.push({title:item.title||item.identifier,url:'https://archive.org/download/'+encodeURIComponent(item.identifier)+'/'+encodeURIComponent(f.name),page:'https://archive.org/details/'+encodeURIComponent(item.identifier),source:'Internet Archive'});
+      }catch(e){}
+      if(out.length>=30) break;
+    }
+    return out;
+  }
+  function externalLinks(query){
+    const box=document.createElement('div'); box.className='vs-source';
+    box.innerHTML='<b>More results for “'+esc(query)+'”</b><br><br><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(query)+'" target="_blank">YouTube ↗</a> &nbsp; <a href="https://www.google.com/search?tbm=vid&q='+encodeURIComponent(query)+'" target="_blank">Google Videos ↗</a> &nbsp; <a href="https://www.pexels.com/search/videos/'+encodeURIComponent(query)+'/" target="_blank">Pexels ↗</a> &nbsp; <a href="https://pixabay.com/videos/search/'+encodeURIComponent(query)+'/" target="_blank">Pixabay ↗</a>';
+    return box;
+  }
+  async function search(){
+    const query=q.value.trim(); if(!query){status.textContent='Type a keyword to search videos.';out.innerHTML='';return;}
+    btn.disabled=true; status.textContent='Searching “'+query+'”…'; out.innerHTML='';
+    const rs=await Promise.allSettled([commons(query),archive(query)]);
+    const items=[], seen=new Set();
+    for(const r of rs) if(r.status==='fulfilled') for(const v of r.value) if(v.url&&!seen.has(v.url)){seen.add(v.url);items.push(v);}
+    if(items.length){
+      items.slice(0,30).forEach(v=>out.appendChild(card(v)));
+      status.textContent='Found '+Math.min(items.length,30)+' playable videos for “'+query+'”.';
+    }else{
+      const m=document.createElement('div');m.className='vs-source';m.textContent='No directly playable public file was found for this keyword. Try a broader keyword.';out.appendChild(m);
+      status.textContent='No direct playable video found.';
+    }
+    out.appendChild(externalLinks(query)); btn.disabled=false;
+  }
+  btn.onclick=search;
+  q.onkeydown=e=>{if(e.key==='Enter')search();};
 })();
 </script><script>
 (()=>{
