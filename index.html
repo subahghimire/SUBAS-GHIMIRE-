@@ -3,52 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="Subas Ghimire — Video Editor and Visual Editor portfolio.">
-<title>Subas Ghimire — Visual Editor</title>
+<meta name="description" content="Subas Ghimire — Video Editor and Visual Editor based in Kathmandu, Nepal.">
+<title>Subas Ghimire | Video Editor & Visual Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#05060b;--card:rgba(15,18,30,.72);--line:rgba(255,255,255,.09);--blue:#5266ff;--cyan:#66fcf1;--text:#fff;--muted:#9da3b8}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 50% 0,#111a45 0,transparent 35%),var(--bg);color:var(--text);overflow-x:hidden}a{text-decoration:none;color:inherit}
-canvas{position:fixed;inset:0;z-index:-2}.glow{position:fixed;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(82,102,255,.2),transparent 65%);pointer-events:none;z-index:-1;transform:translate(-50%,-50%);filter:blur(10px)}
-nav{position:fixed;top:0;left:0;width:100%;z-index:20;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;background:rgba(4,5,10,.58);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
-.logo{font-weight:900;letter-spacing:1px}.links{display:flex;gap:25px}.links a{font-size:13px;color:var(--muted);transition:.25s}.links a:hover{color:#fff}
-.navbtn{padding:10px 16px;border:1px solid var(--line);border-radius:9px;font-size:12px;background:rgba(255,255,255,.05)}
-.hero{min-height:100vh;padding:150px 6% 70px;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center;position:relative}
-.badge{padding:9px 15px;border:1px solid rgba(82,102,255,.45);border-radius:30px;color:#aab2ff;background:rgba(82,102,255,.08);font-size:10px;letter-spacing:2px}.dot{display:inline-block;width:7px;height:7px;background:#00ff88;border-radius:50%;box-shadow:0 0 15px #00ff88;margin-right:7px}
-h1{font-size:clamp(50px,9vw,120px);line-height:.92;letter-spacing:-5px;margin:28px 0;background:linear-gradient(110deg,#fff,#8290ff,#66fcf1,#fff);background-size:250%;-webkit-background-clip:text;color:transparent;animation:grad 6s linear infinite}
-.hero p{max-width:680px;color:var(--muted);line-height:1.8;font-size:16px}.actions{display:flex;gap:12px;margin-top:30px}.btn{padding:13px 21px;border-radius:9px;font-weight:800;font-size:12px;transition:.3s}.primary{background:var(--blue)}.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04)}.btn:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(82,102,255,.25)}
-.console{width:min(850px,100%);margin-top:55px;padding:1px;border-radius:20px;background:linear-gradient(120deg,#5266ff,#66fcf1,#22264d)}.consolein{background:rgba(5,7,14,.9);padding:20px;border-radius:19px;text-align:left}.terminal{font:12px monospace;color:#a9b2d0;min-height:55px}.prompt{color:#5266ff}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.chip{font-size:8px;border:1px solid var(--line);padding:7px 10px;border-radius:20px;color:#8189a5}
-section{padding:110px 6%;border-top:1px solid var(--line)}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:40px}.head small{color:#8290ff;letter-spacing:2px;font-size:10px}.head h2{font-size:clamp(40px,7vw,80px);line-height:.85;text-align:right}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{padding:25px;border:1px solid var(--line);border-radius:18px;background:var(--card);backdrop-filter:blur(16px);transition:.35s}.card:hover{transform:translateY(-8px);border-color:#5266ff;box-shadow:0 25px 60px rgba(0,0,0,.3)}.card b{color:#8290ff;font-size:10px}.card h3{margin:55px 0 8px;font-size:19px}.card p{font-size:11px;color:var(--muted);line-height:1.7}
-.timeline{border-top:1px solid var(--line)}.row{display:grid;grid-template-columns:130px 1fr 130px;gap:20px;padding:25px 0;border-bottom:1px solid var(--line);transition:.3s}.row:hover{padding-left:10px;background:rgba(82,102,255,.04)}.row small{color:#8290ff}.row p{color:var(--muted);font-size:11px;margin-top:5px}.row span{text-align:right;color:#666;font-size:9px}
-.contact{min-height:75vh;display:flex;flex-direction:column;justify-content:center}.contact h2{font-size:clamp(55px,11vw,145px);line-height:.8}.contact h2 span{color:#5266ff}.email{font-size:clamp(18px,3vw,30px);font-weight:800}.social{display:flex;gap:15px;margin-top:25px}.social a{color:#8d94aa;font-size:11px}.social a:hover{color:#fff}
-footer{padding:22px 6%;border-top:1px solid var(--line);color:#666;font-size:9px;display:flex;justify-content:space-between}
-.reveal{opacity:0;transform:translateY(35px);transition:.8s}.reveal.show{opacity:1;transform:none}
-@keyframes grad{to{background-position:250% center}}@media(max-width:700px){.links{display:none}.grid{grid-template-columns:1fr}.row{grid-template-columns:70px 1fr}.row span{display:none}.hero{padding-top:125px}section{padding:80px 5%}.head{align-items:start}.head h2{text-align:right}}
+:root{--bg:#08090b;--panel:#101216;--panel2:#15181e;--line:#252932;--text:#f4f5f7;--muted:#9298a5;--accent:#d9ff3f;--accent2:#a8cc18;--max:1180px}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;line-height:1.5;overflow-x:hidden}a{text-decoration:none;color:inherit}button{font:inherit}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:50px 50px;mask-image:linear-gradient(to bottom,black,transparent 75%);z-index:-2}
+.container{width:min(var(--max),92%);margin:auto}.nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);width:min(1160px,92%);z-index:50;padding:13px 15px 13px 20px;border:1px solid var(--line);background:rgba(10,11,14,.82);backdrop-filter:blur(18px);border-radius:18px;display:flex;align-items:center;justify-content:space-between}.brand{font-family:"Space Grotesk";font-weight:700;letter-spacing:-.5px}.brand span{color:var(--accent)}.navlinks{display:flex;gap:25px;color:var(--muted);font-size:13px}.navlinks a:hover{color:var(--text)}.navcta{background:var(--accent);color:#0b0c0d;padding:9px 15px;border-radius:10px;font-weight:700;font-size:12px}
+.hero{min-height:100vh;display:grid;grid-template-columns:1.25fr .75fr;align-items:center;padding:145px 0 90px;gap:50px}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}.pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 7px rgba(217,255,63,.08)}h1{font-family:"Space Grotesk";font-size:clamp(58px,8vw,112px);line-height:.9;letter-spacing:-6px;max-width:800px}h1 em{font-style:normal;color:var(--accent)}.lead{max-width:620px;color:var(--muted);font-size:17px;margin-top:28px}.buttons{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}.btn{padding:13px 19px;border-radius:11px;border:1px solid var(--line);font-size:13px;font-weight:700;transition:.25s}.btn:hover{transform:translateY(-3px)}.btn.primary{background:var(--accent);color:#090a0b;border-color:var(--accent)}.btn.dark{background:var(--panel)}
+.hero-card{position:relative;background:linear-gradient(145deg,#171a20,#0d0f13);border:1px solid var(--line);border-radius:28px;padding:14px;min-height:470px;display:flex;align-items:flex-end;overflow:hidden}.portrait{position:absolute;inset:0;background:radial-gradient(circle at 70% 28%,rgba(217,255,63,.18),transparent 30%),linear-gradient(145deg,#23272e,#0b0d10)}.portrait:after{content:"SG";position:absolute;right:-20px;bottom:-75px;font-family:"Space Grotesk";font-size:300px;font-weight:700;color:rgba(255,255,255,.035);line-height:1}.hero-label{position:relative;z-index:2;width:100%;background:rgba(8,9,11,.78);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:17px;padding:18px}.hero-label small{color:var(--muted);font-size:10px;letter-spacing:1.5px}.hero-label strong{display:block;font-family:"Space Grotesk";font-size:24px;margin-top:3px}.hero-label .available{color:var(--accent);font-size:11px;margin-top:7px}
+.ticker{border-block:1px solid var(--line);padding:15px 0;overflow:hidden;color:#777d89;font-size:10px;letter-spacing:2px;text-transform:uppercase}.ticker div{white-space:nowrap;animation:move 25s linear infinite}@keyframes move{to{transform:translateX(-25%)}}
+section{padding:115px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:45px}.section-no{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px}.section-head h2{font-family:"Space Grotesk";font-size:clamp(42px,6vw,78px);letter-spacing:-4px;line-height:.95}.section-head p{color:var(--muted);max-width:420px;font-size:14px}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.big-card,.info-card{border:1px solid var(--line);background:var(--panel);border-radius:24px;padding:32px}.big-card{min-height:310px;display:flex;flex-direction:column;justify-content:space-between}.big-card .number{font-family:"Space Grotesk";font-size:72px;color:var(--accent);line-height:1}.big-card h3{font-size:25px}.big-card p,.info-card p{color:var(--muted);font-size:13px;max-width:580px}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.info-card h3{font-family:"Space Grotesk";margin:35px 0 7px;font-size:18px}.info-card small{color:var(--accent);font-weight:700;font-size:10px;letter-spacing:1.5px}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.work{border:1px solid var(--line);background:var(--panel);border-radius:22px;overflow:hidden;transition:.3s}.work:hover{transform:translateY(-7px);border-color:#454b57}.work-visual{height:230px;background:linear-gradient(135deg,#191d23,#0d0f12);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}.work-visual:before{content:"";width:150px;height:150px;border:1px solid rgba(217,255,63,.5);border-radius:50%;box-shadow:0 0 80px rgba(217,255,63,.1)}.work-visual b{position:absolute;font-family:"Space Grotesk";font-size:90px;color:rgba(255,255,255,.05)}.work-body{padding:22px}.work-body small{color:var(--accent);font-weight:700;font-size:10px}.work-body h3{font-family:"Space Grotesk";font-size:22px;margin:8px 0}.work-body p{color:var(--muted);font-size:12px}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.skill{padding:24px;border:1px solid var(--line);background:var(--panel);border-radius:18px}.skill span{color:var(--accent);font-size:10px;font-weight:700}.skill h3{font-family:"Space Grotesk";font-size:17px;margin-top:35px}
+.timeline{border-top:1px solid var(--line)}.job{display:grid;grid-template-columns:150px 1fr 130px;gap:25px;padding:27px 0;border-bottom:1px solid var(--line)}.job .date{color:var(--accent);font-size:11px;font-weight:700}.job h3{font-family:"Space Grotesk";font-size:23px}.job p{color:var(--muted);font-size:12px;margin-top:4px}.job .type{text-align:right;color:#656b76;font-size:10px;letter-spacing:1px}
+.contact-box{border:1px solid var(--line);background:linear-gradient(135deg,#171b20,#0e1014);border-radius:30px;padding:55px;position:relative;overflow:hidden}.contact-box:after{content:"";position:absolute;width:360px;height:360px;right:-100px;top:-150px;border-radius:50%;background:rgba(217,255,63,.09);filter:blur(20px)}.contact-box h2{position:relative;z-index:2;font-family:"Space Grotesk";font-size:clamp(50px,8vw,105px);letter-spacing:-5px;line-height:.9}.contact-box h2 span{color:var(--accent)}.contact-row{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:end;gap:30px;margin-top:50px}.email{font-family:"Space Grotesk";font-size:clamp(16px,2vw,25px);font-weight:600}.social{display:flex;gap:15px;font-size:11px;color:var(--muted)}.social a:hover{color:var(--accent)}
+footer{border-top:1px solid var(--line);padding:25px 0;color:#666d77;font-size:10px;display:flex;justify-content:space-between}
+.reveal{opacity:0;transform:translateY(22px);transition:.7s}.reveal.show{opacity:1;transform:none}
+@media(max-width:850px){.navlinks{display:none}.hero{grid-template-columns:1fr;padding-top:130px}.hero-card{min-height:360px}.about-grid,.info-grid{grid-template-columns:1fr}.work-grid{grid-template-columns:1fr 1fr}.skills{grid-template-columns:1fr 1fr}.job{grid-template-columns:100px 1fr}.job .type{display:none}.contact-row{flex-direction:column;align-items:start}}
+@media(max-width:560px){h1{letter-spacing:-4px}.work-grid,.skills{grid-template-columns:1fr}.section-head{display:block}.section-head h2{margin-top:15px}.contact-box{padding:32px}.nav{top:10px}.navcta{padding:8px 10px}.hero-card{min-height:330px}.big-card,.info-card{padding:24px}}
 </style>
 </head>
 <body>
-<canvas id="space"></canvas><div class="glow" id="glow"></div>
-<nav><a class="logo" href="#home">SUBAS GHIMIRE</a><div class="links"><a href="#about">About</a><a href="#work">Work</a><a href="#tools">Tools</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div><a class="navbtn" href="CV/Subas_Ghimire_CV.pdf" download="Subas_Ghimire_CV.pdf">Download CV ↓</a></nav>
+<nav class="nav">
+<a class="brand" href="#home">SUBAS<span>.</span></a>
+<div class="navlinks"><a href="#about">About</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div>
+<a class="navcta" href="CV/Subas_Ghimire_CV.pdf" download>DOWNLOAD CV</a>
+</nav>
+
 <main>
-<section class="hero" id="home">
-<div class="badge"><span class="dot"></span>AI VISUAL SYSTEM · ONLINE</div>
-<h1>Visual stories.<br>Edited to connect.</h1>
-<p>I'm Subas Ghimire — a Video Editor and Visual Editor creating polished visual stories for television and digital platforms.</p>
-<div class="actions"><a class="btn primary" href="#work">Explore my work</a><a class="btn secondary" href="CV/Subas_Ghimire_CV.pdf" download="Subas_Ghimire_CV.pdf">Download CV ↓</a><a class="btn secondary" href="#contact">Let's talk</a></div>
-<div class="console"><div class="consolein"><div class="terminal"><span class="prompt">›</span> <span id="typing"></span><span>|</span></div><div class="chips"><span class="chip">VIDEO EDITING</span><span class="chip">MOTION DESIGN</span><span class="chip">VISUAL STORYTELLING</span><span class="chip">POST PRODUCTION</span></div></div></div>
+<section class="hero container" id="home">
+<div>
+<div class="eyebrow"><i class="pulse"></i> Video Editor · Visual Editor</div>
+<h1>Cut. Shape.<br><em>Connect.</em></h1>
+<p class="lead">I'm Subas Ghimire, a Video Editor and Visual Editor focused on television, digital video, post-production and visual storytelling.</p>
+<div class="buttons"><a class="btn primary" href="#work">VIEW MY WORK ↗</a><a class="btn dark" href="CV/Subas_Ghimire_CV.pdf" download>DOWNLOAD CV ↓</a></div>
+</div>
+<div class="hero-card"><div class="portrait"></div><div class="hero-label"><small>BASED IN KATHMANDU, NEPAL</small><strong>SUBAS GHIMIRE</strong><div class="available">● Available for creative opportunities</div></div></div>
 </section>
-<section id="about" class="reveal"><div class="head"><small>01 / ABOUT</small><h2>WHO<br>I AM.</h2></div><div class="grid"><div class="card"><b>PROFILE</b><h3>Video Editor / Visual Editor</h3><p>Focused on editing, pacing, visual storytelling and post-production for television and digital platforms.</p></div><div class="card"><b>CURRENT</b><h3>Kantipur Television</h3><p>Working with television content and visual post-production workflows.</p></div><div class="card"><b>LOCATION</b><h3>Kathmandu, Nepal</h3><p>Available for professional editing and visual production opportunities.</p></div></div></section>
-<section id="work" class="reveal"><div class="head"><small>02 / WORK</small><h2>SELECTED<br>WORK.</h2></div><div class="grid"><div class="card"><b>01</b><h3>Television Editing</h3><p>Structured editing and post-production for TV content.</p></div><div class="card"><b>02</b><h3>Digital Video</h3><p>Clean cuts, pacing and visual storytelling for digital platforms.</p></div><div class="card"><b>03</b><h3>Creative Editing</h3><p>Visual rhythm, motion-focused editing and finishing.</p></div></div></section>
-<section id="tools" class="reveal"><div class="head"><small>03 / SOFTWARE</small><h2>MY<br>TOOLS.</h2></div><div class="grid"><div class="card"><b>01</b><h3>Adobe Premiere Pro</h3><p>Professional video editing.</p></div><div class="card"><b>02</b><h3>Adobe After Effects</h3><p>Motion graphics and visual effects.</p></div><div class="card"><b>03</b><h3>Adobe Photoshop</h3><p>Visual design and image preparation.</p></div><div class="card"><b>04</b><h3>DaVinci Resolve</h3><p>Editing and color workflow.</p></div></div></section>
-<section id="experience" class="reveal"><div class="head"><small>04 / EXPERIENCE</small><h2>WHERE<br>I'VE BEEN.</h2></div><div class="timeline"><div class="row"><small>2026 — NOW</small><div><h3>Kantipur Television</h3><p>Video Editor</p></div><span>TELEVISION</span></div><div class="row"><small>PREVIOUS</small><div><h3>Global Television HD</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div><div class="row"><small>PREVIOUS</small><div><h3>Janata Television</h3><p>Video Editor — 4 months</p></div><span>TELEVISION</span></div></div></section>
-<section id="contact" class="contact reveal"><div class="head"><small>05 / CONTACT</small><h2>LET'S<br><span>TALK.</span></h2></div><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com ↗</a><div class="social"><a href="https://wa.me/9779766454587">WHATSAPP</a><a href="https://www.facebook.com/subas.ghimire.164384">FACEBOOK</a><a href="https://www.instagram.com/subas_ghimire__">INSTAGRAM</a></div></section>
-</main><footer><span>© 2026 SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR</span></footer>
+
+<div class="ticker"><div>VIDEO EDITING　✦　VISUAL STORYTELLING　✦　MOTION DESIGN　✦　POST PRODUCTION　✦　TELEVISION　✦　DIGITAL VIDEO　✦　VIDEO EDITING　✦　VISUAL STORYTELLING　✦</div></div>
+
+<section class="container reveal" id="about">
+<div class="section-head"><div><div class="section-no">01 / ABOUT</div><h2>THE PERSON<br>BEHIND THE CUT.</h2></div><p>Focused on turning raw footage into clear, engaging and purposeful visual stories.</p></div>
+<div class="about-grid"><div class="big-card"><div class="number">01</div><div><h3>Video Editor / Visual Editor</h3><p>I work across editing, pacing, visual structure and post-production, with experience in television and digital content.</p></div></div>
+<div class="info-grid"><div class="info-card"><small>CURRENT</small><h3>Kantipur Television</h3><p>Video editing and visual post-production for television content.</p></div><div class="info-card"><small>LOCATION</small><h3>Kathmandu, Nepal</h3><p>Available for professional editing and visual production work.</p></div><div class="info-card"><small>FOCUS</small><h3>Story + Rhythm</h3><p>Clean cuts, timing, continuity and visual flow.</p></div><div class="info-card"><small>APPROACH</small><h3>Detail First</h3><p>Every cut should support the story and the viewer.</p></div></div></div>
+</section>
+
+<section class="container reveal" id="work">
+<div class="section-head"><div><div class="section-no">02 / SELECTED WORK</div><h2>WHAT I<br>DO.</h2></div><p>A focused set of services built around editing and visual communication.</p></div>
+<div class="work-grid">
+<div class="work"><div class="work-visual"><b>TV</b></div><div class="work-body"><small>01</small><h3>Television Editing</h3><p>Structured editing, pacing and finishing for television content and news workflows.</p></div></div>
+<div class="work"><div class="work-visual"><b>DG</b></div><div class="work-body"><small>02</small><h3>Digital Video</h3><p>Short-form and platform-ready edits designed for clear communication and strong retention.</p></div></div>
+<div class="work"><div class="work-visual"><b>MX</b></div><div class="work-body"><small>03</small><h3>Motion & Visuals</h3><p>Motion-focused visuals, graphics and finishing that add clarity and energy.</p></div></div>
+</div>
+</section>
+
+<section class="container reveal" id="skills">
+<div class="section-head"><div><div class="section-no">03 / SOFTWARE</div><h2>THE<br>TOOLKIT.</h2></div><p>Software I use across editing, motion, design and finishing workflows.</p></div>
+<div class="skills"><div class="skill"><span>01</span><h3>Adobe Premiere Pro</h3></div><div class="skill"><span>02</span><h3>Adobe After Effects</h3></div><div class="skill"><span>03</span><h3>Adobe Photoshop</h3></div><div class="skill"><span>04</span><h3>DaVinci Resolve</h3></div></div>
+</section>
+
+<section class="container reveal" id="experience">
+<div class="section-head"><div><div class="section-no">04 / EXPERIENCE</div><h2>THE<br>JOURNEY.</h2></div><p>Professional experience across television editing and post-production.</p></div>
+<div class="timeline">
+<div class="job"><div class="date">2026 — NOW</div><div><h3>Kantipur Television</h3><p>Video Editor · Television</p></div><div class="type">CURRENT</div></div>
+<div class="job"><div class="date">PREVIOUS</div><div><h3>Global Television HD</h3><p>Video Editor · 4 months</p></div><div class="type">TELEVISION</div></div>
+<div class="job"><div class="date">PREVIOUS</div><div><h3>Janata Television</h3><p>Video Editor · 4 months</p></div><div class="type">TELEVISION</div></div>
+</div>
+</section>
+
+<section class="container reveal" id="contact">
+<div class="contact-box"><div class="section-no">05 / CONTACT</div><h2>LET'S MAKE<br>SOMETHING <span>GOOD.</span></h2><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com ↗</a><div class="social"><a href="https://wa.me/9779766454587">WHATSAPP</a><a href="https://www.facebook.com/subas.ghimire.164384">FACEBOOK</a><a href="https://www.instagram.com/subas_ghimire__">INSTAGRAM</a></div></div></div>
+</section>
+</main>
+<footer class="container"><span>© 2026 SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR</span></footer>
+
 <script>
-const c=document.getElementById('space'),x=c.getContext('2d'),g=document.getElementById('glow');let w,h,stars=[];
-function resize(){w=c.width=innerWidth;h=c.height=innerHeight;stars=Array.from({length:110},()=>({x:Math.random()*w,y:Math.random()*h,z:Math.random()*2+.4}))}resize();addEventListener('resize',resize);
-function draw(){x.clearRect(0,0,w,h);for(const s of stars){s.y+=s.z*.08;if(s.y>h)s.y=0;x.fillStyle='rgba(130,145,255,'+(s.z*.22)+')';x.fillRect(s.x,s.y,s.z,s.z)}requestAnimationFrame(draw)}draw();
-addEventListener('pointermove',e=>{g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
-const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
-const text='Initializing Subas Visual Intelligence... loading editing portfolio... system ready.';let i=0;setInterval(()=>{document.getElementById('typing').textContent=text.slice(0,++i% (text.length+8));if(i>=text.length+8)i=0},55);
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("show")}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 </script>
-</body></html>
+</body>
+</html>
