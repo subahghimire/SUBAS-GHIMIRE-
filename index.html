@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+/* On phones, render the same desktop canvas, scaled to fit the screen. Users can still pinch-zoom. */
+(function(){
+  var phone = window.screen && window.screen.width <= 600;
+  if (phone) {
+    var viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) viewport.setAttribute('content', 'width=1200, initial-scale=' + (window.screen.width / 1200).toFixed(3) + ', minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes');
+  }
+})();
+</script>
 <meta name="theme-color" content="#090a0e">
 <meta name="description" content="Subas Ghimire — Video Editor and Visual Editor at Kantipur Television, Kathmandu, Nepal.">
 <title>Subas Ghimire — Video Editor & Visual Editor</title>
