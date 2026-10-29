@@ -173,5 +173,22 @@ const effectItems=[{name:"SG Cinematic Warm LUT",type:"LUT",price:"Free",desc:"O
 const headline=document.getElementById('headline');const words=['Stories','Moments','Pictures','Feelings'];let word=0;
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){setInterval(()=>{headline.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-10px)'}],{duration:180,easing:'ease-in',fill:'forwards'}).onfinish=()=>{word=(word+1)%words.length;headline.textContent=words[word];headline.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:260,easing:'ease-out',fill:'forwards'})}},3200)}
 </script>
+
+<script>
+/* Desktop-style view on mobile, while keeping pinch zoom available. */
+(function () {
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 700;
+  if (!isMobile) return;
+  var viewport = document.querySelector('meta[name="viewport"]');
+  if (!viewport) {
+    viewport = document.createElement('meta');
+    viewport.name = 'viewport';
+    document.head.appendChild(viewport);
+  }
+  var desktopWidth = 1200;
+  var scale = Math.min(1, (window.screen && window.screen.width ? window.screen.width : 390) / desktopWidth);
+  viewport.setAttribute('content', 'width=' + desktopWidth + ', initial-scale=' + scale.toFixed(3) + ', minimum-scale=0.25, maximum-scale=3, user-scalable=yes');
+})();
+</script>
 </body>
 </html>
