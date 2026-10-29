@@ -326,10 +326,10 @@ const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=docu
 </script>
 
 <script>
-/* Use native responsive sizing on every screen. */
+/* Keep the full desktop layout on phones too, as requested. */
 (function () {
   var viewport = document.querySelector('meta[name="viewport"]');
-  if (viewport) viewport.setAttribute('content', 'width=device-width, initial-scale=1, viewport-fit=cover');
+  if (viewport) viewport.setAttribute('content', 'width=1200, initial-scale=0.32, minimum-scale=0.25, maximum-scale=3, user-scalable=yes');
 })();
 </script>
 
