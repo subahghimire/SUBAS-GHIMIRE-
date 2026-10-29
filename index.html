@@ -177,6 +177,20 @@ footer{border-color:#00e9a233;color:#94b9ad;padding:16px 0}.top-link{border-colo
 @media(max-width:850px){.nav{padding:10px 4%}.navlinks{gap:13px}.navcta{display:none}.hero{padding:95px 5% 22px}.portrait-wrap{min-height:300px}.portrait{height:300px}.dashboard-skills{grid-template-columns:1fr 1fr}.gallery-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.nav{position:sticky;padding:9px 4%;gap:8px}.brand{gap:7px}.sg-mark{font-size:24px}.brand-copy b{font-size:11px}.brand-copy small{font-size:8px}.navlinks{display:none}.hero{grid-template-columns:1fr;padding:32px 5% 18px;gap:0}.hero h1{font-size:clamp(36px,10vw,52px)}.hero-copy{padding-bottom:0}.lead{font-size:13px}.hero-meta{gap:12px;margin-top:18px}.hero-meta strong{font-size:11px}.portrait-wrap{min-height:285px}.portrait{height:275px;width:70%}.float-card{right:2%;bottom:10%;font-size:9px}.container{width:92%}section.content{padding:15px 0}#about .about-grid{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr 1fr}.dashboard-skills{grid-template-columns:1fr}.dashboard-panel{padding:15px}.gallery-grid{gap:8px}.gallery-tile{height:120px;padding:10px}.job{grid-template-columns:72px 1fr;gap:10px}.job h3{font-size:14px}.job .type{display:none}.contact-box{padding:20px}.contact-box h2{font-size:36px}.contact-row{align-items:start;flex-direction:column}.section-head h2{font-size:30px}}
 
+
+/* Click any portfolio item to open its detail panel */
+.detail-clickable{cursor:pointer;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.detail-clickable:hover,.detail-clickable:focus-visible{transform:translateY(-3px);border-color:#00e9a2!important;box-shadow:0 0 0 1px #00e9a244,0 12px 30px #00e9a215;outline:none}
+#portfolioDetailModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:#000b09d9;backdrop-filter:blur(12px)}
+#portfolioDetailModal.open{display:flex}
+#portfolioDetailModal .detail-dialog{width:min(540px,100%);max-height:82vh;overflow:auto;position:relative;padding:28px;border:1px solid #00e9a277;border-radius:20px;background:linear-gradient(145deg,#06251f,#020b0a 75%);color:#effff9;box-shadow:0 25px 90px #00e9a21c}
+#portfolioDetailModal .detail-kicker{font-size:10px;letter-spacing:2px;color:#00e9a2;text-transform:uppercase;margin-bottom:12px}
+#portfolioDetailModal h2{font-size:clamp(25px,5vw,36px);line-height:1.1;margin:0 35px 14px 0}
+#portfolioDetailModal .detail-body{font-size:14px;line-height:1.75;color:#c3ddd5;white-space:pre-line}
+#portfolioDetailModal .detail-close{position:absolute;right:14px;top:14px;width:38px;height:38px;border:1px solid #00e9a255;border-radius:50%;background:#001712;color:#dffff5;font-size:22px;cursor:pointer}
+#portfolioDetailModal .detail-hint{margin-top:20px;padding-top:14px;border-top:1px solid #00e9a233;color:#77b7a4;font-size:11px}
+@media(max-width:560px){#portfolioDetailModal{padding:14px}#portfolioDetailModal .detail-dialog{padding:24px 20px;border-radius:16px}}
+
 </style>
 </head>
 <body>
@@ -253,5 +267,72 @@ const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=docu
   viewport.setAttribute('content', 'width=' + desktopWidth + ', initial-scale=' + scale.toFixed(3) + ', minimum-scale=0.25, maximum-scale=3, user-scalable=yes');
 })();
 </script>
+
+<div id="portfolioDetailModal" role="dialog" aria-modal="true" aria-labelledby="portfolioDetailTitle">
+  <div class="detail-dialog">
+    <button type="button" class="detail-close" aria-label="Close details">×</button>
+    <div class="detail-kicker">SUBAS GHIMIRE · PORTFOLIO DETAILS</div>
+    <h2 id="portfolioDetailTitle">Details</h2>
+    <div class="detail-body" id="portfolioDetailBody"></div>
+    <div class="detail-hint">Tap outside this panel or × to close.</div>
+  </div>
+</div>
+<script>
+(function(){
+  var modal=document.getElementById('portfolioDetailModal');
+  if(!modal)return;
+  var title=modal.querySelector('#portfolioDetailTitle');
+  var body=modal.querySelector('#portfolioDetailBody');
+  var closeBtn=modal.querySelector('.detail-close');
+  var detailMap={
+    'Kantipur Television':'Current workplace. Video editing for television news, reports and talk shows, with attention to timing, continuity and clear storytelling.',
+    'Global Television HD':'Previous role as a Video Editor for 4 months, gaining practical television editing and broadcast post-production experience.',
+    'Janata Television':'Previous role as a Video Editor for 4 months, building experience in television content editing.',
+    'Premiere Pro':'Main editing tool for arranging footage, cutting interviews and news packages, syncing audio, refining pacing and exporting finished video.',
+    'After Effects':'Motion graphics and animated titles that support broadcast visuals and storytelling.',
+    'Photoshop':'Image preparation, graphic elements, thumbnails and visual assets for editing projects.',
+    'DaVinci Resolve':'A tool for colour correction and grading workflows.',
+    'Video Editing (Premiere Pro)':'Editing workflow: footage selection, timeline assembly, clean cuts, audio sync, pacing, revisions and final export.',
+    'Motion Graphics (After Effects)':'Motion graphics skills for animated text, titles, transitions and supporting visual elements.',
+    'Color Grading':'Adjusting exposure, contrast, white balance and colour consistency to give footage a clear, balanced look.',
+    'Storytelling':'Shaping footage into a clear sequence so the key information and emotion are easy to follow.',
+    'Team Collaboration':'Coordinating with desk editors and colleagues, responding to feedback and delivering edits on time.',
+    'Television Editing':'Editing news, reports and talk shows with focus on accuracy, timing, continuity and broadcast-ready output.',
+    'Motion & Graphics':'Titles, graphics and motion details that make information easier to understand without distracting from the story.',
+    'Digital Video':'Adapting video pacing and structure for digital platforms while keeping the message clear.',
+    'TV BROADCAST':'Broadcast editing and television storytelling. This gallery tile is a visual category for work experience.',
+    'EDITING SUITE':'A visual category representing editing, post-production and timeline work.',
+    'ON SET':'A visual category representing camera work, production environments and behind-the-scenes activity.',
+    'DREAM · EDIT · CREATE':'A creative direction for visual storytelling, editing and cinematic presentation.'
+  };
+  function openDetails(el){
+    var heading=el.querySelector('h3,h2,strong,b')||el.querySelector('span');
+    var itemTitle=(heading?heading.textContent:el.textContent).trim().replace(/\s+/g,' ');
+    var detail=detailMap[itemTitle];
+    if(!detail){
+      var p=el.querySelector('p');
+      detail=p?p.textContent.trim():'This item is part of Subas Ghimire’s video-editing portfolio. It highlights skills, work experience or visual storytelling.';
+    }
+    title.textContent=itemTitle;
+    body.textContent=detail;
+    modal.classList.add('open');
+    document.body.style.overflow='hidden';
+    closeBtn.focus();
+  }
+  document.querySelectorAll('.info-card,.feature-card,.work,.skill-row,.software-row,.job,.gallery-tile').forEach(function(el){
+    el.classList.add('detail-clickable');
+    el.setAttribute('tabindex','0');
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label','View details: '+(el.textContent.trim().replace(/\s+/g,' ').slice(0,90)));
+    el.addEventListener('click',function(e){if(e.target.closest('a,button'))return;openDetails(el);});
+    el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetails(el);}});
+  });
+  function close(){modal.classList.remove('open');document.body.style.overflow='';}
+  closeBtn.addEventListener('click',close);
+  modal.addEventListener('click',function(e){if(e.target===modal)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))close();});
+})();
+</script>
+
 </body>
 </html>
