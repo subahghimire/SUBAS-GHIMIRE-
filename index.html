@@ -235,8 +235,6 @@ document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 document.getElementById('year').textContent=new Date().getFullYear();
 if(matchMedia('(pointer:fine)').matches){window.addEventListener('pointermove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'},{passive:true})}
 const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=document.getElementById('youtubeQuery');youtubeForm.addEventListener('submit',e=>{e.preventDefault();const q=youtubeQuery.value.trim();if(q)window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q),'_blank','noopener,noreferrer')});document.querySelectorAll('[data-search]').forEach(button=>button.addEventListener('click',()=>{youtubeQuery.value=button.dataset.search;youtubeForm.requestSubmit()}));
-const headline=document.getElementById('headline');const words=['Stories','Moments','Pictures','Feelings'];let word=0;
-if(!matchMedia('(prefers-reduced-motion: reduce)').matches){setInterval(()=>{headline.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-10px)'}],{duration:180,easing:'ease-in',fill:'forwards'}).onfinish=()=>{word=(word+1)%words.length;headline.textContent=words[word];headline.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:260,easing:'ease-out',fill:'forwards'})}},3200)}
 </script>
 
 <script>
