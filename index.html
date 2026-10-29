@@ -306,6 +306,92 @@ section.content{scroll-margin-top:90px}.section-head h2{letter-spacing:-.04em}
 <div class="section-head"><div><div class="section-no">03 / VIDEO DISCOVERY</div><h2>FIND YOUR<br>NEXT VIDEO.</h2></div><p>Search YouTube videos by topic, title, creator or keywords. Results open directly on YouTube.</p></div>
 <div class="youtube-box"><form id="youtubeForm" class="youtube-form"><label class="sr-only" for="youtubeQuery">Search YouTube videos</label><input id="youtubeQuery" type="search" placeholder="Search videos, topics, channels..." autocomplete="off" required><button class="btn primary" type="submit">SEARCH YOUTUBE ↗</button></form><div class="youtube-chips"><button type="button" data-search="video editing tutorials">Video Editing</button><button type="button" data-search="Nepal latest news">Nepal News</button><button type="button" data-search="cinematic filmmaking">Filmmaking</button><button type="button" data-search="Adobe Premiere Pro tips">Premiere Pro</button></div><p class="youtube-note">Search powered by YouTube. No API key or sign-in to this portfolio is required.</p></div>
 </section>
+
+<section class="content container reveal" id="universal-assets-search">
+  <div class="section-head"><div><div class="section-no">04 / CREATOR TOOLKIT</div><h2>SEARCH. PREVIEW.<br>DOWNLOAD.</h2></div><p>Find video overlays, transitions, stock footage, backgrounds and editing assets from trusted libraries. Free and paid sources, all in one place.</p></div>
+  <div class="assets-panel">
+    <div class="assets-searchbar">
+      <input id="assetQuery" type="search" placeholder="Search overlays, smoke, light leaks, transitions..." autocomplete="off" aria-label="Search editing assets">
+      <button class="btn primary" id="assetSearchBtn" type="button">SEARCH ASSETS ↗</button>
+    </div>
+    <div class="assets-chips" aria-label="Popular searches">
+      <button type="button" data-asset-query="free video overlays">Free Overlays</button>
+      <button type="button" data-asset-query="light leaks overlay">Light Leaks</button>
+      <button type="button" data-asset-query="smoke and dust overlay">Smoke / Dust</button>
+      <button type="button" data-asset-query="video transitions">Transitions</button>
+      <button type="button" data-asset-query="green screen effects">Green Screen</button>
+      <button type="button" data-asset-query="cinematic background footage">Cinematic B-roll</button>
+    </div>
+    <div class="asset-filter-row">
+      <label for="assetType">Asset type</label>
+      <select id="assetType"><option value="videos">Video / MP4</option><option value="overlays">Overlays & VFX</option><option value="templates">Premiere Pro Templates</option><option value="sound">Sound Effects</option><option value="images">Images / Backgrounds</option></select>
+      <label for="assetPrice">Price</label>
+      <select id="assetPrice"><option value="all">Free + Paid</option><option value="free">Free only</option><option value="paid">Paid / Premium</option></select>
+    </div>
+    <div class="asset-provider-grid" id="assetProviders">
+      <article class="asset-provider"><div class="asset-provider-icon">M</div><div class="asset-provider-info"><span class="asset-pill free">FREE LIBRARY</span><h3>Mixkit</h3><p>Stock video, backgrounds, transitions and creator assets. Check each item’s licence before commercial use.</p><a class="asset-open" data-provider="mixkit" href="https://mixkit.co/free-stock-video/" target="_blank" rel="noopener noreferrer">Browse & Download ↗</a></div></article>
+      <article class="asset-provider"><div class="asset-provider-icon">P</div><div class="asset-provider-info"><span class="asset-pill free">FREE LIBRARY</span><h3>Pexels Videos</h3><p>Free video clips and B-roll. Download the selected clip from its official page.</p><a class="asset-open" data-provider="pexels" href="https://www.pexels.com/videos/" target="_blank" rel="noopener noreferrer">Browse & Download ↗</a></div></article>
+      <article class="asset-provider"><div class="asset-provider-icon">PX</div><div class="asset-provider-info"><span class="asset-pill free">FREE LIBRARY</span><h3>Pixabay</h3><p>Videos, backgrounds, effects and sound assets. Check the item details and licence.</p><a class="asset-open" data-provider="pixabay" href="https://pixabay.com/videos/" target="_blank" rel="noopener noreferrer">Browse & Download ↗</a></div></article>
+      <article class="asset-provider"><div class="asset-provider-icon">VFX</div><div class="asset-provider-info"><span class="asset-pill">VFX ASSETS</span><h3>ProductionCrate</h3><p>Special-effects elements, particles, light flares and compositing assets; some downloads require an account or paid plan.</p><a class="asset-open" data-provider="crate" href="https://productioncrate.com/" target="_blank" rel="noopener noreferrer">Explore Effects ↗</a></div></article>
+      <article class="asset-provider"><div class="asset-provider-icon">AE</div><div class="asset-provider-info"><span class="asset-pill premium">PREMIUM</span><h3>Envato Elements</h3><p>Paid library for Premiere Pro templates, transitions, overlays and motion graphics.</p><a class="asset-open" data-provider="envato" href="https://elements.envato.com/video-templates" target="_blank" rel="noopener noreferrer">Explore Premium ↗</a></div></article>
+      <article class="asset-provider"><div class="asset-provider-icon">M+</div><div class="asset-provider-info"><span class="asset-pill premium">FREE + PREMIUM</span><h3>Motion Array</h3><p>Video templates, transitions and motion graphics for editing workflows.</p><a class="asset-open" data-provider="motionarray" href="https://motionarray.com/browse/premiere-pro-templates/" target="_blank" rel="noopener noreferrer">Explore Templates ↗</a></div></article>
+    </div>
+    <p class="assets-disclaimer">Downloads open the official source so you get the real file and its licence—not a fake download or an unlicensed copy. Some providers require sign-in or payment.</p>
+  </div>
+</section>
+<style>
+.assets-panel{border:1px solid var(--line);border-radius:22px;padding:clamp(18px,3vw,32px);background:radial-gradient(ellipse at 100% 0%,#00e9a212,transparent 42%),var(--panel)}
+.assets-searchbar{display:flex;gap:10px}.assets-searchbar input{flex:1;min-width:0;background:#08090d;border:1px solid #ffffff24;border-radius:10px;padding:15px;color:var(--text);font:inherit;outline:none}.assets-searchbar input:focus{border-color:#00e9a2;box-shadow:0 0 0 3px #00e9a21b}
+.assets-chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.assets-chips button{background:#ffffff08;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:11px;cursor:pointer}.assets-chips button:hover{border-color:#00e9a2;color:white}
+.asset-filter-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0}.asset-filter-row label{font-size:11px;color:var(--muted)}.asset-filter-row select{background:#090a0f;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px}
+.asset-provider-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.asset-provider{display:flex;gap:13px;padding:17px;border:1px solid var(--line);border-radius:14px;background:#090a0eaa;min-width:0;transition:transform .2s,border-color .2s}.asset-provider:hover{transform:translateY(-3px);border-color:#00e9a266}.asset-provider-icon{flex:0 0 42px;width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#00e9a214;border:1px solid #00e9a22e;color:#00e9a2;font-weight:800;font-size:12px}.asset-provider-info{min-width:0}.asset-provider h3{font-size:17px;margin:7px 0}.asset-provider p{color:var(--muted);font-size:11px;line-height:1.6;margin-bottom:13px}.asset-pill{font-size:8px;letter-spacing:1px;color:#cbd0da;border:1px solid var(--line);border-radius:99px;padding:4px 7px}.asset-pill.free{color:#00e9a2;border-color:#00e9a244}.asset-pill.premium{color:#ffc56b;border-color:#ffc56b44}.asset-open{display:inline-block;background:#ffffff0b;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:10px;font-weight:700}.asset-open:hover{background:#00e9a2;color:#06120e;border-color:#00e9a2}.assets-disclaimer{margin-top:17px;color:#8b909d;font-size:10px;line-height:1.6}
+@media(max-width:1199px){.assets-panel{width:100%}.asset-provider-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.assets-searchbar{flex-direction:row!important}.asset-filter-row{flex-direction:row!important}}
+</style>
+<script>
+(function(){
+ const input=document.getElementById('assetQuery');
+ const type=document.getElementById('assetType');
+ const price=document.getElementById('assetPrice');
+ if(!input||!type||!price)return;
+ const urls={
+  mixkit:{videos:'https://mixkit.co/free-stock-video/',overlays:'https://mixkit.co/free-stock-video/',templates:'https://mixkit.co/free-premiere-pro-templates/',sound:'https://mixkit.co/free-sound-effects/',images:'https://mixkit.co/free-stock-video/'},
+  pexels:{videos:'https://www.pexels.com/search/videos/',overlays:'https://www.pexels.com/search/videos/',templates:'https://www.pexels.com/search/videos/',sound:'https://www.pexels.com/search/videos/',images:'https://www.pexels.com/search/'},
+  pixabay:{videos:'https://pixabay.com/videos/search/',overlays:'https://pixabay.com/videos/search/',templates:'https://pixabay.com/videos/search/',sound:'https://pixabay.com/sound-effects/search/',images:'https://pixabay.com/images/search/'},
+  crate:{videos:'https://productioncrate.com/search.html?query=',overlays:'https://productioncrate.com/search.html?query=',templates:'https://productioncrate.com/search.html?query=',sound:'https://productioncrate.com/search.html?query=',images:'https://productioncrate.com/search.html?query='},
+  envato:{videos:'https://elements.envato.com/stock-video/',overlays:'https://elements.envato.com/stock-video/',templates:'https://elements.envato.com/video-templates/',sound:'https://elements.envato.com/sound-effects/',images:'https://elements.envato.com/stock-photos/'},
+  motionarray:{videos:'https://motionarray.com/browse/stock-video/',overlays:'https://motionarray.com/browse/stock-video/',templates:'https://motionarray.com/browse/premiere-pro-templates/',sound:'https://motionarray.com/browse/sound-effects/',images:'https://motionarray.com/browse/stock-photos/'}
+ };
+ function buildUrl(provider){
+   const q=input.value.trim();
+   let base=urls[provider][type.value];
+   if(provider==='crate')return base+encodeURIComponent(q||'video effects');
+   if(provider==='pexels')return base+encodeURIComponent(q||'video');
+   if(provider==='pixabay')return base+encodeURIComponent(q||'video');
+   if(provider==='envato')return base+encodeURIComponent(q||'video');
+   if(provider==='motionarray')return base+encodeURIComponent(q||'video');
+   if(provider==='mixkit')return base;
+   return base;
+ }
+ function update(){
+  const q=input.value.trim();
+  document.querySelectorAll('.asset-open').forEach(a=>{
+   const p=a.dataset.provider;
+   a.href=buildUrl(p);
+   a.textContent=q?'Search '+(type.value==='videos'?'Videos':type.value==='overlays'?'Overlays':type.value==='templates'?'Templates':type.value==='sound'?'Sound Effects':'Images')+' ↗':'Browse & Download ↗';
+  });
+  document.querySelectorAll('.asset-provider').forEach(card=>{
+   const p=card.querySelector('[data-provider]').dataset.provider;
+   card.style.display=(price.value==='free'&&['envato','motionarray'].includes(p))||(price.value==='paid'&&['mixkit','pexels','pixabay'].includes(p))?'none':'flex';
+  });
+ }
+ document.getElementById('assetSearchBtn').addEventListener('click',update);
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();update();const first=document.querySelector('.asset-provider:not([style*="display: none"]) .asset-open');if(first)first.focus();}});
+ input.addEventListener('input',update);type.addEventListener('change',update);price.addEventListener('change',update);
+ document.querySelectorAll('[data-asset-query]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.assetQuery;update();}));
+ update();
+})();
+</script>
+
 <section class="content container reveal" id="skills"><div class="dashboard-skills"><div class="dashboard-panel skill-bars"><h2>My <span class="accent">Skills</span></h2><div class="skill-row"><div><span>Video Editing (Premiere Pro)</span><b>95%</b></div><i><span style="width:95%"></span></i></div><div class="skill-row"><div><span>Motion Graphics (After Effects)</span><b>85%</b></div><i><span style="width:85%"></span></i></div><div class="skill-row"><div><span>Color Grading</span><b>80%</b></div><i><span style="width:80%"></span></i></div><div class="skill-row"><div><span>Storytelling</span><b>90%</b></div><i><span style="width:90%"></span></i></div><div class="skill-row"><div><span>Team Collaboration</span><b>85%</b></div><i><span style="width:85%"></span></i></div></div><div class="dashboard-panel software-panel"><h2>Software I Use</h2><div class="software-row"><b class="app-icon pr">Pr</b><span>Premiere Pro</span></div><div class="software-row"><b class="app-icon ae">Ae</b><span>After Effects</span></div><div class="software-row"><b class="app-icon ps">Ps</b><span>Photoshop</span></div><div class="software-row"><b class="app-icon da">Da</b><span>DaVinci Resolve</span></div></div></div></section><section class="content container reveal" id="experience">
 <div class="section-head"><div><div class="section-no">04 / EXPERIENCE</div><h2>THE JOURNEY.</h2></div><p>Professional experience across television editing and broadcast post-production.</p></div>
 <div class="timeline"><div class="job"><div class="date">CURRENT</div><div><h3>Kantipur Television</h3><p>Video Editor · Television news and talk-show workflows</p></div><div class="type">TELEVISION</div></div><div class="job"><div class="date">4 MONTHS</div><div><h3>Global Television HD</h3><p>Video Editor · Television</p></div><div class="type">PREVIOUS ROLE</div></div><div class="job"><div class="date">4 MONTHS</div><div><h3>Janata Television</h3><p>Video Editor · Television</p></div><div class="type">PREVIOUS ROLE</div></div></div>
