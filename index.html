@@ -482,5 +482,40 @@ body { width: 1200px !important; }
 })();
 </script>
 
+
+<style>
+/* MOBILE DESKTOP MODE PATCH 2026-10-29 */
+/* Preserve desktop-width layout on phones; users can pinch-zoom if needed. */
+@media screen and (max-width: 1199px) {
+  html { min-width: 1200px !important; width: 1200px !important; }
+  body { min-width: 1200px !important; width: 1200px !important; max-width: none !important; overflow-x: auto !important; }
+  .container { width: 1100px !important; max-width: none !important; }
+  .nav { width: 1100px !important; left: 600px !important; transform: translateX(-50%) !important; }
+  .navlinks { display: flex !important; }
+  .menu-toggle { display: none !important; }
+  .hero { grid-template-columns: 1.1fr .9fr !important; }
+  .about-grid, .info-grid { grid-template-columns: 1fr 1fr !important; }
+  .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .skills { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+  .gallery-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+  .dashboard-skills { grid-template-columns: 1.2fr .8fr !important; }
+  .contact-row { flex-direction: row !important; align-items: end !important; }
+  .section-head { display: flex !important; }
+  .scroll-note { display: block !important; }
+  .effects-controls { flex-direction: row !important; }
+  .effects-controls input, .effects-controls select { width: auto !important; }
+}
+</style>
+<script>
+(function () {
+  function setDesktopCanvas() {
+    var v = document.querySelector('meta[name="viewport"]');
+    if (v) v.setAttribute('content', 'width=1200, initial-scale=0.32, minimum-scale=0.25, maximum-scale=3, user-scalable=yes');
+  }
+  setDesktopCanvas();
+  window.addEventListener('pageshow', setDesktopCanvas);
+  window.addEventListener('orientationchange', setDesktopCanvas);
+})();
+</script>
 </body>
 </html>
