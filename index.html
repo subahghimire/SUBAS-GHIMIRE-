@@ -75,6 +75,38 @@ h1{font-size:clamp(60px,8.5vw,116px);text-shadow:0 8px 45px #0006}h1 .outline{-w
 ::selection{background:#ff365f55;color:#fff}
 @media(max-width:560px){body{background-attachment:scroll}.nav{backdrop-filter:blur(22px)}.hero{gap:0}.portrait-wrap{margin-top:10px}}
 
+/* EMERALD ELITE — PREMIUM LUXURY REDESIGN */
+:root{--emerald:#10d99a;--emerald-bright:#49ffc0;--emerald-deep:#063d2d;--elite-bg:#050907;--elite-panel:rgba(12,24,19,.76);--elite-line:rgba(73,255,192,.18)}
+html{scroll-behavior:smooth;background:var(--elite-bg)!important}
+body{background:radial-gradient(ellipse at 12% 8%,rgba(0,180,120,.15),transparent 35%),radial-gradient(ellipse at 90% 42%,rgba(18,100,68,.12),transparent 34%),#050907!important;color:#f1fff8!important}
+body:before{background-image:linear-gradient(rgba(73,255,192,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(73,255,192,.025) 1px,transparent 1px)!important;opacity:.45!important}
+header,nav,.navbar,.nav-container{background:rgba(5,12,9,.78)!important;border-color:var(--elite-line)!important;backdrop-filter:blur(22px)!important}
+a{transition:color .25s ease,border-color .25s ease,transform .25s ease}
+a:hover{color:var(--emerald-bright)!important}
+h1,h2,h3{color:#f3fff9!important;letter-spacing:-.035em}
+h1{ text-shadow:0 0 35px rgba(16,217,154,.13)!important}
+button,.btn,.button{border-radius:14px!important}
+button:hover,.btn:hover,.button:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(16,217,154,.16)!important}
+section,.card,.skill-card,.project-card,.effect-card,.contact-card,.glass,.panel{background:linear-gradient(145deg,rgba(15,31,24,.88),rgba(7,15,11,.76))!important;border:1px solid var(--elite-line)!important;box-shadow:0 18px 60px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.025)!important;backdrop-filter:blur(18px)!important;border-radius:22px!important}
+.hero,.hero-section{background:radial-gradient(ellipse at 75% 40%,rgba(16,217,154,.10),transparent 40%)!important}
+.hero p,.subtitle,.muted{color:#a8c8b8!important}
+nav a,.navbar a{color:#d7eee3!important}
+nav a:hover,.navbar a:hover{color:var(--emerald-bright)!important}
+button,.btn,.button,.download-link,.effect-actions a{background:linear-gradient(120deg,#087f59,#12b981)!important;color:#f4fff9!important;border:1px solid rgba(73,255,192,.28)!important}
+input,select,textarea{background:rgba(4,13,9,.85)!important;color:#edfff6!important;border:1px solid rgba(73,255,192,.22)!important;border-radius:12px!important}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--emerald)!important;box-shadow:0 0 0 4px rgba(16,217,154,.09)!important}
+img{border-radius:18px}
+.skill-card:hover,.project-card:hover,.effect-card:hover,.card:hover{border-color:rgba(73,255,192,.48)!important;transform:translateY(-4px);transition:all .25s ease}
+::selection{background:#10d99a;color:#03110b}
+.effect-tag,.badge,.tag{border-color:rgba(73,255,192,.22)!important;color:#7effc9!important}
+footer{border-top:1px solid var(--elite-line)!important;color:#a8c8b8!important}
+@media(max-width:700px){
+  body{background:radial-gradient(ellipse at top,rgba(0,180,120,.13),transparent 45%),#050907!important}
+  section,.card,.skill-card,.project-card,.effect-card,.contact-card,.glass,.panel{border-radius:17px!important}
+  button,.btn,.button,.download-link{min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
