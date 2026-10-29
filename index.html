@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=1200, initial-scale=0.32, minimum-scale=0.25, maximum-scale=3, user-scalable=yes">
 
 <meta name="theme-color" content="#090a0e">
 <meta name="description" content="Subas Ghimire — Video Editor and Visual Editor at Kantipur Television, Kathmandu, Nepal.">
@@ -229,6 +229,41 @@ section.content{scroll-margin-top:90px}.section-head h2{letter-spacing:-.04em}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
+
+/* Keep the desktop layout on mobile screens, as requested */
+@media(max-width:850px){
+ .nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);width:min(1160px,92%);padding:12px 15px 12px 20px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+ .menu-toggle{display:none!important}.navcta{display:inline-flex}
+ .navlinks{display:flex!important;position:static;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;flex-direction:row;align-items:center;gap:clamp(12px,2.4vw,24px);white-space:nowrap}
+ .navlinks a{padding:0;font-size:12px}
+ .hero{min-height:100svh;grid-template-columns:.9fr 1.1fr;align-items:center;padding:100px 0 24px;gap:2vw}
+ .hero-copy{padding-bottom:0}.portrait-wrap{min-height:340px}.portrait{height:360px;width:min(76%,340px)}
+ .about-grid{grid-template-columns:.8fr 1.2fr}.info-grid{grid-template-columns:1fr 1fr}
+ .work-grid{grid-template-columns:repeat(3,1fr)}.work-visual{height:210px}
+ .skills{grid-template-columns:repeat(4,1fr)}.job{grid-template-columns:100px 1fr 100px}.job .type{display:block}
+ .contact-row{flex-direction:row;align-items:end}.section-head{display:flex;justify-content:space-between;align-items:end}
+ .gallery-grid{grid-template-columns:repeat(4,1fr)}.gallery-tile{height:160px}
+}
+@media(max-width:560px){
+ .nav{top:10px;width:94%;padding:10px 12px;border-radius:14px}
+ .brand{gap:8px}.sg-mark{font-size:25px}.brand-copy b{font-size:12px}.brand-copy small{font-size:8px}
+ .navlinks{gap:10px}.navlinks a{font-size:9px}.navcta{font-size:9px;padding:8px}
+ .hero{min-height:0;grid-template-columns:.9fr 1.1fr;padding:100px 0 24px;gap:2vw}
+ .hero h1{font-size:clamp(32px,5.3vw,62px);line-height:1.02}.eyebrow{font-size:12px}.lead{font-size:11px;line-height:1.5}
+ .hero-meta{display:flex;gap:10px;margin-top:16px}.hero-meta div{font-size:8px}.hero-meta strong{font-size:10px}
+ .portrait-wrap{min-height:280px}.portrait{width:78%;height:280px}.float-card{font-size:8px;padding:8px;max-width:110px}
+ .buttons{gap:6px;margin-top:15px}.buttons .btn{padding:8px 9px;font-size:8px;flex:initial}
+ .container{width:92%}section.content{padding:42px 0}
+ .section-head{display:flex;margin-bottom:20px;gap:15px}.section-head h2{font-size:32px}.section-head p{font-size:10px;max-width:45%}
+ .about-grid{grid-template-columns:.8fr 1.2fr;gap:8px}.feature-card{min-height:190px;padding:12px}.feature-card h3{font-size:13px}.feature-card p,.info-card p{font-size:9px}.feature-card .big-number{font-size:34px}
+ .info-grid{grid-template-columns:1fr 1fr;gap:6px}.info-card{padding:10px}.info-card h3{font-size:11px;margin:12px 0 5px}
+ .work-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.work-visual{height:100px}.work-visual b{font-size:35px}.work-visual span{font-size:7px;letter-spacing:1px}.work-body{padding:9px}.work-body h3{font-size:11px}.work-body p{font-size:8px}
+ .skills{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.skill{min-height:105px;padding:9px}.skill h3{font-size:10px;margin-top:14px}
+ .dashboard-skills{grid-template-columns:1.7fr .8fr;gap:8px}.dashboard-panel{padding:10px}.dashboard-panel h2{font-size:14px}.skill-row>div{font-size:8px}.software-row{font-size:8px;gap:5px}.app-icon{width:25px;height:25px;font-size:11px}
+ .job{grid-template-columns:65px 1fr 60px;gap:6px;padding:10px 3px}.job h3{font-size:11px}.job p,.job .date,.job .type{font-size:8px}.job .type{display:block}
+ .gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.gallery-tile{height:88px;padding:6px}.gallery-tile span{font-size:6px;letter-spacing:.2px}
+ .contact-box{padding:18px}.contact-box h2{font-size:32px}.contact-row{flex-direction:row;align-items:end;gap:10px}.email{font-size:10px}.social{font-size:8px;gap:7px}footer{font-size:8px}
+}
 </style>
 </head>
 <body>
