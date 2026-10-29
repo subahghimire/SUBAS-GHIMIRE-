@@ -191,13 +191,52 @@ footer{border-color:#00e9a233;color:#94b9ad;padding:16px 0}.top-link{border-colo
 #portfolioDetailModal .detail-hint{margin-top:20px;padding-top:14px;border-top:1px solid #00e9a233;color:#77b7a4;font-size:11px}
 @media(max-width:560px){#portfolioDetailModal{padding:14px}#portfolioDetailModal .detail-dialog{padding:24px 20px;border-radius:16px}}
 
+
+/* Premium finish: emerald lighting, accessible interactions and mobile navigation */
+html{scroll-padding-top:86px}
+body{background-color:#020a09;background-image:radial-gradient(ellipse at 80% 8%,rgba(0,233,162,.18),transparent 30%),radial-gradient(ellipse at 10% 55%,rgba(0,133,104,.14),transparent 32%),linear-gradient(135deg,rgba(0,8,7,.91),rgba(0,16,13,.86)),url("IMG-20260718-WA0001.jpg");background-size:cover;background-position:center 15%;background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(115deg,transparent 0%,rgba(0,255,183,.035) 48%,transparent 65%);background-size:220% 100%;animation:ambientSweep 18s ease-in-out infinite}
+@keyframes ambientSweep{0%,100%{background-position:100% 0}50%{background-position:0 0}}
+.nav{z-index:1000;backdrop-filter:blur(18px);box-shadow:0 8px 30px #0003}
+.navlinks a{transition:color .2s ease,background .2s ease}.navlinks a:focus-visible,.btn:focus-visible,.navcta:focus-visible,.menu-toggle:focus-visible{outline:2px solid #62ffd1;outline-offset:4px}
+.menu-toggle{display:none;background:rgba(0,24,19,.9);border:1px solid #00e9a255;border-radius:10px;width:42px;height:40px;padding:10px;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.menu-toggle span{height:2px;width:18px;border-radius:4px;background:#dffff5;transition:transform .2s ease,opacity .2s ease}
+.hero{isolation:isolate}.hero:after{content:"";position:absolute;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent,#00e9a2aa,transparent);pointer-events:none}
+.portrait{overflow:hidden;transform:translateZ(0);transition:box-shadow .35s ease,border-color .35s ease}.portrait:hover{box-shadow:0 0 0 1px #00e9a2,0 0 55px #00e9a225;border-color:#00e9a2}
+.portrait img{transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s ease}.portrait:hover img{transform:scale(1.035)}
+.btn{transition:transform .2s ease,box-shadow .2s ease,background .2s ease}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px #00e9a222}
+section.content{scroll-margin-top:90px}.section-head h2{letter-spacing:-.04em}
+.info-card,.feature-card,.dashboard-panel,.job,.gallery-tile,.contact-box{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.info-card:hover,.feature-card:hover,.dashboard-panel:hover,.job:hover{border-color:#00e9a277;box-shadow:0 10px 32px #00e9a20b}
+.gallery-tile{isolation:isolate}.gallery-tile:before{transition:transform .7s ease,opacity .4s ease;z-index:-1}
+.gallery-tile:hover{transform:translateY(-4px);border-color:#00e9a2aa;box-shadow:0 14px 34px #00e9a216}.gallery-tile:hover:before{transform:scale(1.12)}
+#portfolioDetailModal{z-index:2000}#portfolioDetailModal .detail-dialog{animation:detailEnter .22s ease-out}
+@keyframes detailEnter{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:850px){
+ .nav{position:sticky;top:0;left:auto;transform:none;width:100%;padding:10px 4%;display:flex;justify-content:space-between;gap:12px;border-radius:0;border-width:0 0 1px}
+ .menu-toggle{display:flex;order:3;flex-shrink:0}.navcta{display:none}
+ .navlinks{display:none;position:absolute;top:calc(100% + 8px);right:4%;left:4%;padding:10px;background:rgba(0,17,14,.97);border:1px solid #00e9a255;border-radius:15px;box-shadow:0 18px 40px #0008;flex-direction:column;align-items:stretch;gap:2px}
+ .navlinks.open{display:flex}.navlinks a{padding:12px;border-radius:9px}.navlinks a:hover{background:#00e9a214}
+ .hero{grid-template-columns:1fr 1fr;padding-top:40px;min-height:auto}.portrait-wrap{min-height:300px}.portrait{height:300px}
+}
+@media(max-width:560px){
+ body{background-attachment:scroll}.hero{grid-template-columns:1fr;padding:30px 5% 18px;gap:0}
+ .hero-copy{order:1}.portrait-wrap{order:2}.hero h1{font-size:clamp(36px,10vw,52px);line-height:1.05}
+ .hero-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.hero-meta div{font-size:10px}.hero-meta strong{display:block;font-size:11px}
+ .portrait-wrap{min-height:300px}.portrait{width:min(76%,300px);height:290px}.float-card{max-width:145px;right:0;bottom:8%;line-height:1.5}
+ .buttons{flex-wrap:wrap}.buttons .btn{flex:1 1 145px;text-align:center}
+ .gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery-tile{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
 <div class="progress" id="progress"></div><div class="noise"></div><div class="cursor-glow" id="glow"></div>
 <nav class="nav">
 <a class="brand" href="#home" aria-label="Subas home"><span class="sg-mark">SG</span><span class="brand-copy"><b>SUBAS GHIMIRE</b><small>VIDEO EDITOR</small></span></a>
-<div class="navlinks"><a href="#home">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div>
+<button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="siteNavLinks"><span></span><span></span><span></span></button>
+<div class="navlinks" id="siteNavLinks"><a href="#home">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div>
 <a class="navcta" href="cv.html">DOWNLOAD CV ↓</a>
 </nav>
 <main>
@@ -252,19 +291,10 @@ const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=docu
 </script>
 
 <script>
-/* Desktop-style view on mobile, while keeping pinch zoom available. */
+/* Use native responsive sizing on every screen. */
 (function () {
-  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 700;
-  if (!isMobile) return;
   var viewport = document.querySelector('meta[name="viewport"]');
-  if (!viewport) {
-    viewport = document.createElement('meta');
-    viewport.name = 'viewport';
-    document.head.appendChild(viewport);
-  }
-  var desktopWidth = 1200;
-  var scale = Math.min(1, (window.screen && window.screen.width ? window.screen.width : 390) / desktopWidth);
-  viewport.setAttribute('content', 'width=' + desktopWidth + ', initial-scale=' + scale.toFixed(3) + ', minimum-scale=0.25, maximum-scale=3, user-scalable=yes');
+  if (viewport) viewport.setAttribute('content', 'width=device-width, initial-scale=1, viewport-fit=cover');
 })();
 </script>
 
@@ -331,6 +361,24 @@ const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=docu
   closeBtn.addEventListener('click',close);
   modal.addEventListener('click',function(e){if(e.target===modal)close();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))close();});
+})();
+</script>
+
+
+<script>
+(function(){
+ const toggle=document.querySelector('.menu-toggle');
+ const links=document.getElementById('siteNavLinks');
+ if(!toggle||!links)return;
+ toggle.addEventListener('click',function(){
+   const open=links.classList.toggle('open');
+   toggle.setAttribute('aria-expanded',String(open));
+   toggle.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
+ });
+ links.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){
+   links.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open navigation menu');
+ });});
+ document.addEventListener('click',function(e){if(!links.contains(e.target)&&!toggle.contains(e.target)){links.classList.remove('open');toggle.setAttribute('aria-expanded','false');}});
 })();
 </script>
 
