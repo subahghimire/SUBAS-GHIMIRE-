@@ -452,5 +452,35 @@ const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=docu
 })();
 </script>
 
+
+<style>
+/* FORCE DESKTOP CANVAS ON EVERY SCREEN */
+html, body { min-width: 1200px !important; }
+body { width: 1200px !important; }
+.container { width: min(var(--max), 92%) !important; }
+@media (max-width: 1199px) {
+  html, body { min-width: 1200px !important; width: 1200px !important; }
+  .nav { width: min(1160px, 92%) !important; }
+  .hero { grid-template-columns: 1.1fr .9fr !important; }
+  .about-grid { grid-template-columns: 1fr 1fr !important; }
+  .info-grid { grid-template-columns: 1fr 1fr !important; }
+  .work-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .skills { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+  .gallery-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+  .contact-row { flex-direction: row !important; }
+  .section-head { display: flex !important; justify-content: space-between !important; align-items: end !important; }
+}
+</style>
+<script>
+(function(){
+  var v=document.querySelector('meta[name="viewport"]');
+  function desktopViewport(){
+    if(v) v.setAttribute('content','width=1200, initial-scale=0.32, minimum-scale=0.25, maximum-scale=3, user-scalable=yes');
+  }
+  desktopViewport();
+  window.addEventListener('pageshow',desktopViewport);
+})();
+</script>
+
 </body>
 </html>
