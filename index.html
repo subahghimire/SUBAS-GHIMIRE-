@@ -421,8 +421,8 @@ const youtubeForm=document.getElementById('youtubeForm');const youtubeQuery=docu
 <style>
 /* Option 1 only: glowing emerald mouse cursor */
 @media (hover:hover) and (pointer:fine) {
-  body.sg-cursor-ready, body.sg-cursor-ready a, body.sg-cursor-ready button,
-  body.sg-cursor-ready [role="button"] { cursor: none !important; }
+  body.sg-cursor-ready, body.sg-cursor-ready *,
+  body.sg-cursor-ready *::before, body.sg-cursor-ready *::after { cursor: none !important; }
   #sgCursorRing, #sgCursorDot {
     position: fixed; top: 0; left: 0; pointer-events: none; z-index: 20000;
     opacity: 0; transform: translate3d(-100px,-100px,0); will-change: transform;
