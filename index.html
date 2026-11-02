@@ -30,6 +30,39 @@ body.light-mode{--bg:#edf6f0;--panel:#fff;--white:#10251a;--muted:#536b5e;--line
 body.light-mode header{background:#edf6f0ed}body.light-mode .contact{background:radial-gradient(ellipse at 100% 0%,#00a87920,transparent 50%),#fff}body.light-mode .work{background:#fff}body.light-mode .float-tag{background:#fff}
 @media(max-width:800px){.menu-toggle{display:grid}.links{display:none;position:absolute;top:70px;left:0;right:0;padding:18px 22px;background:#08150e;border:1px solid var(--line);border-radius:8px;flex-direction:column;gap:18px;box-shadow:0 18px 45px #0008}.links.open{display:flex}.nav-actions{gap:7px}.nav-cta{padding:10px 11px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* Cinematic motion pass */
+body{--pointer-x:50vw;--pointer-y:35vh}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(430px circle at var(--pointer-x) var(--pointer-y),#00d6a012,transparent 70%);transition:background .12s}
+.hero>div:first-child>*{animation:heroRise .85s both;opacity:0}
+.hero>div:first-child> :nth-child(1){animation-delay:.08s}
+.hero>div:first-child> :nth-child(2){animation-delay:.2s}
+.hero>div:first-child> :nth-child(3){animation-delay:.34s}
+.hero>div:first-child> :nth-child(4){animation-delay:.48s}
+.hero>div:first-child> :nth-child(5){animation-delay:.62s}
+.portrait-area{animation:heroReveal 1.2s .25s both}
+.photo{animation:photoFloat 6s ease-in-out infinite}
+.photo:before{content:"";position:absolute;z-index:4;top:-40%;left:-70%;width:45%;height:190%;transform:rotate(22deg);background:linear-gradient(90deg,transparent,#c5ffe455,transparent);animation:photoSweep 7s 1.5s ease-in-out infinite;pointer-events:none}
+.hero h1 em{background:linear-gradient(100deg,#a4ffdc 10%,#fff 45%,#00d6a0 75%);background-size:220% auto;background-clip:text;-webkit-background-clip:text;color:transparent;animation:shine 5s linear infinite}
+.strip{overflow:hidden;position:relative}
+.strip span,.strip b{animation:stripPulse 4s ease-in-out infinite}
+.strip span:nth-of-type(2){animation-delay:.5s}.strip span:nth-of-type(3){animation-delay:1s}
+.work{transform-style:preserve-3d}.work:hover{box-shadow:0 18px 45px #0005,0 0 24px #00d6a018}
+.work:hover .work-art:before{transform:scale(1.18) rotate(18deg);transition:transform .6s}
+.work-art:before{transition:transform .6s}
+.btn,.nav-cta{position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s,background .25s}
+.btn:after,.nav-cta:after{content:"";position:absolute;top:-80%;left:-50%;width:35%;height:260%;transform:rotate(25deg);background:#fff5;transition:left .6s}
+.btn:hover:after,.nav-cta:hover:after{left:130%}
+.btn:hover,.nav-cta:hover{transform:translateY(-3px);box-shadow:0 10px 28px #00d6a02b}
+@keyframes heroRise{from{opacity:0;transform:translateY(28px);filter:blur(5px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes heroReveal{from{opacity:0;transform:translateX(35px) scale(.96);filter:blur(8px)}to{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
+@keyframes photoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes photoSweep{0%,65%{left:-70%;opacity:0}75%{opacity:1}100%{left:140%;opacity:0}}
+@keyframes shine{to{background-position:220% center}}
+@keyframes stripPulse{0%,100%{opacity:.7}50%{opacity:1}}
+@media(max-width:800px){body:before{display:none}.hero>div:first-child>*{animation-duration:.65s}.photo{animation-duration:7s}}
+@media(prefers-reduced-motion:reduce){.hero>div:first-child>*,.portrait-area,.photo,.photo:before,.hero h1 em,.strip span,.strip b{animation:none!important;opacity:1!important;filter:none!important}body:before{display:none}}
+
 </style>
 </head>
 <body>
@@ -54,5 +87,13 @@ links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.cla
 document.getElementById('themeToggle').addEventListener('click',e=>{document.body.classList.toggle('light-mode');e.currentTarget.textContent=document.body.classList.contains('light-mode')?'☾':'☼';});
 const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}}),{threshold:.12});
 document.querySelectorAll('section.block,.work,.tool,.job,.stats').forEach(el=>{el.classList.add('reveal');revealObserver.observe(el);});
+
+if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+ addEventListener('pointermove',e=>{
+  document.body.style.setProperty('--pointer-x',e.clientX+'px');
+  document.body.style.setProperty('--pointer-y',e.clientY+'px');
+ },{passive:true});
+}
+
 </script>
 </body></html>
