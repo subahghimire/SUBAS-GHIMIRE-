@@ -129,6 +129,102 @@ body.light-mode .float-tag{background:#fff;color:#6b21a8}
 @media(max-width:800px){.links{background:#100a1b;border-color:#a855f744}}
 @media(prefers-reduced-motion:reduce){.hero h1 em{animation:none}}
 
+
+/* Mobile layout: preserve the desktop composition while scaling to the screen */
+@media(max-width:800px){
+  .hero{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:center;gap:14px;padding-top:58px}
+  .hero h1{font-size:clamp(38px,7.2vw,58px);letter-spacing:-2.5px;line-height:.98}
+  .lead{font-size:12px;line-height:1.6}
+  .actions{gap:7px;flex-wrap:wrap}
+  .btn{font-size:8px;padding:12px 11px}
+  .meta{font-size:7px;gap:8px}
+  .portrait-area{min-height:300px}
+  .photo{width:82%;height:270px}
+  .orbit{width:100%}
+  .float-tag{right:-4px;font-size:8px}
+  .about-grid,.tools-grid{grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  .about-grid h2,.tools-grid h2{font-size:clamp(30px,5vw,44px);line-height:1.05}
+  .about-copy p,.tools-grid>div>p{font-size:11px;line-height:1.65}
+  .work-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .work-art{height:130px}
+  .work-text{padding:12px}
+  .work-text h3{font-size:15px}
+  .work-text p{font-size:10px;line-height:1.5}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .job{grid-template-columns:78px minmax(0,1fr);gap:10px}
+  .job span{display:none}
+  .contact-row{align-items:center;flex-direction:row;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .contact h2{font-size:clamp(38px,7vw,54px)}
+}
+@media(max-width:540px){
+  .wrap{width:calc(100% - 28px)}
+  header{height:66px}
+  .brand{font-size:10px;gap:7px}
+  .brand small{font-size:6px;letter-spacing:1px}
+  .mark{width:32px;height:32px}
+  .nav-actions{gap:5px}
+  .icon-btn{width:32px;height:32px;font-size:14px}
+  .nav-cta{font-size:7px;padding:9px 8px}
+  .links{top:66px}
+  .hero{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:7px;padding-top:48px}
+  .hero h1{font-size:clamp(33px,9vw,43px);letter-spacing:-2px}
+  .eyebrow{font-size:7px;letter-spacing:1px}
+  .lead{font-size:10px;line-height:1.5}
+  .actions{gap:5px}
+  .btn{font-size:7px;padding:10px 8px;letter-spacing:.3px}
+  .meta{font-size:6px;gap:6px}
+  .portrait-area{min-height:230px}
+  .photo{width:88%;height:205px}
+  .photo-label strong{font-size:9px}
+  .photo-label small{font-size:6px}
+  .float-tag{font-size:6px;padding:7px}
+  .strip{font-size:7px;gap:10px}
+  .strip span:nth-of-type(n+3){display:inline}
+  .block{padding:56px 0!important}
+  .section-top span{font-size:7px}
+  .section-top span:last-child{font-size:6px}
+  .about-grid,.tools-grid{grid-template-columns:1fr 1fr;gap:12px;padding-top:28px}
+  .about-grid h2,.tools-grid h2{font-size:clamp(26px,7vw,34px)}
+  .about-copy p,.tools-grid>div>p{font-size:9px;line-height:1.55}
+  .about-copy .btn{font-size:6px;padding:9px 7px}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+  .stats div{padding:12px 6px}
+  .stats strong{font-size:11px}
+  .stats span{font-size:6px;line-height:1.4}
+  .work-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .work-art{height:95px}
+  .work-art b{font-size:24px}
+  .work-text{padding:9px}
+  .work-text small{font-size:6px}
+  .work-text h3{font-size:12px}
+  .work-text p{font-size:8px;line-height:1.45}
+  .note{font-size:8px}
+  .tool-list{min-width:0}
+  .tool{gap:7px;padding:10px 0}
+  .app{width:28px;height:28px;font-size:10px}
+  .tool h3{font-size:10px}
+  .tool p{font-size:7px;line-height:1.4}
+  .tool>small{font-size:6px}
+  .job{grid-template-columns:55px minmax(0,1fr);gap:8px;padding:14px 0}
+  .job time{font-size:7px}
+  .job h3{font-size:12px}
+  .job p{font-size:8px;line-height:1.4}
+  .contact{padding:22px 15px}
+  .contact h2{font-size:40px}
+  .email{font-size:10px}
+  .social{font-size:8px;gap:8px}
+  .contact-info{font-size:8px;gap:10px;flex-wrap:wrap}
+  footer{font-size:7px;gap:8px}
+  .premiere-float{right:8px;bottom:8px}
+}
+@media(max-width:360px){
+  .hero h1{font-size:31px}
+  .hero .btn{font-size:6px;padding:9px 6px}
+  .photo{height:185px}
+  .portrait-area{min-height:210px}
+  .work-text h3{font-size:11px}
+}
+
 </style>
 </head>
 <body>
