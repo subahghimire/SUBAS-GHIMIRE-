@@ -86,12 +86,55 @@ body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 @keyframes premiereBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @media(max-width:540px){.premiere-float{right:12px;bottom:12px;padding:8px;border-radius:12px;gap:8px}.premiere-logo{width:38px;height:38px}.premiere-copy strong{font-size:10px}.premiere-copy small{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.premiere-float{animation:none}}
+
+/* Cinematic Dark — purple neon portfolio direction */
+:root{--bg:#080611;--panel:#110d1c;--line:rgba(184,133,255,.22);--green:#a855f7;--mint:#d8b4fe;--white:#f8f4ff;--muted:#b3a8c2;--max:1160px}
+body{background:radial-gradient(ellipse at 78% 18%,#7627c52b,transparent 38%),radial-gradient(ellipse at 10% 62%,#32105c2a,transparent 40%),#080611}
+header{background:#080611eF;border-bottom-color:#a855f733}
+.mark{border-color:#a855f7;color:#e9d5ff}
+.links a:hover,.social a:hover{color:#e9d5ff}
+.nav-cta,.btn{border-color:#a855f7}
+.nav-cta,.btn.primary{background:linear-gradient(120deg,#7c3aed,#c026d3);color:#fff}
+.btn.secondary{border-color:#74518f;color:#f8f4ff}
+.eyebrow,.kicker,.photo-label small,.tool small,.job time{color:#d8b4fe}
+.dot{background:#c084fc;box-shadow:0 0 14px #c084fc}
+.hero h1 em,h2 em{color:#d8b4fe}
+.hero h1 em{background:linear-gradient(100deg,#e9d5ff 10%,#a855f7 48%,#f0abfc 78%);background-size:220% auto;background-clip:text;-webkit-background-clip:text;color:transparent}
+.orbit{border-color:#a855f755}.orbit:before,.orbit:after{border-color:#a855f733}
+.photo{border-color:#c084fc88;box-shadow:0 25px 90px #000b,0 0 55px #9333ea35}
+.photo:after{background:linear-gradient(transparent,#080611f5)}
+.float-tag{background:#171027;border-color:#a855f755;color:#e9d5ff}
+.strip{border-color:#a855f733;color:#ded3ed}.strip b{color:#c084fc}
+.section-top{border-color:#a855f733}
+.stats{border-color:#a855f733}.stats div{border-color:#a855f733}.stats strong{color:#d8b4fe}
+.work{border-color:#a855f733;background:linear-gradient(145deg,#171027,#0d0916)}
+.work:hover{border-color:#c084fcaa;box-shadow:0 18px 45px #0008,0 0 28px #9333ea20}
+.work-art{background:radial-gradient(ellipse,#9333ea35,transparent 62%)}
+.work-art:before{border-color:#c084fc66;box-shadow:0 0 0 20px #9333ea12,0 0 0 42px #9333ea0a}
+.work-art b{color:#d8b4fe66}
+.work-text small{color:#d8b4fe}
+.tool-list{border-color:#a855f733}.tool{border-color:#a855f733}
+.app{border-color:#a855f777;background:#1b1230;color:#e9d5ff}
+.timeline{border-color:#a855f733}.job{border-color:#a855f733}
+.contact{background:radial-gradient(ellipse at 100% 0%,#9333ea35,transparent 52%),#130d20;border-color:#a855f744}
+.contact-info a{color:#f8f4ff}
+footer{border-color:#a855f733}
+.icon-btn{border-color:#a855f744;background:#160f23;color:#e9d5ff}
+.icon-btn:hover{background:#a855f7;color:#fff}
+body.light-mode{--bg:#f7f1ff;--panel:#fff;--white:#21142e;--muted:#6d5d7c;--line:rgba(112,48,160,.2);background:radial-gradient(ellipse at 75% 10%,#a855f71c,transparent 38%),#f7f1ff;color:var(--white)}
+body.light-mode header{background:#f7f1ffed}
+body.light-mode .contact{background:radial-gradient(ellipse at 100% 0%,#a855f722,transparent 50%),#fff}
+body.light-mode .work{background:#fff}
+body.light-mode .float-tag{background:#fff;color:#6b21a8}
+@media(max-width:800px){.links{background:#100a1b;border-color:#a855f744}}
+@media(prefers-reduced-motion:reduce){.hero h1 em{animation:none}}
+
 </style>
 </head>
 <body>
 <div class="scroll-progress" id="scrollProgress"></div><header><nav class="nav wrap"><a class="brand" href="#home"><span class="mark">SG</span><span>SUBAS GHIMIRE<small>VIDEO EDITOR / VISUAL EDITOR</small></span></a><div class="links" id="siteLinks"><a href="#about">About</a><a href="#work">Work</a><a href="#tools">Tools</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div><div class="nav-actions"><button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle light theme">☼</button><button class="icon-btn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button><a class="nav-cta" href="https://mail.google.com/mail/?view=cm&fs=1&to=ghimiresubas347%40gmail.com">LET'S TALK ↗</a></div></nav></header>
 <main>
-<section class="hero wrap" id="home"><div><div class="eyebrow"><i class="dot"></i> VIDEO EDITOR · VISUAL STORYTELLER</div><h1>Every frame<br>has a <em>purpose.</em></h1><p class="lead">I shape stories through thoughtful editing, strong visuals and a sharp sense of timing.</p><div class="actions"><a class="btn primary" href="#work">EXPLORE MY WORK ↘</a><a class="btn secondary" href="#about">MORE ABOUT ME ↗</a></div><div class="meta"><span>BASED IN NEPAL</span><span>NEWS · TALK SHOWS · POST-PRODUCTION</span></div></div><div class="portrait-area"><div class="orbit"></div><div class="photo"><img src="IMG-20260718-WA0001.jpg" alt="Subas Ghimire" onerror="this.onerror=null;this.src='SUBASH_GHIMIRE_13407010099907_profile_pic.jpg'"><div class="photo-label"><small>VISUAL EDITOR</small><strong>SUBAS GHIMIRE</strong></div></div><div class="float-tag"><i class="dot"></i> EDITING IN PROGRESS</div></div></section>
+<section class="hero wrap" id="home"><div><div class="eyebrow"><i class="dot"></i> VIDEO EDITOR · VISUAL STORYTELLER</div><h1>Hi, I’m<br>Subas <em>Ghimire.</em></h1><p class="lead">Video Editor · Visual Storyteller<br>I turn ideas into engaging stories through thoughtful editing, strong visuals and precise timing.</p><div class="actions"><a class="btn primary" href="#work">EXPLORE MY WORK ↘</a><a class="btn secondary" href="#about">MORE ABOUT ME ↗</a></div><div class="meta"><span>BASED IN NEPAL</span><span>NEWS · TALK SHOWS · POST-PRODUCTION</span></div></div><div class="portrait-area"><div class="orbit"></div><div class="photo"><img src="IMG-20260718-WA0001.jpg" alt="Subas Ghimire" onerror="this.onerror=null;this.src='SUBASH_GHIMIRE_13407010099907_profile_pic.jpg'"><div class="photo-label"><small>VISUAL EDITOR</small><strong>SUBAS GHIMIRE</strong></div></div><div class="float-tag"><i class="dot"></i> EDITING IN PROGRESS</div></div></section>
 <div class="strip"><span>STORY FIRST</span><b>✳</b><span>DETAIL MATTERS</span><b>✳</b><span>EVERY FRAME COUNTS</span><b>✳</b></div>
 <section class="block wrap" id="about"><div class="section-top"><span class="kicker">01 / ABOUT</span><span>THE EDITOR BEHIND THE FRAME</span></div><div class="about-grid"><h2>Editing is where<br>the story finds<br><em>its rhythm.</em></h2><div class="about-copy"><p class="large">I’m Subas Ghimire, a Video Editor / Visual Editor at <strong>Kantipur Television</strong>.</p><p>I work across news and talk-show formats, bringing together footage, sound, graphics and timing to make each story clear and engaging. I’m always exploring better workflows and new post-production techniques.</p><a class="btn secondary" href="https://mail.google.com/mail/?view=cm&fs=1&to=ghimiresubas347%40gmail.com">START A CONVERSATION ↗</a></div></div><div class="stats"><div><strong>NEWS</strong><span>FAST-PACED STORYTELLING</span></div><div><strong>STUDIO</strong><span>TALK SHOW FORMATS</span></div><div><strong>VISUALS</strong><span>POST-PRODUCTION DETAIL</span></div></div></section>
 <section class="block wrap" id="work"><div class="section-top"><span class="kicker">02 / SELECTED WORK</span><span>FORMATS & DISCIPLINES</span></div><div class="work-grid"><article class="work"><div class="work-art"><b>01</b></div><div class="work-text"><small>BROADCAST EDITING</small><h3>News Packages</h3><p>Clear, accurate and engaging visual storytelling for news.</p></div></article><article class="work"><div class="work-art"><b>02</b></div><div class="work-text"><small>STUDIO & PROGRAMME</small><h3>Talk Shows</h3><p>Thoughtful pacing, clean cuts and a consistent programme look.</p></div></article><article class="work"><div class="work-art"><b>03</b></div><div class="work-text"><small>POST-PRODUCTION</small><h3>Motion & Graphics</h3><p>Titles, visual elements and supporting graphics for the screen.</p></div></article></div><p class="note">Work categories are shown here. Individual project videos and a showreel can be added when supplied.</p></section>
