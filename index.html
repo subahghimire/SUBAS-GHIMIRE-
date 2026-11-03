@@ -77,6 +77,15 @@ body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
   .reveal{opacity:1;transform:none;transition:none}
 }
 
+
+/* Floating Adobe Premiere Pro badge */
+.premiere-float{position:fixed;right:22px;bottom:22px;z-index:90;display:flex;align-items:center;gap:11px;padding:10px 15px 10px 10px;border:1px solid #a78bfa88;border-radius:14px;background:linear-gradient(135deg,#17132dF2,#25164aF2);box-shadow:0 12px 34px #0007,0 0 24px #8b5cf633;color:#f4efff;backdrop-filter:blur(12px);animation:premiereBob 4s ease-in-out infinite;transition:transform .25s,box-shadow .25s}
+.premiere-float:hover{transform:translateY(-5px) scale(1.025);box-shadow:0 16px 38px #0008,0 0 30px #a78bfa66}
+.premiere-logo{width:42px;height:42px;display:grid;place-items:center;border:1.5px solid #b79aff;border-radius:9px;color:#d7c5ff;font:700 19px "Space Grotesk";background:linear-gradient(145deg,#30205d,#17132d);box-shadow:inset 0 0 14px #a78bfa22}
+.premiere-copy{display:flex;flex-direction:column;gap:3px}.premiere-copy strong{font:600 11px "Space Grotesk";letter-spacing:.2px}.premiere-copy small{font-size:8px;letter-spacing:1.2px;color:#c4b5fd}
+@keyframes premiereBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(max-width:540px){.premiere-float{right:12px;bottom:12px;padding:8px;border-radius:12px;gap:8px}.premiere-logo{width:38px;height:38px}.premiere-copy strong{font-size:10px}.premiere-copy small{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.premiere-float{animation:none}}
 </style>
 </head>
 <body>
@@ -90,6 +99,7 @@ body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 <section class="block wrap" id="experience"><div class="section-top"><span class="kicker">04 / EXPERIENCE</span><span>TELEVISION & POST-PRODUCTION</span></div><div class="timeline"><div class="job"><time>CURRENT</time><div><h3>Kantipur Television</h3><p>Video Editor · Television news and talk-show workflows</p></div><span>TELEVISION</span></div><div class="job"><time>4 MONTHS</time><div><h3>Global Television HD</h3><p>Video Editor · Television</p></div><span>PREVIOUS ROLE</span></div><div class="job"><time>4 MONTHS</time><div><h3>Janata Television</h3><p>Video Editor · Television</p></div><span>PREVIOUS ROLE</span></div></div></section>
 <section class="block wrap" id="contact"><div class="section-top"><span class="kicker">05 / CONTACT</span><span>HAVE A STORY TO TELL?</span></div><div class="contact"><div class="kicker">LET'S CREATE SOMETHING MEANINGFUL</div><h2>Have a project<br>in <em>mind?</em></h2><a class="btn primary" href="mailto:ghimiresubas347@gmail.com">GET IN TOUCH ↗</a><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com</a><div class="social"><a href="https://www.facebook.com/subas.ghimire.164384" target="_blank" rel="noopener">Facebook ↗</a><a href="https://www.instagram.com/subas_ghimire__" target="_blank" rel="noopener">Instagram ↗</a></div></div><div class="contact-info"><span>CALL: <a href="tel:+9779766454587">9766454587</a></span><span>CALL: <a href="tel:+9779839158728">9839158728</a></span><span>LOCATION: NEPAL</span></div></div></section>
 </main><footer class="wrap"><span>© <span id="year"></span> SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR · MADE WITH PURPOSE</span><a href="#home">BACK TO TOP ↑</a></footer>
+<a class="premiere-float" href="https://www.adobe.com/products/premiere.html" target="_blank" rel="noopener noreferrer" aria-label="Adobe Premiere Pro — learn more"><span class="premiere-logo">Pr</span><span class="premiere-copy"><strong>Adobe Premiere Pro</strong><small>VIDEO EDITING</small></span></a>
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
 const progress=document.getElementById('scrollProgress');
