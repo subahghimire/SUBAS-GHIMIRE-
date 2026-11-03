@@ -63,6 +63,20 @@ body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 @media(max-width:800px){body:before{display:none}.hero>div:first-child>*{animation-duration:.65s}.photo{animation-duration:7s}}
 @media(prefers-reduced-motion:reduce){.hero>div:first-child>*,.portrait-area,.photo,.photo:before,.hero h1 em,.strip span,.strip b{animation:none!important;opacity:1!important;filter:none!important}body:before{display:none}}
 
+
+/* Subtle motion refinement */
+.orbit{animation-duration:60s}
+.photo{animation-duration:8s}
+.reveal{transform:translateY(14px);transition:opacity .65s ease,transform .65s ease}
+.work:hover{transform:translateY(-3px)}
+.btn:hover,.nav-cta:hover{transform:translateY(-2px)}
+.hero>div:first-child>*{animation-duration:.7s}
+.portrait-area{animation-duration:.85s}
+@media(prefers-reduced-motion:reduce){
+  .orbit,.photo,.hero>div:first-child>*,.portrait-area,.hero h1 em,.strip span,.strip b{animation:none!important}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+
 </style>
 </head>
 <body>
