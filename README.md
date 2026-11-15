@@ -50,11 +50,22 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 
 | Route | What it is |
 | --- | --- |
-| `/` | Main portfolio — hero, about, work, tools, experience, contact |
+| `/` | Main portfolio — hero, about, work, services, tools, experience, FAQ, contact |
 | `/about.html` | About — the editor behind the frame: story, approach, career path, toolkit |
 | `/subas-ghimire.html` | Nepali-language variant (`lang="ne"`, Mukta + Bricolage Grotesque) |
 | `/cv.html` | Printable CV page with direct PDF download |
+| `/thanks.html` | Contact-form confirmation (noindex, 12 s redirect home) |
 | `/effects.html` | Legacy redirect → `/` (effects hub retired) |
+| `/CV/Subas_Ghimire_CV.html` | Old CV page — 301 to `/cv.html` |
+
+## SEO
+
+- Unique title + description per page, keyword-led (`video editor Nepal`, `Kathmandu`)
+- JSON-LD `@graph`: `Person`, `WebSite`, `FAQPage` (home), `AboutPage` / `ProfilePage` + `BreadcrumbList` (subpages)
+- FAQ section on the home page mirrors the `FAQPage` markup word for word
+- `hreflang` en / ne / x-default, `rel="me"` on social links, image entry in the sitemap
+- 301s for `/index.html`, the retired effects hub and the old CV page
+- Hero ships WebP with a JPEG fallback, preloaded for LCP
 
 ## Features
 
