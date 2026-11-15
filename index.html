@@ -16,6 +16,10 @@
 <meta property="og:description" content="Video editor and visual editor at Kantipur Television, Nepal. Editing, visual storytelling and post-production work.">
 <meta property="og:image" content="https://subas-ghimire.vercel.app/SUBASH_GHIMIRE_13407010099907_profile_pic.jpg">
 <meta property="og:image:alt" content="Subas Ghimire — video editor">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="960">
+<meta property="og:image:height" content="1280">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Subas Ghimire | Video Editor &amp; Visual Editor">
 <meta name="twitter:description" content="Video editor and visual editor at Kantipur Television, Nepal. Editing, visual storytelling and post-production work.">
@@ -281,6 +285,12 @@ header:after{content:"";position:absolute;bottom:-1px;left:0;width:100%;height:1
 .aftereffects-icon{background:linear-gradient(145deg,#20154b,#101020)!important}
 .photoshop-icon{background:linear-gradient(145deg,#082d50,#071827)!important;border-color:#31a8ff88!important}
 @media(max-width:540px){.app.adobe-icon{padding:5px;border-radius:7px}.app.adobe-icon.app-mark{font-size:13px}}
+
+/* Accessibility layer */
+.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--green);color:#04120c;padding:13px 20px;font-size:11px;font-weight:700;letter-spacing:1.2px;border-radius:0 0 6px 0}
+.skip-link:focus{left:0;top:0}
+a:focus-visible,button:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:4px}
+.links a:focus-visible{outline-offset:6px}
 </style>
 <script type="application/ld+json">
 {
@@ -303,7 +313,9 @@ header:after{content:"";position:absolute;bottom:-1px;left:0;width:100%;height:1
 </script>
 </head>
 <body>
-<div class="scroll-progress" id="scrollProgress"></div><header><nav class="nav wrap"><a class="brand" href="#home"><span class="mark">SG</span><span>SUBAS GHIMIRE<small>VIDEO EDITOR / VISUAL EDITOR</small></span></a><div class="links" id="siteLinks"><a href="#about">About</a><a href="#work">Work</a><a href="#tools">Tools</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div><div class="nav-actions"><button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle light theme">☼</button><button class="icon-btn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button><a class="nav-cta" href="https://mail.google.com/mail/?view=cm&fs=1&to=ghimiresubas347%40gmail.com">LET'S TALK ↗</a></div></nav></header>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||(!t&&matchMedia("(prefers-color-scheme: light)").matches)){document.body.classList.add("light-mode")}}catch(e){}</script>
+<a class="skip-link" href="#home">Skip to content</a>
+<div class="scroll-progress" id="scrollProgress"></div><header><nav class="nav wrap"><a class="brand" href="#home"><span class="mark">SG</span><span>SUBAS GHIMIRE<small>VIDEO EDITOR / VISUAL EDITOR</small></span></a><div class="links" id="siteLinks"><a href="#about">About</a><a href="#work">Work</a><a href="#tools">Tools</a><a href="#experience">Experience</a><a href="#contact">Contact</a></div><div class="nav-actions"><button class="icon-btn theme-toggle" id="themeToggle" aria-label="Switch to light theme" aria-pressed="false">☼</button><button class="icon-btn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="siteLinks">☰</button><a class="nav-cta" href="https://mail.google.com/mail/?view=cm&fs=1&to=ghimiresubas347%40gmail.com">LET'S TALK ↗</a></div></nav></header>
 <main>
 <section class="hero wrap" id="home"><div><div class="eyebrow"><i class="dot"></i> VIDEO EDITOR · VISUAL STORYTELLER</div><h1>Hi, I’m<br>Subas <em>Ghimire.</em></h1><p class="lead">Video Editor · Visual Storyteller<br>I turn ideas into engaging stories through thoughtful editing, strong visuals and precise timing.</p><div class="actions"><a class="btn primary" href="#work">EXPLORE MY WORK ↘</a><a class="btn secondary" href="#about">MORE ABOUT ME ↗</a></div><div class="meta"><span>BASED IN NEPAL</span><span>NEWS · TALK SHOWS · POST-PRODUCTION</span></div></div><div class="portrait-area"><div class="orbit"></div><div class="photo"><img src="IMG-20260718-WA0001.jpg" alt="Subas Ghimire" width="1600" height="1066" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='SUBASH_GHIMIRE_13407010099907_profile_pic.jpg'"><div class="photo-label"><small>VISUAL EDITOR</small><strong>SUBAS GHIMIRE</strong></div></div><div class="float-tag"><i class="dot"></i> EDITING IN PROGRESS</div></div></section>
 <div class="strip"><span>STORY FIRST</span><b>✳</b><span>DETAIL MATTERS</span><b>✳</b><span>EVERY FRAME COUNTS</span><b>✳</b></div>
@@ -322,7 +334,13 @@ addEventListener('scroll',updateProgress,{passive:true});updateProgress();
 const menu=document.getElementById('menuToggle'),links=document.getElementById('siteLinks');
 menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'×':'☰';});
 links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';}));
-document.getElementById('themeToggle').addEventListener('click',e=>{document.body.classList.toggle('light-mode');e.currentTarget.textContent=document.body.classList.contains('light-mode')?'☾':'☼';});
+const closeMenu=()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';};
+document.addEventListener('click',e=>{if(links.classList.contains('open')&&!links.contains(e.target)&&!menu.contains(e.target))closeMenu();});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&links.classList.contains('open')){closeMenu();menu.focus();}});
+const themeBtn=document.getElementById('themeToggle'),themeMeta=document.querySelector('meta[name="theme-color"]');
+const syncTheme=persist=>{const light=document.body.classList.contains('light-mode');themeBtn.textContent=light?'☾':'☼';themeBtn.setAttribute('aria-pressed',String(light));themeBtn.setAttribute('aria-label',light?'Switch to dark theme':'Switch to light theme');if(themeMeta)themeMeta.setAttribute('content',light?'#edf6f0':'#06100d');if(persist){try{localStorage.setItem('theme',light?'light':'dark')}catch(e){}}};
+syncTheme(false);
+themeBtn.addEventListener('click',()=>{document.body.classList.toggle('light-mode');syncTheme(true);});
 const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}}),{threshold:.12});
 document.querySelectorAll('section.block,.work,.tool,.job,.stats').forEach(el=>{el.classList.add('reveal');revealObserver.observe(el);});
 
