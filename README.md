@@ -31,6 +31,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 | Route | What it is |
 | --- | --- |
 | `/` | Main portfolio — hero, about, work, tools, experience, contact |
+| `/about.html` | About — the editor behind the frame: story, approach, career path, toolkit |
 | `/subas-ghimire.html` | Nepali-language variant (`lang="ne"`, Mukta + Bricolage Grotesque) |
 | `/cv.html` | Printable CV page with direct PDF download |
 | `/effects.html` | Legacy redirect → `/` (effects hub retired) |
@@ -60,6 +61,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 ```
 .
 ├── index.html                  # main portfolio (single file, inlined CSS)
+├── about.html                  # dedicated About page (story, approach, path, toolkit)
 ├── subas-ghimire.html          # Nepali-language variant
 ├── cv.html                     # printable CV
 ├── api/
