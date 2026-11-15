@@ -24,7 +24,8 @@ small{display:block;margin-top:34px;color:#5d7a6c;font-size:10px;letter-spacing:
 <main>
   <p class="big">404</p>
   <p>This frame got cut from the timeline. The page you are looking for does not exist — or it was moved during an edit.</p>
-  <a href="/">← Back to the portfolio</a>
+  <a href="/" id="homeLink">← Back to the portfolio</a>
+  <script>if(location.pathname.indexOf("/SUBAS-GHIMIRE-/")===0)document.getElementById("homeLink").href="/SUBAS-GHIMIRE-/";</script>
   <small>Subas Ghimire · Video Editor</small>
 </main>
 </body>
