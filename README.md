@@ -18,6 +18,25 @@ Personal portfolio of **Subas Ghimire** — video editor and visual editor at Ka
 
 ---
 
+## Members area
+
+`/members.html` is the login screen; `/members` is the room itself, rendered by the
+`api/members.js` serverless function. It is a **single shared access code**, not per-user
+accounts: hand the code to a client and they are in until the code changes.
+
+Set two environment variables in the Vercel project (Settings → Environment Variables):
+
+| Name | Value |
+| --- | --- |
+| `MEMBERS_CODE` | the code you give to clients (change it to revoke access) |
+| `MEMBERS_SECRET` | any long random string — signs the session cookie |
+
+The session is an HttpOnly, Secure, SameSite=Lax cookie valid for 30 days; `/api/logout`
+clears it. Both routes send `X-Robots-Tag: noindex`, are blocked in `robots.txt`, and are
+left out of the sitemap.
+
+Changing `MEMBERS_CODE` logs everyone out on their next visit.
+
 ## Contact form
 
 The home page form posts to [FormSubmit](https://formsubmit.co) and needs no backend or API key.
