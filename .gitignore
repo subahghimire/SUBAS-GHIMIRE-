@@ -1,0 +1,16 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+
+# Vercel
+.vercel
+
+# Node (only used if a local dev server is added)
+node_modules
+npm-debug.log*
+
+# Local env
+.env
+.env.local
