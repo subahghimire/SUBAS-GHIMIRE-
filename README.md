@@ -25,6 +25,7 @@ The home page form posts to [FormSubmit](https://formsubmit.co) and needs no bac
 - First submission sends a one-time activation email to `ghimiresubas347@gmail.com` — click it once, then every later message is delivered.
 - Success redirects to `thanks.html`; the `_honey` field is a spam honeypot.
 - Spam guard is `_captcha=false` plus the honeypot, so keep the honeypot field hidden.
+- `_autoresponse` sends the submitter an instant confirmation (Nepali + English) with the phone number.
 
 ## Custom domain
 
