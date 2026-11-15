@@ -18,6 +18,18 @@ Personal portfolio of **Subas Ghimire** — video editor and visual editor at Ka
 
 ---
 
+## Custom domain
+
+`scripts/set-domain.sh <domain>` rewrites every absolute URL (canonical, og/twitter,
+JSON-LD, sitemap, robots, README) in one pass:
+
+```bash
+./scripts/set-domain.sh subasghimire.com.np
+```
+
+Then add the domain in Vercel and point the registrar's nameservers at
+`ns1.vercel-dns.com` / `ns2.vercel-dns.com`. The script prints the full checklist.
+
 ## About
 
 A single-page portfolio built to feel like a title sequence: dark cinematic palette, mint-green accents,
@@ -71,6 +83,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 ├── effects/                    # LUTs, overlays, transitions, motion assets
 ├── CV/                         # CV in PDF + HTML
 ├── robots.txt · sitemap.xml    # SEO
+├── scripts/set-domain.sh       # repoint every absolute URL at a new domain
 └── .github/workflows/          # maintenance workflow
 ```
 
