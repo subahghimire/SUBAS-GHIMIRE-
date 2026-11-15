@@ -18,6 +18,14 @@ Personal portfolio of **Subas Ghimire** — video editor and visual editor at Ka
 
 ---
 
+## Contact form
+
+The home page form posts to [FormSubmit](https://formsubmit.co) and needs no backend or API key.
+
+- First submission sends a one-time activation email to `ghimiresubas347@gmail.com` — click it once, then every later message is delivered.
+- Success redirects to `thanks.html`; the `_honey` field is a spam honeypot.
+- Spam guard is `_captcha=false` plus the honeypot, so keep the honeypot field hidden.
+
 ## Custom domain
 
 `scripts/set-domain.sh <domain>` rewrites every absolute URL (canonical, og/twitter,
