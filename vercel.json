@@ -83,5 +83,11 @@
       "destination": "/",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/members",
+      "destination": "/api/members"
+    }
   ]
 }
