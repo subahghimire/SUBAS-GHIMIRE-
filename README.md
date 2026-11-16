@@ -50,6 +50,7 @@ Changing `MEMBERS_CODE` logs everyone out on their next visit.
 - **Scrollspy nav** — the section you are reading is marked with `aria-current`.
 - **Kathmandu clock** — live NPT time in the footer.
 - **CV QR** — inline SVG QR to the live site, sized for print.
+- **Case studies** — `/work.html` breaks down each format: the brief, what happens in the timeline, what gets delivered.
 - **PWA shortcuts** — Work, CV, Contact and Client room from the installed icon.
 - **404 quick links** — the useful routes instead of a dead end.
 
@@ -88,6 +89,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 | --- | --- |
 | `/` | Main portfolio — hero, about, work, services, tools, experience, FAQ, contact |
 | `/about.html` | About — the editor behind the frame: story, approach, career path, toolkit |
+| `/work.html` | Case studies — how news packages, talk shows, motion graphics and vertical cuts are made |
 | `/subas-ghimire.html` | Nepali-language variant (`lang="ne"`, Mukta + Bricolage Grotesque) |
 | `/cv.html` | Printable CV page with direct PDF download |
 | `/thanks.html` | Contact-form confirmation (noindex, 12 s redirect home) |
@@ -131,6 +133,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 .
 ├── index.html                  # main portfolio (single file, inlined CSS)
 ├── about.html                  # dedicated About page (story, approach, path, toolkit)
+├── work.html                   # case studies — brief, process and delivery per format
 ├── subas-ghimire.html          # Nepali-language variant
 ├── cv.html                     # printable CV
 ├── api/
