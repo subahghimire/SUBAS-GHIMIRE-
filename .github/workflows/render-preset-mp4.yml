@@ -1,0 +1,39 @@
+name: Render preset demo MP4s
+
+on:
+  push:
+    paths:
+      - ".github/workflows/render-preset-mp4.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Render real MP4 preview clips
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          mkdir -p effects/presets
+          ffmpeg -y -f lavfi -i "testsrc2=size=1280x720:rate=30:duration=6" -vf "eq=saturation=1.25:contrast=1.08:brightness=0.02,colorbalance=rs=0.08:gs=0.02:bs=-0.05,drawtext=text='SG CINEMATIC WARM':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h*0.82:box=1:boxcolor=black@0.35" -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart effects/presets/SG-Cinematic-Warm.mp4
+          ffmpeg -y -f lavfi -i "testsrc2=size=1280x720:rate=30:duration=6" -vf "eq=saturation=0.9:contrast=1.35:brightness=-0.01,unsharp=5:5:0.7:5:5:0.0,drawtext=text='SG CONTRAST FILM':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h*0.82:box=1:boxcolor=black@0.35" -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart effects/presets/SG-Contrast-Film.mp4
+          ffmpeg -y -f lavfi -i "testsrc2=size=1280x720:rate=30:duration=6" -vf "eq=saturation=0.82:contrast=1.12:brightness=0.015,colorbalance=rs=-0.04:gs=0.01:bs=0.10,drawtext=text='SG COOL NEWS':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h*0.82:box=1:boxcolor=black@0.35" -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart effects/presets/SG-Cool-News.mp4
+          ffmpeg -y -f lavfi -i "testsrc2=size=1280x720:rate=30:duration=6" -vf "hue=s=0,eq=contrast=1.12:brightness=0.01,drawtext=text='SG BLACK AND WHITE':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h*0.82:box=1:boxcolor=black@0.35" -an -c:v libx264 -pix_fmt yuv420p -movflags +faststart effects/presets/SG-Black-and-White.mp4
+      - name: Commit generated MP4 files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add effects/presets/*.mp4
+          if git diff --cached --quiet; then
+            echo "No MP4 changes to commit"
+          else
+            git commit -m "Add rendered MP4 preset previews [skip ci]"
+            git push
+          fi
