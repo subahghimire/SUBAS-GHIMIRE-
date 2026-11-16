@@ -90,7 +90,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 | `/` | Main portfolio — hero, about, work, services, tools, experience, FAQ, contact |
 | `/about.html` | About — the editor behind the frame: story, approach, career path, toolkit |
 | `/work.html` | Case studies — how news packages, talk shows, motion graphics and vertical cuts are made |
-| `/subas-ghimire.html` | Nepali-language variant (`lang="ne"`, Mukta + Bricolage Grotesque) |
+| `/subas-ghimire.html` | Nepali-language portfolio (`lang="ne"`, Mukta + Space Grotesk) |
 | `/cv.html` | Printable CV page with direct PDF download |
 | `/thanks.html` | Contact-form confirmation (noindex, 12 s redirect home) |
 | `/signup.html` | Client-room access request — name/email form → inbox |
@@ -123,7 +123,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 | --- | --- |
 | Markup / styling | Hand-written HTML5 + CSS (no build step, no framework) |
 | Behaviour | Vanilla JS — IntersectionObserver reveals, theme toggle, nav |
-| Type | Google Fonts — Space Grotesk, DM Sans, Mukta, Bricolage Grotesque |
+| Type | Google Fonts — Space Grotesk, DM Sans, Mukta |
 | Serverless | Vercel functions (`api/chat.js`, `api/video.js`) → Gemini / Veo |
 | Hosting | Vercel (primary) + GitHub Pages (mirror) |
 
