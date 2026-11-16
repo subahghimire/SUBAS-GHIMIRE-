@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#080611">
+<meta name="theme-color" content="#08060f">
 <meta name="color-scheme" content="dark light">
 <title>सुबास घिमिरे — भिडियो एडिटर, काठमाडौं | Subas Ghimire</title>
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
@@ -35,161 +35,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=3">
 <style>
-:root{--bg:#080611;--panel:#110d1c;--line:rgba(184,133,255,.22);--green:#a855f7;--mint:#d8b4fe;--white:#f8f4ff;--muted:#b3a8c2;--max:1160px}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{margin:0;background:radial-gradient(ellipse at 78% 12%,#7627c52b,transparent 38%),radial-gradient(ellipse at 10% 60%,#32105c2a,transparent 40%),var(--bg);color:var(--white);font-family:"Mukta","DM Sans",system-ui,sans-serif;font-size:17px;line-height:1.8}
-a{color:inherit;text-decoration:none}
-.wrap{width:min(var(--max),calc(100% - 48px));margin:auto}
-.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--green);color:#fff;padding:13px 20px;font-size:12px;font-weight:700;border-radius:0 0 6px 0}
-.skip-link:focus{left:0}
-:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:4px}
-
-header{height:82px;position:sticky;top:0;z-index:20;background:#080611ef;backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand{display:flex;align-items:center;gap:11px;font:700 14px "Space Grotesk";letter-spacing:1px}
-.mark{width:36px;height:36px;border:1px solid var(--green);display:grid;place-items:center;color:var(--mint);font-size:17px;flex:0 0 auto}
-.brand small{display:block;color:var(--muted);font:500 8px "Mukta";letter-spacing:2px}
-.links{display:flex;gap:24px;color:var(--muted);font-size:14px;font-weight:500}
-.links a:hover{color:var(--mint)}
-.links a[aria-current="page"]{color:var(--white)}
-.links a.nav-signup{color:var(--mint);font-weight:600}
-.nav-actions{display:flex;align-items:center;gap:9px}
-.icon-btn{width:38px;height:38px;border:1px solid var(--line);background:#120d20;color:var(--mint);border-radius:5px;cursor:pointer;font-size:16px;display:grid;place-items:center;transition:.2s}
-.icon-btn:hover{background:var(--green);color:#fff}
-.menu-toggle{display:none}
-.nav-cta,.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 18px;border:1px solid var(--green);border-radius:5px;font-size:13px;font-weight:600;background:linear-gradient(120deg,#7c3aed,#c026d3);color:#fff;transition:transform .25s,box-shadow .25s}
-.nav-cta:hover,.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px #a855f72b}
-.btn.secondary{background:transparent;border-color:#74518f;color:var(--white)}
-
-.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:74px 0 64px}
-.eyebrow{font-size:12px;letter-spacing:2.2px;color:var(--mint);text-transform:uppercase}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green);margin-right:9px}
-.hero h1{font:700 clamp(42px,6.4vw,76px)/1.12 "Space Grotesk","Mukta",sans-serif;letter-spacing:-2px;margin:22px 0 18px}
-.hero h1 em{font-style:normal;background:linear-gradient(100deg,#d8b4fe 10%,#fff 45%,#a855f7 75%);background-size:220% auto;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 6s linear infinite}
-.lead{max-width:520px;color:var(--muted);font-size:17px;line-height:1.85;margin:0}
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:40px;color:var(--muted);font-size:11px;letter-spacing:1.4px}
-
-.portrait{position:relative;display:grid;place-items:center;min-height:420px}
-.orbit{position:absolute;width:min(100%,420px);aspect-ratio:1;border:1px solid #a855f744;border-radius:50%}
-.orbit:before,.orbit:after{content:"";position:absolute;inset:11%;border:1px solid var(--line);border-radius:50%}
-.orbit:after{inset:24%;border-style:dashed}
-.photo{position:relative;z-index:2;width:min(80%,320px);aspect-ratio:5/6;border:1px solid #d8b4fe55;border-radius:160px 160px 12px 12px;overflow:hidden;background:#171027;box-shadow:0 25px 90px #0009,0 0 50px #a855f718}
-.photo img{width:100%;height:100%;object-fit:cover;object-position:center 26%}
-.photo:after{content:"";position:absolute;inset:58% 0 0;background:linear-gradient(transparent,#080611f2)}
-.photo-label{position:absolute;z-index:3;left:18px;bottom:18px}
-.photo-label small{display:block;color:var(--mint);font-size:9px;letter-spacing:2px}
-.photo-label strong{font:700 18px "Space Grotesk"}
-
-.strip{border-block:1px solid var(--line);padding:16px 0;display:flex;justify-content:space-around;gap:14px;flex-wrap:wrap;color:#d5c9e3;font-size:11px;letter-spacing:1.6px}
-.strip b{color:var(--green)}
-
-section.block{padding:88px 0}
-.section-top{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:14px}
-.kicker,.section-top span:last-child{font-size:11px;letter-spacing:2px;color:var(--mint);text-transform:uppercase}
-.section-top span:last-child{color:var(--muted);letter-spacing:1.4px}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding-top:46px}
-.about-grid h2,.contact h2{font:700 clamp(32px,4.6vw,52px)/1.2 "Space Grotesk","Mukta",sans-serif;letter-spacing:-1.2px;margin:0}
-.about-grid h2 em{font-style:normal;color:var(--mint)}
-.about-copy p{color:var(--muted);font-size:16px;line-height:1.9;margin:0 0 14px}
-.about-copy .large{font-size:19px;color:var(--white);line-height:1.7}
-.about-copy strong{color:var(--mint);font-weight:600}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:42px;border-block:1px solid var(--line)}
-.stats div{padding:20px 14px;border-right:1px solid var(--line)}
-.stats div:first-child{padding-left:0}
-.stats div:last-child{border:0}
-.stats strong{display:block;color:var(--mint);font:700 15px "Space Grotesk";letter-spacing:1px}
-.stats span{display:block;margin-top:6px;color:var(--muted);font-size:11px}
-
-.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:42px}
-.work{border:1px solid var(--line);background:linear-gradient(145deg,#171027,#0c0816);transition:.25s;border-radius:6px;overflow:hidden}
-.work:hover{transform:translateY(-4px);border-color:#a855f788}
-.work-art{height:150px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse,#a855f72b,transparent 62%)}
-.work-art:before{content:"";position:absolute;inset:16%;border:1px solid #a855f755;border-radius:50%;box-shadow:0 0 0 18px #a855f70b,0 0 0 38px #a855f708}
-.work-art b{position:relative;font:700 42px "Space Grotesk";color:#d8b4fe55}
-.work-text{padding:20px}
-.work-text small{color:var(--mint);font-size:10px;letter-spacing:1.4px}
-.work-text h3{font:600 19px "Space Grotesk","Mukta",sans-serif;margin:8px 0 6px}
-.work-text p{color:var(--muted);font-size:14px;line-height:1.7;margin:0}
-.note{margin-top:16px;color:var(--muted);font-size:13px}
-.note a{color:var(--mint);border-bottom:1px solid var(--green)}
-
-.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:42px}
-.svc{border:1px solid var(--line);background:#100b1c;border-radius:6px;padding:26px;transition:.25s}
-.svc:hover{border-color:#a855f788;transform:translateY(-3px)}
-.svc small{font-size:10px;letter-spacing:1.8px;color:var(--mint)}
-.svc h3{font:600 20px "Space Grotesk","Mukta",sans-serif;margin:10px 0 8px}
-.svc p{margin:0;color:var(--muted);font-size:14px;line-height:1.75}
-
-.timeline{margin-top:40px;border-top:1px solid var(--line)}
-.job{display:grid;grid-template-columns:120px 1fr 110px;gap:18px;padding:20px 8px;border-bottom:1px solid var(--line)}
-.job time{color:var(--mint);font-size:11px;letter-spacing:1px}
-.job h3{font:600 18px "Space Grotesk","Mukta",sans-serif;margin:0}
-.job p{color:var(--muted);font-size:14px;margin:4px 0 0}
-.job span{text-align:right;color:var(--muted);font-size:10px;letter-spacing:1px}
-
-.contact{margin-top:44px;padding:52px;background:radial-gradient(ellipse at 100% 0%,#a855f72e,transparent 55%),#100b1c;border:1px solid var(--line);border-radius:8px}
-.contact h2 em{font-style:normal;color:var(--mint)}
-.contact p{max-width:560px;color:var(--muted);font-size:16px;line-height:1.85;margin:16px 0 0}
-.contact-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.contact-links a{border:1px solid var(--line);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--white);transition:.2s}
-.contact-links a:hover{border-color:var(--green);color:var(--mint)}
-.contact-note{margin-top:22px;color:var(--muted);font-size:11px;letter-spacing:1.4px}
-
-footer{border-top:1px solid var(--line);padding:22px 0 30px;display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:11px;letter-spacing:.6px}
-.foot-links{display:flex;flex-wrap:wrap;gap:16px;flex:1 0 100%;padding-bottom:10px}
-.foot-links a:hover{color:var(--mint)}
-
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .65s ease,transform .65s ease}
-.reveal.visible{opacity:1;transform:none}
-@keyframes shine{to{background-position:220% center}}
-
-@media(max-width:900px){
- .hero{grid-template-columns:1fr;gap:16px;padding-top:56px}
- .portrait{min-height:0;padding:24px 0 6px}
- .photo{width:min(74%,300px)}
- .about-grid{grid-template-columns:1fr;gap:26px;padding-top:34px}
- .svc-grid{grid-template-columns:1fr}
-}
-@media(max-width:800px){
- .links{display:none;position:absolute;top:70px;left:0;right:0;padding:18px 22px;background:#0b0714;border:1px solid var(--line);border-radius:8px;flex-direction:column;gap:16px;box-shadow:0 18px 45px #0008}
- .links.open{display:flex}
- .menu-toggle{display:grid}
-}
-@media(max-width:600px){
- .wrap{width:calc(100% - 36px)}
- header{height:70px}
- .nav-cta{padding:10px 12px;font-size:11px}
- .hero h1{font-size:40px;letter-spacing:-1.2px}
- .lead{font-size:15px}
- .strip{justify-content:center;font-size:10px}
- .strip span:nth-of-type(n+3),.strip b:nth-of-type(n+2){display:none}
- .block{padding:64px 0}
- .work-grid{grid-template-columns:1fr}
- .work-art{height:130px}
- .job{grid-template-columns:76px 1fr;gap:10px;padding-inline:0}
- .job span{display:none}
- .contact{padding:30px 20px}
- .contact h2{font-size:34px}
- footer{flex-direction:column}
-}
-@media(prefers-reduced-motion:reduce){
- *,*::before,*::after{animation:none!important;transition:none!important}
- html{scroll-behavior:auto}
- .reveal{opacity:1;transform:none}
-}
-body.light-mode{--bg:#f7f1ff;--panel:#fff;--white:#1a1030;--muted:#5c4c74;--line:rgba(124,58,237,.2);--mint:#6b21a8;background:radial-gradient(ellipse at 78% 12%,#a855f71f,transparent 38%),#f7f1ff;color:var(--white)}
-body.light-mode header{background:#f7f1ffeb}
-body.light-mode .icon-btn{background:#fff}
-body.light-mode .photo:after{background:linear-gradient(transparent,#f7f1ff)}
-body.light-mode .hero h1 em{background:none;-webkit-text-fill-color:#6b21a8;color:#6b21a8;animation:none}
-body.light-mode .work{background:#fff}
-body.light-mode .svc{background:#fff}
-body.light-mode .contact{background:radial-gradient(ellipse at 100% 0%,#a855f71f,transparent 55%),#fff}
-body.light-mode .strip{color:#4a3b5e}
-@media(max-width:800px){body.light-mode .links{background:#fff}}
+body{font-family:Mukta,var(--sans)}
+h1,h2,h3,.footer-mark{font-family:Mukta,var(--display);font-weight:700}
+.hero h1{font-weight:800;letter-spacing:-.02em}
+.hero h1 em,h2 em{font-family:inherit;font-style:normal;color:var(--accent-soft);letter-spacing:0}
+.brand-text,.photo-label strong,.email{font-family:Mukta,var(--display);letter-spacing:.04em}
+.h1-intro,.hero-status,.marquee-track,.stats strong,.stats span,.kicker,.section-note,.meta,.chip,.work-text small,.work-tag,.work-specs li,.svc small,.contact-info,.job time,.job span,.aside,.footer-bottom,.premiere-copy,.btn,.nav-cta{font-family:Mukta,var(--sans);letter-spacing:.05em}
+.h1-intro{font-weight:600}
+.footer-mark{font-weight:800;letter-spacing:0;line-height:.95}
+.hero-clock{font-family:Mukta,var(--sans);letter-spacing:.05em}
+.contact.solo{grid-template-columns:1fr;max-width:820px}
+.contact.solo h2{font-size:clamp(34px,4.4vw,58px)}
+.btn,.nav-cta{text-transform:none}
+.chip{text-transform:none}
+@media(max-width:640px){.hero h1{font-size:clamp(44px,11.5vw,62px)}}
 </style>
 <script type="application/ld+json">
 {
@@ -229,92 +90,218 @@ body.light-mode .strip{color:#4a3b5e}
 <body>
 <script>try{var t=localStorage.getItem("theme");if(t==="light"||(!t&&matchMedia("(prefers-color-scheme: light)").matches)){document.body.classList.add("light-mode")}}catch(e){}</script>
 <a class="skip-link" href="#home">सामग्रीमा जानुहोस्</a>
-<header><nav class="nav wrap"><a class="brand" href="#home"><span class="mark">SG</span><span>सुबास घिमिरे<small>भिडियो एडिटर / भिजुअल एडिटर</small></span></a><div class="links" id="siteLinks"><a href="#home" aria-current="page">होम</a><a href="#about">परिचय</a><a href="#work">काम</a><a href="#services">सेवा</a><a href="#experience">अनुभव</a><a href="#contact">सम्पर्क</a><a href="index.html" lang="en" hreflang="en">English</a><a class="nav-signup" href="signup.html">साइन अप</a></div><div class="nav-actions"><button class="icon-btn theme-toggle" id="themeToggle" aria-label="लाइट थिममा बदल्नुहोस्" aria-pressed="false">☼</button><button class="icon-btn menu-toggle" id="menuToggle" aria-label="मेनु खोल्नुहोस्" aria-expanded="false" aria-controls="siteLinks">☰</button><a class="nav-cta" href="#contact">सम्पर्क ↗</a></div></nav></header>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header><nav class="nav wrap" aria-label="मुख्य मेनु">
+  <a class="brand" href="#home"><span class="mark">SG</span><span class="brand-text">सुबास घिमिरे<small>भिडियो एडिटर / भिजुअल एडिटर</small></span></a>
+  <div class="links" id="siteLinks">
+    <a href="#home" aria-current="page">होम</a>
+    <a href="#about">परिचय</a>
+    <a href="#work">काम</a>
+    <a href="#services">सेवा</a>
+    <a href="#experience">अनुभव</a>
+    <a href="#contact">सम्पर्क</a>
+    <a href="signup.html">साइन अप</a>
+    <a href="index.html" lang="en" hreflang="en">English</a>
+    <a href="members.html" rel="nofollow">Members</a>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn theme-toggle" id="themeToggle" aria-label="लाइट थिममा बदल्नुहोस्" aria-pressed="false">☼</button>
+    <button class="icon-btn menu-toggle" id="menuToggle" aria-label="मेनु खोल्नुहोस्" aria-expanded="false" aria-controls="siteLinks">☰</button>
+    <a class="nav-cta" href="#contact">सम्पर्क ↗</a>
+  </div>
+</nav></header>
 
 <main>
 <section class="hero wrap" id="home">
-  <div>
-    <p class="eyebrow"><i class="dot"></i> भिडियो एडिटर · भिजुअल स्टोरीटेलर</p>
-    <h1>नमस्ते, म<br>सुबास <em>घिमिरे।</em></h1>
+  <div class="hero-copy">
+    <div class="hero-status">
+      <span class="eyebrow"><i class="dot"></i> भिडियो एडिटर · भिजुअल स्टोरीटेलर</span>
+      <span class="hero-clock" id="heroClock">काठमाडौं · --:-- NPT</span>
+    </div>
+    <h1><span class="h1-intro">नमस्ते, म</span>सुबास<br><em>घिमिरे।</em></h1>
     <p class="lead">कान्तिपुर टेलिभिजनका भिडियो एडिटर / भिजुअल एडिटर। फुटेज, साउन्ड, ग्राफिक्स र टाइमिङ मिलाएर कथालाई स्पष्ट र मन छुने बनाउँछु।</p>
-    <div class="actions"><a class="btn" href="#work">काम हेर्नुहोस् ↘</a><a class="btn secondary" href="./CV/Subas-Ghimire-CV.pdf" download>CV डाउनलोड ↓</a></div>
-    <p class="meta"><span>काठमाडौं, नेपाल</span><span>समाचार · टक शो · पोस्ट-प्रोडक्सन</span></p>
+    <div class="actions">
+      <a class="btn primary" href="#work">काम हेर्नुहोस् ↘</a>
+      <a class="btn secondary" href="./CV/Subas-Ghimire-CV.pdf" download>CV डाउनलोड ↓</a>
+    </div>
+    <div class="meta"><span>काठमाडौं, नेपाल</span><span>समाचार · टक शो · पोस्ट-प्रोडक्सन</span></div>
   </div>
-  <div class="portrait"><div class="orbit"></div><div class="photo"><picture><source type="image/webp" srcset="IMG-20260718-WA0001.webp"><img src="IMG-20260718-WA0001.jpg" alt="सुबास घिमिरे — भिडियो एडिटर" width="1400" height="933" decoding="async"></picture><div class="photo-label"><small>भिजुअल एडिटर</small><strong>सुबास घिमिरे</strong></div></div></div>
+  <div class="portrait-area">
+    <div class="orbit"><i></i></div>
+    <div class="photo">
+      <picture><source type="image/webp" srcset="IMG-20260718-WA0001.webp"><img src="IMG-20260718-WA0001.jpg" alt="सुबास घिमिरे — भिडियो एडिटर" width="1400" height="933" fetchpriority="high" decoding="async"></picture>
+      <div class="photo-label"><small>भिजुअल एडिटर</small><strong>सुबास घिमिरे</strong></div>
+    </div>
+    <div class="float-tag"><i class="dot"></i> एडिटिङ जारी</div>
+  </div>
 </section>
 
-<div class="strip"><span>कथा पहिले</span><b>✳</b><span>विवरण महत्त्वपूर्ण</span><b>✳</b><span>हरेक फ्रेमको अर्थ</span></div>
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-group"><span>कथा पहिले</span><b>✳</b><span>विवरण महत्त्वपूर्ण</span><b>✳</b><span>हरेक फ्रेमको अर्थ</span><b>✳</b></div>
+    <div class="marquee-group"><span>कथा पहिले</span><b>✳</b><span>विवरण महत्त्वपूर्ण</span><b>✳</b><span>हरेक फ्रेमको अर्थ</span><b>✳</b></div>
+  </div>
+</div>
+
+<div class="credits wrap" aria-label="सहकार्य गरेका च्यानल">
+  <span class="kicker">सहकार्य</span>
+  <ul><li>कान्तिपुर टेलिभिजन</li><li>ग्लोबल टेलिभिजन HD</li><li>जनता टेलिभिजन</li></ul>
+  <span class="aside">काठमाडौं · NPT UTC+5:45</span>
+</div>
 
 <section class="block wrap" id="about">
-  <div class="section-top"><span class="kicker">०१ / परिचय</span><span>पर्दा पछाडिको एडिटर</span></div>
-  <div class="about-grid">
-    <h2>एडिटिङ भनेको कथाले <em>लय भेट्ने</em> ठाउँ हो।</h2>
-    <div class="about-copy">
-      <p class="large">म सुबास घिमिरे, <strong>कान्तिपुर टेलिभिजन</strong>मा भिडियो एडिटर / भिजुअल एडिटर।</p>
-      <p>समाचार र टक शो ढाँचामा काम गर्छु — फुटेज, साउन्ड, ग्राफिक्स र टाइमिङ मिलाएर हरेक कथा स्पष्ट र बुझिने बनाउँछु। धेरै दिन रश र डेडलाइनसँगै सुरु हुन्छन्, र अन्त्यमा प्रसारणयोग्य कट तयार हुन्छ।</p>
-      <p>यही गतिले पर्दामा नदेखिने कुरा सिकायो — कुन दुई सेकेन्ड राख्ने, ग्राफिकले कथा बोक्छ कि सजाउँछ मात्र, र साउन्डले दर्शकलाई एउटा शटबाट अर्कोसम्म कसरी लैजान्छ।</p>
+  <div class="section-top"><span class="num">01</span><span class="kicker">परिचय</span><span class="section-note">पर्दा पछाडिको एडिटर</span></div>
+  <div class="section-body">
+    <div class="about-grid">
+      <h2>एडिटिङ भनेको कथाले <em>लय भेट्ने</em> ठाउँ हो।</h2>
+      <div class="about-copy">
+        <p class="large">म सुबास घिमिरे, <strong>कान्तिपुर टेलिभिजन</strong>मा भिडियो एडिटर / भिजुअल एडिटर।</p>
+        <p>समाचार र टक शो ढाँचामा काम गर्छु — फुटेज, साउन्ड, ग्राफिक्स र टाइमिङ मिलाएर हरेक कथा स्पष्ट र बुझिने बनाउँछु। धेरै दिन रश र डेडलाइनसँगै सुरु हुन्छन्, र अन्त्यमा प्रसारणयोग्य कट तयार हुन्छ।</p>
+        <p>यही गतिले पर्दामा नदेखिने कुरा सिकायो — कुन दुई सेकेन्ड राख्ने, ग्राफिकले कथा बोक्छ कि सजाउँछ मात्र, र साउन्डले दर्शकलाई एउटा शटबाट अर्कोसम्म कसरी लैजान्छ।</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div><strong>समाचार</strong><span>छिटो कथावाचन</span></div>
+      <div><strong>स्टुडियो</strong><span>टक शो ढाँचा</span></div>
+      <div><strong>भिजुअल</strong><span>पोस्ट-प्रोडक्सन</span></div>
+    </div>
+    <div class="cv-cta">
+      <a class="btn primary" href="./CV/Subas-Ghimire-CV.pdf" download>CV डाउनलोड ↓</a>
+      <a class="btn secondary" href="cv.html">CV हेर्नुहोस् →</a>
+      <a class="btn secondary" href="index.html" lang="en" hreflang="en">ENGLISH ↗</a>
     </div>
   </div>
-  <div class="stats"><div><strong>समाचार</strong><span>छिटो कथावाचन</span></div><div><strong>स्टुडियो</strong><span>टक शो ढाँचा</span></div><div><strong>भिजुअल</strong><span>पोस्ट-प्रोडक्सन</span></div></div>
 </section>
 
 <section class="block wrap" id="work">
-  <div class="section-top"><span class="kicker">०२ / छानिएको काम</span><span>ढाँचा र विधा</span></div>
-  <div class="work-grid">
-    <article class="work"><div class="work-art"><b>०१</b></div><div class="work-text"><small>ब्रोडकास्ट एडिटिङ</small><h3>समाचार प्याकेज</h3><p>समाचारका लागि स्पष्ट, सटीक र आकर्षक कथावाचन।</p></div></article>
-    <article class="work"><div class="work-art"><b>०२</b></div><div class="work-text"><small>स्टुडियो र कार्यक्रम</small><h3>टक शो</h3><p>सोचिएको गति, सफा कट र एकरूप कार्यक्रम शैली।</p></div></article>
-    <article class="work"><div class="work-art"><b>०३</b></div><div class="work-text"><small>पोस्ट-प्रोडक्सन</small><h3>मोसन र ग्राफिक्स</h3><p>टाइटल, भिजुअल तत्व र सहयोगी ग्राफिक्स।</p></div></article>
+  <div class="section-top"><span class="num">02</span><span class="kicker">छानिएको काम</span><span class="section-note">ढाँचा र विधा</span></div>
+  <div class="section-body">
+    <div class="work-grid">
+      <article class="work">
+        <div class="work-art"><b>01</b><span class="work-tag">समाचार</span></div>
+        <div class="work-text"><small>ब्रोडकास्ट एडिटिङ</small><h3>समाचार प्याकेज</h3><p>समाचारका लागि स्पष्ट, सटीक र आकर्षक कथावाचन।</p><ul class="work-specs"><li>दैनिक टर्नअराउन्ड</li><li>प्रसारण डेलिभरी</li></ul></div>
+      </article>
+      <article class="work">
+        <div class="work-art"><b>02</b><span class="work-tag">स्टुडियो</span></div>
+        <div class="work-text"><small>स्टुडियो र कार्यक्रम</small><h3>टक शो</h3><p>सोचिएको गति, सफा कट र एकरूप कार्यक्रम शैली।</p><ul class="work-specs"><li>स्टुडियो ढाँचा</li><li>कार्यक्रम शैली</li></ul></div>
+      </article>
+      <article class="work">
+        <div class="work-art"><b>03</b><span class="work-tag">मोसन</span></div>
+        <div class="work-text"><small>पोस्ट-प्रोडक्सन</small><h3>मोसन र ग्राफिक्स</h3><p>टाइटल, भिजुअल तत्व र सहयोगी ग्राफिक्स।</p><ul class="work-specs"><li>After Effects</li><li>टाइटल र लोअर-थर्ड</li></ul></div>
+      </article>
+    </div>
+    <p class="note">हरेक ढाँचा सुरुदेखि अन्त्यसम्म कसरी काटिन्छ — <a href="work.html">केस स्टडी पढ्नुहोस्</a>। पूरा सोरिल अनुरोधमा उपलब्ध।</p>
   </div>
-  <p class="note">हरेक ढाँचा सुरुदेखि अन्त्यसम्म कसरी काटिन्छ — <a href="work.html">केस स्टडी पढ्नुहोस्</a>। पूरा सोरिल अनुरोधमा उपलब्ध।</p>
 </section>
 
 <section class="block wrap" id="services">
-  <div class="section-top"><span class="kicker">०३ / सेवा</span><span>के के गर्न सक्छु</span></div>
-  <div class="svc-grid">
-    <article class="svc"><small>एडिट</small><h3>समाचार र टक शो एडिटिङ</h3><p>दैनिक प्रसारणका खण्ड — रशदेखि तयार सामग्रीसम्म, गति र स्पष्टताका साथ।</p></article>
-    <article class="svc"><small>डिजाइन</small><h3>मोसन र ब्रोडकास्ट ग्राफिक्स</h3><p>टाइटल, लोअर-थर्ड, टिकर र फुल-फ्रेम ग्राफिक्स — After Effects मा।</p></article>
-    <article class="svc"><small>फिनिस</small><h3>कलर र अडियो फिनिसिङ</h3><p>ग्रेडिङ, अडियो लेभलिङ र प्रसारणयोग्य बनाउने अन्तिम पास।</p></article>
-    <article class="svc"><small>सर्ट-फर्म</small><h3>सामाजिक र भर्टिकल एडिट</h3><p>लामो सामग्रीका Shorts, Reels र भर्टिकल कट — फोन स्क्रिनका लागि।</p></article>
+  <div class="section-top"><span class="num">03</span><span class="kicker">सेवा</span><span class="section-note">के के गर्न सक्छु</span></div>
+  <div class="section-body">
+    <div class="svc-list">
+      <article class="svc"><span class="svc-num">01</span><div><h3>समाचार र टक शो एडिटिङ</h3><p>दैनिक प्रसारणका खण्ड — रशदेखि तयार सामग्रीसम्म, गति र स्पष्टताका साथ।</p></div><small>एडिट</small><span class="svc-arrow" aria-hidden="true">↗</span></article>
+      <article class="svc"><span class="svc-num">02</span><div><h3>मोसन र ब्रोडकास्ट ग्राफिक्स</h3><p>टाइटल, लोअर-थर्ड, टिकर र फुल-फ्रेम ग्राफिक्स — After Effects मा।</p></div><small>डिजाइन</small><span class="svc-arrow" aria-hidden="true">↗</span></article>
+      <article class="svc"><span class="svc-num">03</span><div><h3>कलर र अडियो फिनिसिङ</h3><p>ग्रेडिङ, अडियो लेभलिङ र प्रसारणयोग्य बनाउने अन्तिम पास।</p></div><small>फिनिस</small><span class="svc-arrow" aria-hidden="true">↗</span></article>
+      <article class="svc"><span class="svc-num">04</span><div><h3>सामाजिक र भर्टिकल एडिट</h3><p>लामो सामग्रीका Shorts, Reels र भर्टिकल कट — फोन स्क्रिनका लागि।</p></div><small>सर्ट-फर्म</small><span class="svc-arrow" aria-hidden="true">↗</span></article>
+    </div>
+    <p class="note">काठमाडौंमा वा रिमोट — <a href="#contact">के चाहियो भन्नुहोस्</a>।</p>
   </div>
 </section>
 
 <section class="block wrap" id="experience">
-  <div class="section-top"><span class="kicker">०४ / अनुभव</span><span>टेलिभिजन र पोस्ट-प्रोडक्सन</span></div>
-  <div class="timeline">
-    <div class="job"><time>हाल</time><div><h3>कान्तिपुर टेलिभिजन</h3><p>भिडियो एडिटर · समाचार र टक शो</p></div><span>टेलिभिजन</span></div>
-    <div class="job"><time>४ महिना</time><div><h3>ग्लोबल टेलिभिजन HD</h3><p>भिडियो एडिटर · टेलिभिजन</p></div><span>अघिल्लो</span></div>
-    <div class="job"><time>४ महिना</time><div><h3>जनता टेलिभिजन</h3><p>भिडियो एडिटर · टेलिभिजन</p></div><span>अघिल्लो</span></div>
+  <div class="section-top"><span class="num">04</span><span class="kicker">अनुभव</span><span class="section-note">टेलिभिजन र पोस्ट-प्रोडक्सन</span></div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="job"><time>हाल</time><div><h3>कान्तिपुर टेलिभिजन</h3><p>भिडियो एडिटर · समाचार र टक शो</p></div><span>टेलिभिजन</span></div>
+      <div class="job"><time>४ महिना</time><div><h3>ग्लोबल टेलिभिजन HD</h3><p>भिडियो एडिटर · टेलिभिजन</p></div><span>अघिल्लो</span></div>
+      <div class="job"><time>४ महिना</time><div><h3>जनता टेलिभिजन</h3><p>भिडियो एडिटर · टेलिभिजन</p></div><span>अघिल्लो</span></div>
+    </div>
   </div>
 </section>
 
 <section class="block wrap" id="contact">
-  <div class="section-top"><span class="kicker">०५ / सम्पर्क</span><span>कथा छ? कुरा गरौं</span></div>
-  <div class="contact">
-    <h2>कथा छ?<br><em>कुरा गरौं।</em></h2>
-    <p>प्रोजेक्ट, फुटेज लिंक र डेडलाइन पठाउनुहोस् — इमेल वा WhatsApp मा। सामान्यतया एक दिनभित्र जवाफ दिन्छु। अंग्रेजीमा विस्तृत ब्रिफ फर्म पनि उपलब्ध छ।</p>
-    <div class="contact-links"><a href="mailto:ghimiresubas347@gmail.com">इमेल</a><a href="tel:+9779766454587">+977 9766454587</a><a href="https://wa.me/9779766454587" target="_blank" rel="noopener">WhatsApp</a><a href="cv.html">CV</a><a href="work.html">केस स्टडी</a><a href="index.html#contact">ब्रिफ फर्म ↗</a></div>
-    <p class="contact-note">काठमाडौं · NPT (UTC+5:45) · रिमोट-फ्रेन्डली</p>
+  <div class="section-top"><span class="num">05</span><span class="kicker">सम्पर्क</span><span class="section-note">कथा छ? कुरा गरौं</span></div>
+  <div class="section-body">
+    <div class="contact solo">
+      <div class="contact-copy">
+        <span class="kicker">कथा छ? कुरा गरौं</span>
+        <h2>कथा छ?<br><em>कुरा गरौं।</em></h2>
+        <p class="contact-lead">प्रोजेक्ट, फुटेज लिंक र डेडलाइन पठाउनुहोस् — इमेल वा WhatsApp मा। सामान्यतया एक दिनभित्र जवाफ दिन्छु। अंग्रेजीमा विस्तृत ब्रिफ फर्म पनि उपलब्ध छ।</p>
+        <div class="contact-actions">
+          <a class="btn primary" href="mailto:ghimiresubas347@gmail.com">इमेल गर्नुहोस् ↗</a>
+          <a class="chip" href="https://wa.me/9779766454587" target="_blank" rel="noopener">WhatsApp ↗</a>
+          <a class="chip" href="tel:+9779766454587">+977 9766454587</a>
+          <a class="chip" href="work.html">केस स्टडी</a>
+          <a class="chip" href="index.html#contact" lang="en" hreflang="en">ब्रिफ फर्म ↗</a>
+        </div>
+        <div class="contact-row">
+          <a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com</a>
+          <div class="social"><a href="https://www.facebook.com/subas.ghimire.164384" target="_blank" rel="noopener me">Facebook ↗</a><a href="https://www.instagram.com/subas_ghimire__" target="_blank" rel="noopener me">Instagram ↗</a></div>
+        </div>
+        <div class="contact-info"><span>काठमाडौं · NPT (UTC+5:45)</span><span>रिमोट-फ्रेन्डली</span></div>
+      </div>
+    </div>
   </div>
 </section>
 </main>
 
-<footer class="wrap"><div class="foot-links"><a href="index.html">English</a><a href="#home">होम</a><a href="about.html">About</a><a href="work.html">केस स्टडी</a><a href="cv.html">CV</a><a href="signup.html">साइन अप</a><a href="members.html" rel="nofollow">Members</a><a href="#contact">सम्पर्क</a></div><span>© <span id="year"></span> सुबास घिमिरे</span><span>काठमाडौं <span id="npt">--:--</span> NPT</span><a href="#home">माथि जानुहोस् ↑</a></footer>
+<footer class="wrap">
+  <div class="footer-top">
+    <div class="footer-mark" aria-hidden="true">सुबास<br>घिमिरे<span>।</span></div>
+    <nav class="foot-links" aria-label="फुटर">
+      <a href="index.html" lang="en" hreflang="en">English</a>
+      <a href="#home">होम</a>
+      <a href="about.html">About</a>
+      <a href="work.html">केस स्टडी</a>
+      <a href="cv.html">CV</a>
+      <a href="signup.html">साइन अप</a>
+      <a href="members.html" rel="nofollow">Members</a>
+      <a href="#contact">सम्पर्क</a>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> सुबास घिमिरे</span>
+    <span>काठमाडौं <span id="npt">--:--</span> NPT</span>
+    <a href="#home">माथि जानुहोस् ↑</a>
+  </div>
+</footer>
+
+<a class="premiere-float" href="https://www.adobe.com/products/premiere.html" target="_blank" rel="noopener noreferrer" aria-label="Adobe Premiere Pro — थप जान्नुहोस्"><span class="premiere-logo">Pr</span><span class="premiere-copy"><strong>Adobe Premiere Pro</strong><small>VIDEO EDITING</small></span></a>
 
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
+const progress=document.getElementById('scrollProgress');
+const updateProgress=()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(max>0?scrollY/max*100:0)+'%'};
+addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+
 const menu=document.getElementById('menuToggle'),links=document.getElementById('siteLinks');
 menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'×':'☰';});
 links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';}));
 const closeMenu=()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';};
 document.addEventListener('click',e=>{if(links.classList.contains('open')&&!links.contains(e.target)&&!menu.contains(e.target))closeMenu();});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&links.classList.contains('open')){closeMenu();menu.focus();}});
+
 const themeBtn=document.getElementById('themeToggle'),themeMeta=document.querySelector('meta[name="theme-color"]');
-const syncTheme=persist=>{const light=document.body.classList.contains('light-mode');themeBtn.textContent=light?'☾':'☼';themeBtn.setAttribute('aria-pressed',String(light));themeBtn.setAttribute('aria-label',light?'डार्क थिममा बदल्नुहोस्':'लाइट थिममा बदल्नुहोस्');if(themeMeta)themeMeta.setAttribute('content',light?'#f7f1ff':'#080611');if(persist){try{localStorage.setItem('theme',light?'light':'dark')}catch(e){}}};
+const syncTheme=persist=>{const light=document.body.classList.contains('light-mode');themeBtn.textContent=light?'☾':'☼';themeBtn.setAttribute('aria-pressed',String(light));themeBtn.setAttribute('aria-label',light?'डार्क थिममा बदल्नुहोस्':'लाइट थिममा बदल्नुहोस्');if(themeMeta)themeMeta.setAttribute('content',light?'#f7f3fc':'#08060f');if(persist){try{localStorage.setItem('theme',light?'light':'dark')}catch(e){}}};
 syncTheme(false);
 themeBtn.addEventListener('click',()=>{document.body.classList.toggle('light-mode');syncTheme(true);});
-const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}}),{threshold:.12});
-document.querySelectorAll('section.block,.work,.svc,.job,.stats').forEach(el=>{el.classList.add('reveal');revealObserver.observe(el);});
-(function(){const el=document.getElementById('npt');if(!el)return;const tick=()=>{try{el.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kathmandu',hour:'2-digit',minute:'2-digit'});}catch(e){el.textContent='UTC+5:45';}};tick();setInterval(tick,30000);})();
+
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}}),{threshold:.1});
+document.querySelectorAll('section.block,.work,.svc,.job,.stats,.contact,.credits').forEach((el,i)=>{el.classList.add('reveal');if(el.matches('.work,.svc,.job'))el.style.setProperty('--d',(i%4)*60+'ms');revealObserver.observe(el);});
+
+if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+ addEventListener('pointermove',e=>{
+  document.body.style.setProperty('--pointer-x',e.clientX+'px');
+  document.body.style.setProperty('--pointer-y',e.clientY+'px');
+ },{passive:true});
+}
+
+(function(){
+ const els=[document.getElementById('npt'),document.getElementById('heroClock')].filter(Boolean);
+ if(!els.length)return;
+ const tick=()=>{let t='UTC+5:45';try{t=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kathmandu',hour:'2-digit',minute:'2-digit'});}catch(e){}els.forEach(el=>{el.textContent=el.id==='heroClock'?'काठमाडौं · '+t+' NPT':t;});};
+ tick();setInterval(tick,30000);
+})();
 </script>
 <script>(function(){var h=location.hostname;if(/(^|\.)vercel\.app$|\.com\.np$/.test(h)){window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};['/_vercel/speed-insights/script.js','/_vercel/insights/script.js'].forEach(function(s){var e=document.createElement("script");e.defer=true;e.src=s;document.head.appendChild(e)})}})();</script>
 </body>
