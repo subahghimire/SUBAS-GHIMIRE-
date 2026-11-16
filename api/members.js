@@ -104,7 +104,7 @@ const membersHtml = page('Client room', `${top}
   <div class="card"><h2>Book a slot</h2><p>Tell me the project, the deadline and how much footage is coming. I will confirm the window and what I need from you.</p><a class="cta" href="mailto:ghimiresubas347@gmail.com?subject=Booking%20enquiry">REQUEST A SLOT ↗</a></div>
   <div class="card"><h2>Rate card</h2><p>Editing, motion graphics, colour and short-form — sent as a one-page PDF with day rates and what each package includes.</p><a class="cta" href="mailto:ghimiresubas347@gmail.com?subject=Rate%20card%20request">ASK FOR THE RATE CARD ↗</a></div>
   <div class="card"><h2>Send footage</h2><p>Drive, WeTransfer or FTP all work. Send the link with the target length, the deadline and any reference cuts.</p><a class="cta" href="mailto:ghimiresubas347@gmail.com?subject=Footage%20link">SEND A LINK ↗</a></div>
-  <div class="card"><h2>See the work</h2><p>Broadcast edits, talk shows and short-form pieces — the public portfolio and the YouTube channel.</p><a class="cta" href="/#work">PORTFOLIO ↗</a> &nbsp; <a class="cta" href="https://www.youtube.com/@withsubashere">YOUTUBE ↗</a></div>
+  <div class="card"><h2>See the work</h2><p>Broadcast edits, talk shows and short-form pieces — the public portfolio and the case studies.</p><a class="cta" href="/#work">PORTFOLIO ↗</a> &nbsp; <a class="cta" href="/work.html">CASE STUDIES ↗</a></div>
 </div>
 <p class="foot">SUBAS GHIMIRE · VIDEO EDITOR · KATHMANDU, NEPAL · +977 9766454587</p>`);
 
