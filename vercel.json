@@ -107,16 +107,6 @@
       "source": "/CV/Subas_Ghimire_CV.html",
       "destination": "/cv.html",
       "permanent": true
-    },
-    {
-      "source": "/effects.html",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/effects",
-      "destination": "/",
-      "permanent": true
     }
   ],
   "rewrites": [
