@@ -298,6 +298,15 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--mint);outline-offse
 @media(max-width:1080px) and (min-width:801px){.links{gap:18px}}
 @media(max-width:1000px) and (min-width:801px){.links{gap:13px;font-size:11px}}
 .foot-links{display:flex;flex-wrap:wrap;gap:18px;flex:1 0 100%;padding-bottom:10px;font-size:9px;letter-spacing:1.4px}.foot-links a:hover{color:var(--green)}
+
+/* Contact action chips */
+.contact-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid var(--line);border-radius:100px;background:#0c1b1480;color:var(--white);font:600 9.5px "Space Grotesk",sans-serif;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:transform .2s,border-color .2s,color .2s,background .2s}
+.chip:hover{transform:translateY(-2px);border-color:var(--green);color:var(--mint)}
+.chip-status{font-size:10px;letter-spacing:.6px;color:var(--green)}
+body.light-mode .chip{background:#fff}
+.npt{white-space:nowrap}
+footer{flex-wrap:wrap}
 </style>
 <script type="application/ld+json">
 {
@@ -351,8 +360,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--mint);outline-offse
 
 <section class="block wrap" id="toolkit"><div class="section-top"><span class="kicker">05 / TOOLKIT</span><span>CRAFT MEETS TECHNOLOGY</span></div><div class="tools-grid"><div><h2>The tools<br>behind the <em>cut.</em></h2><p>Software is only part of the process. The real focus is using the right tool to serve the story.</p></div><div class="tool-list"><div class="tool"><span class="app adobe-icon premiere-icon app-mark">Pr</span><div><h3>Adobe Premiere Pro</h3><p>News editing &middot; Story pacing &middot; Broadcast delivery</p></div><small>01</small></div><div class="tool"><span class="app adobe-icon aftereffects-icon app-mark">Ae</span><div><h3>Adobe After Effects</h3><p>Motion graphics &middot; Titles &middot; Visual effects</p></div><small>02</small></div><div class="tool"><span class="app adobe-icon photoshop-icon app-mark">Ps</span><div><h3>Adobe Photoshop</h3><p>Thumbnails &middot; Image treatment &middot; Graphics</p></div><small>03</small></div></div></div></section>
 
-<section class="block wrap" id="contact"><div class="section-top"><span class="kicker">06 / CONTACT</span><span>HAVE A STORY TO TELL?</span></div><div class="contact"><div class="kicker">LET&rsquo;S CREATE SOMETHING MEANINGFUL</div><h2>Have a project<br>in <em>mind?</em></h2><a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=ghimiresubas347%40gmail.com">GET IN TOUCH &nearr;</a><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com</a><div class="social"><a href="https://www.facebook.com/subas.ghimire.164384" target="_blank" rel="noopener me">Facebook &nearr;</a><a href="https://www.instagram.com/subas_ghimire__" target="_blank" rel="noopener me">Instagram &nearr;</a><a href="https://www.youtube.com/@withsubashere" target="_blank" rel="noopener me">YouTube &nearr;</a></div></div><div class="contact-info"><span>CALL: <a href="tel:+9779766454587">9766454587</a></span><span>LOCATION: NEPAL</span></div></div></section>
-</main><footer class="wrap"><div class="foot-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="index.html#work">Work</a><a href="index.html#services">Services</a><a href="index.html#faq">FAQ</a><a href="cv.html">CV</a><a href="subas-ghimire.html" lang="ne" hreflang="ne">नेपाली</a><a href="index.html#contact">Contact</a></div><span>© <span id="year"></span> SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR · MADE WITH PURPOSE</span><a href="index.html">BACK TO PORTFOLIO ↑</a></footer>
+<section class="block wrap" id="contact"><div class="section-top"><span class="kicker">06 / CONTACT</span><span>HAVE A STORY TO TELL?</span></div><div class="contact"><div class="kicker">LET&rsquo;S CREATE SOMETHING MEANINGFUL</div><h2>Have a project<br>in <em>mind?</em></h2><a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=ghimiresubas347%40gmail.com">GET IN TOUCH &nearr;</a><div class="contact-row"><a class="email" href="mailto:ghimiresubas347@gmail.com">ghimiresubas347@gmail.com</a><div class="social"><a href="https://www.facebook.com/subas.ghimire.164384" target="_blank" rel="noopener me">Facebook &nearr;</a><a href="https://www.instagram.com/subas_ghimire__" target="_blank" rel="noopener me">Instagram &nearr;</a><a href="https://www.youtube.com/@withsubashere" target="_blank" rel="noopener me">YouTube &nearr;</a></div></div><div class="contact-info"><span>CALL: <a href="tel:+9779766454587">9766454587</a></span><span>LOCATION: NEPAL</span></div><div class="contact-actions"><a class="chip" href="https://wa.me/9779766454587?text=Hi%20Subas%2C%20I%27d%20like%20to%20talk%20about%20a%20video%20project." target="_blank" rel="noopener">WhatsApp ↗</a><button class="chip" type="button" id="copyEmail" data-email="ghimiresubas347@gmail.com">Copy email</button><a class="chip" href="subas-ghimire.vcf" download>Save contact ↓</a><span class="chip-status" id="copyStatus" role="status" aria-live="polite"></span></div></div></section>
+</main><footer class="wrap"><div class="foot-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="index.html#work">Work</a><a href="index.html#services">Services</a><a href="index.html#faq">FAQ</a><a href="cv.html">CV</a><a href="signup.html">Sign up</a><a href="subas-ghimire.html" lang="ne" hreflang="ne">नेपाली</a><a href="members.html" rel="nofollow">Members</a><a href="index.html#contact">Contact</a></div><span>© <span id="year"></span> SUBAS GHIMIRE</span><span>VIDEO EDITOR / VISUAL EDITOR · KATHMANDU <span id="npt">--:--</span> NPT</span><a href="index.html">BACK TO PORTFOLIO ↑</a></footer>
 <a class="premiere-float" href="https://www.adobe.com/products/premiere.html" target="_blank" rel="noopener noreferrer" aria-label="Adobe Premiere Pro — learn more"><span class="premiere-logo">Pr</span><span class="premiere-copy"><strong>Adobe Premiere Pro</strong><small>VIDEO EDITING</small></span></a>
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
@@ -399,4 +408,26 @@ if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: r
 
 </script>
 <script>(function(){var h=location.hostname;if(/(^|\.)vercel\.app$|\.com\.np$/.test(h)){window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};['/_vercel/speed-insights/script.js','/_vercel/insights/script.js'].forEach(function(s){var e=document.createElement("script");e.defer=true;e.src=s;document.head.appendChild(e)})}})();</script>
+<script>
+(function(){
+ const el=document.getElementById('npt');
+ if(el){
+  const tick=()=>{try{el.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kathmandu',hour:'2-digit',minute:'2-digit'});}catch(e){el.textContent='UTC+5:45';}};
+  tick();setInterval(tick,30000);
+ }
+ const btn=document.getElementById('copyEmail'),status=document.getElementById('copyStatus');
+ if(btn)btn.addEventListener('click',async()=>{
+  const email=btn.dataset.email||'';
+  try{await navigator.clipboard.writeText(email);}
+  catch(e){
+   const ta=document.createElement('textarea');ta.value=email;ta.setAttribute('readonly','');
+   ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+   try{document.execCommand('copy');}catch(err){}ta.remove();
+  }
+  btn.textContent='COPIED ✓';
+  if(status)status.textContent=email+' copied to clipboard';
+  setTimeout(()=>{btn.textContent='COPY EMAIL';if(status)status.textContent='';},2400);
+ });
+})();
+</script>
 </body></html>

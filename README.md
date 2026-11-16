@@ -41,6 +41,18 @@ left out of the sitemap.
 
 Changing `MEMBERS_CODE` logs everyone out on their next visit.
 
+## Finishing touches
+
+- **Worked-with strip** — Kantipur Television, Global Television HD and Janata Television, taken straight from the CV.
+- **How it works** — brief → rough cut → finish, sitting under the service cards.
+- **Contact actions** — WhatsApp deep link, a copy-email button with a live status line, and a `subas-ghimire.vcf` card for one-tap saving.
+- **Brief builder** — pick services, footage length and a date; it writes a structured brief into the message field.
+- **Scrollspy nav** — the section you are reading is marked with `aria-current`.
+- **Kathmandu clock** — live NPT time in the footer.
+- **CV QR** — inline SVG QR to the live site, sized for print.
+- **PWA shortcuts** — Work, CV, Contact and Client room from the installed icon.
+- **404 quick links** — the useful routes instead of a dead end.
+
 ## Contact form
 
 The home page form posts to [FormSubmit](https://formsubmit.co) and needs no backend or API key.
