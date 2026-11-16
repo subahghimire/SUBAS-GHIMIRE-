@@ -53,6 +53,15 @@
       ]
     },
     {
+      "source": "/signup-thanks.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/api/(.*)",
       "headers": [
         {

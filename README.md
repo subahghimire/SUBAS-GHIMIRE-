@@ -24,6 +24,10 @@ Personal portfolio of **Subas Ghimire** — video editor and visual editor at Ka
 `api/members.js` serverless function. It is a **single shared access code**, not per-user
 accounts: hand the code to a client and they are in until the code changes.
 
+`/signup.html` is the front door for that room — a small FormSubmit form (name, email,
+optional project) that lands in the inbox. Reply with the access code and the client is in.
+The link sits next to **Tools** in the main nav and from the members login screen.
+
 Set two environment variables in the Vercel project (Settings → Environment Variables):
 
 | Name | Value |
@@ -75,6 +79,8 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 | `/subas-ghimire.html` | Nepali-language variant (`lang="ne"`, Mukta + Bricolage Grotesque) |
 | `/cv.html` | Printable CV page with direct PDF download |
 | `/thanks.html` | Contact-form confirmation (noindex, 12 s redirect home) |
+| `/signup.html` | Client-room access request — name/email form → inbox |
+| `/signup-thanks.html` | Access-request confirmation (noindex, redirect to login) |
 | `/effects.html` | Legacy redirect → `/` (effects hub retired) |
 | `/CV/Subas_Ghimire_CV.html` | Old CV page — 301 to `/cv.html` |
 

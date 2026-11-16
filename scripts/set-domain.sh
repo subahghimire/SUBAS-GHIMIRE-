@@ -27,7 +27,7 @@ import sys, pathlib
 
 old, new = sys.argv[1], sys.argv[2]
 files = ["index.html", "about.html", "cv.html", "subas-ghimire.html", "404.html",
-         "robots.txt", "sitemap.xml", "README.md"]
+         "signup.html", "signup-thanks.html", "robots.txt", "sitemap.xml", "README.md"]
 
 total = 0
 for name in files:
