@@ -144,12 +144,13 @@ footer{border-top:1px solid var(--line);padding:24px 0 32px;display:flex;justify
  html{scroll-behavior:auto}
  .reveal{opacity:1;transform:none}
 }
-body.light-mode{--bg:#f3eefc;--panel:#fff;--white:#1a1030;--muted:#5c4c74;--line:rgba(124,58,237,.2);background:radial-gradient(ellipse at 78% 12%,#a855f71f,transparent 38%),#f3eefc;color:var(--white)}
+body.light-mode{--bg:#f3eefc;--panel:#fff;--white:#1a1030;--muted:#5c4c74;--line:rgba(124,58,237,.2);--mint:#6b21a8;background:radial-gradient(ellipse at 78% 12%,#a855f71f,transparent 38%),#f3eefc;color:var(--white)}
 body.light-mode header{background:#f3eefceb}
 body.light-mode .icon-btn{background:#fff}
 body.light-mode .panel{background:#fff}
 body.light-mode .cta{background:radial-gradient(ellipse at 100% 0%,#a855f71f,transparent 55%),#fff}
-body.light-mode .links{background:#fff}
+@media(max-width:800px){@media(max-width:800px){body.light-mode .links{background:#fff}}
+body.light-mode .intro h1 em{background:none;-webkit-text-fill-color:#6b21a8;color:#6b21a8;animation:none}}
 </style>
 <script type="application/ld+json">
 {
@@ -208,7 +209,7 @@ body.light-mode .links{background:#fff}
 
 <section class="wrap cases" aria-label="Case studies">
 
-  <article class="case reveal">
+  <article class="case">
     <div class="case-head">
       <span class="case-no">01</span>
       <div>
@@ -239,7 +240,7 @@ body.light-mode .links{background:#fff}
     </div>
   </article>
 
-  <article class="case reveal">
+  <article class="case">
     <div class="case-head">
       <span class="case-no">02</span>
       <div>
@@ -270,7 +271,7 @@ body.light-mode .links{background:#fff}
     </div>
   </article>
 
-  <article class="case reveal">
+  <article class="case">
     <div class="case-head">
       <span class="case-no">03</span>
       <div>
@@ -301,7 +302,7 @@ body.light-mode .links{background:#fff}
     </div>
   </article>
 
-  <article class="case reveal">
+  <article class="case">
     <div class="case-head">
       <span class="case-no">04</span>
       <div>
@@ -335,12 +336,12 @@ body.light-mode .links{background:#fff}
 </section>
 
 <section class="wrap panels" aria-label="References and reels">
-  <div class="panel reveal">
+  <div class="panel">
     <small>References</small>
     <h2>Available on request</h2>
     <p>Happy to connect you with the newsroom and programme teams I've worked with at Kantipur Television and Global Television HD. <a class="inline" href="index.html#contact">Ask for a reference →</a></p>
   </div>
-  <div class="panel reveal">
+  <div class="panel">
     <small>Showreel</small>
     <h2>Shared on request</h2>
     <p>Broadcast material belongs to the channels, so the reel travels privately rather than on this page. <a class="inline" href="index.html#contact">Request the reel →</a></p>
@@ -348,7 +349,7 @@ body.light-mode .links{background:#fff}
 </section>
 
 <section class="wrap">
-  <div class="cta reveal">
+  <div class="cta">
     <small>Next step</small>
     <h2>Have footage<br>and a <em>deadline?</em></h2>
     <p>Send the brief, the footage link and the delivery date. You'll get a straight answer on scope, turnaround and what the cut will need from you.</p>
@@ -379,7 +380,7 @@ const syncTheme=persist=>{const light=document.body.classList.contains('light-mo
 syncTheme(false);
 themeBtn.addEventListener('click',()=>{document.body.classList.toggle('light-mode');syncTheme(true);});
 const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}}),{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+document.querySelectorAll('.case,.panel,.cta').forEach(el=>{el.classList.add('reveal');revealObserver.observe(el);});
 (function(){const el=document.getElementById('npt');if(!el)return;const tick=()=>{try{el.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kathmandu',hour:'2-digit',minute:'2-digit'});}catch(e){el.textContent='UTC+5:45';}};tick();setInterval(tick,30000);})();
 </script>
 <script>(function(){var h=location.hostname;if(/(^|\.)vercel\.app$|\.com\.np$/.test(h)){window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};['/_vercel/speed-insights/script.js','/_vercel/insights/script.js'].forEach(function(s){var e=document.createElement("script");e.defer=true;e.src=s;document.head.appendChild(e)})}})();</script>
