@@ -1,14 +1,14 @@
 /* ============================================================
-   Subas Ghimire — editorial broadcast portfolio
-   One design system: ink, violet, mono labels, serif accents.
+   Subas Ghimire — cinematic dark portfolio redesign
+   Deep blacks, violet/cyan glow, glass surfaces, dramatic type.
    ============================================================ */
 :root{
-  --bg:#08060f; --bg-2:#0c0917; --panel:#110c1e; --panel-2:#171027;
-  --line:rgba(200,170,255,.15); --line-2:rgba(200,170,255,.3);
-  --ink:#f8f4ff; --muted:#a89bbb;
-  --accent:#a855f7; --accent-soft:#d8b4fe; --accent-deep:#7c3aed;
-  --warm:#ffb86b;
-  --max:1200px;
+  --bg:#05040a; --bg-2:#090714; --panel:rgba(18,14,30,.72); --panel-2:rgba(24,18,40,.78);
+  --line:rgba(186,160,255,.14); --line-2:rgba(216,180,254,.34);
+  --ink:#f7f2ff; --muted:#b4a8c9;
+  --accent:#a855f7; --accent-soft:#e9d5ff; --accent-deep:#6d28d9;
+  --cyan:#22d3ee; --warm:#ffb86b;
+  --max:1220px;
   --display:"Space Grotesk",system-ui,sans-serif;
   --sans:"DM Sans",system-ui,sans-serif;
   --serif:"Instrument Serif",Georgia,serif;
@@ -19,16 +19,17 @@
 html{scroll-behavior:smooth;scroll-padding-top:96px;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;overflow-x:hidden}
 body::before{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  content:"";position:fixed;inset:-10%;z-index:-2;pointer-events:none;
   background:
-    radial-gradient(900px 620px at 80% -12%,rgba(168,85,247,.17),transparent 62%),
-    radial-gradient(760px 540px at -12% 42%,rgba(124,58,237,.13),transparent 62%),
-    radial-gradient(680px 520px at 50% 112%,rgba(216,180,254,.07),transparent 62%),
-    radial-gradient(520px at var(--pointer-x,70vw) var(--pointer-y,8vh),rgba(168,85,247,.06),transparent 70%);
+    radial-gradient(1100px 700px at 85% -10%,rgba(168,85,247,.22),transparent 60%),
+    radial-gradient(900px 620px at -10% 35%,rgba(34,211,238,.10),transparent 60%),
+    radial-gradient(760px 560px at 50% 115%,rgba(124,58,237,.18),transparent 62%),
+    radial-gradient(560px at var(--pointer-x,70vw) var(--pointer-y,8vh),rgba(168,85,247,.10),transparent 70%),
+    linear-gradient(180deg,#05040a 0%,#070612 45%,#040309 100%);
 }
 body::after{
-  content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.045;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
   mix-blend-mode:soft-light;
 }
 ::selection{background:var(--accent);color:#fff}
@@ -50,7 +51,7 @@ em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent
 .scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:80;background:linear-gradient(90deg,var(--accent-deep),var(--accent-soft));box-shadow:0 0 18px rgba(168,85,247,.5)}
 
 /* ---------- header ---------- */
-header{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(20px) saturate(1.25);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(22px) saturate(1.35);border-bottom:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.25)}
 .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .brand{display:flex;align-items:center;gap:12px;flex:0 0 auto}
 .mark{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line-2);border-radius:11px;background:linear-gradient(145deg,rgba(168,85,247,.24),rgba(168,85,247,.04));color:var(--accent-soft);font:700 13px var(--display);letter-spacing:.04em}
@@ -86,7 +87,7 @@ header{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mi
 .eyebrow{display:inline-flex;align-items:center;color:var(--accent-soft)}
 .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);margin-right:9px;animation:pulse 2.4s ease-in-out infinite}
 .hero-clock{white-space:nowrap;color:var(--muted)}
-.hero h1{font-size:clamp(54px,8.2vw,116px);line-height:.9;letter-spacing:-.045em;margin:24px 0 24px}
+.hero h1{font-size:clamp(58px,8.6vw,122px);line-height:.88;letter-spacing:-.05em;margin:24px 0 24px;text-shadow:0 0 40px rgba(168,85,247,.18)}
 .h1-intro{display:block;font:500 11px var(--mono);letter-spacing:.3em;color:var(--muted);margin-bottom:20px}
 .hero h1 em{color:var(--accent-soft)}
 .lead{max-width:47ch;color:var(--muted);font-size:16.5px;line-height:1.78;margin:0}
@@ -100,7 +101,7 @@ header{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mi
 .orbit::before{inset:8%;border:1px dashed rgba(216,180,254,.2)}
 .orbit::after{inset:21%;border:1px solid rgba(168,85,247,.12)}
 .orbit i{position:absolute;top:5%;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--accent-soft);box-shadow:0 0 16px var(--accent)}
-.photo{position:relative;z-index:2;width:min(82%,368px);aspect-ratio:4/5;border:1px solid var(--line-2);border-radius:186px 186px 18px 18px;overflow:hidden;background:var(--panel-2);box-shadow:0 40px 120px rgba(0,0,0,.55),0 0 60px rgba(168,85,247,.14);animation:float 7s ease-in-out infinite}
+.photo{position:relative;z-index:2;width:min(82%,372px);aspect-ratio:4/5;border:1px solid var(--line-2);border-radius:186px 186px 18px 18px;overflow:hidden;background:var(--panel-2);box-shadow:0 50px 140px rgba(0,0,0,.65),0 0 0 1px rgba(216,180,254,.08) inset,0 0 80px rgba(168,85,247,.18);animation:float 7s ease-in-out infinite}
 .photo img{width:100%;height:100%;object-fit:cover;object-position:center 28%}
 .photo::after{content:"";position:absolute;inset:52% 0 0;background:linear-gradient(transparent,rgba(8,6,15,.86))}
 .photo-label{position:absolute;z-index:3;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;align-items:end;gap:10px}
