@@ -95,7 +95,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 | `/thanks.html` | Contact-form confirmation (noindex, 12 s redirect home) |
 | `/signup.html` | Client-room access request — name/email form → inbox |
 | `/signup-thanks.html` | Access-request confirmation (noindex, redirect to login) |
-| `/effects.html` | Legacy redirect → `/` (effects hub retired) |
+| `/effects.html` | Editing assets library — MP4 previews, LUTs, overlays, transitions and broadcast graphics |
 | `/CV/Subas_Ghimire_CV.html` | Old CV page — 301 to `/cv.html` |
 
 ## SEO
@@ -115,7 +115,7 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 - **Responsive** layout down to 360 px (collapsible mobile nav)
 - **AI assistant** — serverless `/api/chat` endpoint backed by Gemini
 - **Video generation demo** — `/api/video` wraps Google Veo 3.1
-- **Downloadable CV** (PDF + HTML) and production-ready **LUTs / overlays / transitions** under `effects/`
+- **Downloadable CV** (PDF + HTML) and an **editing assets library** with MP4 previews, LUTs, overlays, transitions and broadcast graphics under `effects/`
 
 ## Tech stack
 
