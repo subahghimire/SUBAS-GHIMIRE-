@@ -86,7 +86,7 @@ header{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mi
 .eyebrow{display:inline-flex;align-items:center;color:var(--accent-soft)}
 .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);margin-right:9px;animation:pulse 2.4s ease-in-out infinite}
 .hero-clock{white-space:nowrap;color:var(--muted)}
-.hero h1{font-size:clamp(52px,7.4vw,104px);line-height:.9;letter-spacing:-.05em;margin:24px 0 24px}
+.hero h1{font-size:clamp(54px,8.2vw,116px);line-height:.9;letter-spacing:-.045em;margin:24px 0 24px}
 .h1-intro{display:block;font:500 11px var(--mono);letter-spacing:.3em;color:var(--muted);margin-bottom:20px}
 .hero h1 em{color:var(--accent-soft)}
 .lead{max-width:47ch;color:var(--muted);font-size:16.5px;line-height:1.78;margin:0}
@@ -106,7 +106,7 @@ header{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mi
 .photo-label{position:absolute;z-index:3;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;align-items:end;gap:10px}
 .photo-label small{font:600 8px var(--mono);letter-spacing:.2em;color:var(--accent-soft)}
 .photo-label strong{font:700 15px var(--display);letter-spacing:.02em}
-.float-tag{position:absolute;z-index:4;right:0;bottom:22px;display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line-2);border-radius:999px;background:color-mix(in srgb,var(--panel) 86%,transparent);backdrop-filter:blur(14px);font:600 9px var(--mono);letter-spacing:.16em;color:var(--accent-soft);text-transform:uppercase;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.float-tag{position:absolute;z-index:4;right:5%;bottom:22px;display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line-2);border-radius:999px;background:color-mix(in srgb,var(--panel) 86%,transparent);backdrop-filter:blur(14px);font:600 9px var(--mono);letter-spacing:.16em;color:var(--accent-soft);text-transform:uppercase;box-shadow:0 12px 30px rgba(0,0,0,.35)}
 .float-tag .dot{margin:0}
 
 /* ---------- marquee + credits ---------- */
@@ -157,13 +157,13 @@ header{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mi
 .work-art::before{content:"";position:absolute;width:200px;height:200px;border:1px solid rgba(168,85,247,.3);border-radius:50%;box-shadow:0 0 0 26px rgba(168,85,247,.05),0 0 0 54px rgba(168,85,247,.03)}
 .work-art b{position:relative;font:700 52px/1 var(--display);letter-spacing:-.05em;color:rgba(216,180,254,.17);transition:.35s var(--ease)}
 .work:hover .work-art b{color:rgba(216,180,254,.55);transform:scale(1.06)}
-.work-tag{position:absolute;top:12px;left:12px;font:600 8px var(--mono);letter-spacing:.18em;color:var(--accent-soft);border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:rgba(8,6,15,.45);text-transform:uppercase}
+.work-tag{position:absolute;top:12px;left:12px;font:600 9px var(--mono);letter-spacing:.18em;color:var(--accent-soft);border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:rgba(8,6,15,.45);text-transform:uppercase}
 .work-text{padding:19px 19px 21px;display:flex;flex-direction:column;gap:7px;flex:1}
 .work-text small{font:600 8.5px var(--mono);letter-spacing:.18em;color:var(--accent-soft);text-transform:uppercase}
 .work-text h3{font-size:20px;letter-spacing:-.015em}
 .work-text p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.65}
 .work-specs{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:7px 0 0;padding:0}
-.work-specs li{font:500 8px var(--mono);letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 8px;text-transform:uppercase}
+.work-specs li{font:500 8.5px var(--mono);letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 8px;text-transform:uppercase}
 
 /* ---------- services ---------- */
 .svc-list{border-top:1px solid var(--line)}
@@ -363,7 +363,7 @@ body.light-mode .btn.primary,body.light-mode .nav-cta{box-shadow:0 10px 28px rgb
   .lead{font-size:15px}
   .meta{gap:7px;margin-top:28px;font-size:8px}
   .photo{width:min(80%,300px)}
-  .float-tag{right:2px;bottom:12px;font-size:8px;padding:8px 11px}
+  .float-tag{right:6%;bottom:12px;font-size:8px;padding:8px 11px}
   .marquee-group{gap:24px;padding-right:24px}
   .marquee-track{font-size:9px}
   .block{padding:58px 0}
