@@ -307,6 +307,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--mint);outline-offse
 body.light-mode .chip{background:#fff}
 .npt{white-space:nowrap}
 footer{flex-wrap:wrap}
+
+/* Light-mode contrast pass — accents were too pale on the light background */
+body.light-mode{--mint:#6b21a8}
+body.light-mode .eyebrow,body.light-mode .kicker,body.light-mode .photo-label small,body.light-mode .tool small,body.light-mode .job time{color:#6b21a8}
+body.light-mode .strip{color:#3f5648}
+body.light-mode .photo:after{background:linear-gradient(transparent,#f7f1ff)}
+body.light-mode .hero h1 em{background:none;-webkit-text-fill-color:#6b21a8;color:#6b21a8;animation:none}
+
 </style>
 <script type="application/ld+json">
 {
