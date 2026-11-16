@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
-  const allowed = origin === "https://subahghimire.github.io" || origin === "https://subas-ghimire.vercel.app";
+  const allowed = origin === "https://subahghimire.github.io" || origin === "https://subas-ghimire.com.np" || origin === "https://www.subas-ghimire.com.np" || origin === "https://subas-ghimire.vercel.app";
   res.setHeader("Access-Control-Allow-Origin", allowed ? origin : "https://subahghimire.github.io");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");

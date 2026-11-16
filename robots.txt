@@ -3,4 +3,4 @@ Allow: /
 Disallow: /members
 Disallow: /api/
 
-Sitemap: https://subas-ghimire.vercel.app/sitemap.xml
+Sitemap: https://subas-ghimire.com.np/sitemap.xml
