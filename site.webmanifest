@@ -37,7 +37,7 @@
     {
       "name": "Selected work",
       "short_name": "Work",
-      "url": "/#work",
+      "url": "/work.html",
       "icons": [
         {
           "src": "icon-192.png",

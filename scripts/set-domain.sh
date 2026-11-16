@@ -26,7 +26,7 @@ python3 - "$OLD" "$NEW" <<'PY'
 import sys, pathlib
 
 old, new = sys.argv[1], sys.argv[2]
-files = ["index.html", "about.html", "cv.html", "subas-ghimire.html", "404.html",
+files = ["index.html", "about.html", "work.html", "cv.html", "subas-ghimire.html", "404.html",
          "signup.html", "signup-thanks.html", "members.html", "subas-ghimire.vcf",
          "robots.txt", "sitemap.xml", "README.md"]
 
