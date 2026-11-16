@@ -26,6 +26,15 @@
       ]
     },
     {
+      "source": "/assets/(.*)\\.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    },
+    {
       "source": "/(.*)\\.(jpg|jpeg|png|svg|webp|avif|ico|woff2)",
       "headers": [
         {
