@@ -113,7 +113,7 @@ export default async function handler(req, res) {
     for (const model of models) {
       let response;
       try {
-        response = await fetch(url, {
+        response = await geminiRequest(url, {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
 
