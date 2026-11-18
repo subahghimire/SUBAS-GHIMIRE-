@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-      signal: AbortSignal.timeout(25000),
+      signal: AbortSignal.timeout(45000),
       body: JSON.stringify({
         model: "gemini-3.8-flash",
         input: message,
