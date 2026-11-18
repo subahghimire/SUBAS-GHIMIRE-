@@ -7,5 +7,10 @@
   <url><loc>https://subas-ghimire.vercel.app/signup.html</loc><lastmod>2026-11-16</lastmod><priority>0.5</priority></url>
   <url><loc>https://subas-ghimire.vercel.app/cv.html</loc><lastmod>2026-11-16</lastmod><priority>0.6</priority></url>
   <url><loc>https://subas-ghimire.vercel.app/effects.html</loc><lastmod>2026-11-16</lastmod><priority>0.7</priority></url>
-  <url><loc>https://subahghimire.github.io/SUBAS-GHIMIRE-/launchpad.html</loc></url>
+  <url><loc>https://subas-ghimire.vercel.app/launchpad.html</loc></url>
+  <url><loc>https://subas-ghimire.vercel.app/studio.html</loc><priority>0.7</priority></url>
+  <url><loc>https://subas-ghimire.vercel.app/creator-tools.html</loc><priority>0.7</priority></url>
+  <url><loc>https://subas-ghimire.vercel.app/launchpad.html</loc><priority>0.6</priority></url>
+  <url><loc>https://subas-ghimire.vercel.app/pro-workspace.html</loc><priority>0.6</priority></url>
+  <url><loc>https://subas-ghimire.vercel.app/visitor-dashboard.html</loc><priority>0.4</priority></url>
 </urlset>
