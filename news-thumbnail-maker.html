@@ -171,19 +171,19 @@ function draw(){
   ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
  }
  const shade=Number($("overlay").value)/100;
- // Smooth, full-frame cinematic gradient: no hard-edged black panel or boxed overlay.
+ // Natural photo-first overlay: restrained 30% black at the bottom, fading smoothly to clear.
  const dark=ctx.createLinearGradient(0,0,0,H);
- dark.addColorStop(0,"rgba(0,0,0,"+(shade*.04)+")");
- dark.addColorStop(.18,"rgba(0,0,0,"+(shade*.09)+")");
- dark.addColorStop(.38,"rgba(2,2,5,"+(shade*.20)+")");
- dark.addColorStop(.56,"rgba(5,2,7,"+(shade*.42)+")");
- dark.addColorStop(.72,"rgba(7,3,9,"+(shade*.68)+")");
- dark.addColorStop(.88,"rgba(4,3,7,"+(shade*.84)+")");
- dark.addColorStop(1,"rgba(2,2,5,"+(shade*.94)+")");
+ const blackStrength=0.30*(shade/0.48);
+ dark.addColorStop(0,"rgba(0,0,0,"+(blackStrength*.12)+")");
+ dark.addColorStop(.28,"rgba(0,0,0,"+(blackStrength*.22)+")");
+ dark.addColorStop(.52,"rgba(0,0,0,"+(blackStrength*.48)+")");
+ dark.addColorStop(.76,"rgba(0,0,0,"+(blackStrength*.78)+")");
+ dark.addColorStop(1,"rgba(0,0,0,"+blackStrength+")");
  ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
  const accent=$("accentColor").value||t.accent;
- const glow=ctx.createRadialGradient(W*.78,H*.22,0,W*.78,H*.22,W*.92);
- glow.addColorStop(0,accent+"35");glow.addColorStop(.28,accent+"20");glow.addColorStop(.62,accent+"08");glow.addColorStop(1,"rgba(0,0,0,0)");
+ // A very subtle red ambience only; keep the uploaded photo's natural colours visible.
+ const glow=ctx.createRadialGradient(W*.82,H*.18,0,W*.82,H*.18,W*.78);
+ glow.addColorStop(0,accent+"12");glow.addColorStop(.38,accent+"08");glow.addColorStop(1,"rgba(0,0,0,0)");
  ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
  const accentGrad=ctx.createLinearGradient(0,0,W*.9,0);accentGrad.addColorStop(0,"#a90e24");accentGrad.addColorStop(.48,accent);accentGrad.addColorStop(1,"#ff5968");
  ctx.save();
