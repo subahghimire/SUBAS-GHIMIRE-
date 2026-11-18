@@ -117,6 +117,17 @@ It covers the work (editing, visual storytelling, post-production), the tools us
 - **Video generation demo** — `/api/video` wraps Google Veo 3.1
 - **Downloadable CV** (PDF + HTML) and an **editing assets library** with MP4 previews, LUTs, overlays, transitions and broadcast graphics under `effects/`
 
+## Creator workspace and PWA
+
+- `/studio.html` — AI Creator Studio and local prompt builder.
+- `/creator-tools.html` — browser-based creator utilities.
+- `/pro-workspace.html` — local showreel preview, before/after comparison, project tracker with status editing and JSON backup/restore, and email-based client brief.
+- `/hi.html` — Hindi portfolio landing page; English and Nepali versions remain available.
+- `/privacy.html` — privacy notice for browser-local previews, drafts and contact workflows.
+- `/service-worker.js` — offline cache for the core portfolio pages; the web manifest uses a relative scope so it works under GitHub Pages project paths.
+
+The Pro Workspace project list and preview files are stored in the current browser only. Client requests are prepared as email drafts; they are not stored in a shared database. Live analytics, server push notifications, shared client records, and publishing content from Admin require external service credentials and deployment configuration. Do not add private API keys to front-end HTML or JavaScript.
+
 ## Tech stack
 
 | Layer | Choice |
