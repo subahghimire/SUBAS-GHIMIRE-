@@ -16,7 +16,9 @@ export default async function handler(req, res) {
     }
 
     const message = typeof body?.message === "string" ? body.message.trim() : "";
-    if (!message) return res.status(400).json({ reply: "Please type a question first." });
+    const image = body?.image && typeof body.image.data === "string" && typeof body.image.mimeType === "string" ? body.image : null;
+    if (!message && !image) return res.status(400).json({ reply: "कृपया प्रश्न लेख्नुहोस् वा फोटो छान्नुहोस्।" });
+    if (image && (!/^image\\/(jpeg|png|webp|gif)$/.test(image.mimeType) || !/^[A-Za-z0-9+/]+=*$/.test(image.data) || image.data.length > 8 * 1024 * 1024)) return res.status(400).json({ reply: "फोटो JPEG, PNG, WEBP वा GIF हुनुपर्छ र ६ MB भन्दा सानो हुनुपर्छ।" });
     if (message.length > 4000) return res.status(400).json({ reply: "Please keep your question under 4000 characters." });
 
     const apiKey = process.env.GEMINI_API_KEY;
@@ -37,6 +39,29 @@ export default async function handler(req, res) {
       "Reply in the same language as the visitor, including Nepali, Roman Nepali, or English. If the visitor mixes languages, respond naturally in the same style. For a bare greeting or a short unclear opener such as hi, hello, or hey, greet the visitor briefly in Nepali first, then invite their question.",
       "Use simple, natural language. Be concise for simple questions and provide detail when the question requires it. Avoid generic filler and do not repeatedly say you are only a video-editing assistant."
     ].join(" ");
+
+    if (image) {
+      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+        signal: AbortSignal.timeout(20000),
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          contents: [{ role: "user", parts: [
+            ...(message ? [{ text: message }] : [{ text: "यो फोटो हेरेर यसको बारेमा बताउनुहोस्।" }]),
+            { inline_data: { mime_type: image.mimeType, data: image.data } }
+          ] }],
+          generationConfig: { thinkingConfig: { thinkingLevel: "low" } }
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        console.error("Gemini image API error:", response.status, JSON.stringify(data));
+        return res.status(200).json({ reply: response.status === 429 ? "Gemini API को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" : "फोटो विश्लेषण अहिले हुन सकेन। कृपया सानो फोटो राखेर फेरि प्रयास गर्नुहोस्।" });
+      }
+      const reply = (data?.candidates?.[0]?.content?.parts || []).map(part => part?.text || "").join("").trim();
+      return res.status(200).json({ reply: reply || "फोटोबाट जवाफ तयार हुन सकेन। अर्को फोटो प्रयास गर्नुहोस्।" });
+    }
 
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
     // Start with the lightweight model for faster replies, then fall back to
