@@ -178,7 +178,8 @@ function draw(){
  const panel=ctx.createLinearGradient(0,panelY,0,H);panel.addColorStop(0,"rgba(20,5,10,.78)");panel.addColorStop(.3,"rgba(10,7,12,.96)");panel.addColorStop(1,"rgba(4,5,8,.99)");ctx.fillStyle=panel;ctx.fillRect(0,panelY,W,H-panelY);
  const accentGrad=ctx.createLinearGradient(0,0,W,0);accentGrad.addColorStop(0,accent);accentGrad.addColorStop(1,"#ff8b73");
  ctx.save();
- const badgeX=72,badgeY=H*.068,badgeW=Math.min(W*.26,250),badgeH=W===1080?36:32;\n const kicker=layers.find(function(l){return l.id==="kicker"});if(kicker){kicker.x=badgeX+18;kicker.y=badgeY+badgeH-7;kicker.size=18;kicker.maxWidth=badgeW-28;}
+ const badgeX=72,badgeY=H*.068,badgeW=Math.min(W*.26,250),badgeH=W===1080?36:32;
+ const kicker=layers.find(function(l){return l.id==="kicker"});if(kicker){kicker.x=badgeX+18;kicker.y=badgeY+badgeH-7;kicker.size=18;kicker.maxWidth=badgeW-28;}
  ctx.shadowColor=accent+"66";ctx.shadowBlur=22;
  ctx.fillStyle=accentGrad;roundRect(badgeX,badgeY,badgeW,badgeH,7);ctx.fill();
  ctx.shadowBlur=0;ctx.fillStyle="rgba(20,0,4,.22)";roundRect(badgeX+5,badgeY+5,badgeW-10,badgeH-10,4);ctx.fill();
