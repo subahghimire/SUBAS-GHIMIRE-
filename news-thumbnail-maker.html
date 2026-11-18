@@ -187,12 +187,27 @@ function draw(){
   const s=layers.find(function(l){return l.id==="subheadline"});
   if(s){s.visible=$( "showSubheadline" ).checked;s.align="left";s.x=90;s.y=900;s.size=48;s.maxWidth=900;s.weight="900";s.color="#ff3948";s.shadow="none";}
   const ft=layers.find(function(l){return l.id==="footer"});if(ft)ft.visible=false;
-  // Original slim vertical red line beside the headline block.
-  const line=ctx.createLinearGradient(0,646,0,1019);
-  line.addColorStop(0,"#ff5360");line.addColorStop(1,"#a90e20");
-  ctx.fillStyle=line;ctx.fillRect(54,646,8,373);
-  // Small 24 HOUR label at the top-right corner.
-  ctx.save();ctx.font="700 18px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.7)";ctx.shadowBlur=6;ctx.fillText("24 HOUR",W-34,42);ctx.restore();
+  // Soft red plate behind BREAKING NEWS.
+  ctx.save();ctx.font="900 18px Arial,sans-serif";
+  const plateText="BREAKING NEWS",plateW=ctx.measureText(plateText).width+28,plateH=34,plateX=76,plateY=85;
+  ctx.fillStyle="rgba(205,24,43,.76)";roundRect(plateX,plateY,plateW,plateH,5);ctx.fill();ctx.restore();
+  // Vertical accent line follows the actual visible headline text height.
+  const visibleTextLayers=[h,s].filter(function(l){return l&&l.visible!==false&&String(l.text||"").trim()});
+  if(visibleTextLayers.length){
+   let top=Infinity,bottom=-Infinity;
+   visibleTextLayers.forEach(function(l){
+    let fs=l.size,lines=[];
+    while(fs>18){ctx.font=l.weight+" "+fs+"px "+l.font;lines=wrap(l.text,l.maxWidth,ctx.font);if(lines.every(function(v){return ctx.measureText(v).width<=l.maxWidth}))break;fs-=2}
+    ctx.font=l.weight+" "+fs+"px "+l.font;lines=wrap(l.text,l.maxWidth,ctx.font);
+    const lh=fs*1.2;top=Math.min(top,l.y-fs);bottom=Math.max(bottom,l.y+Math.max(0,lines.length-1)*lh+5);
+   });
+   top=Math.max(610,top-12);bottom=Math.min(H-22,bottom+12);
+   const line=ctx.createLinearGradient(0,top,0,bottom);
+   line.addColorStop(0,"#ff5360");line.addColorStop(1,"#a90e20");
+   ctx.fillStyle=line;ctx.fillRect(54,top,8,Math.max(8,bottom-top));
+  }
+  // Slightly larger 24 HOUR label.
+  ctx.save();ctx.font="700 23px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.7)";ctx.shadowBlur=6;ctx.fillText("24 HOUR",W-34,44);ctx.restore();
  }else{
   const dark=ctx.createLinearGradient(0,0,0,H);
   dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
