@@ -22,7 +22,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
 <main class="wrap studio-wrap">
 <div class="studio-head"><div><div class="eyebrow">FREE · LOCAL BROWSER TOOL</div><h1>News Thumbnail <em style="font-family:'Instrument Serif';font-weight:400;color:#ff6873">Studio.</em></h1><p>Create bold, dark-cinematic news and political thumbnails. Upload your own photo, edit the headline and export HD PNG in Facebook square 1080 × 1080 or widescreen 1280 × 720. Your images stay on your device.</p></div></div>
 <div class="workspace">
-<section class="preview-panel"><div class="panel-top"><strong>LIVE THUMBNAIL PREVIEW</strong><small id="formatBadge">16:9 · HD CANVAS</small></div><div class="preview-area"><div class="canvas-frame"><canvas id="thumbCanvas" width="1280" height="720" aria-label="Thumbnail preview"></canvas></div><div class="preview-meta"><span id="imageStatus">No photo uploaded · template background active</span><span id="dimensionLabel">1280 × 720 px</span></div></div></section>
+<section class="preview-panel"><div class="panel-top"><strong>LIVE THUMBNAIL PREVIEW</strong><small id="formatBadge">1:1 · FACEBOOK POST</small></div><div class="preview-area"><div class="canvas-frame"><canvas id="thumbCanvas" width="1080" height="1080" aria-label="Thumbnail preview"></canvas></div><div class="preview-meta"><span id="imageStatus">No photo uploaded · template background active</span><span id="dimensionLabel">1280 × 720 px</span></div></div></section>
 <aside class="editor-panel"><div class="panel-top"><strong>DESIGN CONTROLS</strong><small>EDIT LIVE</small></div><div class="editor-content">
 <div class="field"><label for="canvasFormat">Post / thumbnail format</label><select id="canvasFormat"><option value="square" selected>Facebook Post · 1080 × 1080 (1:1)</option><option value="wide">YouTube / Facebook Video · 1280 × 720 (16:9)</option></select></div>
 <div class="field"><span class="field-label">Choose a template</span><div class="template-grid"><button class="template" data-template="breaking" aria-pressed="true"><i class="template-swatch"></i>BREAKING</button><button class="template" data-template="debate" aria-pressed="false"><i class="template-swatch"></i>DEBATE</button><button class="template" data-template="exclusive" aria-pressed="false"><i class="template-swatch"></i>EXCLUSIVE</button></div></div>
@@ -51,17 +51,26 @@ function draw(){const square=$("canvasFormat").value==="square",W=square?1080:12
 if(photo){const iw=photo.naturalWidth,ih=photo.naturalHeight,fit=$("photoFit").value;let scale=fit==="contain"?Math.min(W/iw,H/ih):Math.max(W/iw,H/ih);let w=iw*scale,h=ih*scale;ctx.drawImage(photo,(W-w)/2,(H-h)/2,w,h)}else{const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,p.base);g.addColorStop(.58,"#25212a");g.addColorStop(1,"#08090d");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.strokeStyle="#ffffff12";ctx.lineWidth=2;for(let x=-500;x<W+500;x+=110){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+500,H);ctx.stroke()}ctx.restore()}
 const shade=Number($("overlay").value)/100;
 if(square){
-  // Dedicated Facebook square composition: photo-led upper half and bold red editorial headline panel below.
-  const topShade=ctx.createLinearGradient(0,0,0,590);topShade.addColorStop(0,"rgba(0,0,0,.72)");topShade.addColorStop(.55,"rgba(0,0,0,"+(shade*.65)+")");topShade.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=topShade;ctx.fillRect(0,0,W,610);
-  ctx.fillStyle="#08090de8";ctx.fillRect(0,0,W,66);ctx.fillStyle="#fff";ctx.font="700 20px Arial,sans-serif";ctx.textAlign="left";ctx.fillText("SUBAS GHIMIRE",58,42);ctx.fillStyle="#ff6570";ctx.font="700 15px Arial,sans-serif";ctx.textAlign="right";ctx.fillText("NEWS  /  POLITICAL",W-58,42);
-  const label=$("kicker").value.toUpperCase();ctx.textAlign="left";ctx.font="800 22px Arial,sans-serif";const labelW=Math.min(720,ctx.measureText(label).width+54);ctx.fillStyle=accent;ctx.fillRect(58,112,labelW,48);ctx.fillStyle="#fff";ctx.fillText(label,82,144);
-  const panel=ctx.createLinearGradient(0,520,0,H);panel.addColorStop(0,"rgba(65,0,8,.82)");panel.addColorStop(.28,"rgba(132,0,17,.96)");panel.addColorStop(1,"#a90920");ctx.fillStyle=panel;ctx.fillRect(0,520,W,560);
-  ctx.fillStyle=accent;ctx.fillRect(58,580,8,330);
-  const align=$("textAlign").value,tx=align==="center"?W/2:92,maxW=align==="center"?W-150:900;
-  const size=Math.min(92,Number($("headlineSize").value)*.96),headline=$("headline").value.trim()||"YOUR HEADLINE";let lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif");if(lines.length>4)lines=lines.slice(0,4);const lineH=size*1.16,startY=Math.max(650,805-(lines.length-1)*lineH);
-  ctx.textAlign=align;ctx.fillStyle=$("headlineColor").value;ctx.font="800 "+size+"px Arial,sans-serif";ctx.shadowColor="#0009";ctx.shadowBlur=12;lines.forEach((line,i)=>ctx.fillText(line,tx,startY+i*lineH));ctx.shadowBlur=0;
-  ctx.fillStyle="#fff";ctx.globalAlpha=.94;ctx.font="500 25px Arial,sans-serif";ctx.fillText($("subheadline").value,tx,925);ctx.globalAlpha=1;
-  ctx.fillStyle="#ffffff55";ctx.fillRect(58,965,W-116,1);ctx.fillStyle="#fff";ctx.globalAlpha=.85;ctx.font="700 16px Arial,sans-serif";ctx.textAlign="left";ctx.fillText($("footerText").value.toUpperCase(),58,1010);ctx.textAlign="right";ctx.fillText("1080 × 1080",W-58,1010);ctx.globalAlpha=1;
+  // Advanced Facebook square artwork: each editorial template has its own visual identity.
+  const isDebate=template==="debate",isExclusive=template==="exclusive";
+  const topShade=ctx.createLinearGradient(0,0,0,590);topShade.addColorStop(0,"rgba(0,0,0,.78)");topShade.addColorStop(.62,"rgba(0,0,0,"+(shade*.72)+")");topShade.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=topShade;ctx.fillRect(0,0,W,610);
+  ctx.fillStyle="#07090deF";ctx.fillRect(0,0,W,68);ctx.fillStyle="#fff";ctx.font="800 21px Arial,sans-serif";ctx.textAlign="left";ctx.fillText("SUBAS GHIMIRE",58,43);ctx.fillStyle=isExclusive?"#e7c77b":isDebate?"#f0c36a":"#ff6570";ctx.font="700 15px Arial,sans-serif";ctx.textAlign="right";ctx.fillText(isExclusive?"SPECIAL REPORT":isDebate?"POLITICAL DESK":"NEWS  /  POLITICAL",W-58,43);
+  const label=$("kicker").value.toUpperCase();ctx.textAlign="left";ctx.font="800 21px Arial,sans-serif";const labelW=Math.min(720,ctx.measureText(label).width+54);ctx.fillStyle=accent;ctx.fillRect(58,112,labelW,48);ctx.fillStyle="#fff";ctx.fillText(label,82,144);
+  if(isDebate){
+    const panel=ctx.createLinearGradient(0,500,0,H);panel.addColorStop(0,"#071626");panel.addColorStop(1,"#101d31");ctx.fillStyle=panel;ctx.fillRect(0,500,W,580);ctx.fillStyle=accent;ctx.fillRect(0,500,W,9);ctx.fillRect(58,566,7,355);
+    ctx.strokeStyle="#ffffff20";ctx.lineWidth=2;ctx.strokeRect(35,535,W-70,420);
+  }else if(isExclusive){
+    ctx.fillStyle="#080a0d";ctx.fillRect(0,500,W,580);ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.strokeRect(34,520,W-68,520);ctx.fillStyle=accent;ctx.fillRect(58,555,130,5);
+  }else{
+    const panel=ctx.createLinearGradient(0,500,0,H);panel.addColorStop(0,"rgba(65,0,8,.9)");panel.addColorStop(.3,"rgba(132,0,17,.98)");panel.addColorStop(1,"#a90920");ctx.fillStyle=panel;ctx.fillRect(0,500,W,580);ctx.fillStyle=accent;ctx.fillRect(58,555,8,370);
+  }
+  const align=$("textAlign").value,tx=align==="center"?W/2:92,maxW=align==="center"?W-150:900,headline=$("headline").value.trim()||"YOUR HEADLINE";
+  let size=Math.min(92,Number($("headlineSize").value)*.96),lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif");
+  while(lines.length>3&&size>48){size-=4;lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif")}
+  if(lines.length>3)lines=lines.slice(0,3);const lineH=size*1.13,startY=lines.length===1?700:lines.length===2?665:630;
+  ctx.textAlign=align;ctx.fillStyle=$("headlineColor").value;ctx.font="800 "+size+"px Arial,sans-serif";ctx.shadowColor="#000b";ctx.shadowBlur=14;lines.forEach((line,i)=>ctx.fillText(line,tx,startY+i*lineH, maxW));ctx.shadowBlur=0;
+  const subY=Math.min(930,startY+lines.length*lineH+28);ctx.fillStyle=isExclusive?accent:"#fff";ctx.globalAlpha=.96;ctx.font="500 24px Arial,sans-serif";ctx.fillText($("subheadline").value,tx,subY,maxW);ctx.globalAlpha=1;
+  ctx.fillStyle="#ffffff55";ctx.fillRect(58,965,W-116,1);ctx.fillStyle="#fff";ctx.globalAlpha=.88;ctx.font="700 16px Arial,sans-serif";ctx.textAlign="left";ctx.fillText($("footerText").value.toUpperCase(),58,1010,760);ctx.textAlign="right";ctx.fillText("1080 × 1080",W-58,1010);ctx.globalAlpha=1;
 }else{
   const grad=ctx.createLinearGradient(0,0,W,0);grad.addColorStop(0,"rgba(0,0,0,"+Math.min(.94,shade+.25)+")");grad.addColorStop(.65,"rgba(0,0,0,"+shade+")");grad.addColorStop(1,"rgba(0,0,0,"+Math.max(.12,shade-.22)+")");ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
   const align=$("textAlign").value,tx=align==="center"?W/2:78;ctx.textAlign=align;ctx.fillStyle=accent;ctx.fillRect(78,70,9,52);ctx.font="700 27px Arial,sans-serif";ctx.fillText($("kicker").value.toUpperCase(),align==="center"?W/2:105,105);
