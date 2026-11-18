@@ -173,24 +173,25 @@ function draw(){
  const shade=Number($("overlay").value)/100;
  // Smooth, full-frame cinematic gradient: no hard-edged black panel or boxed overlay.
  const dark=ctx.createLinearGradient(0,0,0,H);
- dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");
- dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
- dark.addColorStop(.52,"rgba(5,3,8,"+(shade*.38)+")");
- dark.addColorStop(.72,"rgba(7,3,9,"+(shade*.72)+")");
- dark.addColorStop(1,"rgba(3,3,6,"+(shade*.94)+")");
+ dark.addColorStop(0,"rgba(0,0,0,"+(shade*.04)+")");
+ dark.addColorStop(.18,"rgba(0,0,0,"+(shade*.09)+")");
+ dark.addColorStop(.38,"rgba(2,2,5,"+(shade*.20)+")");
+ dark.addColorStop(.56,"rgba(5,2,7,"+(shade*.42)+")");
+ dark.addColorStop(.72,"rgba(7,3,9,"+(shade*.68)+")");
+ dark.addColorStop(.88,"rgba(4,3,7,"+(shade*.84)+")");
+ dark.addColorStop(1,"rgba(2,2,5,"+(shade*.94)+")");
  ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
  const accent=$("accentColor").value||t.accent;
- const glow=ctx.createRadialGradient(W*.82,H*.16,10,W*.82,H*.16,W*.82);glow.addColorStop(0,accent+"44");glow.addColorStop(.42,accent+"14");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
- const panelY=H*(W===1080?.57:.53);
- const accentGrad=ctx.createLinearGradient(0,0,W,0);accentGrad.addColorStop(0,accent);accentGrad.addColorStop(1,"#ff8b73");
+ const glow=ctx.createRadialGradient(W*.78,H*.22,0,W*.78,H*.22,W*.92);
+ glow.addColorStop(0,accent+"35");glow.addColorStop(.28,accent+"20");glow.addColorStop(.62,accent+"08");glow.addColorStop(1,"rgba(0,0,0,0)");
+ ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+ const accentGrad=ctx.createLinearGradient(0,0,W*.9,0);accentGrad.addColorStop(0,"#a90e24");accentGrad.addColorStop(.48,accent);accentGrad.addColorStop(1,"#ff5968");
  ctx.save();
  const badgeX=72,badgeY=H*.068,badgeH=W===1080?28:26;
  ctx.font="900 14px Arial, sans-serif";const badgeW=Math.ceil(ctx.measureText("BREAKING NEWS").width)+28;
  const kicker=layers.find(function(l){return l.id==="kicker"});if(kicker){kicker.x=badgeX+14;kicker.y=badgeY+badgeH-6;kicker.size=14;kicker.maxWidth=badgeW-22;}
- ctx.shadowColor=accent+"66";ctx.shadowBlur=22;
+ ctx.shadowColor=accent+"44";ctx.shadowBlur=14;
  ctx.fillStyle=accentGrad;roundRect(badgeX,badgeY,badgeW,badgeH,7);ctx.fill();
- ctx.shadowBlur=0;ctx.fillStyle="rgba(20,0,4,.22)";roundRect(badgeX+5,badgeY+5,badgeW-10,badgeH-10,4);ctx.fill();
- ctx.fillStyle="#fff";ctx.fillRect(badgeX+9,badgeY+7,3,badgeH-14);
  ctx.restore();
  // Fixed Facebook page branding in the top-right corner
  ctx.save();ctx.textAlign="right";ctx.textBaseline="alphabetic";ctx.font="900 "+(W===1080?25:22)+"px Arial, sans-serif";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.85)";ctx.shadowBlur=12;ctx.fillText("24 hour",W-72,badgeY+badgeH-2);ctx.restore();
