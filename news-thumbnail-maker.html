@@ -114,11 +114,9 @@ function draw(){
  const panel=ctx.createLinearGradient(0,panelY,0,H);panel.addColorStop(0,"rgba(20,5,10,.78)");panel.addColorStop(.3,"rgba(10,7,12,.96)");panel.addColorStop(1,"rgba(4,5,8,.99)");ctx.fillStyle=panel;ctx.fillRect(0,panelY,W,H-panelY);
  const accentGrad=ctx.createLinearGradient(0,0,W,0);accentGrad.addColorStop(0,accent);accentGrad.addColorStop(1,"#ff8b73");
  ctx.fillStyle=accentGrad;roundRect(54,H*.075,Math.min(W*.56,500),W===1080?58:48,7);ctx.fill();
- const kicker=layers.find(function(l){return l.id==="kicker"});if(kicker){ctx.save();ctx.font=fontString(kicker);ctx.fillStyle="#fff";ctx.textAlign="left";ctx.textBaseline="middle";ctx.shadowColor="#000";ctx.shadowBlur=8;ctx.fillText(kicker.text,72,H*.075+(W===1080?29:24),W*.52);ctx.restore()}
  ctx.fillStyle=accent;ctx.fillRect(54,panelY+30,9,H-panelY-90);
  ctx.fillStyle="rgba(255,255,255,.22)";ctx.fillRect(54,H-62,W-108,1);
- hitBoxes=[];layers.filter(function(l){return l.id!=="kicker"}).forEach(renderLayer);
- if(kicker){hitBoxes.unshift({id:kicker.id,left:45,top:H*.075-8,right:Math.min(W*.56,500)+65,bottom:H*.075+(W===1080?65:55)})}
+ hitBoxes=[];layers.forEach(renderLayer);
  $("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"Default cinematic background · upload your photo";
  syncLayerControls();
 }
