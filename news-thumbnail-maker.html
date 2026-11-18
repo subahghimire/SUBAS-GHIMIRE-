@@ -187,6 +187,8 @@ function draw(){
   ctx.fillStyle="#ed2638";ctx.fillRect(54,646,9,373);
   ctx.fillStyle="rgba(255,255,255,.24)";ctx.fillRect(63,1018,963,1);
   ctx.save();ctx.font="900 18px Arial,sans-serif";ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle="#fff";ctx.fillText("BREAKING NEWS",72,96);ctx.restore();
+  // Small 24 hour page label at the top-right corner.
+  ctx.save();ctx.font="700 16px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="rgba(255,255,255,.95)";ctx.shadowColor="rgba(0,0,0,.65)";ctx.shadowBlur=5;ctx.fillText("24 hour",W-54,92);ctx.restore();
  }else{
   const dark=ctx.createLinearGradient(0,0,0,H);
   dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
