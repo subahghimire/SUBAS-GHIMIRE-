@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ne">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08090d">
+<meta name="description" content="Newsroom Graphics Studio — create lower thirds, breaking news bars, tickers and broadcast graphics.">
+<title>Newsroom Graphics Studio | Subas Ghimire</title>
+<link rel="stylesheet" href="assets/studio.css?v=3">
+<style>
+:root{--bg:#08090d;--panel:#11131b;--line:#ffffff20;--red:#e51f35;--ink:#f7f7fb;--muted:#a6a8b3}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#8b111d30,transparent 38%),var(--bg);color:var(--ink);font:15px/1.55 'DM Sans',Arial,sans-serif}
+.wrap{width:min(1280px,calc(100% - 36px));margin:auto}header{border-bottom:1px solid var(--line);background:#08090de8;position:sticky;top:0;z-index:5;backdrop-filter:blur(16px)}.nav{height:66px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{color:#fff;font-weight:800;letter-spacing:.12em;text-decoration:none}.brand small{display:block;color:#aaa;font-size:9px;letter-spacing:.16em}.navlinks{display:flex;gap:18px;flex-wrap:wrap}.navlinks a{color:#ddd;text-decoration:none;font-size:12px}
+main{padding:28px 0 60px}.head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:20px}.eyebrow{color:#ff818b;font:700 10px ui-monospace,monospace;letter-spacing:.18em}.head h1{font-size:clamp(32px,5vw,54px);line-height:1.04;letter-spacing:-.05em;margin:8px 0}.head p{max-width:650px;color:var(--muted);margin:0;font-size:13px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px;align-items:start}.panel{background:linear-gradient(145deg,#171923,#0d0f15);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 22px 70px #0006}.panelhead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.panelhead b{font:700 12px ui-monospace,monospace;letter-spacing:.1em}.panelhead small{font:700 9px ui-monospace,monospace;color:#ff858d}.preview{padding:14px}.stage{background:repeating-conic-gradient(#171923 0 25%,#11131b 0 50%) 50%/24px 24px;border:1px solid #ffffff25;border-radius:9px;overflow:hidden}.stage canvas{display:block;width:100%;height:auto}.hint{color:var(--muted);font-size:10px;margin:9px 0 0}
+.controls{padding:14px;display:grid;gap:12px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px}.tab{border:1px solid #ffffff2b;background:#090b11;color:#ddd;padding:10px 7px;border-radius:8px;font-size:11px;cursor:pointer}.tab[aria-pressed=true]{background:#42131b;border-color:#ff5965;color:#fff}.field{display:grid;gap:6px}.field label,.field>span{font:700 9px ui-monospace,monospace;letter-spacing:.13em;color:#c5c6d0;text-transform:uppercase}.field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #ffffff24;border-radius:8px;background:#090b11;color:#fff;padding:11px;font:14px 'DM Sans',sans-serif}.field input[type=color]{height:42px;padding:4px}.field textarea{resize:vertical;min-height:68px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.toggle{display:flex;align-items:center;gap:9px;color:#ddd;font-size:12px}.toggle input{accent-color:#ed2638;width:17px;height:17px}.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.btn{border:1px solid #ffffff30;border-radius:999px;padding:12px 10px;background:linear-gradient(120deg,#b7192a,#f13d4d);color:#fff;font:700 10px ui-monospace,monospace;letter-spacing:.08em;cursor:pointer}.btn.secondary{background:transparent}.status{min-height:16px;color:#ff9da5;font-size:10px}.hidden{display:none!important}
+footer{padding:20px 0;border-top:1px solid var(--line);color:#888;font-size:10px;display:flex;justify-content:space-between;gap:12px}footer a{color:#ddd}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.head{align-items:start;flex-direction:column}.controls{grid-template-columns:1fr 1fr}.tabs,.btnrow,.status{grid-column:1/-1}}
+@media(max-width:600px){.wrap{width:calc(100% - 22px)}main{padding-top:20px}.nav{height:auto;min-height:60px;align-items:flex-start;padding:12px 0}.navlinks{gap:9px;justify-content:flex-end}.navlinks a{font-size:10px}.controls{display:grid;grid-template-columns:1fr}.tabs,.btnrow,.status{grid-column:auto}.panelhead{padding:12px}.preview{padding:8px}.field input,.field select,.field textarea{font-size:16px;min-height:44px}}
+</style>
+</head>
+<body>
+<header><nav class="wrap nav"><a class="brand" href="index.html">SUBAS GHIMIRE<small>NEWSROOM GRAPHICS STUDIO</small></a><div class="navlinks"><a href="news-thumbnail-maker.html">Photo Post Studio</a><a href="creator-tools.html">Creator Tools</a><a href="index.html">Portfolio ↗</a></div></nav></header>
+<main class="wrap">
+<div class="head"><div><div class="eyebrow">BROADCAST DESIGN · FREE BROWSER TOOL</div><h1>Newsroom Graphics <span style="color:#ff6873">Studio.</span></h1><p>Lower thirds, breaking news bars, tickers and full-screen broadcast graphics. Edit the text, preview instantly and export a transparent 1920 × 1080 PNG. Everything runs in your browser.</p></div></div>
+<div class="workspace">
+<section class="panel"><div class="panelhead"><b>LIVE BROADCAST PREVIEW</b><small id="format">LOWER THIRD · 1920 × 1080</small></div><div class="preview"><div class="stage"><canvas id="art" width="1920" height="1080" aria-label="Broadcast graphic preview"></canvas></div><p class="hint">Transparent canvas preview. Export PNG and place it above your footage in Premiere Pro or another editor.</p></div></section>
+<aside class="panel"><div class="panelhead"><b>GRAPHIC CONTROLS</b><small>EDIT LIVE</small></div><div class="controls">
+<div class="tabs" role="group" aria-label="Graphic type">
+<button class="tab" data-kind="lower" aria-pressed="true">LOWER THIRD</button><button class="tab" data-kind="breaking" aria-pressed="false">BREAKING BAR</button><button class="tab" data-kind="ticker" aria-pressed="false">NEWS TICKER</button><button class="tab" data-kind="full" aria-pressed="false">TV GRAPHIC</button>
+</div>
+<div class="field"><label for="label">Top label / category</label><input id="label" value="BREAKING NEWS" maxlength="40"></div>
+<div class="field"><label for="headline">Main headline</label><textarea id="headline" maxlength="100">सरकारको महत्वपूर्ण निर्णय सार्वजनिक</textarea></div>
+<div class="field" id="subWrap"><label for="subline">Name / supporting line</label><input id="subline" value="सुबास घिमिरे · काठमाडौं" maxlength="80"></div>
+<div class="field hidden" id="tickerWrap"><label for="ticker">Ticker message</label><textarea id="ticker" maxlength="180">ताजा समाचारका लागि हामीसँग जोडिइरहनुहोस् · मुख्य समाचार अपडेट</textarea></div>
+<div class="two"><div class="field"><label for="accent">Accent colour</label><input id="accent" type="color" value="#e51f35"></div><div class="field"><label for="base">Dark panel colour</label><input id="base" type="color" value="#08090d"></div></div>
+<div class="field"><label for="position">Vertical position</label><select id="position"><option value="bottom">Bottom</option><option value="top">Top</option></select></div>
+<label class="toggle"><input id="showClock" type="checkbox" checked> Show 24-hour Kathmandu clock label</label>
+<div class="btnrow"><button class="btn secondary" id="reset" type="button">RESET</button><button class="btn" id="download" type="button">DOWNLOAD PNG ↓</button></div>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+</div></aside>
+</div>
+</main>
+<footer class="wrap"><span>© <span id="year"></span> SUBAS GHIMIRE</span><span><a href="news-thumbnail-maker.html">Photo Post Studio</a> · <a href="index.html">Portfolio</a></span></footer>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),c=$('art'),ctx=c.getContext('2d');
+let kind='lower';
+const defaults={label:'BREAKING NEWS',headline:'सरकारको महत्वपूर्ण निर्णय सार्वजनिक',subline:'सुबास घिमिरे · काठमाडौं',ticker:'ताजा समाचारका लागि हामीसँग जोडिइरहनुहोस् · मुख्य समाचार अपडेट'};
+const fields=['label','headline','subline','ticker','accent','base','position','showClock'];
+function clock(){try{return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kathmandu',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date())}catch(e){return '--:--'}}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function text(str,x,y,size,weight='700',color='#fff',align='left',max=1600){ctx.font=weight+' '+size+'px "Noto Sans Devanagari",Arial,sans-serif';ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline='middle';ctx.fillText(str,x,y,max)}
+function draw(){
+ const accent=$('accent').value,base=$('base').value,label=$('label').value.trim(),headline=$('headline').value.trim(),sub=$('subline').value.trim(),ticker=$('ticker').value.trim(),pos=$('position').value,show=$('showClock').checked;
+ ctx.clearRect(0,0,c.width,c.height);
+ const bottom=pos==='bottom',y=bottom?760:110;
+ if(kind==='lower'){
+  const g=ctx.createLinearGradient(100,y,1660,y+190);g.addColorStop(0,base);g.addColorStop(.76,'#111318');g.addColorStop(1,'#090a0e');
+  ctx.fillStyle=g;rr(100,y,1700,210,12);ctx.fill();
+  ctx.fillStyle=accent;rr(100,y,16,210,7);ctx.fill();
+  ctx.fillStyle=accent;rr(145,y+24,310,42,5);ctx.fill();
+  text(label.toUpperCase(),165,y+45,23,'800','#fff');
+  text(headline,150,y+112,52,'800','#fff');
+  text(sub,150,y+169,27,'500','#d5d5da');
+  if(show){ctx.fillStyle='#fff';ctx.globalAlpha=.9;rr(1570,y+24,190,42,5);ctx.fill();ctx.globalAlpha=1;text(clock()+' NPT',1665,y+45,22,'800',base,'center')}
+ }else if(kind==='breaking'){
+  ctx.fillStyle=base;ctx.globalAlpha=.96;rr(70,y+35,1780,165,9);ctx.fill();ctx.globalAlpha=1;
+  ctx.fillStyle=accent;rr(70,y+35,320,165,9);ctx.fill();text(label.toUpperCase(),230,y+118,35,'900','#fff','center',285);
+  text(headline,430,y+116,55,'900','#fff', 'left',1350);
+  if(show)text(clock()+' NPT',1780,y+175,20,'700','#fff','right',250);
+ }else if(kind==='ticker'){
+  const ty=bottom?900:120;
+  ctx.fillStyle=base;ctx.globalAlpha=.96;rr(55,ty,1810,100,8);ctx.fill();ctx.globalAlpha=1;
+  ctx.fillStyle=accent;rr(55,ty,245,100,8);ctx.fill();text(label.toUpperCase(),177,ty+51,26,'900','#fff','center',220);
+  text(ticker||headline,335,ty+51,31,'700','#fff','left',1450);
+  if(show){ctx.fillStyle=accent;rr(1690,ty+14,150,72,6);ctx.fill();text(clock(),1765,ty+50,27,'900','#fff','center')}
+ }else{
+  const gy=bottom?690:90;
+  const grad=ctx.createLinearGradient(0,gy,0,gy+310);grad.addColorStop(0,'#08090d00');grad.addColorStop(.4,base+'dd');grad.addColorStop(1,base);
+  ctx.fillStyle=grad;ctx.fillRect(0,gy,1920,340);
+  ctx.fillStyle=accent;ctx.fillRect(100,gy+85,12,170);
+  ctx.fillStyle=accent;rr(140,gy+80,300,48,5);ctx.fill();
+  text(label.toUpperCase(),160,gy+105,24,'900','#fff');
+  text(headline,140,gy+190,64,'900','#fff','left',1600);
+  text(sub,140,gy+260,30,'500','#eee');
+  if(show)text(clock()+' NPT',1800,gy+105,25,'800','#fff','right',300);
+ }
+ $('format').textContent=({lower:'LOWER THIRD',breaking:'BREAKING NEWS BAR',ticker:'NEWS TICKER',full:'TV BROADCAST GRAPHIC'})[kind]+' · 1920 × 1080';
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{kind=b.dataset.kind;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('subWrap').classList.toggle('hidden',kind==='ticker');$('tickerWrap').classList.toggle('hidden',kind!=='ticker');draw()}));
+fields.forEach(id=>$(id).addEventListener('input',draw));$('ticker').addEventListener('input',draw);
+$('reset').addEventListener('click',()=>{Object.entries(defaults).forEach(([k,v])=>$(k).value=v);$('accent').value='#e51f35';$('base').value='#08090d';$('position').value='bottom';$('showClock').checked=true;draw();$('status').textContent='Default design restored.'});
+$('download').addEventListener('click',()=>{try{const a=document.createElement('a');a.download='subas-newsroom-'+kind+'-1920x1080.png';a.href=c.toDataURL('image/png');a.click();$('status').textContent='PNG exported — ready for your video timeline.'}catch(e){$('status').textContent='Export failed. Please try again in a modern browser.'}});
+$('year').textContent=new Date().getFullYear();draw();
+})();
+</script>
+</body></html>
