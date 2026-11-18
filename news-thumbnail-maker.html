@@ -171,20 +171,16 @@ function draw(){
   ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
  }
  const shade=Number($("overlay").value)/100;
- // Natural photo-first overlay: up to 30% black at the bottom, fading smoothly to clear.
+ // Smooth, full-frame cinematic gradient: no hard-edged black panel or boxed overlay.
  const dark=ctx.createLinearGradient(0,0,0,H);
- const blackStrength=0.30*(shade/0.48);
- dark.addColorStop(0,"rgba(0,0,0,"+(blackStrength*.12)+")");
- dark.addColorStop(.28,"rgba(0,0,0,"+(blackStrength*.22)+")");
- dark.addColorStop(.52,"rgba(0,0,0,"+(blackStrength*.48)+")");
- dark.addColorStop(.76,"rgba(0,0,0,"+(blackStrength*.78)+")");
- dark.addColorStop(1,"rgba(0,0,0,"+blackStrength+")");
+ dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");
+ dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
+ dark.addColorStop(.52,"rgba(5,3,8,"+(shade*.38)+")");
+ dark.addColorStop(.72,"rgba(7,3,9,"+(shade*.72)+")");
+ dark.addColorStop(1,"rgba(3,3,6,"+(shade*.94)+")");
  ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
  const accent=$("accentColor").value||t.accent;
- // A very subtle red ambience only; keep the uploaded photo's natural colours visible.
- const glow=ctx.createRadialGradient(W*.82,H*.18,0,W*.82,H*.18,W*.78);
- glow.addColorStop(0,accent+"12");glow.addColorStop(.38,accent+"08");glow.addColorStop(1,"rgba(0,0,0,0)");
- ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+ const glow=ctx.createRadialGradient(W*.82,H*.16,10,W*.82,H*.16,W*.82);glow.addColorStop(0,accent+"44");glow.addColorStop(.42,accent+"14");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
  const accentGrad=ctx.createLinearGradient(0,0,W*.9,0);accentGrad.addColorStop(0,"#a90e24");accentGrad.addColorStop(.48,accent);accentGrad.addColorStop(1,"#ff5968");
  ctx.save();
  const badgeX=72,badgeY=H*.068,badgeH=W===1080?28:26;
