@@ -32,7 +32,7 @@
 <span class="hub-kicker">SUBAS GHIMIRE · CREATOR WORKSPACE</span>
 <h1>SG Pro <em>Workspace.</em></h1>
 <p>A responsive workspace for video editing, client briefs and creative planning. Your project drafts and local previews stay in this browser unless you choose to share them.</p>
-<div class="hub-actions"><a class="btn primary" href="studio.html">OPEN AI CREATOR STUDIO ↗</a><a class="btn secondary" href="effects.html">EDITING ASSETS ↗</a><button id="installBtn" class="secondary" type="button" hidden>INSTALL WEBSITE</button></div>
+<div class="hub-actions"><a class="btn primary" href="studio.html">OPEN AI CREATOR STUDIO ↗</a><a class="btn secondary" href="effects.html">EDITING ASSETS ↗</a><a class="btn secondary" href="hi.html">हिन्दी</a><button id="installBtn" class="secondary" type="button" hidden>INSTALL WEBSITE</button></div>
 <p class="status" id="installStatus" aria-live="polite"></p>
 </section>
 
@@ -82,7 +82,7 @@
 <div class="hub-card"><p>Enable browser notifications for this device. This grants permission only; push notifications require a service worker and notification server to be configured separately.</p><button id="notifyBtn" type="button">Enable Browser Notifications</button><p class="status" id="notifyStatus" aria-live="polite"></p></div>
 </section>
 
-<footer class="hub-section"><p class="muted">© <span id="year"></span> Subas Ghimire · <a href="index.html">Main Portfolio</a> · <a href="mailto:ghimiresubas347@gmail.com">Contact</a></p></footer>
+<footer class="hub-section"><p class="muted">© <span id="year"></span> Subas Ghimire · <a href="index.html">Main Portfolio</a> · <a href="privacy.html">Privacy</a> · <a href="mailto:ghimiresubas347@gmail.com">Contact</a></p></footer>
 </main>
 <script>
 (function(){
@@ -102,4 +102,5 @@ $('notifyBtn').addEventListener('click',async()=>{if(!('Notification'in window))
 let installPrompt=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false});$('installBtn').addEventListener('click',async()=>{if(!installPrompt){$('installStatus').textContent='Use your browser menu and choose Install app or Add to Home Screen.';return}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true});
 })();
 </script>
+<script>if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./service-worker.js").catch(()=>{});</script>
 </body></html>
