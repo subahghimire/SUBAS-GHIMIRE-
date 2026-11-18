@@ -57,6 +57,7 @@ const templates={
  exclusive:{base:"#0b0a0b",accent:"#d7b36a",gradient:["#08090b","#352719","#09090b"]}
 };
 let template="breaking",photo=null,photoUrl="",photoOffsetX=0,photoOffsetY=0,drag=null,selectedId="headline";
+let lastW=1080,lastH=1080;
 let layers=[
 {id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
 {id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},
@@ -85,7 +86,9 @@ function renderLayer(layer){
  hitBoxes.push({id:layer.id,left:left-14,top:top-14,right:left+maxLine+14,bottom:layer.y+Math.max(0,lines.length-1)*lineHeight+14});
 }
 function draw(){
- const d=dimensions(),W=d.w,H=d.h;canvas.width=W;canvas.height=H;
+ const d=dimensions(),W=d.w,H=d.h;
+ if(W!==lastW||H!==lastH){const sx=W/lastW,sy=H/lastH,ss=Math.min(sx,sy);layers.forEach(function(l){l.x*=sx;l.y*=sy;l.size=Math.max(16,l.size*ss);l.maxWidth*=sx});lastW=W;lastH=H}
+ canvas.width=W;canvas.height=H;
  $("formatBadge").textContent=W===1080?"1:1 · FACEBOOK POST":"16:9 · YOUTUBE THUMBNAIL";
  $("dimensionLabel").textContent=W+" × "+H+" px";
  const t=templates[template],style=$("backgroundStyle").value;
