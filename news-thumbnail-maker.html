@@ -61,6 +61,14 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
   footer { width:calc(100% - 24px); }
 }
 
+
+/* Refined breaking-news hierarchy and compact badge */
+.canvas-frame { background:#050609; }
+.template[data-template="breaking"] .template-swatch { background:linear-gradient(115deg,#430711,#f02b40 55%,#8d0719); }
+@media(min-width:901px){
+ .workspace{grid-template-columns:minmax(0,1fr) 370px}
+ .preview-panel{min-width:0}
+}
 </style>
 </head>
 <body>
@@ -75,6 +83,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
 <div class="field"><label for="photoUpload">Upload photo</label><div class="upload"><input id="photoUpload" type="file" accept="image/png,image/jpeg,image/webp"><p>JPG, PNG or WEBP · maximum 20 MB</p></div></div>
 <div class="two"><div class="field"><label for="photoFit">Photo fit</label><select id="photoFit"><option value="cover">Fill frame</option><option value="contain">Show full photo</option></select></div><div class="field"><label for="photoZoom">Photo zoom</label><input id="photoZoom" type="range" min="50" max="250" value="100"></div></div>
 <div class="field"><label for="overlay">Dark cinematic overlay</label><input id="overlay" type="range" min="0" max="90" value="48"></div>
+<div class="field"><label style="display:flex;align-items:center;gap:9px;text-transform:none;letter-spacing:0;font:600 12px 'DM Sans',sans-serif;color:#f4dfe2"><input id="showSubheadline" type="checkbox" checked style="width:17px;height:17px;accent-color:#ed2638"> आजको मुख्य समाचार देखाउने</label></div>
 <div class="field"><label for="backgroundStyle">Background gradient</label><select id="backgroundStyle"><option value="red">Breaking Red</option><option value="midnight">Midnight Blue</option><option value="gold">Gold / Exclusive</option><option value="charcoal">Charcoal</option><option value="custom">Custom colour gradient</option></select></div>
 <div class="two"><div class="field"><label for="backgroundColor">Custom base colour</label><input id="backgroundColor" type="color" value="#16080d"></div><div class="field"><label for="accentColor">Accent colour</label><input id="accentColor" type="color" value="#ed2638"></div></div>
 <div class="section-line"></div>
@@ -107,7 +116,7 @@ let lastW=1080,lastH=1080;
 let layers=[
 {id:"kicker",name:"Top label",text:"BREAKING NEWS",x:78,y:121,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
 {id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:72,y:770,size:70,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:936},
-{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:72,y:920,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936},
+{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:72,y:920,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936,visible:true},
 {id:"footer",name:"Footer",text:"LATEST UPDATE",x:72,y:1018,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
 ];
 let hitBoxes=[];
@@ -118,8 +127,15 @@ function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,
 function wrap(text,maxWidth,font){ctx.font=font;const words=String(text).split(/\s+/);const lines=[];let line="";words.forEach(function(word){const next=line?line+" "+word:word;if(line&&ctx.measureText(next).width>maxWidth){lines.push(line);line=word}else line=next});if(line)lines.push(line);return lines}
 function fontString(layer){return layer.weight+" "+layer.size+"px "+layer.font}
 function renderLayer(layer){
- const text=String(layer.text||"");if(!text)return;
- const font=fontString(layer),lines=wrap(text,layer.maxWidth,font),lineHeight=layer.size*1.18;
+ const text=String(layer.text||"");if(!text||layer.visible===false)return;
+ let fittedSize=layer.size;
+ while(fittedSize>18){
+  ctx.font=layer.weight+" "+fittedSize+"px "+layer.font;
+  const measured=wrap(text,layer.maxWidth,ctx.font);
+  if(measured.every(function(line){return ctx.measureText(line).width<=layer.maxWidth}))break;
+  fittedSize-=2;
+ }
+ const font=layer.weight+" "+fittedSize+"px "+layer.font,lines=wrap(text,layer.maxWidth,font),lineHeight=fittedSize*1.2;
  ctx.save();ctx.font=font;ctx.textAlign=layer.align;ctx.textBaseline="alphabetic";ctx.fillStyle=layer.color;
  if(layer.shadow==="strong"){ctx.shadowColor="rgba(0,0,0,.9)";ctx.shadowBlur=18;ctx.shadowOffsetY=5}
  else if(layer.shadow==="soft"){ctx.shadowColor="rgba(0,0,0,.65)";ctx.shadowBlur=9;ctx.shadowOffsetY=2}
@@ -158,10 +174,16 @@ function draw(){
  const dark=ctx.createLinearGradient(0,0,W,H);dark.addColorStop(0,"rgba(0,0,0,"+(shade*.82)+")");dark.addColorStop(.45,"rgba(0,0,0,"+(shade*.34)+")");dark.addColorStop(1,"rgba(0,0,0,"+(shade*.88)+")");ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
  const accent=$("accentColor").value||t.accent;
  const glow=ctx.createRadialGradient(W*.82,H*.16,10,W*.82,H*.16,W*.8);glow.addColorStop(0,accent+"55");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
- const panelY=H*(W===1080?.59:.56);
+ const panelY=H*(W===1080?.57:.53);
  const panel=ctx.createLinearGradient(0,panelY,0,H);panel.addColorStop(0,"rgba(20,5,10,.78)");panel.addColorStop(.3,"rgba(10,7,12,.96)");panel.addColorStop(1,"rgba(4,5,8,.99)");ctx.fillStyle=panel;ctx.fillRect(0,panelY,W,H-panelY);
  const accentGrad=ctx.createLinearGradient(0,0,W,0);accentGrad.addColorStop(0,accent);accentGrad.addColorStop(1,"#ff8b73");
- ctx.fillStyle=accentGrad;roundRect(54,H*.075,Math.min(W*.56,500),W===1080?58:48,7);ctx.fill();
+ ctx.save();
+ const badgeX=54,badgeY=H*.068,badgeW=Math.min(W*.58,540),badgeH=W===1080?66:54;
+ ctx.shadowColor=accent+"66";ctx.shadowBlur=22;
+ ctx.fillStyle=accentGrad;roundRect(badgeX,badgeY,badgeW,badgeH,9);ctx.fill();
+ ctx.shadowBlur=0;ctx.fillStyle="rgba(20,0,4,.22)";roundRect(badgeX+7,badgeY+7,badgeW-14,badgeH-14,5);ctx.fill();
+ ctx.fillStyle="#fff";ctx.fillRect(badgeX+17,badgeY+12,5,badgeH-24);
+ ctx.restore();
  ctx.fillStyle=accent;ctx.fillRect(54,panelY+30,9,H-panelY-90);
  ctx.fillStyle="rgba(255,255,255,.22)";ctx.fillRect(54,H-62,W-108,1);
  hitBoxes=[];layers.forEach(renderLayer);
@@ -180,6 +202,7 @@ function updateSelected(){
 ["canvasFormat","photoFit","photoZoom","overlay","backgroundStyle","backgroundColor","accentColor"].forEach(function(id){$(id).addEventListener("input",draw);$(id).addEventListener("change",function(){draw();if(id==="canvasFormat")syncLayerControls()})});
 ["layerText","fontFamily","fontWeight","fontSize","textColor","textAlign","textShadow"].forEach(function(id){$(id).addEventListener("input",updateSelected);$(id).addEventListener("change",updateSelected)});
 $("layerSelect").addEventListener("change",function(){selectedId=this.value;syncLayerControls();draw()});
+$("showSubheadline").addEventListener("change",function(){const sub=layers.find(function(l){return l.id==="subheadline"});if(sub)sub.visible=this.checked;draw()});
 document.querySelectorAll(".template").forEach(function(button){button.addEventListener("click",function(){template=button.dataset.template;document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b===button))});$("accentColor").value=templates[template].accent;$("backgroundStyle").value=template==="debate"?"midnight":template==="exclusive"?"gold":"red";draw()})});
 $("photoUpload").addEventListener("change",function(){const file=this.files&&this.files[0];if(!file)return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>20*1024*1024){setStatus("Please choose JPG, PNG or WEBP under 20 MB.");this.value="";return}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(file);const img=new Image();img.onload=function(){photo=img;photoOffsetX=0;photoOffsetY=0;draw();setStatus("Photo uploaded. Drag it in the preview to reposition.")};img.onerror=function(){setStatus("Could not load this photo. Try another image.")};img.src=photoUrl});
 $("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:72,y:d.h*.52,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit and drag it into position.")});
@@ -223,7 +246,7 @@ function stopDrag(e){
 }
 canvas.addEventListener("pointerup",stopDrag);canvas.addEventListener("pointercancel",stopDrag);canvas.addEventListener("lostpointercapture",stopDrag);
 $("downloadBtn").addEventListener("click",function(){draw();try{canvas.toBlob(function(blob){if(!blob){setStatus("PNG export failed. Please try again.");return}const url=URL.createObjectURL(blob),a=document.createElement("a"),d=dimensions();a.href=url;a.download=d.w===1080?"subas-breaking-news-facebook-1080x1080.png":"subas-breaking-news-youtube-1280x720.png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},2000);setStatus("HD PNG ready · "+d.w+" × "+d.h+" px")}, "image/png")}catch(err){setStatus("Export error: "+err.message)}});
-$("resetBtn").addEventListener("click",function(){if(photoUrl)URL.revokeObjectURL(photoUrl);photo=null;photoUrl="";photoOffsetX=0;photoOffsetY=0;$("photoUpload").value="";$("canvasFormat").value="square";$("photoFit").value="cover";$("photoZoom").value=100;$("overlay").value=48;$("backgroundStyle").value="red";$("backgroundColor").value="#16080d";$("accentColor").value="#ed2638";template="breaking";lastW=1080;lastH=1080;layers=[{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}];selectedId="headline";document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.template==="breaking"))});draw();setStatus("Default cinematic design restored.")});
+$("resetBtn").addEventListener("click",function(){if(photoUrl)URL.revokeObjectURL(photoUrl);photo=null;photoUrl="";photoOffsetX=0;photoOffsetY=0;$("photoUpload").value="";$("canvasFormat").value="square";$("photoFit").value="cover";$("photoZoom").value=100;$("overlay").value=48;$("backgroundStyle").value="red";$("backgroundColor").value="#16080d";$("accentColor").value="#ed2638";template="breaking";lastW=1080;lastH=1080;layers=[{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}];selectedId="headline";$("showSubheadline").checked=true;document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.template==="breaking"))});draw();setStatus("Default cinematic design restored.")});
 $("year").textContent=new Date().getFullYear();syncLayerControls();draw();
 })();
 </script>
