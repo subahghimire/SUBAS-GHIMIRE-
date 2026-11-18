@@ -1,3 +1,21 @@
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function geminiRequest(url, options, timeoutMs = 10000) {
+  let lastError;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const response = await geminiRequest(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+      if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
+      await sleep(500);
+    } catch (error) {
+      lastError = error;
+      if (attempt === 1) throw error;
+      await sleep(500);
+    }
+  }
+  throw lastError || new Error("Gemini request failed");
+}
+
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
   const allowed = origin === "https://subahghimire.github.io" || origin === "https://subas-ghimire.vercel.app" || origin === "https://subas-ghimire.com.np" || origin === "https://www.subas-ghimire.com.np";
@@ -43,16 +61,16 @@ export default async function handler(req, res) {
     if (image) {
       // Try lightweight models first so one busy model or exhausted
       // per-model quota does not block photo questions.
-      const imageModels = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
+      const imageModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
       let imageRateLimited = false;
       let imageTimedOut = false;
       for (const model of imageModels) {
         let response;
         try {
-          response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+          response = await geminiRequest(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-            signal: AbortSignal.timeout(12000),
+
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: systemInstruction }] },
               contents: [{ role: "user", parts: [
@@ -88,7 +106,7 @@ export default async function handler(req, res) {
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
     // Start with the lightweight model for faster replies, then fall back to
     // progressively stronger models if a model is busy or quota-limited.
-    const models = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
+    const models = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
     let sawRateLimit = false;
     let lastFailure = "";
 
@@ -98,7 +116,7 @@ export default async function handler(req, res) {
         response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-          signal: AbortSignal.timeout(10000),
+
           body: JSON.stringify({
             model,
             input: message,
