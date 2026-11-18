@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08090d">
+<meta name="description" content="Create dark cinematic Nepal news and political thumbnails in your browser. Upload photos, edit headlines and export HD PNG for free.">
+<title>News Thumbnail Studio | Subas Ghimire</title>
+<link rel="stylesheet" href="assets/studio.css?v=2">
+<style>
+:root{--bg:#08090d;--panel:#11131b;--line:rgba(255,255,255,.12);--mint:#ff525e;--green:#ff3445;--text:#f7f7fb;--muted:#a6a8b3}
+body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08090d}
+.studio-wrap{padding:34px 0 70px}.studio-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:24px}.studio-head h1{font:700 clamp(34px,6vw,58px)/1 'Space Grotesk';letter-spacing:-.05em;margin:10px 0}.studio-head p{max-width:620px;color:var(--muted);margin:0}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}.preview-panel,.editor-panel{border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#171923,#0d0f15);overflow:hidden;box-shadow:0 22px 70px #0006}.panel-top{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-top strong{font:600 13px 'Space Grotesk'}.panel-top small{font:700 9px ui-monospace,monospace;color:#ff858d;letter-spacing:.12em}.preview-area{padding:16px}.canvas-frame{width:100%;background:#050609;border-radius:10px;overflow:hidden;border:1px solid #ffffff22}.canvas-frame canvas{display:block;width:100%;height:auto;aspect-ratio:16/9}.preview-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;margin-top:10px}
+.editor-panel{padding-bottom:14px}.editor-content{padding:15px;display:grid;gap:13px}.field{display:grid;gap:6px}.field label,.field-label{font:700 9px ui-monospace,monospace;letter-spacing:.13em;color:#c5c6d0;text-transform:uppercase}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff24;border-radius:9px;background:#090b11;color:#fff;padding:10px;font:13px 'DM Sans',sans-serif;min-width:0}.field input[type=color]{height:40px;padding:4px}.field input[type=range]{padding:0;accent-color:#ff4654}.field textarea{resize:vertical;min-height:64px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.template{border:1px solid #ffffff24;background:#0a0b10;border-radius:8px;padding:7px 5px;color:#eee;cursor:pointer;font-size:10px}.template[aria-pressed=true]{border-color:#ff5965;background:#43141a}.template-swatch{display:block;height:30px;border-radius:4px;margin-bottom:5px;background:linear-gradient(120deg,#12090d,#c51d2b)}.template:nth-child(2) .template-swatch{background:linear-gradient(120deg,#05070d,#344c66)}.template:nth-child(3) .template-swatch{background:linear-gradient(120deg,#09090b,#8b6a34)}
+.upload{border:1px dashed #ff626d88;border-radius:10px;padding:13px;text-align:center;background:#ff3b4b0c}.upload input{width:100%;font-size:11px;color:var(--muted)}.upload p{font-size:10px;color:var(--muted);margin:6px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .btn{flex:1}.btn{background:linear-gradient(120deg,#b7192a,#ff4d5a);color:white}.btn.secondary{background:transparent;border:1px solid #ffffff30;color:#fff}.note{font-size:10px;color:var(--muted);line-height:1.5;margin:0}.section-line{height:1px;background:var(--line)}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.editor-panel{order:2}.studio-head{align-items:start;flex-direction:column}}
+@media(max-width:560px){.studio-wrap{padding-top:24px}.preview-area,.editor-content{padding:11px}.panel-top{padding:13px}.preview-meta{font-size:9px}.studio-head p{font-size:13px}}
+</style>
+</head>
+<body>
+<header><nav class="wrap"><a class="brand" href="index.html">SUBAS GHIMIRE<small>NEWS THUMBNAIL STUDIO</small></a><div class="navlinks"><a href="creator-tools.html">Creator Tools</a><a href="effects.html">Effects</a><a href="index.html">Portfolio ↗</a></div></nav></header>
+<main class="wrap studio-wrap">
+<div class="studio-head"><div><div class="eyebrow">FREE · LOCAL BROWSER TOOL</div><h1>News Thumbnail <em style="font-family:'Instrument Serif';font-weight:400;color:#ff6873">Studio.</em></h1><p>Create bold, dark-cinematic news and political thumbnails. Upload your own photo, edit the headline and export a 1280 × 720 PNG. Your images stay on your device.</p></div></div>
+<div class="workspace">
+<section class="preview-panel"><div class="panel-top"><strong>LIVE THUMBNAIL PREVIEW</strong><small>16:9 · HD CANVAS</small></div><div class="preview-area"><div class="canvas-frame"><canvas id="thumbCanvas" width="1280" height="720" aria-label="Thumbnail preview"></canvas></div><div class="preview-meta"><span id="imageStatus">No photo uploaded · template background active</span><span>1280 × 720 px</span></div></div></section>
+<aside class="editor-panel"><div class="panel-top"><strong>DESIGN CONTROLS</strong><small>EDIT LIVE</small></div><div class="editor-content">
+<div class="field"><span class="field-label">Choose a template</span><div class="template-grid"><button class="template" data-template="breaking" aria-pressed="true"><i class="template-swatch"></i>BREAKING</button><button class="template" data-template="debate" aria-pressed="false"><i class="template-swatch"></i>DEBATE</button><button class="template" data-template="exclusive" aria-pressed="false"><i class="template-swatch"></i>EXCLUSIVE</button></div></div>
+<div class="field"><label for="photoUpload">Upload your photo</label><div class="upload"><input id="photoUpload" type="file" accept="image/png,image/jpeg,image/webp"><p>JPG, PNG or WEBP · up to 20 MB</p></div></div>
+<div class="two"><div class="field"><label for="photoFit">Photo layout</label><select id="photoFit"><option value="cover">Fill frame</option><option value="contain">Fit entire photo</option></select></div><div class="field"><label for="overlay">Dark overlay</label><input id="overlay" type="range" min="10" max="90" value="55"></div></div>
+<div class="field"><label for="kicker">Top label</label><input id="kicker" maxlength="34" value="BREAKING NEWS"></div>
+<div class="field"><label for="headline">Main headline</label><textarea id="headline" maxlength="100" rows="3">नेपालको राजनीतिमा ठूलो हलचल</textarea></div>
+<div class="field"><label for="subheadline">Sub headline</label><input id="subheadline" maxlength="100" value="आजको मुख्य अपडेट · विशेष रिपोर्ट"></div>
+<div class="two"><div class="field"><label for="headlineColor">Headline colour</label><input id="headlineColor" type="color" value="#ffffff"></div><div class="field"><label for="accentColor">Accent colour</label><input id="accentColor" type="color" value="#ed2638"></div></div>
+<div class="two"><div class="field"><label for="headlineSize">Headline size</label><input id="headlineSize" type="range" min="42" max="100" value="76"></div><div class="field"><label for="textAlign">Text alignment</label><select id="textAlign"><option value="left">Left</option><option value="center">Center</option></select></div></div>
+<div class="field"><label for="footerText">Footer / source</label><input id="footerText" maxlength="45" value="SUBAS GHIMIRE · NEWS DESK"></div>
+<div class="actions"><button class="btn" id="downloadBtn" type="button">DOWNLOAD HD PNG ↓</button><button class="btn secondary" id="resetBtn" type="button">RESET</button></div>
+<p class="note">For editorial accuracy, use verified photos and headlines. This tool does not generate or verify news. All processing and PNG export happen locally in your browser.</p>
+</div></aside>
+</div>
+</main>
+<footer class="wrap"><span>© <span id="year"></span> SUBAS GHIMIRE</span><span><a href="creator-tools.html">Creator Tools</a> · <a href="index.html">Portfolio</a></span></footer>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),canvas=$("thumbCanvas"),ctx=canvas.getContext("2d");
+const defaults={kicker:"BREAKING NEWS",headline:"नेपालको राजनीतिमा ठूलो हलचल",subheadline:"आजको मुख्य अपडेट · विशेष रिपोर्ट",headlineColor:"#ffffff",accentColor:"#ed2638",headlineSize:76,overlay:55,footerText:"SUBAS GHIMIRE · NEWS DESK",textAlign:"left",photoFit:"cover",template:"breaking"};
+let photo=null,photoUrl="",template="breaking";
+const presets={breaking:{base:"#08090d",accent:"#ed2638",kicker:"BREAKING NEWS"},debate:{base:"#07111d",accent:"#e2a43a",kicker:"POLITICAL UPDATE"},exclusive:{base:"#0b0a0b",accent:"#d7b36a",kicker:"EXCLUSIVE REPORT"}};
+function wrapText(text,maxWidth,font){ctx.font=font;const words=text.split(/\s+/);let lines=[],line="";for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);return lines}
+function draw(){const p=presets[template],accent=$("accentColor").value||p.accent;ctx.clearRect(0,0,1280,720);ctx.fillStyle=p.base;ctx.fillRect(0,0,1280,720);
+if(photo){const iw=photo.naturalWidth,ih=photo.naturalHeight,fit=$("photoFit").value;let scale=fit==="contain"?Math.min(1280/iw,720/ih):Math.max(1280/iw,720/ih);let w=iw*scale,h=ih*scale;ctx.drawImage(photo,(1280-w)/2,(720-h)/2,w,h)}else{const g=ctx.createLinearGradient(0,0,1280,720);g.addColorStop(0,p.base);g.addColorStop(.58,"#25212a");g.addColorStop(1,"#08090d");ctx.fillStyle=g;ctx.fillRect(0,0,1280,720);ctx.save();ctx.strokeStyle="#ffffff12";ctx.lineWidth=2;for(let x=-500;x<1500;x+=110){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+500,720);ctx.stroke()}ctx.restore()}
+const shade=Number($("overlay").value)/100;const grad=ctx.createLinearGradient(0,0,1280,0);grad.addColorStop(0,"rgba(0,0,0,"+Math.min(.94,shade+.25)+")");grad.addColorStop(.65,"rgba(0,0,0,"+shade+")");grad.addColorStop(1,"rgba(0,0,0,"+Math.max(.12,shade-.22)+")");ctx.fillStyle=grad;ctx.fillRect(0,0,1280,720);
+const align=$("textAlign").value,tx=align==="center"?640:78;ctx.textAlign=align;ctx.fillStyle=accent;ctx.fillRect(78,70,9,52);ctx.font="700 27px Arial, sans-serif";ctx.fillText($("kicker").value.toUpperCase(),align==="center"?640:105,105);
+ctx.fillStyle=accent;ctx.fillRect(78,500,1124,3);
+const size=Number($("headlineSize").value),headline=$("headline").value.trim()||"YOUR HEADLINE";let lines=wrapText(headline,1080,"800 "+size+"px Arial, sans-serif");if(lines.length>3)lines=lines.slice(0,3);const lineH=size*1.23;const startY=Math.max(260,490-(lines.length-1)*lineH);ctx.fillStyle=$("headlineColor").value;ctx.font="800 "+size+"px Arial, sans-serif";ctx.shadowColor="#000";ctx.shadowBlur=18;lines.forEach((line,i)=>ctx.fillText(line,tx,startY+i*lineH));ctx.shadowBlur=0;
+ctx.fillStyle="#ffffff";ctx.globalAlpha=.92;ctx.font="500 29px Arial, sans-serif";const sub=$("subheadline").value;ctx.fillText(sub,tx,590);ctx.globalAlpha=1;
+ctx.fillStyle=accent;ctx.fillRect(78,635,1124,2);ctx.fillStyle="#ffffff";ctx.globalAlpha=.8;ctx.font="700 17px Arial, sans-serif";ctx.fillText($("footerText").value.toUpperCase(),78,675);ctx.globalAlpha=1;
+ctx.textAlign="left";$("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"No photo uploaded · template background active";
+}
+["kicker","headline","subheadline","headlineColor","accentColor","headlineSize","overlay","footerText","textAlign","photoFit"].forEach(id=>$(id).addEventListener("input",draw));
+document.querySelectorAll(".template").forEach(btn=>btn.addEventListener("click",()=>{template=btn.dataset.template;document.querySelectorAll(".template").forEach(b=>b.setAttribute("aria-pressed",String(b===btn)));$("accentColor").value=presets[template].accent;$("kicker").value=presets[template].kicker;draw()}));
+$("photoUpload").addEventListener("change",()=>{const file=$("photoUpload").files[0];if(!file)return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>20*1024*1024){alert("Choose a JPG, PNG or WEBP image under 20 MB.");$("photoUpload").value="";return}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(file);const img=new Image();img.onload=()=>{photo=img;draw()};img.onerror=()=>alert("Could not load this image.");img.src=photoUrl});
+$("downloadBtn").addEventListener("click",()=>{draw();canvas.toBlob(blob=>{if(!blob){alert("PNG export failed. Please try again.");return}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="subas-news-thumbnail-1280x720.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)},"image/png")});
+$("resetBtn").addEventListener("click",()=>{Object.keys(defaults).forEach(k=>{if($(k))$(k).value=defaults[k]});template="breaking";document.querySelectorAll(".template").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.template==="breaking")));photo=null;if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";$("photoUpload").value="";draw()});
+$("year").textContent=new Date().getFullYear();draw();
+})();
+</script>
+</body></html>
