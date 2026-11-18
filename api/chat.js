@@ -4,7 +4,7 @@ async function geminiRequest(url, options, timeoutMs = 10000) {
   let lastError;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const response = await geminiRequest(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+      const response = await fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
       if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
       await sleep(500);
     } catch (error) {
