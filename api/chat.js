@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     ].join(" ");
 
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
-    const models = ["gemini-3.8-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite"];
+    const models = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
     let lastStatus = 0;
     let lastApiMessage = "";
 
@@ -74,11 +74,12 @@ export default async function handler(req, res) {
         if (response.status === 401 || response.status === 403) {
           return res.status(200).json({ reply: "Gemini API key मा authentication वा permission समस्या छ। Vercel को GEMINI_API_KEY जाँच गर्नुपर्छ।" });
         }
-        if (response.status === 429) {
-          return res.status(200).json({ reply: "Gemini API को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+        // A quota limit on one model does not necessarily mean every model is
+        // exhausted. Continue to the distinct fallback model before failing.
+        if (response.status === 429 || response.status === 503 || response.status === 500 || response.status === 502 || response.status === 504) {
+          continue;
         }
-        if (response.status !== 503 && response.status !== 500 && response.status !== 502 && response.status !== 504) break;
-        continue;
+        break;
       }
 
       const reply = (data?.steps || [])
@@ -94,7 +95,7 @@ export default async function handler(req, res) {
     }
 
     if (lastStatus === 429) {
-      return res.status(200).json({ reply: "Gemini API को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+      return res.status(200).json({ reply: "दुवै AI मोडेलको हालको request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
     }
     return res.status(200).json({
       reply: lastApiMessage === "timeout"
