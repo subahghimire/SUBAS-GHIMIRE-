@@ -1,4 +1,4 @@
-const CACHE_NAME = "sg-portfolio-v4";
+const CACHE_NAME = "sg-portfolio-v5";
 const CORE = [
   "./",
   "./index.html",
@@ -12,7 +12,8 @@ const CORE = [
   "./cv.html",
   "./work.html",
   "./site.webmanifest",
-  "./assets/site.css"
+  "./assets/site.css",
+  "./assets/studio.css"
 ];
 
 self.addEventListener("install", event => {
