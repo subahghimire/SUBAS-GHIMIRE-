@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     if (image && (!/^image\/(jpeg|png|webp|gif)$/.test(image.mimeType) || !/^[A-Za-z0-9+/]+=*$/.test(image.data) || image.data.length > 8 * 1024 * 1024)) return res.status(400).json({ reply: "फोटो JPEG, PNG, WEBP वा GIF हुनुपर्छ र ६ MB भन्दा सानो हुनुपर्छ।" });
     if (message.length > 4000) return res.status(400).json({ reply: "Please keep your question under 4000 characters." });
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || process.env.SUBAS_ASSISTANCE;
     if (!apiKey) {
       console.error("GEMINI_API_KEY is missing");
       return res.status(200).json({ reply: "AI जोडिएको छैन। Vercel मा GEMINI_API_KEY नामको Environment Variable मा Google AI Studio को API Key राख्नुहोस्।" });
