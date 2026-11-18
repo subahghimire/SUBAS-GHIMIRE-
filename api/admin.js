@@ -26,7 +26,14 @@ module.exports = (req, res) => {
   const secret = process.env.ADMIN_SECRET || "";
   const code = process.env.ADMIN_CODE || "";
   if (req.method === "GET") {
-    return res.status(200).json({ authenticated: valid(cookieOf(req), secret), configured: Boolean(secret && code) });
+    const authenticated = valid(cookieOf(req), secret);
+    const integrations = authenticated ? {
+      github: Boolean(process.env.GITHUB_TOKEN),
+      analytics: Boolean(process.env.GA4_MEASUREMENT_ID),
+      voice: Boolean(process.env.ELEVENLABS_API_KEY),
+      database: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+    } : undefined;
+    return res.status(200).json({ authenticated, configured: Boolean(secret && code), ...(integrations ? { integrations } : {}) });
   }
   if (req.method === "DELETE") {
     res.setHeader("Set-Cookie", COOKIE + "=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0");
