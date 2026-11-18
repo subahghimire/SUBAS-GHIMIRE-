@@ -183,9 +183,9 @@ function draw(){
   const k=layers.find(function(l){return l.id==="kicker"});
   if(k){k.visible=true;k.text="BREAKING NEWS";k.x=90;k.y=102;k.size=18;k.color="#ffffff";k.align="left";}
   const h=layers.find(function(l){return l.id==="headline"});
-  if(h){h.visible=true;h.align="left";h.x=90;h.y=770;h.size=68;h.maxWidth=920;h.weight="900";h.color="#ffffff";h.shadow="strong";}
+  if(h)h.visible=true;
   const s=layers.find(function(l){return l.id==="subheadline"});
-  if(s){s.visible=$( "showSubheadline" ).checked;s.align="left";s.x=90;s.y=900;s.size=48;s.maxWidth=900;s.weight="900";s.color="#ff3948";s.shadow="none";}
+  if(s)s.visible=$("showSubheadline").checked;
   const ft=layers.find(function(l){return l.id==="footer"});if(ft)ft.visible=false;
   // Soft red plate behind BREAKING NEWS.
   ctx.save();ctx.font="900 18px Arial,sans-serif";
@@ -216,9 +216,9 @@ function draw(){
   const k=layers.find(function(l){return l.id==="kicker"});
   if(k){k.visible=true;k.text="BREAKING NEWS";k.x=72;k.y=104;k.size=18;k.color="#ffffff";k.align="left";}
   const h=layers.find(function(l){return l.id==="headline"});
-  if(h){h.visible=true;h.align="left";h.x=72;h.y=500;h.size=58;h.maxWidth=W-144;h.weight="900";h.color="#ffffff";h.shadow="strong";}
+  if(h)h.visible=true;
   const s=layers.find(function(l){return l.id==="subheadline"});
-  if(s){s.visible=$("showSubheadline").checked;s.align="left";s.x=72;s.y=610;s.size=30;s.maxWidth=W-144;s.weight="800";s.color="#ffffff";s.shadow="soft";}
+  if(s)s.visible=$("showSubheadline").checked;
   const ft=layers.find(function(l){return l.id==="footer"});if(ft)ft.visible=false;
   ctx.save();ctx.font="900 18px Arial,sans-serif";
   const plateText="BREAKING NEWS",plateW=ctx.measureText(plateText).width+28,plateH=34,plateX=58,plateY=86;
@@ -239,6 +239,13 @@ function draw(){
  hitBoxes=[];layers.forEach(renderLayer);
  $("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"Default cinematic background · upload your photo";
 }
+function applyFormatLayout(){
+ const wide=dimensions().w===1280,W=dimensions().w;
+ const h=layers.find(function(l){return l.id==="headline"});
+ if(h){h.x=wide?72:90;h.y=wide?500:770;h.size=wide?58:68;h.maxWidth=wide?W-144:920;h.align="left";h.weight="900";h.color="#ffffff";h.shadow="strong";}
+ const sub=layers.find(function(l){return l.id==="subheadline"});
+ if(sub){sub.x=wide?72:90;sub.y=wide?610:900;sub.size=wide?30:48;sub.maxWidth=wide?W-144:900;sub.align="left";sub.weight="900";sub.color=wide?"#ffffff":"#ff3948";sub.shadow=wide?"soft":"none";sub.visible=$("showSubheadline").checked;}
+}
 function syncLayerControls(){
  const select=$("layerSelect"),previous=selectedId;select.innerHTML="";
  layers.forEach(function(layer){const option=document.createElement("option");option.value=layer.id;option.textContent=layer.name;select.appendChild(option)});
@@ -249,13 +256,13 @@ function syncLayerControls(){
 function updateSelected(){
  const l=currentLayer();l.text=$("layerText").value;l.font=$("fontFamily").value;l.weight=$("fontWeight").value;l.size=Number($("fontSize").value);l.color=$("textColor").value;l.align=$("textAlign").value;l.shadow=$("textShadow").value;draw()
 }
-["canvasFormat","photoFit","photoZoom","overlay","backgroundStyle","backgroundColor","accentColor"].forEach(function(id){$(id).addEventListener("input",draw);$(id).addEventListener("change",function(){draw();if(id==="canvasFormat")syncLayerControls()})});
+["canvasFormat","photoFit","photoZoom","overlay","backgroundStyle","backgroundColor","accentColor"].forEach(function(id){$(id).addEventListener("input",draw);$(id).addEventListener("change",function(){if(id==="canvasFormat")applyFormatLayout();draw();if(id==="canvasFormat")syncLayerControls()})});
 ["layerText","fontFamily","fontWeight","fontSize","textColor","textAlign","textShadow"].forEach(function(id){$(id).addEventListener("input",updateSelected);$(id).addEventListener("change",updateSelected)});
 $("layerSelect").addEventListener("change",function(){selectedId=this.value;syncLayerControls();draw()});
 $("showSubheadline").addEventListener("change",function(){const sub=layers.find(function(l){return l.id==="subheadline"});if(sub)sub.visible=this.checked;draw()});
 document.querySelectorAll(".template").forEach(function(button){button.addEventListener("click",function(){template=button.dataset.template;document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b===button))});$("accentColor").value=templates[template].accent;$("backgroundStyle").value=template==="debate"?"midnight":template==="exclusive"?"gold":"red";draw()})});
 $("photoUpload").addEventListener("change",function(){const file=this.files&&this.files[0];if(!file)return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>20*1024*1024){setStatus("Please choose JPG, PNG or WEBP under 20 MB.");this.value="";return}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(file);const img=new Image();img.onload=function(){photo=img;photoOffsetX=0;photoOffsetY=0;draw();setStatus("Photo uploaded. Drag it in the preview to reposition.")};img.onerror=function(){setStatus("Could not load this photo. Try another image.")};img.src=photoUrl});
-$("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:72,y:d.h*.52,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit and drag it into position.")});
+$("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:72,y:d.h*.52,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit its position and style with the controls; text layers stay locked on the canvas.")});
 $("deleteTextBtn").addEventListener("click",function(){if(layers.length<=1){setStatus("At least one text layer must remain.");return}layers=layers.filter(function(l){return l.id!==selectedId});selectedId=layers[0].id;draw();setStatus("Selected text layer deleted.")});
 function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
 const activePointers=new Map();let pinchStart=null;
@@ -296,8 +303,8 @@ function stopDrag(e){
 }
 canvas.addEventListener("pointerup",stopDrag);canvas.addEventListener("pointercancel",stopDrag);canvas.addEventListener("lostpointercapture",stopDrag);
 $("downloadBtn").addEventListener("click",function(){draw();try{canvas.toBlob(function(blob){if(!blob){setStatus("PNG export failed. Please try again.");return}const url=URL.createObjectURL(blob),a=document.createElement("a"),d=dimensions();a.href=url;a.download=d.w===1080?"subas-breaking-news-facebook-1080x1080.png":"subas-breaking-news-youtube-1280x720.png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},2000);setStatus("HD PNG ready · "+d.w+" × "+d.h+" px")}, "image/png")}catch(err){setStatus("Export error: "+err.message)}});
-$("resetBtn").addEventListener("click",function(){if(photoUrl)URL.revokeObjectURL(photoUrl);photo=null;photoUrl="";photoOffsetX=0;photoOffsetY=0;$("photoUpload").value="";$("canvasFormat").value="square";$("photoFit").value="cover";$("photoZoom").value=100;$("overlay").value=48;$("backgroundStyle").value="red";$("backgroundColor").value="#16080d";$("accentColor").value="#ed2638";template="breaking";lastW=1080;lastH=1080;layers=[{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:90,y:102,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}];selectedId="headline";$("showSubheadline").checked=true;syncLayerControls();document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.template==="breaking"))});draw();setStatus("Default cinematic design restored.")});
-$("year").textContent=new Date().getFullYear();syncLayerControls();draw();
+$("resetBtn").addEventListener("click",function(){if(photoUrl)URL.revokeObjectURL(photoUrl);photo=null;photoUrl="";photoOffsetX=0;photoOffsetY=0;$("photoUpload").value="";$("canvasFormat").value="square";$("photoFit").value="cover";$("photoZoom").value=100;$("overlay").value=48;$("backgroundStyle").value="red";$("backgroundColor").value="#16080d";$("accentColor").value="#ed2638";template="breaking";lastW=1080;lastH=1080;layers=[{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:90,y:102,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}];selectedId="headline";$("showSubheadline").checked=true;applyFormatLayout();syncLayerControls();document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.template==="breaking"))});draw();setStatus("Default cinematic design restored.")});
+$("year").textContent=new Date().getFullYear();applyFormatLayout();syncLayerControls();draw();
 })();
 </script>
 </body></html>
