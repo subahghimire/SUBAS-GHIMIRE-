@@ -1,0 +1,5 @@
+const CACHE_NAME="sg-portfolio-v1";
+const CORE=["./","./index.html","./subas-ghimire.html","./hi.html","./pro-workspace.html","./studio.html","./creator-tools.html","./effects.html","./cv.html","./work.html","./site.webmanifest","./assets/site.css"];
+self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE.map(url=>new Request(url,{cache:"reload"}))).catch(()=>{})).then(()=>self.skipWaiting()))});
+self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
+self.addEventListener("fetch",event=>{const req=event.request;if(req.method!=="GET"||new URL(req.url).origin!==self.location.origin)return;event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(response=>{if(response.ok&&new URL(req.url).pathname.match(/\.(css|js|html|svg|webmanifest)$/)){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(req,copy))}return response}).catch(()=>caches.match("./index.html"))))});
