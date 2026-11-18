@@ -2,8 +2,8 @@
   "name": "Subas Ghimire — Video Editor",
   "short_name": "Subas Ghimire",
   "description": "Video editor and visual editor at Kantipur Television, Nepal.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#06100c",
   "theme_color": "#06110d",
@@ -37,7 +37,7 @@
     {
       "name": "Selected work",
       "short_name": "Work",
-      "url": "/work.html",
+      "url": "./work.html",
       "icons": [
         {
           "src": "icon-192.png",
@@ -49,7 +49,7 @@
     {
       "name": "Curriculum vitae",
       "short_name": "CV",
-      "url": "/cv.html",
+      "url": "./cv.html",
       "icons": [
         {
           "src": "icon-192.png",
@@ -61,7 +61,7 @@
     {
       "name": "Contact",
       "short_name": "Contact",
-      "url": "/#contact",
+      "url": "./index.html#contact",
       "icons": [
         {
           "src": "icon-192.png",
@@ -73,7 +73,7 @@
     {
       "name": "Client room",
       "short_name": "Client room",
-      "url": "/members.html",
+      "url": "./members.html",
       "icons": [
         {
           "src": "icon-192.png",
