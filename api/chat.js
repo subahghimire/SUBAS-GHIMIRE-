@@ -41,32 +41,54 @@ export default async function handler(req, res) {
     ].join(" ");
 
     if (image) {
-      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        signal: AbortSignal.timeout(20000),
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemInstruction }] },
-          contents: [{ role: "user", parts: [
-            ...(message ? [{ text: message }] : [{ text: "यो फोटो हेरेर यसको बारेमा बताउनुहोस्।" }]),
-            { inline_data: { mime_type: image.mimeType, data: image.data } }
-          ] }],
-          generationConfig: { thinkingConfig: { thinkingLevel: "low" } }
-        })
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        console.error("Gemini image API error:", response.status, JSON.stringify(data));
-        return res.status(200).json({ reply: response.status === 429 ? "Gemini API को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" : "फोटो विश्लेषण अहिले हुन सकेन। कृपया सानो फोटो राखेर फेरि प्रयास गर्नुहोस्।" });
+      // Try lightweight models first so one busy model or exhausted
+      // per-model quota does not block photo questions.
+      const imageModels = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.8-flash"];
+      let imageRateLimited = false;
+      let imageTimedOut = false;
+      for (const model of imageModels) {
+        let response;
+        try {
+          response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+            signal: AbortSignal.timeout(12000),
+            body: JSON.stringify({
+              systemInstruction: { parts: [{ text: systemInstruction }] },
+              contents: [{ role: "user", parts: [
+                ...(message ? [{ text: message }] : [{ text: "यो फोटो हेरेर यसको बारेमा बताउनुहोस्।" }]),
+                { inline_data: { mime_type: image.mimeType, data: image.data } }
+              ] }],
+              generationConfig: { maxOutputTokens: 1024 }
+            })
+          });
+        } catch (error) {
+          if (error?.name === "TimeoutError" || error?.name === "AbortError") imageTimedOut = true;
+          console.error("Gemini image request failed:", model, error?.name || "network");
+          continue;
+        }
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          console.error("Gemini image API error:", model, response.status, JSON.stringify(data));
+          if (response.status === 429) imageRateLimited = true;
+          if ([400, 404, 429, 500, 502, 503, 504].includes(response.status)) continue;
+          break;
+        }
+
+        const reply = (data?.candidates?.[0]?.content?.parts || []).map(part => part?.text || "").join("").trim();
+        if (reply) return res.status(200).json({ reply });
       }
-      const reply = (data?.candidates?.[0]?.content?.parts || []).map(part => part?.text || "").join("").trim();
-      return res.status(200).json({ reply: reply || "फोटोबाट जवाफ तयार हुन सकेन। अर्को फोटो प्रयास गर्नुहोस्।" });
+
+      if (imageRateLimited) return res.status(200).json({ reply: "फोटो विश्लेषणका लागि अहिले Gemini को निःशुल्क सीमा पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+      if (imageTimedOut) return res.status(200).json({ reply: "फोटो विश्लेषणमा ढिलाइ भयो। कृपया सानो फोटो राखेर फेरि प्रयास गर्नुहोस्।" });
+      return res.status(200).json({ reply: "फोटो विश्लेषण अहिले उपलब्ध भएन। कृपया अर्को फोटो प्रयास गर्नुहोस्।" });
     }
 
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
     // Start with the lightweight model for faster replies, then fall back to
     // progressively stronger models if a model is busy or quota-limited.
-    const models = ["gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3.8-flash"];
+    const models = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.8-flash"];
     let sawRateLimit = false;
     let lastFailure = "";
 
