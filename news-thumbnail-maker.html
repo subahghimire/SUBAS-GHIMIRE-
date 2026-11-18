@@ -1,18 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="ne">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#08090d">
-<meta name="description" content="Create dark cinematic Nepal news and political thumbnails in your browser. Upload photos, edit headlines and export HD PNG for free.">
+<meta name="description" content="Create dark cinematic breaking news thumbnails. Upload photos, move text, customize fonts, colors and gradients, and export HD PNG.">
 <title>News Thumbnail Studio | Subas Ghimire</title>
-<link rel="stylesheet" href="assets/studio.css?v=2">
+<link rel="stylesheet" href="assets/studio.css?v=3">
 <style>
-:root{--bg:#08090d;--panel:#11131b;--line:rgba(255,255,255,.12);--mint:#ff525e;--green:#ff3445;--text:#f7f7fb;--muted:#a6a8b3}
+:root{--bg:#08090d;--panel:#11131b;--line:rgba(255,255,255,.12);--red:#ed2638;--text:#f7f7fb;--muted:#a6a8b3}
 body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08090d}
-.studio-wrap{padding:34px 0 70px}.studio-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:24px}.studio-head h1{font:700 clamp(34px,6vw,58px)/1 'Space Grotesk';letter-spacing:-.05em;margin:10px 0}.studio-head p{max-width:620px;color:var(--muted);margin:0}
-.workspace{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}.preview-panel,.editor-panel{border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#171923,#0d0f15);overflow:hidden;box-shadow:0 22px 70px #0006}.panel-top{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-top strong{font:600 13px 'Space Grotesk'}.panel-top small{font:700 9px ui-monospace,monospace;color:#ff858d;letter-spacing:.12em}.preview-area{padding:16px}.canvas-frame{width:100%;background:#050609;border-radius:10px;overflow:hidden;border:1px solid #ffffff22}.canvas-frame canvas{display:block;width:100%;height:auto;aspect-ratio:var(--canvas-ratio,16/9);touch-action:none;cursor:grab}.canvas-frame canvas.dragging{cursor:grabbing}.preview-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;margin-top:10px}
-.editor-panel{padding-bottom:14px}.editor-content{padding:15px;display:grid;gap:13px}.field{display:grid;gap:6px}.field label,.field-label{font:700 9px ui-monospace,monospace;letter-spacing:.13em;color:#c5c6d0;text-transform:uppercase}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff24;border-radius:9px;background:#090b11;color:#fff;padding:10px;font:13px 'DM Sans',sans-serif;min-width:0}.field input[type=color]{height:40px;padding:4px}.field input[type=range]{padding:0;accent-color:#ff4654}.field textarea{resize:vertical;min-height:64px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.template{border:1px solid #ffffff24;background:#0a0b10;border-radius:8px;padding:7px 5px;color:#eee;cursor:pointer;font-size:10px}.template[aria-pressed=true]{border-color:#ff5965;background:#43141a}.template-swatch{display:block;height:30px;border-radius:4px;margin-bottom:5px;background:linear-gradient(120deg,#12090d,#c51d2b)}.template:nth-child(2) .template-swatch{background:linear-gradient(120deg,#05070d,#344c66)}.template:nth-child(3) .template-swatch{background:linear-gradient(120deg,#09090b,#8b6a34)}
-.upload{border:1px dashed #ff626d88;border-radius:10px;padding:13px;text-align:center;background:#ff3b4b0c}.upload input{width:100%;font-size:11px;color:var(--muted)}.upload p{font-size:10px;color:var(--muted);margin:6px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .btn{flex:1}.btn{background:linear-gradient(120deg,#b7192a,#ff4d5a);color:white}.btn.secondary{background:transparent;border:1px solid #ffffff30;color:#fff}.note{font-size:10px;color:var(--muted);line-height:1.5;margin:0}.section-line{height:1px;background:var(--line)}
+.studio-wrap{padding:30px 0 70px}.studio-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:24px}.studio-head h1{font:700 clamp(34px,6vw,58px)/1 'Space Grotesk';letter-spacing:-.05em;margin:10px 0}.studio-head p{max-width:650px;color:var(--muted);margin:0}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:18px;align-items:start}.preview-panel,.editor-panel{border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#171923,#0d0f15);overflow:hidden;box-shadow:0 22px 70px #0006}.panel-top{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-top strong{font:600 13px 'Space Grotesk'}.panel-top small{font:700 9px ui-monospace,monospace;color:#ff858d;letter-spacing:.12em}.preview-area{padding:16px}.canvas-frame{width:100%;background:#050609;border-radius:10px;overflow:hidden;border:1px solid #ffffff22}.canvas-frame canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}.canvas-frame canvas.dragging{cursor:grabbing}.preview-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;margin-top:10px}
+.editor-panel{padding-bottom:14px}.editor-content{padding:15px;display:grid;gap:13px}.field{display:grid;gap:6px}.field label,.field-label{font:700 9px ui-monospace,monospace;letter-spacing:.13em;color:#c5c6d0;text-transform:uppercase}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff24;border-radius:9px;background:#090b11;color:#fff;padding:10px;font:13px 'DM Sans',sans-serif;min-width:0}.field input[type=color]{height:40px;padding:4px}.field input[type=range]{padding:0;accent-color:#ff4654}.field textarea{resize:vertical;min-height:68px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.template{border:1px solid #ffffff24;background:#0a0b10;border-radius:8px;padding:7px 5px;color:#eee;cursor:pointer;font-size:10px}.template[aria-pressed=true]{border-color:#ff5965;background:#43141a}.template-swatch{display:block;height:30px;border-radius:4px;margin-bottom:5px;background:linear-gradient(120deg,#12090d,#c51d2b)}.template:nth-child(2) .template-swatch{background:linear-gradient(120deg,#05070d,#344c66)}.template:nth-child(3) .template-swatch{background:linear-gradient(120deg,#09090b,#8b6a34)}
+.upload{border:1px dashed #ff626d88;border-radius:10px;padding:13px;text-align:center;background:#ff3b4b0c}.upload input{width:100%;font-size:11px;color:var(--muted)}.upload p{font-size:10px;color:var(--muted);margin:6px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .btn{flex:1}.btn{background:linear-gradient(120deg,#b7192a,#ff4d5a);color:white}.btn.secondary{background:transparent;border:1px solid #ffffff30;color:#fff}.btn.small{padding:9px 11px;font-size:11px}.note{font-size:10px;color:var(--muted);line-height:1.5;margin:0}.section-line{height:1px;background:var(--line)}.layer-row{display:flex;gap:7px}.layer-row select{flex:1}.layer-row button{white-space:nowrap}.status{min-height:15px;color:#ff9da5;font-size:10px}
 @media(max-width:900px){.workspace{grid-template-columns:1fr}.editor-panel{order:2}.studio-head{align-items:start;flex-direction:column}}
 @media(max-width:560px){.studio-wrap{padding-top:24px}.preview-area,.editor-content{padding:11px}.panel-top{padding:13px}.preview-meta{font-size:9px}.studio-head p{font-size:13px}}
 </style>
@@ -20,111 +20,132 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
 <body>
 <header><nav class="wrap"><a class="brand" href="index.html">SUBAS GHIMIRE<small>NEWS THUMBNAIL STUDIO</small></a><div class="navlinks"><a href="creator-tools.html">Creator Tools</a><a href="effects.html">Effects</a><a href="index.html">Portfolio ↗</a></div></nav></header>
 <main class="wrap studio-wrap">
-<div class="studio-head"><div><div class="eyebrow">FREE · LOCAL BROWSER TOOL</div><h1>News Thumbnail <em style="font-family:'Instrument Serif';font-weight:400;color:#ff6873">Studio.</em></h1><p>Create bold, dark-cinematic news and political thumbnails. Upload your own photo, edit the headline and export HD PNG in Facebook square 1080 × 1080 or widescreen 1280 × 720. Your images stay on your device.</p></div></div>
+<div class="studio-head"><div><div class="eyebrow">FREE · LOCAL BROWSER TOOL</div><h1>News Thumbnail <em style="font-family:'Instrument Serif';font-weight:400;color:#ff6873">Studio.</em></h1><p>Dark cinematic breaking-news designs. Upload a photo, add and move text, customize fonts, colors and gradients, then export a full-resolution PNG. Your photos stay on your device.</p></div></div>
 <div class="workspace">
-<section class="preview-panel"><div class="panel-top"><strong>LIVE THUMBNAIL PREVIEW</strong><small id="formatBadge">1:1 · FACEBOOK POST</small></div><div class="preview-area"><div class="canvas-frame"><canvas id="thumbCanvas" width="1080" height="1080" aria-label="Thumbnail preview"></canvas></div><div class="preview-meta"><span id="imageStatus">No photo uploaded · template background active</span><span id="dimensionLabel">1080 × 1080 px</span></div><p class="note" style="margin-top:8px">✋ फोटो सार्न Preview माथि औँला वा माउसले थिचेर तान्नुहोस् (Drag to move photo).</p></div></section>
+<section class="preview-panel"><div class="panel-top"><strong>LIVE THUMBNAIL PREVIEW</strong><small id="formatBadge">1:1 · FACEBOOK POST</small></div><div class="preview-area"><div class="canvas-frame"><canvas id="thumbCanvas" width="1080" height="1080" aria-label="Thumbnail preview"></canvas></div><div class="preview-meta"><span id="imageStatus">Default cinematic design · upload a photo to begin</span><span id="dimensionLabel">1080 × 1080 px</span></div><p class="note" style="margin-top:8px">✋ फोटो वा Text माथि औँला/माउसले थिचेर तान्नुहोस्। Text छान्न त्यसैमा क्लिक गर्नुहोस्।</p></div></section>
 <aside class="editor-panel"><div class="panel-top"><strong>DESIGN CONTROLS</strong><small>EDIT LIVE</small></div><div class="editor-content">
-<div class="field"><label for="canvasFormat">Post / thumbnail format</label><select id="canvasFormat"><option value="square" selected>Facebook Square · 1080 × 1080 (1:1)</option><option value="portrait">Facebook Photo Post · 1080 × 1350 (4:5)</option><option value="wide">YouTube / Facebook Video · 1280 × 720 (16:9)</option><option value="custom">Custom size · आफ्नै मापन</option></select></div><div class="two" id="customSizeFields" hidden><div class="field"><label for="customWidth">Width (px)</label><input id="customWidth" type="number" min="320" max="3000" value="1080"></div><div class="field"><label for="customHeight">Height (px)</label><input id="customHeight" type="number" min="320" max="3000" value="1350"></div></div>
-<div class="field"><span class="field-label">Choose a template</span><div class="template-grid"><button class="template" data-template="breaking" aria-pressed="true"><i class="template-swatch"></i>BREAKING</button><button class="template" data-template="debate" aria-pressed="false"><i class="template-swatch"></i>DEBATE</button><button class="template" data-template="exclusive" aria-pressed="false"><i class="template-swatch"></i>EXCLUSIVE</button></div></div>
-<div class="field"><label for="photoUpload">Upload your photo</label><div class="upload"><input id="photoUpload" type="file" accept="image/png,image/jpeg,image/webp"><p>JPG, PNG or WEBP · up to 20 MB</p></div></div>
-<div class="two"><div class="field"><label for="photoFit">Photo layout</label><select id="photoFit"><option value="contain" selected>Show full photo (no crop)</option><option value="cover">Fill frame (crop edges)</option></select></div><div class="field"><label for="overlay">Dark overlay</label><input id="overlay" type="range" min="10" max="90" value="55"></div></div><div class="field"><label for="photoZoom">Photo zoom</label><input id="photoZoom" type="range" min="50" max="250" value="100"><span class="note" id="zoomValue">100% · Drag photo to reposition</span></div>
-<div class="field"><label style="display:flex;align-items:center;gap:9px;text-transform:none;letter-spacing:0;font:600 12px Arial,sans-serif;color:#f4f4f7"><input id="redPlateToggle" type="checkbox" checked style="width:17px;height:17px;accent-color:#ed2638"> Red plate / रातो पृष्ठभूमि देखाउने</label><p class="note">Tick हटाउँदा headline पछाडिको रातो plate हट्छ।</p></div><div class="field"><label for="kicker">Breaking bar / top text (आफ्नै लेख्नुहोस्)</label><input id="kicker" maxlength="34" value="BREAKING NEWS" placeholder="जस्तै: BREAKING NEWS"></div><div class="field"><label for="masthead">Top name / page name</label><input id="masthead" maxlength="28" value="SUBAS GHIMIRE" placeholder="आफ्नो नाम वा पेज"></div>
-<div class="field"><label for="headline">Main headline</label><textarea id="headline" maxlength="100" rows="3">नेपालको राजनीतिमा ठूलो हलचल</textarea></div>
-<div class="field"><label for="subheadline">Sub headline</label><input id="subheadline" maxlength="100" value="आजको मुख्य अपडेट · विशेष रिपोर्ट"></div>
-<div class="two"><div class="field"><label for="headlineColor">Headline colour</label><input id="headlineColor" type="color" value="#ffffff"></div><div class="field"><label for="accentColor">Accent colour</label><input id="accentColor" type="color" value="#ed2638"></div></div>
-<div class="two"><div class="field"><label for="headlineSize">Headline size</label><input id="headlineSize" type="range" min="42" max="100" value="76"></div><div class="field"><label for="textAlign">Text alignment</label><select id="textAlign"><option value="left">Left</option><option value="center">Center</option></select></div></div>
-<div class="field"><label for="footerText">Footer / source</label><input id="footerText" maxlength="45" value="SUBAS GHIMIRE · NEWS DESK"></div>
-<div class="actions"><button class="btn" id="downloadBtn" type="button">DOWNLOAD HD PNG ↓</button><button class="btn secondary" id="resetBtn" type="button">RESET</button></div>
-<p class="note">For editorial accuracy, use verified photos and headlines. This tool does not generate or verify news. All processing and PNG export happen locally in your browser.</p>
+<div class="field"><label for="canvasFormat">Output format</label><select id="canvasFormat"><option value="square" selected>Facebook Post · 1080 × 1080 (1:1)</option><option value="wide">YouTube Thumbnail · 1280 × 720 (16:9)</option></select></div>
+<div class="field"><span class="field-label">Design template</span><div class="template-grid"><button class="template" type="button" data-template="breaking" aria-pressed="true"><i class="template-swatch"></i>BREAKING</button><button class="template" type="button" data-template="debate" aria-pressed="false"><i class="template-swatch"></i>POLITICAL</button><button class="template" type="button" data-template="exclusive" aria-pressed="false"><i class="template-swatch"></i>EXCLUSIVE</button></div></div>
+<div class="field"><label for="photoUpload">Upload photo</label><div class="upload"><input id="photoUpload" type="file" accept="image/png,image/jpeg,image/webp"><p>JPG, PNG or WEBP · maximum 20 MB</p></div></div>
+<div class="two"><div class="field"><label for="photoFit">Photo fit</label><select id="photoFit"><option value="cover">Fill frame</option><option value="contain">Show full photo</option></select></div><div class="field"><label for="photoZoom">Photo zoom</label><input id="photoZoom" type="range" min="50" max="250" value="100"></div></div>
+<div class="field"><label for="overlay">Dark cinematic overlay</label><input id="overlay" type="range" min="0" max="90" value="48"></div>
+<div class="field"><label for="backgroundStyle">Background gradient</label><select id="backgroundStyle"><option value="red">Breaking Red</option><option value="midnight">Midnight Blue</option><option value="gold">Gold / Exclusive</option><option value="charcoal">Charcoal</option><option value="custom">Custom colour gradient</option></select></div>
+<div class="two"><div class="field"><label for="backgroundColor">Custom base colour</label><input id="backgroundColor" type="color" value="#16080d"></div><div class="field"><label for="accentColor">Accent colour</label><input id="accentColor" type="color" value="#ed2638"></div></div>
+<div class="section-line"></div>
+<div class="field"><span class="field-label">Text layers</span><div class="layer-row"><select id="layerSelect" aria-label="Select text layer"></select><button class="btn small" id="addTextBtn" type="button">+ Add text</button><button class="btn secondary small" id="deleteTextBtn" type="button">Delete</button></div></div>
+<div class="field"><label for="layerText">Text content</label><textarea id="layerText" rows="3" maxlength="140">नेपालको राजनीतिमा ठूलो हलचल</textarea></div>
+<div class="two"><div class="field"><label for="fontFamily">Font family</label><select id="fontFamily"><option value="Arial, sans-serif">Arial / Sans</option><option value="'Noto Sans Devanagari', Arial, sans-serif">Noto Sans Devanagari</option><option value="Impact, sans-serif">Impact</option><option value="Georgia, serif">Georgia</option><option value="'Trebuchet MS', sans-serif">Trebuchet</option></select></div><div class="field"><label for="fontWeight">Font weight</label><select id="fontWeight"><option value="900">Black</option><option value="700">Bold</option><option value="500">Medium</option><option value="400">Regular</option></select></div></div>
+<div class="two"><div class="field"><label for="fontSize">Font size</label><input id="fontSize" type="range" min="18" max="130" value="76"></div><div class="field"><label for="textColor">Text colour</label><input id="textColor" type="color" value="#ffffff"></div></div>
+<div class="two"><div class="field"><label for="textAlign">Text alignment</label><select id="textAlign"><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div><div class="field"><label for="textShadow">Text shadow</label><select id="textShadow"><option value="strong">Strong</option><option value="soft">Soft</option><option value="none">None</option></select></div></div>
+<p class="note">Tip: Select any text layer, edit it, then drag the text directly on the preview to position it.</p>
+<div class="actions"><button class="btn secondary" id="resetBtn" type="button">RESET DESIGN</button><button class="btn" id="downloadBtn" type="button">DOWNLOAD HD PNG ↓</button></div>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+<p class="note">PNG export uses the exact selected canvas size. Editing and photo processing happen locally in your browser. Use verified photos and headlines.</p>
 </div></aside>
 </div>
 </main>
 <footer class="wrap"><span>© <span id="year"></span> SUBAS GHIMIRE</span><span><a href="creator-tools.html">Creator Tools</a> · <a href="index.html">Portfolio</a></span></footer>
 <script>
-(()=>{
-const $=id=>document.getElementById(id),canvas=$("thumbCanvas"),ctx=canvas.getContext("2d");
-const defaults={canvasFormat:"square",customWidth:1080,customHeight:1350,kicker:"BREAKING NEWS",masthead:"SUBAS GHIMIRE",headline:"नेपालको राजनीतिमा ठूलो हलचल",subheadline:"आजको मुख्य अपडेट · विशेष रिपोर्ट",headlineColor:"#ffffff",accentColor:"#ed2638",headlineSize:76,overlay:55,footerText:"",photoZoom:100,textAlign:"left",photoFit:"contain",redPlateToggle:true,template:"breaking"};
-let photo=null,photoUrl="",template="breaking",photoOffsetX=0,photoOffsetY=0,dragState=null;
-const presets={breaking:{base:"#08090d",accent:"#ed2638",kicker:"BREAKING NEWS"},debate:{base:"#07111d",accent:"#e2a43a",kicker:"POLITICAL UPDATE"},exclusive:{base:"#0b0a0b",accent:"#d7b36a",kicker:"EXCLUSIVE REPORT"}};
-function wrapText(text,maxWidth,font){ctx.font=font;const words=text.split(/\s+/);let lines=[],line="";for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);return lines}
-function draw(){const format=$("canvasFormat").value;const custom=format==="custom";$("customSizeFields").hidden=!custom;const customW=Math.max(320,Math.min(3000,Number($("customWidth").value)||1080)),customH=Math.max(320,Math.min(3000,Number($("customHeight").value)||1350));const portrait=format==="portrait";const square=format==="square"||(custom&&customW===customH);const W=custom?customW:(portrait||square?1080:1280),H=custom?customH:(portrait?1350:square?1080:720);canvas.width=W;canvas.height=H;canvas.style.setProperty("--canvas-ratio",W+"/"+H);$("formatBadge").textContent=custom?"CUSTOM · "+W+":"+H:(portrait?"4:5 · FACEBOOK PHOTO POST":square?"1:1 · FACEBOOK POST":"16:9 · HD CANVAS");$("dimensionLabel").textContent=W+" × "+H+" px";const p=presets[template],accent=$("accentColor").value||p.accent;ctx.clearRect(0,0,W,H);ctx.fillStyle=p.base;ctx.fillRect(0,0,W,H);
-if(photo){const iw=photo.naturalWidth,ih=photo.naturalHeight,fit=$("photoFit").value;const photoAreaH=portrait?790:(square?500:H);let scale=fit==="contain"?Math.min(W/iw,photoAreaH/ih):Math.max(W/iw,photoAreaH/ih);scale*=Number($("photoZoom").value||100)/100;let w=iw*scale,h=ih*scale;ctx.drawImage(photo,(W-w)/2+photoOffsetX,(photoAreaH-h)/2+photoOffsetY,w,h)}else{const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,p.base);g.addColorStop(.58,"#25212a");g.addColorStop(1,"#08090d");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.strokeStyle="#ffffff12";ctx.lineWidth=2;for(let x=-500;x<W+500;x+=110){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+500,H);ctx.stroke()}ctx.restore()}
-if(square){\n  // Full-canvas cinematic red gradient glaze: photo remains visible beneath it.\n  const fullRed=ctx.createLinearGradient(0,0,W,H);\n  fullRed.addColorStop(0,"rgba(20,5,12,.24)");\n  fullRed.addColorStop(.38,"rgba(112,8,25,.22)");\n  fullRed.addColorStop(.72,"rgba(184,8,32,.34)");\n  fullRed.addColorStop(1,"rgba(112,0,18,.52)");\n  ctx.fillStyle=fullRed;ctx.fillRect(0,0,W,H);\n}\nif($("canvasFormat").value==="portrait"){
-  // Subtle 10% blue gradient glaze over the photo, matching the requested reference look.
-  const blueWash=ctx.createLinearGradient(0,0,0,H);
-  blueWash.addColorStop(0,"rgba(28,105,220,.10)");
-  blueWash.addColorStop(.58,"rgba(24,91,190,.065)");
-  blueWash.addColorStop(1,"rgba(10,35,85,0)");
-  ctx.fillStyle=blueWash;ctx.fillRect(0,0,W,H);
+(function(){
+"use strict";
+const $=function(id){return document.getElementById(id)};
+const canvas=$("thumbCanvas"),ctx=canvas.getContext("2d");
+if(!ctx){$("status").textContent="Canvas is not supported in this browser.";return}
+const templates={
+ breaking:{base:"#10070c",accent:"#ed2638",gradient:["#16070d","#610b19","#16070d"]},
+ debate:{base:"#07111d",accent:"#e2a43a",gradient:["#06111d","#122d49","#070d18"]},
+ exclusive:{base:"#0b0a0b",accent:"#d7b36a",gradient:["#08090b","#352719","#09090b"]}
+};
+let template="breaking",photo=null,photoUrl="",photoOffsetX=0,photoOffsetY=0,drag=null,selectedId="headline";
+let layers=[
+{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
+{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},
+{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},
+{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
+];
+let hitBoxes=[];
+function dimensions(){return $("canvasFormat").value==="wide"?{w:1280,h:720}:{w:1080,h:1080}}
+function currentLayer(){return layers.find(function(l){return l.id===selectedId})||layers[0]}
+function setStatus(message){$("status").textContent=message}
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function wrap(text,maxWidth,font){ctx.font=font;const words=String(text).split(/\s+/);const lines=[];let line="";words.forEach(function(word){const next=line?line+" "+word:word;if(line&&ctx.measureText(next).width>maxWidth){lines.push(line);line=word}else line=next});if(line)lines.push(line);return lines}
+function fontString(layer){return layer.weight+" "+layer.size+"px "+layer.font}
+function renderLayer(layer){
+ const text=String(layer.text||"");if(!text)return;
+ const font=fontString(layer),lines=wrap(text,layer.maxWidth,font),lineHeight=layer.size*1.18;
+ ctx.save();ctx.font=font;ctx.textAlign=layer.align;ctx.textBaseline="alphabetic";ctx.fillStyle=layer.color;
+ if(layer.shadow==="strong"){ctx.shadowColor="rgba(0,0,0,.9)";ctx.shadowBlur=18;ctx.shadowOffsetY=5}
+ else if(layer.shadow==="soft"){ctx.shadowColor="rgba(0,0,0,.65)";ctx.shadowBlur=9;ctx.shadowOffsetY=2}
+ const widths=lines.map(function(line){return ctx.measureText(line).width});
+ const maxLine=Math.max.apply(null,widths.concat([1]));
+ const left=layer.align==="center"?layer.x-maxLine/2:layer.align==="right"?layer.x-maxLine:layer.x;
+ const top=layer.y-layer.size;
+ lines.forEach(function(line,i){ctx.fillText(line,layer.x,layer.y+i*lineHeight,layer.maxWidth)});
+ ctx.restore();
+ hitBoxes.push({id:layer.id,left:left-14,top:top-14,right:left+maxLine+14,bottom:layer.y+Math.max(0,lines.length-1)*lineHeight+14});
 }
-const shade=Number($("overlay").value)/100;
-if(portrait){
-  // Portrait 4:5 editorial post: photo-led upper area and bold lower headline panel.
-  const isDebate=template==="debate",isExclusive=template==="exclusive";
-  const panelTop=790;
-  const topShade=ctx.createLinearGradient(0,0,0,850);topShade.addColorStop(0,"rgba(0,0,0,.78)");topShade.addColorStop(.72,"rgba(0,0,0,"+(shade*.72)+")");topShade.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=topShade;ctx.fillRect(0,0,W,850);
-  ctx.fillStyle="#07090def";ctx.fillRect(0,0,W,68);
-  const label=$("kicker").value.toUpperCase();ctx.textAlign="left";ctx.font=template==="breaking"?"900 25px Arial,sans-serif":"800 21px Arial,sans-serif";const labelW=Math.min(760,ctx.measureText(label).width+74);if(template==="breaking"){ctx.save();ctx.shadowColor="#0009";ctx.shadowBlur=18;ctx.fillStyle=accent;ctx.beginPath();ctx.moveTo(58,106);ctx.lineTo(58+labelW,106);ctx.lineTo(58+labelW+24,136);ctx.lineTo(58+labelW,166);ctx.lineTo(58,166);ctx.closePath();ctx.fill();ctx.restore();ctx.fillStyle="#fff";ctx.fillText(label,82,145)}else{ctx.fillStyle=accent;ctx.fillRect(58,112,labelW,48);ctx.fillStyle="#fff";ctx.fillText(label,82,144)}
-  if(isDebate){const panel=ctx.createLinearGradient(0,panelTop,0,H);panel.addColorStop(0,"#071626");panel.addColorStop(1,"#101d31");ctx.fillStyle=panel;ctx.fillRect(0,panelTop,W,H-panelTop);ctx.fillStyle=accent;ctx.fillRect(0,panelTop,W,10);ctx.fillRect(58,770,7,440);ctx.strokeStyle="#ffffff25";ctx.lineWidth=2;ctx.strokeRect(35,735,W-70,555)}
-  else if(isExclusive){ctx.fillStyle="#080a0d";ctx.fillRect(0,panelTop,W,H-panelTop);ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.strokeRect(34,720,W-68,H-760);ctx.fillStyle=accent;ctx.fillRect(58,770,130,5)}
-  else{if($("redPlateToggle").checked){const panel=ctx.createLinearGradient(0,panelTop,0,H);panel.addColorStop(0,"rgba(65,0,8,.96)");panel.addColorStop(.35,"rgba(132,0,17,.99)");panel.addColorStop(1,"#a90920");ctx.fillStyle=panel;ctx.fillRect(0,panelTop,W,H-panelTop)}ctx.fillStyle=accent;if($("redPlateToggle").checked)ctx.fillRect(58,770,8,430)}
-  const align=$("textAlign").value,tx=align==="center"?W/2:92,maxW=align==="center"?W-150:900,headline=$("headline").value.trim()||"YOUR HEADLINE";
-  let size=Math.min(92,Number($("headlineSize").value)*.96),lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif");while(lines.length>4&&size>48){size-=4;lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif")}if(lines.length>4)lines=lines.slice(0,4);
-  const lineH=size*1.13,startY=lines.length===1?930:lines.length===2?890:lines.length===3?850:810;
-  ctx.textAlign=align;ctx.fillStyle=$("headlineColor").value;ctx.font="800 "+size+"px Arial,sans-serif";ctx.shadowColor="#000b";ctx.shadowBlur=14;lines.forEach((line,i)=>ctx.fillText(line,tx,startY+i*lineH,maxW));ctx.shadowBlur=0;
-  const subY=Math.min(1210,startY+lines.length*lineH+28);ctx.fillStyle=isExclusive?accent:"#fff";ctx.globalAlpha=.96;ctx.font="500 24px Arial,sans-serif";ctx.fillText($("subheadline").value,tx,subY,maxW);ctx.globalAlpha=1;
-  ctx.fillStyle="#ffffff55";ctx.fillRect(58,1260,W-116,1);ctx.fillStyle="#fff";ctx.globalAlpha=.88;ctx.font="700 16px Arial,sans-serif";ctx.textAlign="left";ctx.fillText($("footerText").value.toUpperCase(),58,1305,760);ctx.textAlign="right";ctx.fillText("1080 × 1350",W-58,1305);ctx.globalAlpha=1;
-}else if(square){
-  // Advanced Facebook square artwork: each editorial template has its own visual identity.
-  const isDebate=template==="debate",isExclusive=template==="exclusive";
-  const topShade=ctx.createLinearGradient(0,0,0,590);topShade.addColorStop(0,"rgba(0,0,0,.78)");topShade.addColorStop(.62,"rgba(0,0,0,"+(shade*.72)+")");topShade.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=topShade;ctx.fillRect(0,0,W,610);
-  
-  const label=$("kicker").value.toUpperCase();ctx.textAlign="left";ctx.font="800 21px Arial,sans-serif";const labelW=Math.min(720,ctx.measureText(label).width+54);ctx.fillStyle=accent;ctx.fillRect(58,112,labelW,48);ctx.fillStyle="#fff";ctx.fillText(label,82,144);
-  if(isDebate){
-    const panel=ctx.createLinearGradient(0,500,0,H);panel.addColorStop(0,"#071626");panel.addColorStop(1,"#101d31");ctx.fillStyle=panel;ctx.fillRect(0,500,W,580);ctx.fillStyle=accent;ctx.fillRect(0,500,W,9);ctx.fillRect(58,566,7,355);
-    ctx.strokeStyle="#ffffff20";ctx.lineWidth=2;ctx.strokeRect(35,535,W-70,420);
-  }else if(isExclusive){
-    ctx.fillStyle="#080a0d";ctx.fillRect(0,500,W,580);ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.strokeRect(34,520,W-68,520);ctx.fillStyle=accent;ctx.fillRect(58,555,130,5);
-  }else{
-    const panel=ctx.createLinearGradient(0,500,0,H);panel.addColorStop(0,"rgba(65,0,8,.9)");panel.addColorStop(.3,"rgba(132,0,17,.98)");panel.addColorStop(1,"#a90920");ctx.fillStyle=panel;ctx.fillRect(0,500,W,580);ctx.fillStyle=accent;ctx.fillRect(58,555,8,370);
-  }
-  const align=$("textAlign").value,tx=align==="center"?W/2:92,maxW=align==="center"?W-150:900,headline=$("headline").value.trim()||"YOUR HEADLINE";
-  let size=Math.min(92,Number($("headlineSize").value)*.96),lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif");
-  while(lines.length>3&&size>48){size-=4;lines=wrapText(headline,maxW,"800 "+size+"px Arial,sans-serif")}
-  if(lines.length>3)lines=lines.slice(0,3);const lineH=size*1.13,startY=lines.length===1?700:lines.length===2?665:630;
-  ctx.textAlign=align;ctx.fillStyle=$("headlineColor").value;ctx.font="800 "+size+"px Arial,sans-serif";ctx.shadowColor="#000b";ctx.shadowBlur=14;lines.forEach((line,i)=>ctx.fillText(line,tx,startY+i*lineH, maxW));ctx.shadowBlur=0;
-  const subY=Math.min(930,startY+lines.length*lineH+28);ctx.fillStyle=isExclusive?accent:"#fff";ctx.globalAlpha=.96;ctx.font="500 24px Arial,sans-serif";ctx.fillText($("subheadline").value,tx,subY,maxW);ctx.globalAlpha=1;
-  ctx.fillStyle="#ffffff55";ctx.fillRect(58,965,W-116,1);ctx.fillStyle="#fff";ctx.globalAlpha=.88;ctx.font="700 16px Arial,sans-serif";ctx.textAlign="left";ctx.fillText($("footerText").value.toUpperCase(),58,1010,760);ctx.textAlign="right";ctx.fillText(W+" × "+H,W-58,1010);ctx.globalAlpha=1;
-}else{
-  const grad=ctx.createLinearGradient(0,0,W,0);grad.addColorStop(0,"rgba(0,0,0,"+Math.min(.94,shade+.25)+")");grad.addColorStop(.65,"rgba(0,0,0,"+shade+")");grad.addColorStop(1,"rgba(0,0,0,"+Math.max(.12,shade-.22)+")");ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-  const align=$("textAlign").value,tx=align==="center"?W/2:78;ctx.textAlign=align;ctx.fillStyle=accent;ctx.fillRect(78,70,9,52);ctx.font="700 27px Arial,sans-serif";ctx.fillText($("kicker").value.toUpperCase(),align==="center"?W/2:105,105);
-  ctx.fillStyle=accent;ctx.fillRect(78,500,W-156,3);const size=Number($("headlineSize").value),headline=$("headline").value.trim()||"YOUR HEADLINE";let lines=wrapText(headline,W-200,"800 "+size+"px Arial,sans-serif");if(lines.length>3)lines=lines.slice(0,3);const lineH=size*1.23,startY=Math.max(260,490-(lines.length-1)*lineH);ctx.fillStyle=$("headlineColor").value;ctx.font="800 "+size+"px Arial,sans-serif";ctx.shadowColor="#000";ctx.shadowBlur=18;lines.forEach((line,i)=>ctx.fillText(line,tx,startY+i*lineH));ctx.shadowBlur=0;
-  ctx.fillStyle="#fff";ctx.globalAlpha=.92;ctx.font="500 29px Arial,sans-serif";ctx.fillText($("subheadline").value,tx,590);ctx.globalAlpha=1;ctx.fillStyle=accent;ctx.fillRect(78,635,W-156,2);ctx.fillStyle="#fff";ctx.globalAlpha=.8;ctx.font="700 17px Arial,sans-serif";ctx.textAlign="left";ctx.fillText($("footerText").value.toUpperCase(),78,675);ctx.globalAlpha=1;
+function draw(){
+ const d=dimensions(),W=d.w,H=d.h;canvas.width=W;canvas.height=H;
+ $("formatBadge").textContent=W===1080?"1:1 · FACEBOOK POST":"16:9 · YOUTUBE THUMBNAIL";
+ $("dimensionLabel").textContent=W+" × "+H+" px";
+ const t=templates[template],style=$("backgroundStyle").value;
+ let colors=t.gradient;
+ if(style==="midnight")colors=["#030914","#102d50","#050b16"];
+ if(style==="gold")colors=["#0b0907","#49351c","#0b0907"];
+ if(style==="charcoal")colors=["#050608","#292a31","#08090d"];
+ if(style==="custom"){const c=$("backgroundColor").value;colors=[c,"#4a1019",c]}
+ const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,colors[0]);bg.addColorStop(.55,colors[1]);bg.addColorStop(1,colors[2]);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ if(photo){
+  const iw=photo.naturalWidth,ih=photo.naturalHeight,fit=$("photoFit").value;
+  let scale=fit==="contain"?Math.min(W/iw,H/ih):Math.max(W/iw,H/ih);
+  scale*=Number($("photoZoom").value)/100;
+  const pw=iw*scale,ph=ih*scale;
+  ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);ctx.clip();
+  ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
+ }
+ const shade=Number($("overlay").value)/100;
+ const dark=ctx.createLinearGradient(0,0,W,H);dark.addColorStop(0,"rgba(0,0,0,"+(shade*.82)+")");dark.addColorStop(.45,"rgba(0,0,0,"+(shade*.34)+")");dark.addColorStop(1,"rgba(0,0,0,"+(shade*.88)+")");ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
+ const accent=$("accentColor").value||t.accent;
+ const glow=ctx.createRadialGradient(W*.82,H*.16,10,W*.82,H*.16,W*.8);glow.addColorStop(0,accent+"55");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+ const panelY=H*(W===1080?.59:.56);
+ const panel=ctx.createLinearGradient(0,panelY,0,H);panel.addColorStop(0,"rgba(20,5,10,.78)");panel.addColorStop(.3,"rgba(10,7,12,.96)");panel.addColorStop(1,"rgba(4,5,8,.99)");ctx.fillStyle=panel;ctx.fillRect(0,panelY,W,H-panelY);
+ const accentGrad=ctx.createLinearGradient(0,0,W,0);accentGrad.addColorStop(0,accent);accentGrad.addColorStop(1,"#ff8b73");
+ ctx.fillStyle=accentGrad;roundRect(54,H*.075,Math.min(W*.56,500),W===1080?58:48,7);ctx.fill();
+ const kicker=layers.find(function(l){return l.id==="kicker"});if(kicker){ctx.save();ctx.font=fontString(kicker);ctx.fillStyle="#fff";ctx.textAlign="left";ctx.textBaseline="middle";ctx.shadowColor="#000";ctx.shadowBlur=8;ctx.fillText(kicker.text,72,H*.075+(W===1080?29:24),W*.52);ctx.restore()}
+ ctx.fillStyle=accent;ctx.fillRect(54,panelY+30,9,H-panelY-90);
+ ctx.fillStyle="rgba(255,255,255,.22)";ctx.fillRect(54,H-62,W-108,1);
+ hitBoxes=[];layers.filter(function(l){return l.id!=="kicker"}).forEach(renderLayer);
+ if(kicker){hitBoxes.unshift({id:kicker.id,left:45,top:H*.075-8,right:Math.min(W*.56,500)+65,bottom:H*.075+(W===1080?65:55)})}
+ $("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"Default cinematic background · upload your photo";
+ syncLayerControls();
 }
-ctx.textAlign="left";$("zoomValue").textContent=$("photoZoom").value+"% · Drag photo to reposition";$("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"No photo uploaded · template background active";
+function syncLayerControls(){
+ const select=$("layerSelect"),previous=selectedId;select.innerHTML="";
+ layers.forEach(function(layer){const option=document.createElement("option");option.value=layer.id;option.textContent=layer.name;select.appendChild(option)});
+ if(!layers.some(function(l){return l.id===previous}))selectedId=layers[0].id;
+ select.value=selectedId;
+ const l=currentLayer();$("layerText").value=l.text;$("fontFamily").value=l.font;$("fontWeight").value=l.weight;$("fontSize").value=l.size;$("textColor").value=l.color;$("textAlign").value=l.align;$("textShadow").value=l.shadow;
 }
-["canvasFormat","customWidth","customHeight","redPlateToggle","kicker","masthead","headline","subheadline","headlineColor","accentColor","headlineSize","overlay","footerText","textAlign","photoFit","photoZoom"].forEach(id=>$(id).addEventListener("input",draw));
-document.querySelectorAll(".template").forEach(btn=>btn.addEventListener("click",()=>{template=btn.dataset.template;document.querySelectorAll(".template").forEach(b=>b.setAttribute("aria-pressed",String(b===btn)));$("accentColor").value=presets[template].accent;$("kicker").value=presets[template].kicker;draw()}));
-$("photoUpload").addEventListener("change",()=>{const file=$("photoUpload").files[0];if(!file)return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>20*1024*1024){alert("Choose a JPG, PNG or WEBP image under 20 MB.");$("photoUpload").value="";return}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(file);const img=new Image();img.onload=()=>{photo=img;photoOffsetX=0;photoOffsetY=0;draw()};img.onerror=()=>alert("Could not load this image.");img.src=photoUrl});
-// Drag the uploaded photo directly inside the live preview (mouse + touch).
-canvas.addEventListener("pointerdown",e=>{
-  if(!photo)return;
-  const rect=canvas.getBoundingClientRect();
-  dragState={id:e.pointerId,x:e.clientX,y:e.clientY,startX:photoOffsetX,startY:photoOffsetY,scaleX:canvas.width/rect.width,scaleY:canvas.height/rect.height};
-  canvas.classList.add("dragging");canvas.setPointerCapture(e.pointerId);e.preventDefault();
+function updateSelected(){
+ const l=currentLayer();l.text=$("layerText").value;l.font=$("fontFamily").value;l.weight=$("fontWeight").value;l.size=Number($("fontSize").value);l.color=$("textColor").value;l.align=$("textAlign").value;l.shadow=$("textShadow").value;draw()
+}
+["canvasFormat","photoFit","photoZoom","overlay","backgroundStyle","backgroundColor","accentColor"].forEach(function(id){$(id).addEventListener("input",draw);$(id).addEventListener("change",draw)});
+["layerText","fontFamily","fontWeight","fontSize","textColor","textAlign","textShadow"].forEach(function(id){$(id).addEventListener("input",updateSelected);$(id).addEventListener("change",updateSelected)});
+$("layerSelect").addEventListener("change",function(){selectedId=this.value;syncLayerControls();draw()});
+document.querySelectorAll(".template").forEach(function(button){button.addEventListener("click",function(){template=button.dataset.template;document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b===button))});$("accentColor").value=templates[template].accent;$("backgroundStyle").value=template==="debate"?"midnight":template==="exclusive"?"gold":"red";draw()})});
+$("photoUpload").addEventListener("change",function(){const file=this.files&&this.files[0];if(!file)return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>20*1024*1024){setStatus("Please choose JPG, PNG or WEBP under 20 MB.");this.value="";return}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(file);const img=new Image();img.onload=function(){photo=img;photoOffsetX=0;photoOffsetY=0;draw();setStatus("Photo uploaded. Drag it in the preview to reposition.")};img.onerror=function(){setStatus("Could not load this photo. Try another image.")};img.src=photoUrl});
+$("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:d.w*.08,y:d.h*.48,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit and drag it into position.")});
+$("deleteTextBtn").addEventListener("click",function(){if(layers.length<=1){setStatus("At least one text layer must remain.");return}layers=layers.filter(function(l){return l.id!==selectedId});selectedId=layers[0].id;draw();setStatus("Selected text layer deleted.")});
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
+canvas.addEventListener("pointerdown",function(e){const p=point(e);let box=null;for(let i=hitBoxes.length-1;i>=0;i--){const b=hitBoxes[i];if(p.x>=b.left&&p.x<=b.right&&p.y>=b.top&&p.y<=b.bottom){box=b;break}}
+ if(box){selectedId=box.id;syncLayerControls();const l=currentLayer();drag={kind:"text",id:l.id,startX:p.x,startY:p.y,originX:l.x,originY:l.y};canvas.setPointerCapture(e.pointerId);canvas.classList.add("dragging");e.preventDefault();return}
+ if(photo){drag={kind:"photo",startX:p.x,startY:p.y,originX:photoOffsetX,originY:photoOffsetY};canvas.setPointerCapture(e.pointerId);canvas.classList.add("dragging");e.preventDefault()}
 });
-canvas.addEventListener("pointermove",e=>{
-  if(!dragState||dragState.id!==e.pointerId)return;
-  photoOffsetX=dragState.startX+(e.clientX-dragState.x)*dragState.scaleX;
-  photoOffsetY=dragState.startY+(e.clientY-dragState.y)*dragState.scaleY;
-  draw();e.preventDefault();
-});
-function stopPhotoDrag(e){if(dragState&&(!e||dragState.id===e.pointerId)){dragState=null;canvas.classList.remove("dragging")}}
-canvas.addEventListener("pointerup",stopPhotoDrag);
-canvas.addEventListener("pointercancel",stopPhotoDrag);
-canvas.addEventListener("lostpointercapture",stopPhotoDrag);
-$("downloadBtn").addEventListener("click",()=>{draw();canvas.toBlob(blob=>{if(!blob){alert("PNG export failed. Please try again.");return}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=$("canvasFormat").value==="custom"?"subas-custom-photo-post-"+canvas.width+"x"+canvas.height+".png":$("canvasFormat").value==="portrait"?"subas-facebook-photo-post-1080x1350.png":$("canvasFormat").value==="square"?"subas-facebook-post-1080x1080.png":"subas-news-thumbnail-1280x720.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)},"image/png")});
-$("resetBtn").addEventListener("click",()=>{Object.keys(defaults).forEach(k=>{if($(k)){if($(k).type==="checkbox")$(k).checked=defaults[k];else $(k).value=defaults[k]}});template="breaking";document.querySelectorAll(".template").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.template==="breaking")));photo=null;photoOffsetX=0;photoOffsetY=0;if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl="";$("photoUpload").value="";draw()});
+canvas.addEventListener("pointermove",function(e){if(!drag)return;const p=point(e);if(drag.kind==="text"){const l=layers.find(function(x){return x.id===drag.id});if(l){l.x=drag.originX+p.x-drag.startX;l.y=drag.originY+p.y-drag.startY}}else{photoOffsetX=drag.originX+p.x-drag.startX;photoOffsetY=drag.originY+p.y-drag.startY}draw();e.preventDefault()});
+function stopDrag(){drag=null;canvas.classList.remove("dragging")}
+canvas.addEventListener("pointerup",stopDrag);canvas.addEventListener("pointercancel",stopDrag);canvas.addEventListener("lostpointercapture",stopDrag);
+$("downloadBtn").addEventListener("click",function(){draw();try{canvas.toBlob(function(blob){if(!blob){setStatus("PNG export failed. Please try again.");return}const url=URL.createObjectURL(blob),a=document.createElement("a"),d=dimensions();a.href=url;a.download=d.w===1080?"subas-breaking-news-facebook-1080x1080.png":"subas-breaking-news-youtube-1280x720.png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},2000);setStatus("HD PNG ready · "+d.w+" × "+d.h+" px")}, "image/png")}catch(err){setStatus("Export error: "+err.message)}});
+$("resetBtn").addEventListener("click",function(){if(photoUrl)URL.revokeObjectURL(photoUrl);photo=null;photoUrl="";photoOffsetX=0;photoOffsetY=0;$("photoUpload").value="";$("canvasFormat").value="square";$("photoFit").value="cover";$("photoZoom").value=100;$("overlay").value=48;$("backgroundStyle").value="red";$("backgroundColor").value="#16080d";$("accentColor").value="#ed2638";template="breaking";layers=[{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}];selectedId="headline";document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.template==="breaking"))});draw();setStatus("Default cinematic design restored.")});
 $("year").textContent=new Date().getFullYear();draw();
 })();
 </script>
