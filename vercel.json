@@ -127,5 +127,10 @@
       "source": "/members",
       "destination": "/api/members"
     }
-  ]
+  ],
+  "functions": {
+    "api/chat.js": {
+      "maxDuration": 60
+    }
+  }
 }
