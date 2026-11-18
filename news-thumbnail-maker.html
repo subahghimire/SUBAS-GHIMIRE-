@@ -115,9 +115,9 @@ let template="breaking",photo=null,photoUrl="",photoOffsetX=0,photoOffsetY=0,dra
 let lastW=1080,lastH=1080;
 let layers=[
 {id:"kicker",name:"Top label",text:"BREAKING NEWS",x:90,y:102,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
-{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:72,y:770,size:70,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:936},
-{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:72,y:920,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936,visible:true},
-{id:"footer",name:"Footer",text:"LATEST UPDATE",x:72,y:1018,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
+{id:"headline",name:"Main headline",text:"कान खोलेर सुन, एमाले फेरि सरकारमा जान्छ - एमाले अध्यक्ष केपी",x:72,y:770,size:70,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"center",shadow:"strong",maxWidth:960},
+{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:72,y:920,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936,visible:false},
+{id:"footer",name:"Footer",text:"LATEST UPDATE",x:72,y:1018,size:22,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
 ];
 let hitBoxes=[];
 function dimensions(){return $("canvasFormat").value==="wide"?{w:1280,h:720}:{w:1080,h:1080}}
@@ -172,27 +172,28 @@ function draw(){
   ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
  }
  const shade=Number($("overlay").value)/100;
- // Restore the original smooth full-frame black cinematic gradient.
- const dark=ctx.createLinearGradient(0,0,0,H);
- dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");
- dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
- dark.addColorStop(.52,"rgba(0,0,0,"+(shade*.38)+")");
- dark.addColorStop(.72,"rgba(0,0,0,"+(shade*.72)+")");
- dark.addColorStop(1,"rgba(0,0,0,"+(shade*.94)+")");
- ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
- const accentGrad=ctx.createLinearGradient(0,0,W*.9,0);accentGrad.addColorStop(0,"#a90e24");accentGrad.addColorStop(.48,accent);accentGrad.addColorStop(1,"#ff5968");
- ctx.save();
- const badgeX=72,badgeY=H*.068,badgeH=W===1080?28:26;
- ctx.font="900 14px Arial, sans-serif";const badgeW=Math.ceil(ctx.measureText("BREAKING NEWS").width)+28;
- const kicker=layers.find(function(l){return l.id==="kicker"});if(kicker){kicker.x=badgeX+14;kicker.y=badgeY+badgeH-6;kicker.size=14;kicker.maxWidth=badgeW-22;}
- ctx.shadowColor=accent+"44";ctx.shadowBlur=14;
- ctx.fillStyle=accentGrad;roundRect(badgeX,badgeY,badgeW,badgeH,7);ctx.fill();
- // Original slim white vertical marker inside the Breaking News plate.
- ctx.shadowBlur=0;ctx.fillStyle="#ffffff";ctx.fillRect(badgeX+9,badgeY+7,3,badgeH-14);
- ctx.restore();
- // Fixed Facebook page branding in the top-right corner
- ctx.save();ctx.textAlign="right";ctx.textBaseline="alphabetic";ctx.font="900 "+(W===1080?25:22)+"px Arial, sans-serif";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.85)";ctx.shadowBlur=12;ctx.fillText("24 hour",W-72,badgeY+badgeH-2);ctx.restore();
- // Keep the photo-led layout clean: no solid side bar or boxed footer line.
+ if(W===1080){
+  const py=615,pg=ctx.createLinearGradient(0,py,0,H);
+  pg.addColorStop(0,"rgba(5,4,7,.84)");pg.addColorStop(.38,"rgba(3,3,5,.95)");pg.addColorStop(1,"rgba(0,0,0,.99)");
+  ctx.fillStyle=pg;ctx.fillRect(0,py,W,H-py);
+  const bx=72,by=74,bw=250,bh=36,bg=ctx.createLinearGradient(bx,by,bx+bw,by);
+  bg.addColorStop(0,"#ed2638");bg.addColorStop(1,"#b91e2e");
+  ctx.save();ctx.shadowColor="rgba(237,38,56,.35)";ctx.shadowBlur=9;ctx.fillStyle=bg;roundRect(bx,by,bw,bh,7);ctx.fill();
+  ctx.shadowBlur=0;ctx.fillStyle="rgba(85,5,15,.42)";roundRect(bx+5,by+5,bw-10,bh-10,4);ctx.fill();ctx.restore();
+  const k=layers.find(function(l){return l.id==="kicker"});if(k)k.visible=false;
+  const h=layers.find(function(l){return l.id==="headline"});if(h){h.visible=true;h.align="center";h.x=540;h.y=770;h.size=70;h.maxWidth=960;h.weight="900";}
+  const s=layers.find(function(l){return l.id==="subheadline"});if(s)s.visible=false;
+  const ft=layers.find(function(l){return l.id==="footer"});if(ft){ft.visible=true;ft.text="LATEST UPDATE";ft.align="left";ft.y=1018;ft.size=22;ft.shadow="none";}
+  ctx.fillStyle="#ed2638";ctx.fillRect(54,646,9,373);
+  ctx.fillStyle="rgba(255,255,255,.24)";ctx.fillRect(63,1018,963,1);
+  ctx.save();ctx.font="900 18px Arial,sans-serif";ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle="#fff";ctx.fillText("BREAKING NEWS",72,96);ctx.restore();
+ }else{
+  const dark=ctx.createLinearGradient(0,0,0,H);
+  dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
+  dark.addColorStop(.52,"rgba(0,0,0,"+(shade*.38)+")");dark.addColorStop(.72,"rgba(0,0,0,"+(shade*.72)+")");
+  dark.addColorStop(1,"rgba(0,0,0,"+(shade*.94)+")");ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
+  const k=layers.find(function(l){return l.id==="kicker"});if(k)k.visible=false;
+ }
  hitBoxes=[];layers.forEach(renderLayer);
  $("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"Default cinematic background · upload your photo";
 }
