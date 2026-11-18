@@ -15,6 +15,52 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
 .upload{border:1px dashed #ff626d88;border-radius:10px;padding:13px;text-align:center;background:#ff3b4b0c}.upload input{width:100%;font-size:11px;color:var(--muted)}.upload p{font-size:10px;color:var(--muted);margin:6px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .btn{flex:1}.btn{background:linear-gradient(120deg,#b7192a,#ff4d5a);color:white}.btn.secondary{background:transparent;border:1px solid #ffffff30;color:#fff}.btn.small{padding:9px 11px;font-size:11px}.note{font-size:10px;color:var(--muted);line-height:1.5;margin:0}.section-line{height:1px;background:var(--line)}.layer-row{display:flex;gap:7px}.layer-row select{flex:1}.layer-row button{white-space:nowrap}.status{min-height:15px;color:#ff9da5;font-size:10px}
 @media(max-width:900px){.workspace{grid-template-columns:1fr}.editor-panel{order:2}.studio-head{align-items:start;flex-direction:column}}
 @media(max-width:560px){.studio-wrap{padding-top:24px}.preview-area,.editor-content{padding:11px}.panel-top{padding:13px}.preview-meta{font-size:9px}.studio-head p{font-size:13px}}
+
+/* Mobile-first responsive correction: desktop rules above remain unchanged */
+@media (max-width: 900px) {
+  html, body { width:100%; max-width:100%; overflow-x:hidden; }
+  .studio-wrap { width:min(100% - 28px, 760px); padding-top:22px; }
+  .workspace { display:flex; flex-direction:column; align-items:stretch; gap:14px; width:100%; }
+  .preview-panel { order:0; width:100%; min-width:0; }
+  .editor-panel { order:1; width:100%; min-width:0; }
+  .preview-area { padding:clamp(8px,2.5vw,14px); }
+  .canvas-frame { width:100%; max-width:100%; }
+  .canvas-frame canvas { width:100%; height:auto; max-width:100%; touch-action:none; }
+  .editor-content { grid-template-columns:minmax(0,1fr); }
+  .field, .two, .template-grid, .layer-row { min-width:0; }
+  .field input, .field select, .field textarea { min-width:0; max-width:100%; }
+  .actions { display:grid; grid-template-columns:1fr 1fr; }
+  .actions .btn { width:100%; min-width:0; white-space:normal; }
+}
+@media (max-width: 560px) {
+  .studio-wrap { width:calc(100% - 24px); padding:16px 0 38px; }
+  .studio-head { margin-bottom:16px; }
+  .studio-head h1 { font-size:clamp(31px,9vw,42px); }
+  .studio-head p { font-size:13px; line-height:1.55; }
+  .panel-top { padding:12px; }
+  .panel-top strong { font-size:12px; }
+  .panel-top small { font-size:8px; }
+  .preview-area, .editor-content { padding:10px; }
+  .preview-meta { flex-wrap:wrap; font-size:9px; }
+  .editor-content { gap:12px; }
+  .field { gap:7px; }
+  .field label, .field-label { font-size:10px; }
+  .field input:not([type=range]):not([type=color]), .field select, .field textarea {
+    min-height:44px; padding:11px; font-size:16px;
+  }
+  .field textarea { min-height:76px; }
+  .field input[type=range] { min-height:30px; width:100%; }
+  .field input[type=color] { min-height:44px; }
+  .template { min-height:64px; padding:8px 5px; font-size:10px; }
+  .template-swatch { height:28px; }
+  .layer-row { display:grid; grid-template-columns:minmax(0,1fr) auto auto; }
+  .layer-row select { min-width:0; font-size:14px; }
+  .layer-row .btn { padding:9px 8px; }
+  .actions { grid-template-columns:1fr; }
+  .actions .btn { min-height:44px; }
+  footer { width:calc(100% - 24px); }
+}
+
 </style>
 </head>
 <body>
@@ -139,9 +185,42 @@ $("photoUpload").addEventListener("change",function(){const file=this.files&&thi
 $("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:72,y:d.h*.52,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit and drag it into position.")});
 $("deleteTextBtn").addEventListener("click",function(){if(layers.length<=1){setStatus("At least one text layer must remain.");return}layers=layers.filter(function(l){return l.id!==selectedId});selectedId=layers[0].id;draw();setStatus("Selected text layer deleted.")});
 function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
-canvas.addEventListener("pointerdown",function(e){if(!photo)return;const p=point(e);drag={kind:"photo",startX:p.x,startY:p.y,originX:photoOffsetX,originY:photoOffsetY};canvas.setPointerCapture(e.pointerId);canvas.classList.add("dragging");e.preventDefault()});
-canvas.addEventListener("pointermove",function(e){if(!drag||drag.kind!=="photo")return;const p=point(e);photoOffsetX=drag.originX+p.x-drag.startX;photoOffsetY=drag.originY+p.y-drag.startY;draw();e.preventDefault()});
-function stopDrag(){drag=null;canvas.classList.remove("dragging")}
+const activePointers=new Map();let pinchStart=null;
+function distance(a,b){const dx=a.x-b.x,dy=a.y-b.y;return Math.hypot(dx,dy)}
+canvas.addEventListener("pointerdown",function(e){
+ if(!photo)return;
+ const p=point(e);activePointers.set(e.pointerId,p);
+ try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+ if(activePointers.size===1){
+  drag={kind:"photo",startX:p.x,startY:p.y,originX:photoOffsetX,originY:photoOffsetY};
+  canvas.classList.add("dragging");
+ }else if(activePointers.size===2){
+  const pts=Array.from(activePointers.values());
+  pinchStart={distance:Math.max(1,distance(pts[0],pts[1])),zoom:Number($("photoZoom").value)};
+  drag=null;
+ }
+ e.preventDefault();
+});
+canvas.addEventListener("pointermove",function(e){
+ if(!activePointers.has(e.pointerId))return;
+ const p=point(e);activePointers.set(e.pointerId,p);
+ if(activePointers.size>=2&&pinchStart){
+  const pts=Array.from(activePointers.values()),next=pinchStart.zoom*distance(pts[0],pts[1])/pinchStart.distance;
+  $("photoZoom").value=Math.max(50,Math.min(250,next));
+  draw();e.preventDefault();return;
+ }
+ if(drag&&drag.kind==="photo"){
+  photoOffsetX=drag.originX+p.x-drag.startX;photoOffsetY=drag.originY+p.y-drag.startY;draw();e.preventDefault();
+ }
+});
+function stopDrag(e){
+ if(e&&activePointers.has(e.pointerId))activePointers.delete(e.pointerId);
+ if(activePointers.size<2)pinchStart=null;
+ if(activePointers.size===1){
+  const entry=Array.from(activePointers.entries())[0];
+  drag={kind:"photo",startX:entry[1].x,startY:entry[1].y,originX:photoOffsetX,originY:photoOffsetY};
+ }else if(activePointers.size===0){drag=null;canvas.classList.remove("dragging")}
+}
 canvas.addEventListener("pointerup",stopDrag);canvas.addEventListener("pointercancel",stopDrag);canvas.addEventListener("lostpointercapture",stopDrag);
 $("downloadBtn").addEventListener("click",function(){draw();try{canvas.toBlob(function(blob){if(!blob){setStatus("PNG export failed. Please try again.");return}const url=URL.createObjectURL(blob),a=document.createElement("a"),d=dimensions();a.href=url;a.download=d.w===1080?"subas-breaking-news-facebook-1080x1080.png":"subas-breaking-news-youtube-1280x720.png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},2000);setStatus("HD PNG ready · "+d.w+" × "+d.h+" px")}, "image/png")}catch(err){setStatus("Export error: "+err.message)}});
 $("resetBtn").addEventListener("click",function(){if(photoUrl)URL.revokeObjectURL(photoUrl);photo=null;photoUrl="";photoOffsetX=0;photoOffsetY=0;$("photoUpload").value="";$("canvasFormat").value="square";$("photoFit").value="cover";$("photoZoom").value=100;$("overlay").value=48;$("backgroundStyle").value="red";$("backgroundColor").value="#16080d";$("accentColor").value="#ed2638";template="breaking";lastW=1080;lastH=1080;layers=[{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}];selectedId="headline";document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.template==="breaking"))});draw();setStatus("Default cinematic design restored.")});
