@@ -91,7 +91,7 @@ document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{kin
 fields.forEach(id=>$(id).addEventListener('input',draw));$('ticker').addEventListener('input',draw);
 $('reset').addEventListener('click',()=>{Object.entries(defaults).forEach(([k,v])=>$(k).value=v);$('accent').value='#e51f35';$('base').value='#08090d';$('position').value='bottom';$('showClock').checked=true;draw();$('status').textContent='Default design restored.'});
 $('download').addEventListener('click',()=>{try{const a=document.createElement('a');a.download='subas-newsroom-'+kind+'-1920x1080.png';a.href=c.toDataURL('image/png');a.click();$('status').textContent='PNG exported — ready for your video timeline.'}catch(e){$('status').textContent='Export failed. Please try again in a modern browser.'}});
-$('year').textContent=new Date().getFullYear();draw();
+$('year').textContent=new Date().getFullYear();draw();setInterval(()=>{if($('showClock').checked)draw()},1000);
 })();
 </script>
 </body></html>
