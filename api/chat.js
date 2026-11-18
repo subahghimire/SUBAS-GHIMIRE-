@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     const message = typeof body?.message === "string" ? body.message.trim() : "";
     const image = body?.image && typeof body.image.data === "string" && typeof body.image.mimeType === "string" ? body.image : null;
     if (!message && !image) return res.status(400).json({ reply: "कृपया प्रश्न लेख्नुहोस् वा फोटो छान्नुहोस्।" });
-    if (image && (!/^image\\/(jpeg|png|webp|gif)$/.test(image.mimeType) || !/^[A-Za-z0-9+/]+=*$/.test(image.data) || image.data.length > 8 * 1024 * 1024)) return res.status(400).json({ reply: "फोटो JPEG, PNG, WEBP वा GIF हुनुपर्छ र ६ MB भन्दा सानो हुनुपर्छ।" });
+    if (image && (!/^image\/(jpeg|png|webp|gif)$/.test(image.mimeType) || !/^[A-Za-z0-9+/]+=*$/.test(image.data) || image.data.length > 8 * 1024 * 1024)) return res.status(400).json({ reply: "फोटो JPEG, PNG, WEBP वा GIF हुनुपर्छ र ६ MB भन्दा सानो हुनुपर्छ।" });
     if (message.length > 4000) return res.status(400).json({ reply: "Please keep your question under 4000 characters." });
 
     const apiKey = process.env.GEMINI_API_KEY;
