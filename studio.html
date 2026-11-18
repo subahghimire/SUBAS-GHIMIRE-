@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b08"><meta name="description" content="SG Creator Studio — AI writing assistant, video prompt builder and editing resources by Subas Ghimire.">
+<title>SG Creator Studio — Subas Ghimire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/studio.css?v=1">
+</head><body>
+<header><nav class="wrap"><a class="brand" href="index.html">SUBAS GHIMIRE<small>SG CREATOR STUDIO</small></a><div class="navlinks"><a href="index.html">Portfolio</a><a href="effects.html">Effects Library</a><a href="cv.html">CV</a><a href="subas-ghimire.html">नेपाली</a></div></nav></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">PERSONAL WORKSPACE · VIDEO &amp; AI</div><h1>Make the next cut<br><em>count.</em></h1><p>A focused workspace for editing ideas, news scripts, video prompts and portfolio resources. Ask the AI assistant, prepare a prompt, or jump straight into the effects library.</p><div class="status"><i class="pulse"></i> SG CREATOR STUDIO · READY</div></section>
+<div class="layout">
+<section class="panel" aria-label="AI assistant">
+<div class="panel-head"><h2>AI Editing Assistant</h2><span>GEMINI API · SERVER CONNECTED</span></div>
+<div class="chatlog" id="chatLog" aria-live="polite"><div class="bubble ai"><small>SG ASSISTANT</small>नमस्कार! म तपाईंलाई Video Editing, Premiere Pro, After Effects, News Script, Headline र Creative Ideas मा सहयोग गर्न सक्छु। के बनाउन चाहनुहुन्छ?</div></div>
+<form class="chat-form" id="chatForm"><textarea id="chatInput" maxlength="4000" placeholder="Ask in Nepali, Roman Nepali or English..." required></textarea><button class="btn" id="sendBtn" type="submit">SEND ↗</button></form>
+</section>
+<aside class="side">
+<section class="panel toolcard"><h3>Editing Workspace</h3><p>तपाईंका आवश्यक editing resources एकै ठाउँमा।</p><div class="tool-links">
+<a class="tool-link" href="effects.html"><span>Premiere Pro Effects &amp; Overlays</span><span>↗</span></a>
+<a class="tool-link" href="work.html"><span>Video Work &amp; Case Studies</span><span>↗</span></a>
+<a class="tool-link" href="cv.html"><span>CV Preview &amp; Download</span><span>↗</span></a>
+<a class="tool-link" href="members.html"><span>Client Members Area</span><span>↗</span></a>
+<a class="tool-link" href="subas-ghimire.html"><span>Nepali Portfolio</span><span>↗</span></a>
+</div></section>
+<section class="panel"><div class="panel-head"><h2>Video Prompt Builder</h2><span>LOCAL TOOL</span></div>
+<form class="formgrid" id="promptForm">
+<div class="field"><label for="subject">Video subject</label><input id="subject" placeholder="e.g. Kathmandu city at sunrise" required></div>
+<div class="field"><label for="style">Visual style</label><select id="style"><option>Cinematic documentary</option><option>Broadcast news package</option><option>Clean corporate</option><option>Moody dramatic</option><option>Social media reel</option></select></div>
+<div class="field"><label for="ratio">Aspect ratio</label><select id="ratio"><option>9:16 vertical</option><option>16:9 widescreen</option><option>4:5 portrait</option><option>1:1 square</option></select></div>
+<button class="btn" type="submit">BUILD VIDEO PROMPT</button>
+</form><div class="result" id="promptResult"></div><div class="hint">Prompt builder runs in your browser; it does not generate a video or consume AI credits.</div></section>
+<section class="panel toolcard"><h3>Quick Writing Tasks</h3><p>यी कामका लागि AI Assistant मा सिधै सोध्न सक्नुहुन्छ।</p><div class="tool-links">
+<button class="tool-link quick" type="button" data-prompt="Write a clear 60-second Nepali television news script about: "><span>60-sec News Script</span><span>＋</span></button>
+<button class="tool-link quick" type="button" data-prompt="Give me 5 concise, neutral Nepali news headlines about: "><span>News Headlines</span><span>＋</span></button>
+<button class="tool-link quick" type="button" data-prompt="Suggest a Premiere Pro editing workflow for: "><span>Editing Workflow</span><span>＋</span></button>
+<button class="tool-link quick" type="button" data-prompt="Create a shot-by-shot visual plan for a short video about: "><span>Visual Shot Plan</span><span>＋</span></button>
+</div></section>
+</aside></div></main>
+<footer class="wrap"><span>© <span id="year"></span> SUBAS GHIMIRE · SG CREATOR STUDIO</span><span>Built for editing, storytelling &amp; creative workflow.</span></footer>
+<script>
+(function(){
+const apiBase=location.hostname==="subahghimire.github.io"?"https://subas-ghimire.vercel.app": "";
+const log=document.getElementById("chatLog"),form=document.getElementById("chatForm"),input=document.getElementById("chatInput"),send=document.getElementById("sendBtn");
+document.getElementById("year").textContent=new Date().getFullYear();
+function bubble(text,who){const el=document.createElement("div");el.className="bubble "+who;const label=document.createElement("small");label.textContent=who==="user"?"YOU":"SG ASSISTANT";el.appendChild(label);el.appendChild(document.createTextNode(text));log.appendChild(el);log.scrollTop=log.scrollHeight;return el}
+async function ask(message){bubble(message,"user");send.disabled=true;send.textContent="THINKING…";const pending=bubble("जवाफ तयार हुँदैछ…","ai");
+try{const response=await fetch(apiBase+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.reply||"AI service is not responding.");pending.lastChild.textContent=data.reply||"अहिले जवाफ आउन सकेन। फेरि प्रयास गर्नुहोस्।"}
+catch(error){pending.lastChild.textContent="AI सेवा अहिले उपलब्ध भएन। Vercel deployment र GEMINI_API_KEY configuration जाँच गर्नुहोस्। ("+error.message+")"}
+finally{send.disabled=false;send.textContent="SEND ↗";input.focus()}}
+form.addEventListener("submit",e=>{e.preventDefault();const message=input.value.trim();if(!message)return;input.value="";ask(message)});
+document.querySelectorAll(".quick").forEach(btn=>btn.addEventListener("click",()=>{input.value=btn.dataset.prompt;input.focus();input.setSelectionRange(input.value.length,input.value.length)}));
+document.getElementById("promptForm").addEventListener("submit",e=>{e.preventDefault();const subject=document.getElementById("subject").value.trim();const style=document.getElementById("style").value;const ratio=document.getElementById("ratio").value;const result="Create a "+style.toLowerCase()+" video about "+subject+". Aspect ratio: "+ratio+". Use clear visual storytelling, intentional camera movement, natural lighting, coherent scene continuity, realistic details, and purposeful transitions. Avoid on-screen text unless specifically requested.";const box=document.getElementById("promptResult");box.textContent=result;box.classList.add("show");if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(result).catch(()=>{})});
+})();
+</script></body></html>
