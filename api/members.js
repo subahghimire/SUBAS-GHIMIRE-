@@ -59,16 +59,16 @@ const page = (title, body) => `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#080611">
+<meta name="theme-color" content="#050b08">
 <title>${title} | Subas Ghimire</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <style>
-:root{--bg:#080611;--panel:#171027;--line:#b885ff2b;--green:#a855f7;--mint:#d8b4fe;--white:#f8f4ff;--muted:#b3a8c2}
+:root{--bg:#050b08;--panel:#10271a;--line:#10b9812b;--green:#10b981;--mint:#a7f3d0;--white:#f8f4ff;--muted:#a6c0b0}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;padding:36px 22px 60px;
- background:radial-gradient(ellipse at 78% 6%,#a855f71e,transparent 42%),radial-gradient(ellipse at 8% 92%,#7c3aed18,transparent 40%),var(--bg);
+ background:radial-gradient(ellipse at 78% 6%,#10b9811e,transparent 42%),radial-gradient(ellipse at 8% 92%,#04785718,transparent 40%),var(--bg);
  color:var(--white);font-family:"DM Sans",system-ui,sans-serif}
 .wrap{width:min(940px,100%);margin:0 auto}
 .top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:44px}
@@ -82,12 +82,12 @@ h1{font:700 clamp(34px,6vw,54px)/1.05 "Space Grotesk",sans-serif;letter-spacing:
 h1 em{color:var(--green);font-style:normal}
 .lead{color:var(--muted);max-width:52ch;line-height:1.7;margin:0 0 34px;font-size:15px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{border:1px solid var(--line);border-radius:14px;padding:22px;background:#17102780}
+.card{border:1px solid var(--line);border-radius:14px;padding:22px;background:#10271a80}
 .card h2{font:600 15px "Space Grotesk",sans-serif;margin:0 0 8px;letter-spacing:.2px}
 .card p{color:var(--muted);font-size:13.5px;line-height:1.65;margin:0 0 16px}
 .card a.cta{font:700 10px "Space Grotesk",sans-serif;letter-spacing:1.3px;color:var(--green)}
 .card a.cta:hover{color:var(--mint)}
-.foot{margin-top:34px;color:#8a7aa0;font-size:11px;letter-spacing:.5px}
+.foot{margin-top:34px;color:#789382;font-size:11px;letter-spacing:.5px}
 @media(max-width:640px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
