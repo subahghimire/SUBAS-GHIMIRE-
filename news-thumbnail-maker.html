@@ -36,7 +36,7 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
 <div class="field"><label for="layerText">Text content</label><textarea id="layerText" rows="3" maxlength="140">नेपालको राजनीतिमा ठूलो हलचल</textarea></div>
 <div class="two"><div class="field"><label for="fontFamily">Font family</label><select id="fontFamily"><option value="Arial, sans-serif">Arial / Sans</option><option value="'Noto Sans Devanagari', Arial, sans-serif">Noto Sans Devanagari</option><option value="Impact, sans-serif">Impact</option><option value="Georgia, serif">Georgia</option><option value="'Trebuchet MS', sans-serif">Trebuchet</option></select></div><div class="field"><label for="fontWeight">Font weight</label><select id="fontWeight"><option value="900">Black</option><option value="700">Bold</option><option value="500">Medium</option><option value="400">Regular</option></select></div></div>
 <div class="two"><div class="field"><label for="fontSize">Font size</label><input id="fontSize" type="range" min="18" max="130" value="76"></div><div class="field"><label for="textColor">Text colour</label><input id="textColor" type="color" value="#ffffff"></div></div>
-<div class="two"><div class="field"><label for="textAlign">Text alignment</label><select id="textAlign"><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div><div class="field"><label for="textShadow">Text shadow</label><select id="textShadow"><option value="strong">Strong</option><option value="soft">Soft</option><option value="none">None</option></select></div></div>
+<div class="two"><div class="field"><label for="textAlign">Text alignment</label><select id="textAlign"><option value="left">Left · 72 px margin</option><option value="center">Center · exact middle</option><option value="right">Right · 72 px margin</option></select></div><div class="field"><label for="textShadow">Text shadow</label><select id="textShadow"><option value="strong">Strong</option><option value="soft">Soft</option><option value="none">None</option></select></div></div>
 <p class="note">Text र design shapes fixed/locked छन्, त्यसैले गल्तीले सर्दैनन्। Text layer छानेर दायाँपट्टि content, font, size र colour मात्र परिवर्तन गर्नुहोस्। फोटो मात्र preview मा drag गर्न मिल्छ।</p>
 <div class="actions"><button class="btn secondary" id="resetBtn" type="button">RESET DESIGN</button><button class="btn" id="downloadBtn" type="button">DOWNLOAD HD PNG ↓</button></div>
 <div class="status" id="status" role="status" aria-live="polite"></div>
@@ -59,10 +59,10 @@ const templates={
 let template="breaking",photo=null,photoUrl="",photoOffsetX=0,photoOffsetY=0,drag=null,selectedId="headline";
 let lastW=1080,lastH=1080;
 let layers=[
-{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:64,y:116,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
-{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:64,y:790,size:76,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:950},
-{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:66,y:900,size:30,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:930},
-{id:"footer",name:"Footer",text:"LATEST UPDATE",x:66,y:1012,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
+{id:"kicker",name:"Top label",text:"BREAKING NEWS",x:78,y:121,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
+{id:"headline",name:"Main headline",text:"नेपालको राजनीतिमा ठूलो हलचल",x:72,y:770,size:70,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:936},
+{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:72,y:920,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936},
+{id:"footer",name:"Footer",text:"LATEST UPDATE",x:72,y:1018,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
 ];
 let hitBoxes=[];
 function dimensions(){return $("canvasFormat").value==="wide"?{w:1280,h:720}:{w:1080,h:1080}}
@@ -79,9 +79,11 @@ function renderLayer(layer){
  else if(layer.shadow==="soft"){ctx.shadowColor="rgba(0,0,0,.65)";ctx.shadowBlur=9;ctx.shadowOffsetY=2}
  const widths=lines.map(function(line){return ctx.measureText(line).width});
  const maxLine=Math.max.apply(null,widths.concat([1]));
- const left=layer.align==="center"?layer.x-maxLine/2:layer.align==="right"?layer.x-maxLine:layer.x;
+ const margin=72;
+ const drawX=layer.align==="center"?canvas.width/2:layer.align==="right"?canvas.width-margin:margin;
+ const left=layer.align==="center"?drawX-maxLine/2:layer.align==="right"?drawX-maxLine:drawX;
  const top=layer.y-layer.size;
- lines.forEach(function(line,i){ctx.fillText(line,layer.x,layer.y+i*lineHeight,layer.maxWidth)});
+ lines.forEach(function(line,i){ctx.fillText(line,drawX,layer.y+i*lineHeight,layer.maxWidth)});
  ctx.restore();
  hitBoxes.push({id:layer.id,left:left-14,top:top-14,right:left+maxLine+14,bottom:layer.y+Math.max(0,lines.length-1)*lineHeight+14});
 }
@@ -134,7 +136,7 @@ function updateSelected(){
 $("layerSelect").addEventListener("change",function(){selectedId=this.value;syncLayerControls();draw()});
 document.querySelectorAll(".template").forEach(function(button){button.addEventListener("click",function(){template=button.dataset.template;document.querySelectorAll(".template").forEach(function(b){b.setAttribute("aria-pressed",String(b===button))});$("accentColor").value=templates[template].accent;$("backgroundStyle").value=template==="debate"?"midnight":template==="exclusive"?"gold":"red";draw()})});
 $("photoUpload").addEventListener("change",function(){const file=this.files&&this.files[0];if(!file)return;if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>20*1024*1024){setStatus("Please choose JPG, PNG or WEBP under 20 MB.");this.value="";return}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(file);const img=new Image();img.onload=function(){photo=img;photoOffsetX=0;photoOffsetY=0;draw();setStatus("Photo uploaded. Drag it in the preview to reposition.")};img.onerror=function(){setStatus("Could not load this photo. Try another image.")};img.src=photoUrl});
-$("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:d.w*.08,y:d.h*.48,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit and drag it into position.")});
+$("addTextBtn").addEventListener("click",function(){const id="text-"+Date.now();const d=dimensions();layers.push({id:id,name:"Text "+(layers.length-3),text:"नयाँ टेक्स्ट लेख्नुहोस्",x:72,y:d.h*.52,size:42,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:d.w*.84});selectedId=id;draw();setStatus("New text layer added. Edit and drag it into position.")});
 $("deleteTextBtn").addEventListener("click",function(){if(layers.length<=1){setStatus("At least one text layer must remain.");return}layers=layers.filter(function(l){return l.id!==selectedId});selectedId=layers[0].id;draw();setStatus("Selected text layer deleted.")});
 function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}
 canvas.addEventListener("pointerdown",function(e){if(!photo)return;const p=point(e);drag={kind:"photo",startX:p.x,startY:p.y,originX:photoOffsetX,originY:photoOffsetY};canvas.setPointerCapture(e.pointerId);canvas.classList.add("dragging");e.preventDefault()});
