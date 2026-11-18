@@ -156,6 +156,7 @@ function draw(){
  $("formatBadge").textContent=W===1080?"1:1 · FACEBOOK POST":"16:9 · YOUTUBE THUMBNAIL";
  $("dimensionLabel").textContent=W+" × "+H+" px";
  const t=templates[template],style=$("backgroundStyle").value;
+ const accent=$("accentColor").value||t.accent;
  let colors=t.gradient;
  if(style==="midnight")colors=["#030914","#102d50","#050b16"];
  if(style==="gold")colors=["#0b0907","#49351c","#0b0907"];
