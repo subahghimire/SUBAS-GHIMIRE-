@@ -1,11 +1,11 @@
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function geminiRequest(url, options, timeoutMs = 10000) {
+async function geminiRequest(url, options, timeoutMs = 7000) {
   let lastError;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const response = await fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
-      if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
+      if (![500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
       await sleep(500);
     } catch (error) {
       lastError = error;
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
     if (image) {
       // Try lightweight models first so one busy model or exhausted
       // per-model quota does not block photo questions.
-      const imageModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
+      const imageModels = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
       let imageRateLimited = false;
       let imageTimedOut = false;
       for (const model of imageModels) {
@@ -106,7 +106,7 @@ export default async function handler(req, res) {
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
     // Start with the lightweight model for faster replies, then fall back to
     // progressively stronger models if a model is busy or quota-limited.
-    const models = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
+    const models = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
     let sawRateLimit = false;
     let lastFailure = "";
 
