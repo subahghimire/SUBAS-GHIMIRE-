@@ -171,9 +171,9 @@ function draw(){
   ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
  }
  const shade=Number($("overlay").value)/100;
- // Natural photo-first overlay: restrained 30% black at the bottom, fading smoothly to clear.
+ // Natural photo-first overlay: up to 50% black at the bottom, fading smoothly to clear.
  const dark=ctx.createLinearGradient(0,0,0,H);
- const blackStrength=0.30*(shade/0.48);
+ const blackStrength=Math.min(0.50,0.50*(shade/0.48));
  dark.addColorStop(0,"rgba(0,0,0,"+(blackStrength*.12)+")");
  dark.addColorStop(.28,"rgba(0,0,0,"+(blackStrength*.22)+")");
  dark.addColorStop(.52,"rgba(0,0,0,"+(blackStrength*.48)+")");
