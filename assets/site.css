@@ -1,13 +1,13 @@
 /* ============================================================
    Subas Ghimire — cinematic dark portfolio redesign
-   Deep blacks, violet/cyan glow, glass surfaces, dramatic type.
+   Deep emerald glow, glass surfaces, precise typography.
    ============================================================ */
 :root{
   --bg:#05040a; --bg-2:#090714; --panel:rgba(18,14,30,.72); --panel-2:rgba(24,18,40,.78);
   --line:rgba(110,231,183,.14); --line-2:rgba(167,243,208,.34);
   --ink:#f7f2ff; --muted:#b4a8c9;
   --accent:#10b981; --accent-soft:#a7f3d0; --accent-deep:#047857;
-  --cyan:#22d3ee; --warm:#ffb86b;
+  --cyan:#6ee7b7; --warm:#ffb86b;
   --max:1220px;
   --display:"Space Grotesk",system-ui,sans-serif;
   --sans:"DM Sans",system-ui,sans-serif;
@@ -22,7 +22,7 @@ body::before{
   content:"";position:fixed;inset:-10%;z-index:-2;pointer-events:none;
   background:
     radial-gradient(1100px 700px at 85% -10%,rgba(16,185,129,.22),transparent 60%),
-    radial-gradient(900px 620px at -10% 35%,rgba(34,211,238,.10),transparent 60%),
+    radial-gradient(900px 620px at -10% 35%,rgba(16,185,129,.10),transparent 60%),
     radial-gradient(760px 560px at 50% 115%,rgba(5,150,105,.18),transparent 62%),
     radial-gradient(560px at var(--pointer-x,70vw) var(--pointer-y,8vh),rgba(16,185,129,.10),transparent 70%),
     linear-gradient(180deg,#05040a 0%,#070612 45%,#040309 100%);
