@@ -438,3 +438,24 @@ body.light-mode .btn.primary,body.light-mode .nav-cta{background:linear-gradient
  .photo:hover{border-color:var(--accent-soft);box-shadow:0 50px 140px rgba(0,0,0,.62),0 0 90px rgba(16,185,129,.24)}
 }
 @media(prefers-reduced-motion:reduce){.orbit,.photo,.dot,.marquee-track{animation:none!important}}
+
+
+/* ---------- compact navigation ---------- */
+.nav{gap:16px}
+.links{gap:clamp(11px,1.35vw,19px);font-size:12px;white-space:nowrap}
+.nav-more{position:relative}
+.nav-more>summary{list-style:none;cursor:pointer;padding:7px 0;color:var(--muted);transition:color .2s}
+.nav-more>summary::-webkit-details-marker{display:none}
+.nav-more>summary:hover,.nav-more[open]>summary{color:var(--ink)}
+.nav-more>summary span{color:var(--accent-soft);margin-left:3px}
+.nav-more-menu{position:absolute;top:calc(100% + 16px);right:0;z-index:60;min-width:190px;display:grid;gap:0;padding:8px 14px;background:var(--panel);border:1px solid var(--line-2);border-radius:14px;box-shadow:0 18px 45px rgba(0,0,0,.35)}
+.nav-more-menu a{padding:10px 3px;border-bottom:1px solid var(--line);font-size:12px}
+.nav-more-menu a:last-child{border:0}
+.nav-more-menu a::after{display:none}
+@media(max-width:1120px){.links{gap:11px;font-size:11px}.nav{gap:12px}.brand{gap:8px}.brand-text{font-size:11px}.nav-cta{padding:10px 12px}}
+@media(max-width:900px){
+ .nav-more{width:100%;border-bottom:1px solid var(--line)}
+ .nav-more>summary{padding:12px 0;font-size:14px}
+ .nav-more-menu{position:static;min-width:0;padding:0 12px 8px;background:transparent;border:0;border-radius:0;box-shadow:none}
+ .nav-more-menu a{padding:10px 0 10px 12px;font-size:13px}
+}
