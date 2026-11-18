@@ -35,6 +35,18 @@
   ],
   "shortcuts": [
     {
+      "name": "SG Launchpad",
+      "short_name": "Launchpad",
+      "description": "Open the creative command center",
+      "url": "./launchpad.html",
+      "icons": [
+        {
+          "src": "./icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
       "name": "Selected work",
       "short_name": "Work",
       "url": "./work.html",
