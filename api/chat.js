@@ -36,27 +36,26 @@ export default async function handler(req, res) {
       "Keep the answer concise, useful and conversational."
     ].join(" ");
 
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
+    const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+      signal: AbortSignal.timeout(25000),
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemInstruction }] },
-        contents: [{ role: "user", parts: [{ text: message }] }],
-        generationConfig: {
-          temperature: 0.6,
-          thinkingConfig: { thinkingLevel: "low" },
-          maxOutputTokens: 450
-        }
+        model: "gemini-3.8-flash",
+        input: message,
+        system_instruction: systemInstruction,
+        generation_config: { thinking_level: "low" },
+        store: false
       })
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      console.error("Gemini API error:", response.status, JSON.stringify(data));
-      const apiMessage = data?.error?.message || "";
+      console.error("Gemini Interactions API error:", response.status, JSON.stringify(data));
+      const apiMessage = data?.error?.message || data?.message || "";
       if (response.status === 401 || response.status === 403) {
         return res.status(200).json({ reply: "Gemini API key ko authentication/restriction problem cha. Vercel ko GEMINI_API_KEY check garnu parcha." });
       }
@@ -68,8 +67,10 @@ export default async function handler(req, res) {
       });
     }
 
-    const reply = data?.candidates?.[0]?.content?.parts
-      ?.map(part => part?.text || "")
+    const reply = (data?.steps || [])
+      .filter(step => step?.type === "model_output")
+      .flatMap(step => step?.content || [])
+      .map(part => part?.text || "")
       .join("")
       .trim();
 
@@ -83,6 +84,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ reply });
   } catch (error) {
     console.error("Chat handler error:", error);
+    if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+      return res.status(200).json({ reply: "AI जवाफ आउन धेरै समय लाग्यो। कृपया फेरि प्रयास गर्नुहोस्।" });
+    }
     return res.status(200).json({
       reply: "AI service temporarily unavailable. Please try again."
     });
