@@ -49,6 +49,14 @@ const presets={breaking:{base:"#08090d",accent:"#ed2638",kicker:"BREAKING NEWS"}
 function wrapText(text,maxWidth,font){ctx.font=font;const words=text.split(/\s+/);let lines=[],line="";for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);return lines}
 function draw(){const format=$("canvasFormat").value;const custom=format==="custom";$("customSizeFields").hidden=!custom;const customW=Math.max(320,Math.min(3000,Number($("customWidth").value)||1080)),customH=Math.max(320,Math.min(3000,Number($("customHeight").value)||1350));const portrait=format==="portrait";const square=format==="square"||(custom&&customW===customH);const W=custom?customW:(portrait||square?1080:1280),H=custom?customH:(portrait?1350:square?1080:720);canvas.width=W;canvas.height=H;canvas.style.setProperty("--canvas-ratio",W+"/"+H);$("formatBadge").textContent=custom?"CUSTOM · "+W+":"+H:(portrait?"4:5 · FACEBOOK PHOTO POST":square?"1:1 · FACEBOOK POST":"16:9 · HD CANVAS");$("dimensionLabel").textContent=W+" × "+H+" px";const p=presets[template],accent=$("accentColor").value||p.accent;ctx.clearRect(0,0,W,H);ctx.fillStyle=p.base;ctx.fillRect(0,0,W,H);
 if(photo){const iw=photo.naturalWidth,ih=photo.naturalHeight,fit=$("photoFit").value;let scale=fit==="contain"?Math.min(W/iw,H/ih):Math.max(W/iw,H/ih);let w=iw*scale,h=ih*scale;ctx.drawImage(photo,(W-w)/2,(H-h)/2,w,h)}else{const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,p.base);g.addColorStop(.58,"#25212a");g.addColorStop(1,"#08090d");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.strokeStyle="#ffffff12";ctx.lineWidth=2;for(let x=-500;x<W+500;x+=110){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+500,H);ctx.stroke()}ctx.restore()}
+if($("canvasFormat").value==="portrait"){
+  // Subtle 10% blue gradient glaze over the photo, matching the requested reference look.
+  const blueWash=ctx.createLinearGradient(0,0,0,H);
+  blueWash.addColorStop(0,"rgba(28,105,220,.10)");
+  blueWash.addColorStop(.58,"rgba(24,91,190,.065)");
+  blueWash.addColorStop(1,"rgba(10,35,85,0)");
+  ctx.fillStyle=blueWash;ctx.fillRect(0,0,W,H);
+}
 const shade=Number($("overlay").value)/100;
 if(portrait){
   // Portrait 4:5 editorial post: photo-led upper area and bold lower headline panel.
