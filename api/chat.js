@@ -2,15 +2,17 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function geminiRequest(url, options, timeoutMs = 10000) {
   let lastError;
+  // A 429 is a quota/rate-limit response: do not retry the same model.
+  // Move immediately to the next configured fallback model instead.
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const response = await fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
-      if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
-      await sleep(500);
+      if (response.status === 429 || ![500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
+      await sleep(700 * (attempt + 1));
     } catch (error) {
       lastError = error;
       if (attempt === 1) throw error;
-      await sleep(500);
+      await sleep(700 * (attempt + 1));
     }
   }
   throw lastError || new Error("Gemini request failed");
