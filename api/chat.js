@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
-  const allowed = origin === "https://subahghimire.github.io" || origin === "https://subas-ghimire.vercel.app";
-  res.setHeader("Access-Control-Allow-Origin", allowed ? origin : "https://subahghimire.github.io");
+  const allowed = origin === "https://subahghimire.github.io" || origin === "https://subas-ghimire.vercel.app" || origin === "https://subas-ghimire.com.np" || origin === "https://www.subas-ghimire.com.np";
+  res.setHeader("Access-Control-Allow-Origin", allowed ? origin : "https://subas-ghimire.vercel.app");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
@@ -22,12 +22,12 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       console.error("GEMINI_API_KEY is missing");
-      return res.status(200).json({ reply: "AI जोडिएको छैन। Vercel मा GEMINI_API_KEY configuration जाँच गर्नुपर्छ।" });
+      return res.status(200).json({ reply: "AI जोडिएको छैन। Vercel मा GEMINI_API_KEY नामको Environment Variable मा Google AI Studio को API Key राख्नुहोस्।" });
     }
 
     const systemInstruction = [
       "You are SG Assistant, a helpful general-purpose AI assistant on Subas Ghimire's personal portfolio website.",
-      "IMPORTANT: Answer questions on ANY topic the visitor asks about, not only video editing or portfolio topics. Topics may include general knowledge, education, science, technology, business, writing, translation, coding, calculations, news context, travel, entertainment, everyday problems, and casual conversation.",
+      "Answer questions on ANY topic the visitor asks about, not only video editing or portfolio topics. Topics may include general knowledge, education, science, technology, business, writing, translation, coding, calculations, news context, travel, entertainment, everyday problems, and casual conversation.",
       "Do not reject or redirect a question merely because it is unrelated to Subas, video editing, or Adobe software. Give the best useful answer you can within your knowledge and applicable safety rules.",
       "Answer the actual question directly and completely. If the request is unclear, ask one short clarifying question. For multi-part questions, address every part.",
       "For instructions or how-to requests, provide clear step-by-step guidance appropriate to the visitor's skill level. For calculations, calculate carefully and show the result. For writing requests, produce the requested draft rather than only giving advice.",
@@ -39,20 +39,21 @@ export default async function handler(req, res) {
     ].join(" ");
 
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
-    const models = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
-    let lastStatus = 0;
-    let lastApiMessage = "";
+    // Start with the lightweight model for faster replies, then fall back to
+    // progressively stronger models if a model is busy or quota-limited.
+    const models = ["gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3.8-flash"];
+    let sawRateLimit = false;
+    let lastFailure = "";
 
-    for (let i = 0; i < models.length; i++) {
-      if (i > 0) await new Promise(resolve => setTimeout(resolve, i === 1 ? 900 : 500));
+    for (const model of models) {
       let response;
       try {
         response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-          signal: AbortSignal.timeout(13000),
+          signal: AbortSignal.timeout(10000),
           body: JSON.stringify({
-            model: models[i],
+            model,
             input: message,
             system_instruction: systemInstruction,
             generation_config: { thinking_level: "low" },
@@ -60,25 +61,21 @@ export default async function handler(req, res) {
           })
         });
       } catch (error) {
-        lastApiMessage = error?.name === "TimeoutError" || error?.name === "AbortError" ? "timeout" : "network";
-        console.error("Gemini request failed:", models[i], lastApiMessage);
+        lastFailure = error?.name === "TimeoutError" || error?.name === "AbortError" ? "timeout" : "network";
+        console.error("Gemini request failed:", model, lastFailure);
         continue;
       }
 
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        lastStatus = response.status;
-        lastApiMessage = data?.error?.message || data?.message || "";
-        console.error("Gemini Interactions API error:", models[i], response.status, JSON.stringify(data));
+        lastFailure = data?.error?.message || data?.message || "request failed";
+        console.error("Gemini Interactions API error:", model, response.status, JSON.stringify(data));
 
         if (response.status === 401 || response.status === 403) {
-          return res.status(200).json({ reply: "Gemini API key मा authentication वा permission समस्या छ। Vercel को GEMINI_API_KEY जाँच गर्नुपर्छ।" });
+          return res.status(200).json({ reply: "Gemini API key मा authentication वा permission समस्या छ। Vercel को GEMINI_API_KEY जाँच गर्नुहोस्।" });
         }
-        // A quota limit on one model does not necessarily mean every model is
-        // exhausted. Continue to the distinct fallback model before failing.
-        if (response.status === 429 || response.status === 503 || response.status === 500 || response.status === 502 || response.status === 504) {
-          continue;
-        }
+        if (response.status === 429) sawRateLimit = true;
+        if ([400, 404, 429, 500, 502, 503, 504].includes(response.status)) continue;
         break;
       }
 
@@ -90,18 +87,17 @@ export default async function handler(req, res) {
         .trim();
 
       if (reply) return res.status(200).json({ reply });
-      console.error("Gemini returned no text:", JSON.stringify(data));
-      lastApiMessage = "empty";
+      lastFailure = "empty";
+      console.error("Gemini returned no text:", model, JSON.stringify(data));
     }
 
-    if (lastStatus === 429) {
-      return res.status(200).json({ reply: "दुवै AI मोडेलको हालको request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+    if (lastFailure === "timeout") {
+      return res.status(200).json({ reply: "AI जवाफ आउन ढिलो भयो। छिटो मोडेल र वैकल्पिक मोडेलहरू पनि प्रयास गरियो। कृपया फेरि प्रयास गर्नुहोस्।" });
     }
-    return res.status(200).json({
-      reply: lastApiMessage === "timeout"
-        ? "AI जवाफ आउन ढिलो भयो। कृपया फेरि प्रयास गर्नुहोस्।"
-        : "AI सेवा अहिले व्यस्त छ। अर्को मोडेलबाट पनि प्रयास गरियो, तर जवाफ आएन। कृपया केही समयपछि फेरि प्रयास गर्नुहोस्।"
-    });
+    if (sawRateLimit) {
+      return res.status(200).json({ reply: "Gemini API को request limit पुगेको छ वा सेवा व्यस्त छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+    }
+    return res.status(200).json({ reply: "AI सेवा अहिले व्यस्त छ। वैकल्पिक मोडेलहरू पनि प्रयास गरियो, तर जवाफ आएन। कृपया केही समयपछि फेरि प्रयास गर्नुहोस्।" });
   } catch (error) {
     console.error("Chat handler error:", error);
     return res.status(200).json({ reply: "AI सेवा अहिले उपलब्ध भएन। कृपया फेरि प्रयास गर्नुहोस्।" });
