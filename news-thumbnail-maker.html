@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#08090d">
-<meta name="description" content="Create dark cinematic breaking news thumbnails. Upload photos, move text, customize fonts, colors and gradients, and export HD PNG.">
+<meta name="description" content="Create Facebook news photo posts with a dark black gradient, vertical accent line and editable headlines.">
 <title>News Thumbnail Studio | Subas Ghimire</title>
 <link rel="stylesheet" href="assets/studio.css?v=3">
 <style>
@@ -173,21 +173,26 @@ function draw(){
  }
  const shade=Number($("overlay").value)/100;
  if(W===1080){
-  // Clean Facebook photo-post layout: large photo, soft white fade, open headline area.
-  const fade=ctx.createLinearGradient(0,535,0,760);
-  fade.addColorStop(0,"rgba(255,255,255,0)");
-  fade.addColorStop(.42,"rgba(255,255,255,.72)");
-  fade.addColorStop(1,"#ffffff");
-  ctx.fillStyle=fade;ctx.fillRect(0,535,W,H-535);
-  ctx.fillStyle="#ffffff";ctx.fillRect(0,735,W,H-735);
-  const k=layers.find(function(l){return l.id==="kicker"});if(k)k.visible=false;
+  // Dark Facebook photo-post layout with the original vertical accent line and editable headlines.
+  const darkFade=ctx.createLinearGradient(0,510,0,H);
+  darkFade.addColorStop(0,"rgba(0,0,0,0)");
+  darkFade.addColorStop(.28,"rgba(0,0,0,.76)");
+  darkFade.addColorStop(.62,"rgba(0,0,0,.96)");
+  darkFade.addColorStop(1,"#000000");
+  ctx.fillStyle=darkFade;ctx.fillRect(0,510,W,H-510);
+  const k=layers.find(function(l){return l.id==="kicker"});
+  if(k){k.visible=true;k.text="BREAKING NEWS";k.x=90;k.y=102;k.size=18;k.color="#ffffff";k.align="left";}
   const h=layers.find(function(l){return l.id==="headline"});
-  if(h){h.visible=true;h.align="center";h.x=540;h.y=790;h.size=66;h.maxWidth=940;h.weight="900";h.color="#111111";h.shadow="none";}
+  if(h){h.visible=true;h.align="left";h.x=90;h.y=770;h.size=68;h.maxWidth=920;h.weight="900";h.color="#ffffff";h.shadow="strong";}
   const s=layers.find(function(l){return l.id==="subheadline"});
-  if(s){s.visible=$( "showSubheadline" ).checked;s.align="center";s.x=540;s.y=900;s.size=58;s.maxWidth=940;s.weight="900";s.color="#d51f2b";s.shadow="none";}
+  if(s){s.visible=$( "showSubheadline" ).checked;s.align="left";s.x=90;s.y=900;s.size=48;s.maxWidth=900;s.weight="900";s.color="#ff3948";s.shadow="none";}
   const ft=layers.find(function(l){return l.id==="footer"});if(ft)ft.visible=false;
-  // Small page identity only; no third-party logo, website, CTA or advertisement.
-  ctx.save();ctx.font="700 18px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.55)";ctx.shadowBlur=5;ctx.fillText("24 HOUR",W-34,42);ctx.restore();
+  // Original slim vertical red line beside the headline block.
+  const line=ctx.createLinearGradient(0,646,0,1019);
+  line.addColorStop(0,"#ff5360");line.addColorStop(1,"#a90e20");
+  ctx.fillStyle=line;ctx.fillRect(54,646,8,373);
+  // Small 24 HOUR label at the top-right corner.
+  ctx.save();ctx.font="700 18px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.7)";ctx.shadowBlur=6;ctx.fillText("24 HOUR",W-34,42);ctx.restore();
  }else{
   const dark=ctx.createLinearGradient(0,0,0,H);
   dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
