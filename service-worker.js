@@ -1,4 +1,4 @@
-const CACHE_NAME="sg-portfolio-v2";
+const CACHE_NAME="sg-portfolio-v3";
 const CORE=["./","./index.html","./subas-ghimire.html","./hi.html","./pro-workspace.html","./launchpad.html","./studio.html","./creator-tools.html","./effects.html","./cv.html","./work.html","./site.webmanifest","./assets/site.css"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE.map(url=>new Request(url,{cache:"reload"}))).catch(()=>{})).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
