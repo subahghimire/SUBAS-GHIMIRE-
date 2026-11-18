@@ -74,16 +74,16 @@ body{background:radial-gradient(ellipse at 80% 0%,#8b111d30,transparent 38%),#08
 <body>
 <header><nav class="wrap"><a class="brand" href="index.html">SUBAS GHIMIRE<small>NEWS THUMBNAIL STUDIO</small></a><div class="navlinks"><a href="creator-tools.html">Creator Tools</a><a href="effects.html">Effects</a><a href="index.html">Portfolio ↗</a></div></nav></header>
 <main class="wrap studio-wrap">
-<div class="studio-head"><div><div class="eyebrow">FREE · LOCAL BROWSER TOOL</div><h1>News Thumbnail <em style="font-family:'Instrument Serif';font-weight:400;color:#ff6873">Studio.</em></h1><p>Dark cinematic breaking-news designs. Upload a photo, add and move text, customize fonts, colors and gradients, then export a full-resolution PNG. Your photos stay on your device.</p></div></div>
+<div class="studio-head"><div><div class="eyebrow">FREE · LOCAL BROWSER TOOL</div><h1>News Thumbnail <em style="font-family:'Instrument Serif';font-weight:400;color:#ff6873">Studio.</em></h1><p>Facebook photo post design. Upload a photo, reposition and zoom it, edit the headline, then export a 1080 × 1080 PNG. Your photos stay on your device.</p></div></div>
 <div class="workspace">
 <section class="preview-panel"><div class="panel-top"><strong>LIVE THUMBNAIL PREVIEW</strong><small id="formatBadge">1:1 · FACEBOOK POST</small></div><div class="preview-area"><div class="canvas-frame"><canvas id="thumbCanvas" width="1080" height="1080" aria-label="Thumbnail preview"></canvas></div><div class="preview-meta"><span id="imageStatus">Default cinematic design · upload a photo to begin</span><span id="dimensionLabel">1080 × 1080 px</span></div><p class="note" style="margin-top:8px">🔒 Text र सबै design shapes lock छन्। फोटो मात्र preview भित्र तानेर मिलाउनुहोस्; zoom slider बाट ठूलो/सानो बनाउनुहोस्।</p></div></section>
 <aside class="editor-panel"><div class="panel-top"><strong>DESIGN CONTROLS</strong><small>EDIT LIVE</small></div><div class="editor-content">
 <div class="field"><label for="canvasFormat">Output format</label><select id="canvasFormat"><option value="square" selected>Facebook Post · 1080 × 1080 (1:1)</option><option value="wide">YouTube Thumbnail · 1280 × 720 (16:9)</option></select></div>
-<div class="field"><span class="field-label">Design template</span><div class="template-grid"><button class="template" type="button" data-template="breaking" aria-pressed="true"><i class="template-swatch"></i>BREAKING</button><button class="template" type="button" data-template="debate" aria-pressed="false"><i class="template-swatch"></i>POLITICAL</button><button class="template" type="button" data-template="exclusive" aria-pressed="false"><i class="template-swatch"></i>EXCLUSIVE</button></div></div>
+<div class="field"><span class="field-label">Design template</span><div class="template-grid"><button class="template" type="button" data-template="breaking" aria-pressed="true"><i class="template-swatch"></i>BREAKING</button><button class="template" type="button" data-template="debate" aria-pressed="false"><i class="template-swatch"></i>CLEAN NEWS</button><button class="template" type="button" data-template="exclusive" aria-pressed="false"><i class="template-swatch"></i>PHOTO POST</button></div></div>
 <div class="field"><label for="photoUpload">Upload photo</label><div class="upload"><input id="photoUpload" type="file" accept="image/png,image/jpeg,image/webp"><p>JPG, PNG or WEBP · maximum 20 MB</p></div></div>
 <div class="two"><div class="field"><label for="photoFit">Photo fit</label><select id="photoFit"><option value="cover">Fill frame</option><option value="contain">Show full photo</option></select></div><div class="field"><label for="photoZoom">Photo zoom</label><input id="photoZoom" type="range" min="50" max="250" value="100"></div></div>
-<div class="field"><label for="overlay">Dark cinematic overlay</label><input id="overlay" type="range" min="0" max="90" value="48"></div>
-<div class="field"><label style="display:flex;align-items:center;gap:9px;text-transform:none;letter-spacing:0;font:600 12px 'DM Sans',sans-serif;color:#f4dfe2"><input id="showSubheadline" type="checkbox" checked style="width:17px;height:17px;accent-color:#ed2638"> आजको मुख्य समाचार देखाउने</label></div>
+<div class="field"><label for="overlay">Photo overlay</label><input id="overlay" type="range" min="0" max="90" value="48"></div>
+<div class="field"><label style="display:flex;align-items:center;gap:9px;text-transform:none;letter-spacing:0;font:600 12px 'DM Sans',sans-serif;color:#f4dfe2"><input id="showSubheadline" type="checkbox" checked style="width:17px;height:17px;accent-color:#ed2638"> दोस्रो रातो शीर्षक देखाउने</label></div>
 <div class="field"><label for="backgroundStyle">Background gradient</label><select id="backgroundStyle"><option value="red">Breaking Red</option><option value="midnight">Midnight Blue</option><option value="gold">Gold / Exclusive</option><option value="charcoal">Charcoal</option><option value="custom">Custom colour gradient</option></select></div>
 <div class="two"><div class="field"><label for="backgroundColor">Custom base colour</label><input id="backgroundColor" type="color" value="#16080d"></div><div class="field"><label for="accentColor">Accent colour</label><input id="accentColor" type="color" value="#ed2638"></div></div>
 <div class="section-line"></div>
@@ -115,9 +115,9 @@ let template="breaking",photo=null,photoUrl="",photoOffsetX=0,photoOffsetY=0,dra
 let lastW=1080,lastH=1080;
 let layers=[
 {id:"kicker",name:"Top label",text:"BREAKING NEWS",x:90,y:102,size:18,color:"#ffffff",font:"Arial, sans-serif",weight:"900",align:"left",shadow:"strong",maxWidth:900},
-{id:"headline",name:"Main headline",text:"कान खोलेर सुन, एमाले फेरि सरकारमा जान्छ - एमाले अध्यक्ष केपी",x:72,y:770,size:70,color:"#ffffff",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"center",shadow:"strong",maxWidth:960},
-{id:"subheadline",name:"Sub headline",text:"आजको मुख्य अपडेट · विशेष रिपोर्ट",x:72,y:920,size:28,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936,visible:false},
-{id:"footer",name:"Footer",text:"LATEST UPDATE",x:72,y:1018,size:22,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
+{id:"headline",name:"Main headline",text:"यहाँ समाचारको मुख्य शीर्षक लेख्नुहोस्",x:72,y:770,size:66,color:"#111111",font:"'Noto Sans Devanagari', Arial, sans-serif",weight:"900",align:"center",shadow:"strong",maxWidth:960},
+{id:"subheadline",name:"Sub headline",text:"समाचारको दोस्रो शीर्षक यहाँ लेख्नुहोस्",x:72,y:900,size:58,color:"#d51f2b",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"soft",maxWidth:936,visible:false},
+{id:"footer",name:"Footer",text:"",x:72,y:1018,size:22,color:"#ffffff",font:"Arial, sans-serif",weight:"700",align:"left",shadow:"none",maxWidth:850}
 ];
 let hitBoxes=[];
 function dimensions(){return $("canvasFormat").value==="wide"?{w:1280,h:720}:{w:1080,h:1080}}
@@ -173,22 +173,21 @@ function draw(){
  }
  const shade=Number($("overlay").value)/100;
  if(W===1080){
-  const py=615,pg=ctx.createLinearGradient(0,py,0,H);
-  pg.addColorStop(0,"rgba(5,4,7,.84)");pg.addColorStop(.38,"rgba(3,3,5,.95)");pg.addColorStop(1,"rgba(0,0,0,.99)");
-  ctx.fillStyle=pg;ctx.fillRect(0,py,W,H-py);
-  const bx=72,by=74,bw=250,bh=36,bg=ctx.createLinearGradient(bx,by,bx+bw,by);
-  bg.addColorStop(0,"#ed2638");bg.addColorStop(1,"#b91e2e");
-  ctx.save();ctx.shadowColor="rgba(237,38,56,.35)";ctx.shadowBlur=9;ctx.fillStyle=bg;roundRect(bx,by,bw,bh,7);ctx.fill();
-  ctx.shadowBlur=0;ctx.fillStyle="rgba(85,5,15,.42)";roundRect(bx+5,by+5,bw-10,bh-10,4);ctx.fill();ctx.restore();
+  // Clean Facebook photo-post layout: large photo, soft white fade, open headline area.
+  const fade=ctx.createLinearGradient(0,535,0,760);
+  fade.addColorStop(0,"rgba(255,255,255,0)");
+  fade.addColorStop(.42,"rgba(255,255,255,.72)");
+  fade.addColorStop(1,"#ffffff");
+  ctx.fillStyle=fade;ctx.fillRect(0,535,W,H-535);
+  ctx.fillStyle="#ffffff";ctx.fillRect(0,735,W,H-735);
   const k=layers.find(function(l){return l.id==="kicker"});if(k)k.visible=false;
-  const h=layers.find(function(l){return l.id==="headline"});if(h){h.visible=true;h.align="center";h.x=540;h.y=770;h.size=70;h.maxWidth=960;h.weight="900";}
-  const s=layers.find(function(l){return l.id==="subheadline"});if(s)s.visible=false;
-  const ft=layers.find(function(l){return l.id==="footer"});if(ft){ft.visible=true;ft.text="LATEST UPDATE";ft.align="left";ft.y=1018;ft.size=22;ft.shadow="none";}
-  ctx.fillStyle="#ed2638";ctx.fillRect(54,646,9,373);
-  ctx.fillStyle="rgba(255,255,255,.24)";ctx.fillRect(63,1018,963,1);
-  ctx.save();ctx.font="900 18px Arial,sans-serif";ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillStyle="#fff";ctx.fillText("BREAKING NEWS",72,96);ctx.restore();
-  // Small 24 hour page label at the top-right corner.
-  ctx.save();ctx.font="700 16px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="rgba(255,255,255,.95)";ctx.shadowColor="rgba(0,0,0,.65)";ctx.shadowBlur=5;ctx.fillText("24 hour",W-54,92);ctx.restore();
+  const h=layers.find(function(l){return l.id==="headline"});
+  if(h){h.visible=true;h.align="center";h.x=540;h.y=790;h.size=66;h.maxWidth=940;h.weight="900";h.color="#111111";h.shadow="none";}
+  const s=layers.find(function(l){return l.id==="subheadline"});
+  if(s){s.visible=$( "showSubheadline" ).checked;s.align="center";s.x=540;s.y=900;s.size=58;s.maxWidth=940;s.weight="900";s.color="#d51f2b";s.shadow="none";}
+  const ft=layers.find(function(l){return l.id==="footer"});if(ft)ft.visible=false;
+  // Small page identity only; no third-party logo, website, CTA or advertisement.
+  ctx.save();ctx.font="700 18px Arial,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.55)";ctx.shadowBlur=5;ctx.fillText("24 HOUR",W-34,42);ctx.restore();
  }else{
   const dark=ctx.createLinearGradient(0,0,0,H);
   dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
