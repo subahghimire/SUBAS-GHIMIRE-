@@ -171,11 +171,17 @@ function draw(){
   ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
  }
  const shade=Number($("overlay").value)/100;
- const dark=ctx.createLinearGradient(0,0,W,H);dark.addColorStop(0,"rgba(0,0,0,"+(shade*.82)+")");dark.addColorStop(.45,"rgba(0,0,0,"+(shade*.34)+")");dark.addColorStop(1,"rgba(0,0,0,"+(shade*.88)+")");ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
+ // Smooth, full-frame cinematic gradient: no hard-edged black panel or boxed overlay.
+ const dark=ctx.createLinearGradient(0,0,0,H);
+ dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");
+ dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
+ dark.addColorStop(.52,"rgba(5,3,8,"+(shade*.38)+")");
+ dark.addColorStop(.72,"rgba(7,3,9,"+(shade*.72)+")");
+ dark.addColorStop(1,"rgba(3,3,6,"+(shade*.94)+")");
+ ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
  const accent=$("accentColor").value||t.accent;
- const glow=ctx.createRadialGradient(W*.82,H*.16,10,W*.82,H*.16,W*.8);glow.addColorStop(0,accent+"55");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+ const glow=ctx.createRadialGradient(W*.82,H*.16,10,W*.82,H*.16,W*.82);glow.addColorStop(0,accent+"44");glow.addColorStop(.42,accent+"14");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
  const panelY=H*(W===1080?.57:.53);
- const panel=ctx.createLinearGradient(0,panelY,0,H);panel.addColorStop(0,"rgba(20,5,10,.78)");panel.addColorStop(.3,"rgba(10,7,12,.96)");panel.addColorStop(1,"rgba(4,5,8,.99)");ctx.fillStyle=panel;ctx.fillRect(0,panelY,W,H-panelY);
  const accentGrad=ctx.createLinearGradient(0,0,W,0);accentGrad.addColorStop(0,accent);accentGrad.addColorStop(1,"#ff8b73");
  ctx.save();
  const badgeX=72,badgeY=H*.068,badgeH=W===1080?28:26;
@@ -188,8 +194,7 @@ function draw(){
  ctx.restore();
  // Fixed Facebook page branding in the top-right corner
  ctx.save();ctx.textAlign="right";ctx.textBaseline="alphabetic";ctx.font="900 "+(W===1080?25:22)+"px Arial, sans-serif";ctx.fillStyle="#ffffff";ctx.shadowColor="rgba(0,0,0,.85)";ctx.shadowBlur=12;ctx.fillText("24 hour",W-72,badgeY+badgeH-2);ctx.restore();
- ctx.fillStyle=accent;ctx.fillRect(54,panelY+30,9,H-panelY-90);
- ctx.fillStyle="rgba(255,255,255,.22)";ctx.fillRect(54,H-62,W-108,1);
+ // Keep the photo-led layout clean: no solid side bar or boxed footer line.
  hitBoxes=[];layers.forEach(renderLayer);
  $("imageStatus").textContent=photo?"Photo loaded · "+photo.naturalWidth+" × "+photo.naturalHeight:"Default cinematic background · upload your photo";
 }
