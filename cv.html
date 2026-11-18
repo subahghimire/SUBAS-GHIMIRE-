@@ -89,28 +89,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--mint);outline-offse
 
 @media print{
   @page{size:A4;margin:13mm}
-  body{background:#fff;color:#12181a;font-size:11.5px;line-height:1.5}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{font-size:11.5px;line-height:1.5}
   .bar{display:none}
-  .sheet{max-width:none;margin:0;padding:0;border:0;border-radius:0;background:#fff;box-shadow:none}
-  .head{border-bottom:2px solid #12181a;padding-bottom:12px}
-  .mark{border-color:#6b21a8;color:#6b21a8;border-radius:8px}
-  h1{color:#12181a}
-  .role{color:#6b21a8}
-  h2{color:#6b21a8;border-bottom:1px solid #ddd6e7;margin-bottom:9px;padding-bottom:6px;font-size:9px}
+  .sheet{max-width:none;margin:0;padding:0;box-shadow:none;break-inside:avoid}
   .grid{grid-template-columns:210px 1fr;gap:26px;padding-top:18px}
   section{margin-bottom:18px}
-  p,.job li{color:#232b2e}
-  .contact{color:#4a4655}.contact a{color:#12181a;border:0}
-  .tags li{background:#f7f4fb;border:1px solid #ded7e8;color:#232b2e;padding:3px 6px;font-size:9.5px}
   .job{margin-bottom:13px}
-  .job h3{color:#12181a}
-  .job:before{background:#6b21a8;box-shadow:none}
-  .job:after{background:#e3dced}
-  .date{color:#6b21a8}
-  .title{color:#5a666a}
-  footer{color:#5a666a;border-top:1px solid #ded7e8;margin-top:16px;padding-top:8px}
   .qr svg{width:64px;height:64px;padding:4px}
-  .qr small{color:#5a666a}
   .job,.head{break-inside:avoid}
   h2{break-after:avoid}
 }
