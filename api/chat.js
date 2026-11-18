@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       console.error("GEMINI_API_KEY is missing");
-      return res.status(200).json({ reply: "AI is not connected yet. Please check the server configuration." });
+      return res.status(200).json({ reply: "AI जोडिएको छैन। Vercel मा GEMINI_API_KEY configuration जाँच गर्नुपर्छ।" });
     }
 
     const systemInstruction = [
@@ -37,58 +37,70 @@ export default async function handler(req, res) {
     ].join(" ");
 
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
+    const models = ["gemini-3.8-flash", "gemini-3.8-flash", "gemini-3.7-flash"];
+    let lastStatus = 0;
+    let lastApiMessage = "";
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-      signal: AbortSignal.timeout(45000),
-      body: JSON.stringify({
-        model: "gemini-3.8-flash",
-        input: message,
-        system_instruction: systemInstruction,
-        generation_config: { thinking_level: "low" },
-        store: false
-      })
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      console.error("Gemini Interactions API error:", response.status, JSON.stringify(data));
-      const apiMessage = data?.error?.message || data?.message || "";
-      if (response.status === 401 || response.status === 403) {
-        return res.status(200).json({ reply: "Gemini API key ko authentication/restriction problem cha. Vercel ko GEMINI_API_KEY check garnu parcha." });
+    for (let i = 0; i < models.length; i++) {
+      if (i > 0) await new Promise(resolve => setTimeout(resolve, i === 1 ? 900 : 500));
+      let response;
+      try {
+        response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+          signal: AbortSignal.timeout(13000),
+          body: JSON.stringify({
+            model: models[i],
+            input: message,
+            system_instruction: systemInstruction,
+            generation_config: { thinking_level: "low" },
+            store: false
+          })
+        });
+      } catch (error) {
+        lastApiMessage = error?.name === "TimeoutError" || error?.name === "AbortError" ? "timeout" : "network";
+        console.error("Gemini request failed:", models[i], lastApiMessage);
+        continue;
       }
-      if (response.status === 429) {
-        return res.status(200).json({ reply: "Gemini API ko usage limit पुगेको छ. Please try again later." });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        lastStatus = response.status;
+        lastApiMessage = data?.error?.message || data?.message || "";
+        console.error("Gemini Interactions API error:", models[i], response.status, JSON.stringify(data));
+
+        if (response.status === 401 || response.status === 403) {
+          return res.status(200).json({ reply: "Gemini API key मा authentication वा permission समस्या छ। Vercel को GEMINI_API_KEY जाँच गर्नुपर्छ।" });
+        }
+        if (response.status === 429) {
+          return res.status(200).json({ reply: "Gemini API को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+        }
+        if (response.status !== 503 && response.status !== 500 && response.status !== 502 && response.status !== 504) break;
+        continue;
       }
-      return res.status(200).json({
-        reply: apiMessage ? "Gemini API error: " + apiMessage : "AI service ma problem aayo. Please try again in a moment."
-      });
-    }
 
-    const reply = (data?.steps || [])
-      .filter(step => step?.type === "model_output")
-      .flatMap(step => step?.content || [])
-      .map(part => part?.text || "")
-      .join("")
-      .trim();
+      const reply = (data?.steps || [])
+        .filter(step => step?.type === "model_output")
+        .flatMap(step => step?.content || [])
+        .map(part => part?.text || "")
+        .join("")
+        .trim();
 
-    if (!reply) {
+      if (reply) return res.status(200).json({ reply });
       console.error("Gemini returned no text:", JSON.stringify(data));
-      return res.status(200).json({
-        reply: "I couldn't generate an answer right now. Please try asking in a different way."
-      });
+      lastApiMessage = "empty";
     }
 
-    return res.status(200).json({ reply });
-  } catch (error) {
-    console.error("Chat handler error:", error);
-    if (error?.name === "TimeoutError" || error?.name === "AbortError") {
-      return res.status(200).json({ reply: "AI जवाफ आउन धेरै समय लाग्यो। कृपया फेरि प्रयास गर्नुहोस्।" });
+    if (lastStatus === 429) {
+      return res.status(200).json({ reply: "Gemini API को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
     }
     return res.status(200).json({
-      reply: "AI service temporarily unavailable. Please try again."
+      reply: lastApiMessage === "timeout"
+        ? "AI जवाफ आउन ढिलो भयो। कृपया फेरि प्रयास गर्नुहोस्।"
+        : "AI सेवा अहिले व्यस्त छ। अर्को मोडेलबाट पनि प्रयास गरियो, तर जवाफ आएन। कृपया केही समयपछि फेरि प्रयास गर्नुहोस्।"
     });
+  } catch (error) {
+    console.error("Chat handler error:", error);
+    return res.status(200).json({ reply: "AI सेवा अहिले उपलब्ध भएन। कृपया फेरि प्रयास गर्नुहोस्।" });
   }
 }
