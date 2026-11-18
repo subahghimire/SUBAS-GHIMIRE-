@@ -171,14 +171,12 @@ function draw(){
   ctx.drawImage(photo,(W-pw)/2+photoOffsetX,(H-ph)/2+photoOffsetY,pw,ph);ctx.restore();
  }
  const shade=Number($("overlay").value)/100;
- // Smooth full-frame black cinematic gradient, with no red glow.
- const dark=ctx.createLinearGradient(0,0,0,H);
- dark.addColorStop(0,"rgba(0,0,0,"+(shade*.10)+")");
- dark.addColorStop(.30,"rgba(0,0,0,"+(shade*.18)+")");
- dark.addColorStop(.52,"rgba(0,0,0,"+(shade*.38)+")");
- dark.addColorStop(.72,"rgba(0,0,0,"+(shade*.72)+")");
- dark.addColorStop(1,"rgba(0,0,0,"+(shade*.94)+")");
- ctx.fillStyle=dark;ctx.fillRect(0,0,W,H);
+ // Reference-style black lower panel: starts below the photo, then fades to deep black.
+ const dark=ctx.createLinearGradient(0,H*.57,0,H);
+ dark.addColorStop(0,"rgba(0,0,0,"+Math.min(.78,shade*1.5)+")");
+ dark.addColorStop(.38,"rgba(0,0,0,"+Math.min(.88,shade*1.75)+")");
+ dark.addColorStop(1,"rgba(0,0,0,"+Math.min(.97,shade*2)+")");
+ ctx.fillStyle=dark;ctx.fillRect(0,H*.57,W,H*.43);
  const accentGrad=ctx.createLinearGradient(0,0,W*.9,0);accentGrad.addColorStop(0,"#a90e24");accentGrad.addColorStop(.48,accent);accentGrad.addColorStop(1,"#ff5968");
  ctx.save();
  const badgeX=72,badgeY=H*.068,badgeH=W===1080?28:26;
