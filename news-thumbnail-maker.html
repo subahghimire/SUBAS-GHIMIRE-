@@ -61,7 +61,7 @@ const shade=Number($("overlay").value)/100;
 if(portrait){
   // Portrait 4:5 editorial post: photo-led upper area and bold lower headline panel.
   const isDebate=template==="debate",isExclusive=template==="exclusive";
-  const panelTop=700;
+  const panelTop=790;
   const topShade=ctx.createLinearGradient(0,0,0,850);topShade.addColorStop(0,"rgba(0,0,0,.78)");topShade.addColorStop(.72,"rgba(0,0,0,"+(shade*.72)+")");topShade.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=topShade;ctx.fillRect(0,0,W,850);
   ctx.fillStyle="#07090def";ctx.fillRect(0,0,W,68);ctx.fillStyle="#fff";ctx.font="800 21px Arial,sans-serif";ctx.textAlign="left";ctx.fillText("SUBAS GHIMIRE",58,43);ctx.fillStyle=isExclusive?"#e7c77b":isDebate?"#f0c36a":"#ff6570";ctx.font="700 15px Arial,sans-serif";ctx.textAlign="right";ctx.fillText(isExclusive?"SPECIAL REPORT":isDebate?"POLITICAL DESK":"NEWS  /  POLITICAL",W-58,43);
   const label=$("kicker").value.toUpperCase();ctx.textAlign="left";ctx.font="800 21px Arial,sans-serif";const labelW=Math.min(720,ctx.measureText(label).width+54);ctx.fillStyle=accent;ctx.fillRect(58,112,labelW,48);ctx.fillStyle="#fff";ctx.fillText(label,82,144);
