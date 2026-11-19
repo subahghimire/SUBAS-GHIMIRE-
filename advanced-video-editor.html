@@ -61,7 +61,7 @@ video.onpause=()=>$('audioPreview').pause();
 video.onseeked=()=>{const a=$('audioPreview'),c=current();if(a.src&&c){const t=Math.max(0,video.currentTime-c.start);if(Math.abs(a.currentTime-t)>.35)a.currentTime=t}};
 $('audioPreview').onloadedmetadata=()=>{$('audioPreview').volume=Math.min(1,Number($('audioVolume').value)/100)};
 $('files').onchange=e=>{
- for(const f of e.target.files){
+ let firstAudio=-1;for(const f of e.target.files){
   if(!f.type.startsWith('video/')&&!f.type.startsWith('audio/')&&!f.type.startsWith('image/')){message('Unsupported media type: '+f.name);continue}
   const m={name:f.name,type:f.type,file:f,url:URL.createObjectURL(f),duration:0};media.push(m);const idx=media.length-1;
   if(f.type.startsWith('video/')){
@@ -70,7 +70,7 @@ $('files').onchange=e=>{
    probe.onerror=()=>message('यो भिडियो format browser ले पढ्न सकेन: '+m.name);
   }else{
    const a=document.createElement('div');a.className='asset';a.innerHTML='<strong>'+esc(f.name)+'</strong><small>'+esc(f.type)+'</small>';$('assets').append(a);
-   if(f.type.startsWith('audio/')&&!$('audioSource').value){$('audioSource').value=String(idx);$('audioPreview').src=m.url;$('audioPreview').style.display='block'}
+   if(f.type.startsWith('audio/')&&!$('audioSource').value&&firstAudio<0)firstAudio=idx
   }
  }
  $('assets').querySelector('.empty')?.remove();draw();e.target.value='';
@@ -80,7 +80,7 @@ $('split').onclick=split;$('delete').onclick=()=>{if(!current())return;saveUndo(
 $('undo').onclick=()=>{if(!undoStack.length)return message('Undo history छैन।');clips=JSON.parse(undoStack.pop());selected=Math.min(selected,clips.length-1);draw();if(current())select(selected)};
 $('applyTrim').onclick=()=>{let c=current();if(!c)return;let a=Number($('start').value),b=Number($('end').value);if(a<0||b>media[c.media].duration||b-a<.2)return message('Valid start/end time राख्नुहोस्।');saveUndo();c.start=a;c.end=b;video.currentTime=a;draw();message('Trim लागू भयो।')};
 $('toggle').onclick=$('play').onclick=()=>video.paused?video.play():video.pause();$('back').onclick=()=>video.currentTime=Math.max(current()?.start||0,video.currentTime-1);$('forward').onclick=()=>video.currentTime=Math.min(current()?.end||video.duration,video.currentTime+1);
-video.ontimeupdate=()=>{let c=current();if(c&&video.currentTime>=c.end){video.pause();video.currentTime=c.end}if(c){$('timecode').textContent=fmt(video.currentTime)+'.'+String(Math.floor(video.currentTime%1*100)).padStart(2,'0');$('seek').value=video.duration?video.currentTime/video.duration*1000:0}};
+video.ontimeupdate=()=>{let c=current();if(c&&video.currentTime>=c.end){video.pause();video.currentTime=c.end}if(c){$('timecode').textContent=fmt(video.currentTime)+'.'+String(Math.floor(video.currentTime%1*100)).padStart(2,'0');$('seek').value=video.duration?video.currentTime/video.duration*1000:0;const a=$('audioPreview');if(!a.paused&&a.src){const t=Math.max(0,video.currentTime-c.start);if(Math.abs(a.currentTime-t)>.5)a.currentTime=t}}};
 $('seek').oninput=()=>{if(video.duration)video.currentTime=Number($('seek').value)/1000*video.duration};
 function updateTextPreview(){$('textOverlay').textContent=$('titleText').value;$('textOverlay').style.fontSize=$('fontSize').value+'px';$('textOverlay').style.color=$('textColor').value;draw()}
 $('addText').onclick=updateTextPreview;$('clearText').onclick=()=>{$('titleText').value='';$('textOverlay').textContent='';draw()};
