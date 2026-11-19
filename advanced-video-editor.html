@@ -87,7 +87,33 @@ $('addText').onclick=updateTextPreview;$('clearText').onclick=()=>{$('titleText'
 $('titleText').addEventListener('input',()=>{$('textOverlay').textContent=$('titleText').value;$('textTrack').textContent=$('titleText').value?'TITLE · '+$('titleText').value:'Text overlay appears here'});$('fontSize').oninput=()=>$('textOverlay').style.fontSize=$('fontSize').value+'px';$('textColor').onchange=()=>$('textOverlay').style.color=$('textColor').value;
 ['brightness','contrast','saturation'].forEach(id=>$(id).oninput=applyFx);$('speed').onchange=()=>video.playbackRate=Number($('speed').value);
 $('ratio').onchange=()=>{let r=$('ratio').value,stage=$('stage');stage.style.aspectRatio=r==='original'?'auto':r.replace(':',' / ');stage.style.minHeight='230px'};
-async function getFFmpeg(){if(ffmpeg)return ffmpeg;message('Export engine download हुँदैछ (पहिलो पटक ठूलो download हुन सक्छ)…');const{FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');const{toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');ffmpeg=new FFmpeg();ffmpeg.on('progress',({progress})=>$('progress').style.width=Math.max(0,Math.min(100,progress*100))+'%');const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';await ffmpeg.load({coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:base+'/ffmpeg-core.wasm'});return ffmpeg}
+let ffmpegLoadPromise=null;
+async function getFFmpeg(){
+ if(ffmpegLoadPromise)return ffmpegLoadPromise;
+ ffmpegLoadPromise=(async()=>{
+  message('Export engine download हुँदैछ… पहिलो पटक केही समय लाग्न सक्छ।');
+  const{FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');
+  const{toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');
+  const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+  const [coreURL,wasmURL,workerURL]=await Promise.all([
+   toBlobURL(base+'/ffmpeg-core.js','text/javascript'),
+   toBlobURL(base+'/ffmpeg-core.wasm','application/wasm'),
+   toBlobURL(base+'/ffmpeg-core.worker.js','text/javascript')
+  ]);
+  const engine=new FFmpeg();
+  engine.on('progress',({progress})=>$('progress').style.width=Math.max(0,Math.min(100,progress*100))+'%');
+  engine.on('log',({message:logMessage})=>{if(logMessage)$('status').textContent=logMessage.slice(0,180)});
+  await engine.load({coreURL,wasmURL,workerURL});
+  ffmpeg=engine;
+  message('Export engine तयार भयो।');
+  return engine;
+ })().catch(err=>{
+  ffmpeg=null;
+  ffmpegLoadPromise=null;
+  throw new Error('FFmpeg load हुन सकेन: '+(err?.message||String(err))+'। इन्टरनेट/CDN access जाँचेर फेरि प्रयास गर्नुहोस्।');
+ });
+ return ffmpegLoadPromise;
+}
 $('export').onclick=async()=>{
  if(!clips.length)return message('Export गर्न पहिले video import गर्नुहोस्।');
  const btn=$('export');btn.disabled=true;$('download').hidden=true;$('progress').style.width='0';
