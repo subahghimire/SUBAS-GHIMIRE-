@@ -66,7 +66,7 @@ $('files').onchange=e=>{
   const m={name:f.name,type:f.type,file:f,url:URL.createObjectURL(f),duration:0};media.push(m);const idx=media.length-1;
   if(f.type.startsWith('video/')){
    const probe=document.createElement('video');probe.preload='metadata';probe.src=m.url;
-   probe.onloadedmetadata=()=>{m.duration=probe.duration;if(!Number.isFinite(m.duration)||m.duration<=0){message('यो भिडियोको duration पढ्न सकिएन: '+m.name);return}saveUndo();clips.push({media:idx,start:0,end:probe.duration,speed:1});if(selected<0)selected=0;draw();if(selected===clips.length-1)select(selected)};
+   probe.onloadedmetadata=()=>{m.duration=probe.duration;m.width=probe.videoWidth;m.height=probe.videoHeight;if(!Number.isFinite(m.duration)||m.duration<=0){message('यो भिडियोको duration पढ्न सकिएन: '+m.name);return}saveUndo();clips.push({media:idx,start:0,end:probe.duration,speed:1});if(selected<0)selected=0;draw();if(selected===clips.length-1)select(selected)};
    probe.onerror=()=>message('यो भिडियो format browser ले पढ्न सकेन: '+m.name);
   }else{
    const a=document.createElement('div');a.className='asset';a.innerHTML='<strong>'+esc(f.name)+'</strong><small>'+esc(f.type)+'</small>';$('assets').append(a);
@@ -104,11 +104,14 @@ $('export').onclick=async()=>{
    await ff.writeFile('sg-audio.'+ext,new Uint8Array(await am.file.arrayBuffer()));args.push('-i','sg-audio.'+ext);
   }
   const speed=Math.max(.25,Number($('speed').value)||1),total=inputs.reduce((n,x)=>n+(x.clip.end-x.clip.start)/speed,0);
-  const chains=inputs.map((x,i)=>'['+i+':v]trim=start='+x.clip.start+':end='+x.clip.end+',setpts=(PTS-STARTPTS)/'+speed+',eq=brightness='+((Number($('brightness').value)-100)/100)+':contrast='+(Number($('contrast').value)/100)+':saturation='+(Number($('saturation').value)/100)+',scale=trunc(iw/2)*2:trunc(ih/2)*2,setsar=1[v'+i+']');
+  const ratio=$('ratio').value,first=media[clips[0].media];
+  const sizes={'16:9':[1280,720],'9:16':[720,1280],'1:1':[1080,1080],'4:5':[1080,1350]};
+  const outputW=sizes[ratio]?.[0]||Math.max(2,Math.floor((first.width||1920)/2)*2),outputH=sizes[ratio]?.[1]||Math.max(2,Math.floor((first.height||1080)/2)*2);
+  const chains=inputs.map((x,i)=>'['+i+':v]trim=start='+x.clip.start+':end='+x.clip.end+',setpts=(PTS-STARTPTS)/'+speed+',eq=brightness='+((Number($('brightness').value)-100)/100)+':contrast='+(Number($('contrast').value)/100)+':saturation='+(Number($('saturation').value)/100)+',scale='+outputW+':'+outputH+':force_original_aspect_ratio=decrease,pad='+outputW+':'+outputH+':(ow-iw)/2:(oh-ih)/2:black,setsar=1[v'+i+']');
   const concat=inputs.map((x,i)=>'[v'+i+']').join('')+'concat=n='+inputs.length+':v=1:a=0[outv]';let filter=chains.join(';')+';'+concat;let videoMap='[outv]';
   const title=$('titleText').value.trim();
   if(title){
-   const w=video.videoWidth||1920,h=video.videoHeight||1080,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');
+   const w=outputW,h=outputH,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');
    const font=Math.max(24,Math.round(Number($('fontSize').value)*w/640));ctx.font='900 '+font+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
    const maxWidth=w*.84,words=title.split(/\s+/),lines=[];let line='';
    for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);
