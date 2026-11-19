@@ -1,4 +1,20 @@
 export default async function handler(req, res) {
+  const allowedOrigins = new Set([
+    "https://subahghimire.github.io",
+    "https://subas-ghimire.vercel.app",
+    "https://subas-ghimire.com.np",
+    "https://www.subas-ghimire.com.np"
+  ]);
+  const origin = req.headers.origin || "";
+  if (allowedOrigins.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Cache-Control", "no-store");
+  if (req.method === "OPTIONS") return res.status(204).end();
+
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
