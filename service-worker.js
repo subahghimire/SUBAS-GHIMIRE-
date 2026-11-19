@@ -1,4 +1,4 @@
-const CACHE_NAME = "sg-portfolio-v14";
+const CACHE_NAME = "sg-portfolio-v15";
 const CORE = [
   "./",
   "./index.html",
@@ -8,6 +8,16 @@ const CORE = [
   "./launchpad.html",
   "./studio.html",
   "./creator-tools.html",
+  "./advanced-video-editor.html",
+  "./news-post-studio.html",
+  "./social-media-studio.html",
+  "./video-toolkit.html",
+  "./video-workspace.html",
+  "./news-management.html",
+  "./media-library.html",
+  "./social-planner.html",
+  "./analytics-center.html",
+  "./security-center.html",
   "./creative-workspace.html",
   "./newsroom-graphics-studio.html",
   "./news-thumbnail-maker.html",
