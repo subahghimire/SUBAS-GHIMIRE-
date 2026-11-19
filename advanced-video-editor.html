@@ -100,10 +100,27 @@ async function getFFmpeg(){
    toBlobURL(base+'/ffmpeg-core.wasm','application/wasm'),
    toBlobURL(base+'/ffmpeg-core.worker.js','text/javascript')
   ]);
+  // The ESM package's default worker URL points back to jsDelivr. Browsers
+  // reject constructing that cross-origin Worker from this Vercel page.
+  // Fetch its module source, rewrite its relative imports to absolute CDN
+  // module URLs, then launch it from a same-origin blob URL instead.
+  const workerBase='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/';
+  const workerResponse=await fetch(workerBase+'worker.js',{mode:'cors',cache:'force-cache'});
+  if(!workerResponse.ok)throw new Error('FFmpeg worker download failed (HTTP '+workerResponse.status+').');
+  const workerSource=await workerResponse.text();
+  const sameOriginWorkerSource=workerSource.replace(/(["'])\.\/([^"']+)\1/g,(_,quote,path)=>quote+workerBase+path+quote);
+  const classWorkerURL=URL.createObjectURL(new Blob([sameOriginWorkerSource],{type:'text/javascript'}));
   const engine=new FFmpeg();
   engine.on('progress',({progress})=>$('progress').style.width=Math.max(0,Math.min(100,progress*100))+'%');
   engine.on('log',({message:logMessage})=>{if(logMessage)$('status').textContent=logMessage.slice(0,180)});
-  await engine.load({coreURL,wasmURL,workerURL});
+  try{
+   await engine.load({coreURL,wasmURL,workerURL,classWorkerURL});
+  }catch(loadError){
+   URL.revokeObjectURL(classWorkerURL);
+   throw loadError;
+  }
+  // Keep the worker blob URL alive for the lifetime of the FFmpeg worker.
+  engine.__subasWorkerURL=classWorkerURL;
   ffmpeg=engine;
   message('Export engine तयार भयो।');
   return engine;
