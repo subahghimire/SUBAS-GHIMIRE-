@@ -103,9 +103,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ reply: "फोटो विश्लेषण अहिले उपलब्ध भएन। कृपया अर्को फोटो प्रयास गर्नुहोस्।" });
     }
 
-    const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
-    // Start with the lightweight model for faster replies, then fall back to
-    // progressively stronger models if a model is busy or quota-limited.
+    // Use Gemini's generateContent REST endpoint. The Interactions API
+    // currently rejects API-key authentication for this project (401).
     const models = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
     let sawRateLimit = false;
     let lastFailure = "";
@@ -113,16 +112,13 @@ export default async function handler(req, res) {
     for (const model of models) {
       let response;
       try {
-        response = await geminiRequest(url, {
+        response = await geminiRequest("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-
           body: JSON.stringify({
-            model,
-            input: message,
-            system_instruction: systemInstruction,
-            generation_config: { thinking_level: "low" },
-            store: false
+            systemInstruction: { parts: [{ text: systemInstruction }] },
+            contents: [{ role: "user", parts: [{ text: message }] }],
+            generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
           })
         });
       } catch (error) {
@@ -144,9 +140,7 @@ export default async function handler(req, res) {
         break;
       }
 
-      const reply = (data?.steps || [])
-        .filter(step => step?.type === "model_output")
-        .flatMap(step => step?.content || [])
+      const reply = (data?.candidates?.[0]?.content?.parts || [])
         .map(part => part?.text || "")
         .join("")
         .trim();
