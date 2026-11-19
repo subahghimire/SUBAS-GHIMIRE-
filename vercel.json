@@ -131,6 +131,12 @@
   "functions": {
     "api/chat.js": {
       "maxDuration": 60
+    },
+    "api/video.js": {
+      "maxDuration": 60
+    },
+    "api/voice.js": {
+      "maxDuration": 60
     }
   }
 }
