@@ -481,3 +481,12 @@ body.light-mode .btn.primary,body.light-mode .nav-cta{background:linear-gradient
  .nav-more-languages{padding-top:10px}
 }
 @media(max-width:420px){.nav-more-menu{padding-right:2px;padding-left:2px}}
+
+
+/* Unified creative workspace links on the portfolio tools section */
+.tool-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.tool-action{display:flex;flex-direction:column;gap:5px;padding:14px 16px;border:1px solid rgba(229,37,58,.32);border-radius:10px;background:linear-gradient(135deg,rgba(229,37,58,.12),rgba(12,12,18,.8));text-decoration:none;transition:transform .2s,border-color .2s,background .2s}
+.tool-action:hover{transform:translateY(-2px);border-color:rgba(229,37,58,.72);background:linear-gradient(135deg,rgba(229,37,58,.2),rgba(12,12,18,.9))}
+.tool-action strong{font:700 10px ui-monospace,monospace;letter-spacing:.08em;color:#ff9ba4}
+.tool-action span{font-size:11px;color:var(--muted,#aaa)}
+@media(max-width:700px){.tool-actions{grid-template-columns:1fr}}

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ne"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08090d"><title>Advanced Video Editor | Subas Ghimire</title>
+<style>
+:root{color-scheme:dark;--bg:#08090d;--panel:#12141c;--line:#ffffff20;--muted:#a4a7b3;--red:#e5253a;--ink:#f7f7fb}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Arial,"Noto Sans Devanagari",sans-serif}button,input,select{font:inherit}button{cursor:pointer}.top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);background:#0b0c11;position:sticky;top:0;z-index:5}.brand{font-weight:900;letter-spacing:.12em}.brand small{display:block;color:var(--muted);font-size:9px}.top a{color:#ff9da5;text-decoration:none;font-size:12px}.shell{max-width:1500px;margin:auto;padding:16px}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.btn{border:1px solid #ffffff2b;border-radius:8px;padding:9px 12px;background:#20232d;color:white;font-size:12px;font-weight:700}.btn.primary{background:linear-gradient(120deg,#b7192a,#e5253a);border-color:#e5253a}.btn:disabled{opacity:.4;cursor:not-allowed}.layout{display:grid;grid-template-columns:260px minmax(0,1fr) 250px;gap:12px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;min-width:0;overflow:hidden}.panel h2{font-size:12px;letter-spacing:.1em;margin:0;padding:12px 14px;border-bottom:1px solid var(--line);color:#e7e7ec}.inner{padding:12px}.asset{padding:10px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:#0b0d13}.asset strong{display:block;font-size:12px;overflow-wrap:anywhere}.asset small{color:var(--muted)}.stage{background:#050609;min-height:350px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.stage video{display:block;max-width:100%;max-height:58vh;object-fit:contain}.overlay{position:absolute;left:8%;right:8%;bottom:12%;text-align:center;font-size:clamp(18px,3vw,38px);font-weight:900;text-shadow:0 2px 9px #000,0 0 4px #000;pointer-events:none;white-space:pre-wrap}.stageInfo{padding:8px 12px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between}.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;border-top:1px solid var(--line)}.controls input[type=range]{min-width:90px;flex:1}.timeline{margin-top:12px}.track{display:grid;grid-template-columns:80px minmax(0,1fr);border-bottom:1px solid var(--line);min-height:62px}.trackName{padding:10px;color:var(--muted);font-size:10px;border-right:1px solid var(--line)}.trackLane{padding:7px;display:flex;gap:5px;align-items:stretch;overflow-x:auto;min-width:0}.clip{min-width:95px;flex:1;border:1px solid #ffffff28;background:linear-gradient(135deg,#293044,#1a2030);border-radius:6px;padding:7px;text-align:left;color:white;font-size:10px;position:relative}.clip.active{border:1px solid #ff6675;box-shadow:0 0 0 1px #e5253a55}.clip.dragging{opacity:.38;cursor:grabbing}.clip small{display:block;color:#c4c7d1;margin-top:5px}.field{margin:0 0 12px}.field label{display:flex;justify-content:space-between;color:#c7c9d2;font-size:10px;margin-bottom:5px}.field input[type=text],.field select{width:100%;background:#080a10;border:1px solid var(--line);border-radius:7px;color:white;padding:9px}.field input[type=range]{width:100%;accent-color:var(--red)}.hint{font-size:11px;color:var(--muted);line-height:1.55}.status{font-size:11px;color:#ff9da5;min-height:18px;margin-top:8px}.empty{color:var(--muted);text-align:center;padding:26px 8px;font-size:12px}.exportProgress{height:5px;background:#272a34;border-radius:5px;overflow:hidden;margin-top:8px}.exportProgress i{display:block;height:100%;width:0;background:var(--red)}.mobileTools{display:none}@media(max-width:980px){.layout{grid-template-columns:220px minmax(0,1fr)}.right{grid-column:1/-1}.right .inner{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.right h2{grid-column:1/-1}}@media(max-width:650px){.shell{padding:9px}.layout{grid-template-columns:1fr}.left{order:2}.center{order:1}.right{order:3;grid-column:auto}.right .inner{grid-template-columns:1fr 1fr}.stage{min-height:230px}.stage video{max-height:42vh}.top{padding:0 12px}.track{grid-template-columns:64px minmax(0,1fr)}.toolbar .btn{padding:8px 9px}.brand{font-size:12px}}
+</style></head><body>
+<header class="top"><div class="brand">SUBAS GHIMIRE <small>ADVANCED VIDEO EDITOR · BETA</small></div><a href="creative-workspace.html">← Creative Workspace</a></header>
+<main class="shell"><div class="toolbar">
+<label class="btn primary" for="files">＋ Import Media</label><input id="files" type="file" accept="video/*,audio/*,image/*" multiple hidden>
+<button class="btn" id="split">✂ Split</button><button class="btn" id="delete">Delete Clip</button><button class="btn" id="undo">Undo</button><button class="btn" id="play">▶ Play</button><button class="btn" id="export">Export MP4</button>
+<span class="hint" id="projectTime">00:00 / 00:00</span></div>
+<div class="layout">
+<aside class="panel left"><h2>MEDIA LIBRARY</h2><div class="inner"><p class="hint">आफ्नो device बाट video, audio वा image import गर्नुहोस्।</p><div id="assets"><div class="empty">No media imported yet</div></div></div></aside>
+<section class="panel center"><h2>PREVIEW MONITOR</h2><div class="stage" id="stage"><video id="preview" playsinline controls></video><div class="overlay" id="textOverlay"></div></div><div class="stageInfo"><span id="clipName">No clip selected</span><span id="timecode">00:00.00</span></div>
+<div class="controls"><button class="btn" id="back">−1s</button><button class="btn primary" id="toggle">▶ / ❚❚</button><button class="btn" id="forward">+1s</button><input id="seek" type="range" min="0" max="1000" value="0"><select id="ratio" class="btn"><option value="original">Original</option><option value="16:9">16:9</option><option value="9:16">9:16</option><option value="1:1">1:1</option><option value="4:5">4:5</option></select></div>
+<div class="timeline panel"><h2>EDITING TIMELINE <span class="hint"> · Select a clip to edit</span></h2><div class="track"><div class="trackName">VIDEO 1</div><div class="trackLane" id="videoTrack"><div class="empty">Import a video to start editing</div></div></div><div class="track"><div class="trackName">TEXT</div><div class="trackLane" id="textTrack"><div class="empty">Text overlay appears here</div></div></div><div class="track"><div class="trackName">AUDIO</div><div class="trackLane" id="audioTrack"><div class="empty">Import audio to add music</div></div></div><div class="controls"><select id="audioSource" class="btn" aria-label="Select audio track"><option value="">No audio track selected</option></select><label class="hint">VOLUME <input id="audioVolume" type="range" min="0" max="150" value="100" style="vertical-align:middle;width:110px"></label><audio id="audioPreview" controls preload="metadata" style="width:100%;max-width:100%;display:none"></audio></div></div>
+</section>
+<aside class="panel right"><h2>EDIT PROPERTIES</h2><div class="inner">
+<div class="field"><label>CLIP START (seconds)</label><input id="start" type="number" min="0" step=".1" value="0"></div><div class="field"><label>CLIP END (seconds)</label><input id="end" type="number" min="0" step=".1" value="0"></div><button class="btn" id="applyTrim">Apply Trim</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+<div class="field"><label>TEXT OVERLAY</label><input id="titleText" type="text" placeholder="Type your title"></div><div class="field"><label>TEXT SIZE</label><input id="fontSize" type="range" min="14" max="64" value="34"></div><div class="field"><label>TEXT COLOR</label><select id="textColor"><option value="#ffffff">White</option><option value="#ff394f">Red</option><option value="#ffcf45">Yellow</option></select></div><button class="btn" id="addText">Add / Update Text</button><button class="btn" id="clearText">Remove Text</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+<div class="field"><label>BRIGHTNESS <output id="bVal">100%</output></label><input id="brightness" type="range" min="50" max="160" value="100"></div><div class="field"><label>CONTRAST <output id="cVal">100%</output></label><input id="contrast" type="range" min="50" max="180" value="100"></div><div class="field"><label>SATURATION <output id="sVal">100%</output></label><input id="saturation" type="range" min="0" max="200" value="100"></div><div class="field"><label>PLAYBACK SPEED</label><select id="speed"><option value=".5">0.5×</option><option value=".75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></div>
+<p class="hint">Tip: Timeline clips drag गरेर क्रम मिलाउनुहोस्। Split, trim, text overlay, colour filters, speed र imported audio track MP4 export मा समावेश हुन्छन्। ठूलो भिडियोमा browser memory अनुसार export समय लाग्न सक्छ।</p><div class="status" id="status" aria-live="polite"></div><div class="exportProgress"><i id="progress"></i></div><a id="download" class="btn primary" hidden download="subas-edited-video.mp4">Download MP4</a>
+</div></aside></div></main>
+<script type="module">
+const $=id=>document.getElementById(id);let media=[],clips=[],selected=-1,ffmpeg=null,undoStack=[],dragging=-1,lastExportUrl="";
+const video=$('preview');const fmt=n=>{n=Math.max(0,n||0);return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')};
+function saveUndo(){undoStack.push(JSON.stringify(clips));if(undoStack.length>20)undoStack.shift()}
+function current(){return clips[selected]}
+function message(t){$('status').textContent=t}
+function draw(){
+ const lane=$('videoTrack');lane.innerHTML='';
+ if(!clips.length)lane.innerHTML='<div class="empty">Import a video to start editing</div>';
+ clips.forEach((clip,i)=>{
+  const b=document.createElement('button');b.className='clip'+(i===selected?' active':'');b.draggable=true;
+  b.innerHTML=(i+1)+'. '+esc(media[clip.media].name)+'<small>'+fmt(clip.start)+' – '+fmt(clip.end)+' · '+(clip.end-clip.start).toFixed(1)+'s</small>';
+  b.onclick=()=>select(i);
+  b.addEventListener('dragstart',()=>{dragging=i;b.classList.add('dragging')});
+  b.addEventListener('dragover',e=>e.preventDefault());
+  b.addEventListener('drop',e=>{e.preventDefault();if(dragging<0||dragging===i)return;saveUndo();const moved=clips.splice(dragging,1)[0];clips.splice(i,0,moved);selected=i;dragging=-1;draw();select(selected)});
+  b.addEventListener('dragend',()=>{dragging=-1;b.classList.remove('dragging')});
+  lane.append(b);
+ });
+ $('textTrack').innerHTML=$('titleText').value?'<div class="clip">TITLE · '+esc($('titleText').value)+'</div>':'<div class="empty">Text overlay appears here</div>';
+ const audios=media.map((m,i)=>({m,i})).filter(x=>x.m.type.startsWith('audio/'));
+ const selectAudio=$('audioSource'),currentAudio=selectAudio.value;
+ selectAudio.innerHTML='<option value="">No audio track selected</option>';
+ audios.forEach(({m,i})=>{const o=document.createElement('option');o.value=String(i);o.textContent=m.name;selectAudio.append(o)});
+ if(audios.some(x=>String(x.i)===currentAudio))selectAudio.value=currentAudio;
+ const chosen=selectAudio.value!==''?media[Number(selectAudio.value)]:null;
+ $('audioTrack').innerHTML=chosen?'<div class="clip">'+esc(chosen.name)+'<small>Music / voice track</small></div>':(audios.length?'<div class="empty">Choose an imported audio track above</div>':'<div class="empty">Import audio to add music</div>');
+ const total=clips.reduce((a,x)=>a+(x.end-x.start),0);$('projectTime').textContent=fmt(total)+' total';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function select(i){selected=i;let c=current();if(!c)return;let m=media[c.media];video.pause();video.src=m.url;video.currentTime=c.start;$('start').value=c.start;$('end').value=c.end;$('clipName').textContent=m.name;video.playbackRate=Number($('speed').value);applyFx();draw()}
+function applyFx(){video.style.filter='brightness('+$('brightness').value+'%) contrast('+$('contrast').value+'%) saturate('+$('saturation').value+'%)';$('bVal').textContent=$('brightness').value+'%';$('cVal').textContent=$('contrast').value+'%';$('sVal').textContent=$('saturation').value+'%'}
+$('audioSource').onchange=()=>{const m=$('audioSource').value!==''?media[Number($('audioSource').value)]:null;const audio=$('audioPreview');audio.pause();audio.removeAttribute('src');if(m){audio.src=m.url;audio.style.display='block';audio.load()}else audio.style.display='none';draw()};
+$('audioVolume').oninput=()=>{$('audioPreview').volume=Math.min(1.5,Number($('audioVolume').value)/100)};
+video.onplay=()=>{const a=$('audioPreview');if(a.src&&$('audioSource').value!=='')a.play().catch(()=>{})};
+video.onpause=()=>$('audioPreview').pause();
+video.onseeked=()=>{const a=$('audioPreview'),c=current();if(a.src&&c){const t=Math.max(0,video.currentTime-c.start);if(Math.abs(a.currentTime-t)>.35)a.currentTime=t}};
+$('audioPreview').onloadedmetadata=()=>{$('audioPreview').volume=Math.min(1,Number($('audioVolume').value)/100)};
+$('files').onchange=e=>{
+ let firstAudio=-1;for(const f of e.target.files){
+  if(!f.type.startsWith('video/')&&!f.type.startsWith('audio/')&&!f.type.startsWith('image/')){message('Unsupported media type: '+f.name);continue}
+  const m={name:f.name,type:f.type,file:f,url:URL.createObjectURL(f),duration:0};media.push(m);const idx=media.length-1;
+  if(f.type.startsWith('video/')){
+   const probe=document.createElement('video');probe.preload='metadata';probe.src=m.url;
+   probe.onloadedmetadata=()=>{m.duration=probe.duration;m.width=probe.videoWidth;m.height=probe.videoHeight;if(!Number.isFinite(m.duration)||m.duration<=0){message('यो भिडियोको duration पढ्न सकिएन: '+m.name);return}saveUndo();clips.push({media:idx,start:0,end:probe.duration,speed:1});if(selected<0)selected=0;draw();if(selected===clips.length-1)select(selected)};
+   probe.onerror=()=>message('यो भिडियो format browser ले पढ्न सकेन: '+m.name);
+  }else{
+   const a=document.createElement('div');a.className='asset';a.innerHTML='<strong>'+esc(f.name)+'</strong><small>'+esc(f.type)+'</small>';$('assets').append(a);
+   if(f.type.startsWith('audio/')&&!$('audioSource').value&&firstAudio<0)firstAudio=idx
+  }
+ }
+ $('assets').querySelector('.empty')?.remove();draw();if(firstAudio>=0&&!$('audioSource').value){$('audioSource').value=String(firstAudio);$('audioSource').dispatchEvent(new Event('change'))}e.target.value='';
+};
+function split(){let c=current();if(!c)return message('पहिले timeline मा video clip छान्नुहोस्।');let t=video.currentTime;if(t<=c.start+.15||t>=c.end-.15)return message('Split गर्न playhead clip को बीचमा राख्नुहोस्।');saveUndo();let second={...c,start:t};c.end=t;clips.splice(selected+1,0,second);draw();message('Clip split भयो।')}
+$('split').onclick=split;$('delete').onclick=()=>{if(!current())return;saveUndo();clips.splice(selected,1);selected=Math.min(selected,clips.length-1);draw();if(current())select(selected);else{video.removeAttribute('src');video.load();$('clipName').textContent='No clip selected'}};
+$('undo').onclick=()=>{if(!undoStack.length)return message('Undo history छैन।');clips=JSON.parse(undoStack.pop());selected=Math.min(selected,clips.length-1);draw();if(current())select(selected)};
+$('applyTrim').onclick=()=>{let c=current();if(!c)return;let a=Number($('start').value),b=Number($('end').value);if(a<0||b>media[c.media].duration||b-a<.2)return message('Valid start/end time राख्नुहोस्।');saveUndo();c.start=a;c.end=b;video.currentTime=a;draw();message('Trim लागू भयो।')};
+$('toggle').onclick=$('play').onclick=()=>video.paused?video.play():video.pause();$('back').onclick=()=>video.currentTime=Math.max(current()?.start||0,video.currentTime-1);$('forward').onclick=()=>video.currentTime=Math.min(current()?.end||video.duration,video.currentTime+1);
+video.ontimeupdate=()=>{let c=current();if(c&&video.currentTime>=c.end){video.pause();video.currentTime=c.end}if(c){$('timecode').textContent=fmt(video.currentTime)+'.'+String(Math.floor(video.currentTime%1*100)).padStart(2,'0');$('seek').value=video.duration?video.currentTime/video.duration*1000:0;const a=$('audioPreview');if(!a.paused&&a.src){const t=Math.max(0,video.currentTime-c.start);if(Math.abs(a.currentTime-t)>.5)a.currentTime=t}}};
+$('seek').oninput=()=>{if(video.duration)video.currentTime=Number($('seek').value)/1000*video.duration};
+function updateTextPreview(){$('textOverlay').textContent=$('titleText').value;$('textOverlay').style.fontSize=$('fontSize').value+'px';$('textOverlay').style.color=$('textColor').value;draw()}
+$('addText').onclick=updateTextPreview;$('clearText').onclick=()=>{$('titleText').value='';$('textOverlay').textContent='';draw()};
+$('titleText').addEventListener('input',()=>{$('textOverlay').textContent=$('titleText').value;$('textTrack').textContent=$('titleText').value?'TITLE · '+$('titleText').value:'Text overlay appears here'});$('fontSize').oninput=()=>$('textOverlay').style.fontSize=$('fontSize').value+'px';$('textColor').onchange=()=>$('textOverlay').style.color=$('textColor').value;
+['brightness','contrast','saturation'].forEach(id=>$(id).oninput=applyFx);$('speed').onchange=()=>video.playbackRate=Number($('speed').value);
+$('ratio').onchange=()=>{let r=$('ratio').value,stage=$('stage');stage.style.aspectRatio=r==='original'?'auto':r.replace(':',' / ');stage.style.minHeight='230px'};
+async function getFFmpeg(){if(ffmpeg)return ffmpeg;message('Export engine download हुँदैछ (पहिलो पटक ठूलो download हुन सक्छ)…');const{FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');const{toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');ffmpeg=new FFmpeg();ffmpeg.on('progress',({progress})=>$('progress').style.width=Math.max(0,Math.min(100,progress*100))+'%');const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';await ffmpeg.load({coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:base+'/ffmpeg-core.wasm'});return ffmpeg}
+$('export').onclick=async()=>{
+ if(!clips.length)return message('Export गर्न पहिले video import गर्नुहोस्।');
+ const btn=$('export');btn.disabled=true;$('download').hidden=true;$('progress').style.width='0';
+ try{
+  const ff=await getFFmpeg(),inputs=[],args=[];
+  for(let i=0;i<clips.length;i++){
+   const clip=clips[i],m=media[clip.media],ext=(m.name.split('.').pop()||'mp4').replace(/[^a-z0-9]/gi,'')||'mp4',name='sg-video-'+i+'.'+ext;
+   if(m.file.size>350*1024*1024)throw new Error('एउटा भिडियो 350 MB भन्दा ठूलो छ। सानो/छोटो फाइल प्रयोग गर्नुहोस्।');
+   await ff.writeFile(name,new Uint8Array(await m.file.arrayBuffer()));args.push('-i',name);inputs.push({name,clip});
+  }
+  const audioIndex=$('audioSource').value!==''?Number($('audioSource').value):-1;
+  if(audioIndex>=0){
+   const am=media[audioIndex],ext=(am.name.split('.').pop()||'mp3').replace(/[^a-z0-9]/gi,'')||'mp3';
+   await ff.writeFile('sg-audio.'+ext,new Uint8Array(await am.file.arrayBuffer()));args.push('-i','sg-audio.'+ext);
+  }
+  const speed=Math.max(.25,Number($('speed').value)||1),total=inputs.reduce((n,x)=>n+(x.clip.end-x.clip.start)/speed,0);
+  const ratio=$('ratio').value,first=media[clips[0].media];
+  const sizes={'16:9':[1280,720],'9:16':[720,1280],'1:1':[1080,1080],'4:5':[1080,1350]};
+  const outputW=sizes[ratio]?.[0]||Math.max(2,Math.floor((first.width||1920)/2)*2),outputH=sizes[ratio]?.[1]||Math.max(2,Math.floor((first.height||1080)/2)*2);
+  const chains=inputs.map((x,i)=>'['+i+':v]trim=start='+x.clip.start+':end='+x.clip.end+',setpts=(PTS-STARTPTS)/'+speed+',eq=brightness='+((Number($('brightness').value)-100)/100)+':contrast='+(Number($('contrast').value)/100)+':saturation='+(Number($('saturation').value)/100)+',scale='+outputW+':'+outputH+':force_original_aspect_ratio=decrease,pad='+outputW+':'+outputH+':(ow-iw)/2:(oh-ih)/2:black,setsar=1[v'+i+']');
+  const concat=inputs.map((x,i)=>'[v'+i+']').join('')+'concat=n='+inputs.length+':v=1:a=0[outv]';let filter=chains.join(';')+';'+concat;let videoMap='[outv]';
+  const title=$('titleText').value.trim();
+  if(title){
+   const w=outputW,h=outputH,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');
+   const font=Math.max(24,Math.round(Number($('fontSize').value)*w/640));ctx.font='900 '+font+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+   const maxWidth=w*.84,words=title.split(/\s+/),lines=[];let line='';
+   for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);
+   const lineHeight=font*1.22,blockHeight=lines.length*lineHeight,pad=font*.55,y=h*.82;
+   ctx.fillStyle='rgba(0,0,0,.58)';ctx.fillRect(w*.04,y-blockHeight/2-pad,w*.92,blockHeight+pad*2);
+   ctx.fillStyle=$('textColor').value;ctx.strokeStyle='rgba(0,0,0,.9)';ctx.lineWidth=Math.max(2,font*.07);
+   lines.forEach((ln,i)=>{const yy=y-(blockHeight/2)+(i+.5)*lineHeight;ctx.strokeText(ln,w/2,yy,maxWidth);ctx.fillText(ln,w/2,yy,maxWidth)});
+   const png=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Text overlay PNG बनाउन सकिएन।')),'image/png'));
+   await ff.writeFile('sg-title.png',new Uint8Array(await png.arrayBuffer()));args.push('-loop','1','-i','sg-title.png');
+   const titleInput=inputs.length+(audioIndex>=0?1:0);filter+=';[outv]['+titleInput+':v]overlay=(W-w)/2:(H-h)/2:shortest=1[finalv]';videoMap='[finalv]';
+  }
+  if(audioIndex>=0){const audioInput=inputs.length;filter+=';['+audioInput+':a]atrim=duration='+total+',asetpts=PTS-STARTPTS,volume='+(Number($('audioVolume').value)/100)+',apad[aout]'}
+  message('Export हुँदैछ… यो पहिलो पटक FFmpeg engine load हुन सक्छ।');
+  const command=[...args,'-filter_complex',filter,'-map',videoMap,'-c:v','libx264','-preset','ultrafast','-crf','23','-pix_fmt','yuv420p','-movflags','+faststart'];
+  if(audioIndex>=0)command.push('-map','[aout]','-c:a','aac','-b:a','192k','-shortest');else command.push('-an');
+  command.push('sg-output.mp4');await ff.exec(command);
+  const data=await ff.readFile('sg-output.mp4');if(lastExportUrl)URL.revokeObjectURL(lastExportUrl);
+  lastExportUrl=URL.createObjectURL(new Blob([data],{type:'video/mp4'}));$('download').href=lastExportUrl;$('download').hidden=false;$('download').textContent='⬇ Download Edited MP4';
+  message('Export पूरा भयो — video, filters'+(title?', text overlay':'')+(audioIndex>=0?', audio':'')+' सहित। Download MP4 थिच्नुहोस्।');
+ }catch(err){console.error(err);message('Export असफल भयो: '+(err.message||'browser memory, codec वा network समस्या')+'। छोटो video प्रयोग गरेर पुनः प्रयास गर्नुहोस्।')}
+ finally{btn.disabled=false}
+};
+draw();
+window.addEventListener('beforeunload',()=>{media.forEach(m=>URL.revokeObjectURL(m.url));if(lastExportUrl)URL.revokeObjectURL(lastExportUrl)});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.code==='Space'){e.preventDefault();video.paused?video.play():video.pause()}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){$('undo').click()}else if(e.key.toLowerCase()==='s'){$('split').click()}else if(e.key==='Delete'){$('delete').click()}});
+</script></body></html>
