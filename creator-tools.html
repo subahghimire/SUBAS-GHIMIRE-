@@ -28,7 +28,7 @@
   <div class="result" id="videoStatus" role="status" aria-live="polite">पहिले Generate &amp; Play बाट audio बनाउनुहोस्। त्यसपछि यही audio बाट video तयार गर्न सकिन्छ।</div>
   <video id="newsVideoPreview" controls playsinline style="display:none;width:100%;border-radius:12px;background:#000;max-height:420px"></video>
   <a class="btn secondary" id="downloadNewsVideo" href="#" download="subas-news-video.mp4" style="display:none">↓ DOWNLOAD FINAL MP4</a>
-  <p class="small-note">Veo ले script अनुसार AI-generated illustrative news B-roll scenes बनाउँछ। बनेको original voice नै final MP4 मा audio track हुन्छ। वास्तविक घटनाको प्रमाणित footage होइन। Veo access / API quota आवश्यक पर्न सक्छ; scene generation ले API credits प्रयोग गर्छ.</p>
+  <p class="small-note">Gemini Omni 1.2 ले audio script अनुसार 15-second सम्मका AI-generated illustrative news B-roll scenes बनाउँछ। बनेको original voice नै final MP4 मा audio track हुन्छ। वास्तविक घटनाको प्रमाणित footage होइन। लामो audio मा धेरै scenes र धेरै API credits लाग्न सक्छन्; खर्च र quota तपाईंको Google API account अनुसार हुन्छ।</p>
 </div>
 <div class="result" id="voiceStatus" role="status" aria-live="polite">स्क्रिप्ट लेख्नुहोस् र Generate &amp; Play थिच्नुहोस्।</div>
 <p class="small-note">AI voice generation needs a Gemini API key configured securely on the Vercel server. Audio is generated as WAV; your script is sent to Google Gemini TTS for synthesis.</p>
