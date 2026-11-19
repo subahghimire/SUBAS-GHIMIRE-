@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt + "\n\n" + text.trim() }] }],
+        contents: [{ parts: [{ text: text.trim(), speechMetadata: { style: prompt } }] }],
         generationConfig: {
           responseModalities: ["AUDIO"],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voices[gender] || voices.female } } }
@@ -57,15 +57,20 @@ export default async function handler(req, res) {
     const audioPart = parts.find(part => part.inlineData?.data);
     if (!audioPart) return res.status(502).json({ error: "Gemini did not return audio. Check model access and API billing." });
 
-    const pcm = Buffer.from(audioPart.inlineData.data, "base64");
-    const sampleRate = 24000, channels = 1, bitsPerSample = 16;
-    const wav = Buffer.alloc(44 + pcm.length);
-    wav.write("RIFF", 0); wav.writeUInt32LE(36 + pcm.length, 4); wav.write("WAVE", 8);
-    wav.write("fmt ", 12); wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20);
-    wav.writeUInt16LE(channels, 22); wav.writeUInt32LE(sampleRate, 24);
-    wav.writeUInt32LE(sampleRate * channels * bitsPerSample / 8, 28);
-    wav.writeUInt16LE(channels * bitsPerSample / 8, 32); wav.writeUInt16LE(bitsPerSample, 34);
-    wav.write("data", 36); wav.writeUInt32LE(pcm.length, 40); pcm.copy(wav, 44);
+    const audioBytes = Buffer.from(audioPart.inlineData.data, "base64");
+    // Gemini 3.8 TTS returns a complete WAV file by default. Older/raw PCM
+    // responses have no RIFF header and need a WAV wrapper.
+    let wav = audioBytes;
+    if (audioBytes.subarray(0, 4).toString("ascii") !== "RIFF") {
+      const sampleRate = 24000, channels = 1, bitsPerSample = 16;
+      wav = Buffer.alloc(44 + audioBytes.length);
+      wav.write("RIFF", 0); wav.writeUInt32LE(36 + audioBytes.length, 4); wav.write("WAVE", 8);
+      wav.write("fmt ", 12); wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20);
+      wav.writeUInt16LE(channels, 22); wav.writeUInt32LE(sampleRate, 24);
+      wav.writeUInt32LE(sampleRate * channels * bitsPerSample / 8, 28);
+      wav.writeUInt16LE(channels * bitsPerSample / 8, 32); wav.writeUInt16LE(bitsPerSample, 34);
+      wav.write("data", 36); wav.writeUInt32LE(audioBytes.length, 40); audioBytes.copy(wav, 44);
+    }
     res.setHeader("Content-Type", "audio/wav");
     res.setHeader("Content-Disposition", 'attachment; filename="subas-news-voice.wav"');
     res.setHeader("Content-Length", String(wav.length));
