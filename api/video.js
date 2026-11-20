@@ -1,4 +1,11 @@
 export default async function handler(req, res) {
+  const origin = req.headers.origin || "";
+  const allowedOrigins = ["https://subahghimire.github.io", "https://subas-ghimire.vercel.app", "https://subas-ghimire.com.np", "https://www.subas-ghimire.com.np"];
+  if (allowedOrigins.includes(origin)) res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Vary", "Origin");
+  if (req.method === "OPTIONS") return res.status(204).end();
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
@@ -9,7 +16,9 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "POST") {
-      const { prompt, model = "veo-3.1-fast-generate-preview", aspectRatio = "16:9", resolution = "720p" } = req.body || {};
+      let body = req.body;
+      if (typeof body === "string") { try { body = JSON.parse(body); } catch { body = {}; } }
+      const { prompt, model = "veo-3.1-fast-generate-preview", aspectRatio = "16:9", resolution = "720p" } = body || {};
 
       if (!prompt || typeof prompt !== "string") {
         return res.status(400).json({ error: "Video prompt is required" });
