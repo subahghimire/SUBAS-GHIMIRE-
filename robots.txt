@@ -1,6 +1,11 @@
 User-agent: *
 Allow: /
-Disallow: /members
 Disallow: /api/
+Disallow: /members
+Disallow: /members.html
+Disallow: /admin.html
+Disallow: /signup.html
+Disallow: /signup-thanks.html
+Disallow: /visitor-dashboard.html
 
-Sitemap: https://subas-ghimire.vercel.app/sitemap.xml
+Sitemap: https://subahghimire.github.io/SUBAS-GHIMIRE-/sitemap.xml
