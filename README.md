@@ -6,13 +6,13 @@
 
 Personal portfolio of **Subas Ghimire** — video editor and visual editor at Kantipur Television, Nepal.
 
-[![Live site](https://img.shields.io/badge/live-subas--ghimire.vercel.app-00d6a0?style=flat-square)](https://subas-ghimire.vercel.app)
+[![Live site](https://img.shields.io/badge/live-subas--ghimire.vercel.app-00d6a0?style=flat-square)](https://subahghimire.github.io/SUBAS-GHIMIRE-)
 [![GitHub Pages](https://img.shields.io/badge/mirror-github.io-00d6a0?style=flat-square)](https://subahghimire.github.io/SUBAS-GHIMIRE-/)
 [![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](#tech-stack)
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](#deployment)
 [![License](https://img.shields.io/badge/license-personal-9cb1a5?style=flat-square)](#license)
 
-[**Live site ↗**](https://subas-ghimire.vercel.app) &nbsp;·&nbsp; [Nepali version](https://subas-ghimire.vercel.app/subas-ghimire.html) &nbsp;·&nbsp; [CV](https://subas-ghimire.vercel.app/cv.html) &nbsp;·&nbsp; [Email](mailto:ghimiresubas347@gmail.com)
+[**Live site ↗**](https://subahghimire.github.io/SUBAS-GHIMIRE-) &nbsp;·&nbsp; [Nepali version](https://subahghimire.github.io/SUBAS-GHIMIRE-/subas-ghimire.html) &nbsp;·&nbsp; [CV](https://subahghimire.github.io/SUBAS-GHIMIRE-/cv.html) &nbsp;·&nbsp; [Email](mailto:ghimiresubas347@gmail.com)
 
 </div>
 
@@ -176,7 +176,7 @@ vercel dev
 
 ## Deployment
 
-- **Vercel** — every push to `main` deploys to <https://subas-ghimire.vercel.app>
+- **Vercel** — every push to `main` deploys to <https://subahghimire.github.io/SUBAS-GHIMIRE->
 - **GitHub Pages** — mirrors the same branch at <https://subahghimire.github.io/SUBAS-GHIMIRE-/>
 
 ## Contact
