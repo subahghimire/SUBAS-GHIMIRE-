@@ -44,6 +44,28 @@ const newsGenerateAudio=document.getElementById("newsGenerateAudio"),newsGenerat
 newsGenerateAudio.onclick=generateNewsAudio;
 const newsVoiceStatus=document.getElementById("newsVoiceStatus"),newsVoiceText=document.getElementById("newsVoiceText"),newsLanguage=document.getElementById("newsLanguage"),newsPlayBtn=document.getElementById("newsSpeakBtn"),newsPauseBtn=document.getElementById("newsPauseVoice"),newsStopBtn=document.getElementById("newsStopVoice");let newsVoices=[];const newsHasSpeech=("speechSynthesis"in window)&&("SpeechSynthesisUtterance"in window);function newsSetStatus(s){newsVoiceStatus.textContent=s}function newsLoadVoices(){if(!newsHasSpeech)return;newsVoices=window.speechSynthesis.getVoices()||[]}if(newsHasSpeech){newsLoadVoices();window.speechSynthesis.addEventListener("voiceschanged",newsLoadVoices);setTimeout(newsLoadVoices,500)}else{newsPlayBtn.disabled=true;newsPauseBtn.disabled=true;newsStopBtn.disabled=true;newsSetStatus("यो browser मा Text-to-Speech उपलब्ध छैन। Chrome प्रयोग गर्नुहोस्।")}newsPlayBtn.onclick=()=>{if(!newsHasSpeech)return;const text=newsVoiceText.value.trim();if(!text){newsSetStatus("पहिले समाचारको text लेख्नुहोस्।");newsVoiceText.focus();return}window.speechSynthesis.cancel();const langHint=newsLanguage.value==="ne"?"ne-NP":newsLanguage.value==="hi"?"hi-IN":"en-US";const chosen=newsVoices.find(v=>v.lang.toLowerCase().startsWith(newsLanguage.value))||null;const chunks=text.match(/[\s\S]{1,220}?(?:[.!?।\\n]|$)/g)||[text];let index=0;function speakNext(){if(index>=chunks.length){newsSetStatus("✓ News voice playback सकियो।");return}const part=chunks[index++].trim();if(!part){speakNext();return}const u=new SpeechSynthesisUtterance(part);u.lang=chosen?.lang||langHint;if(chosen)u.voice=chosen;u.rate=1;u.pitch=1;u.onstart=()=>newsSetStatus("▶ Playing news voice… ("+index+"/"+chunks.length+")");u.onend=speakNext;u.onerror=e=>{if(e.error!=="canceled"&&e.error!=="interrupted")newsSetStatus("Voice play भएन: "+e.error+". अर्को voice छानेर फेरि प्रयास गर्नुहोस्।")};window.speechSynthesis.speak(u)}speakNext()};newsPauseBtn.onclick=()=>{if(!newsHasSpeech)return;if(window.speechSynthesis.paused){window.speechSynthesis.resume();newsSetStatus("▶ Playback resumed")}else if(window.speechSynthesis.speaking){window.speechSynthesis.pause();newsSetStatus("Ⅱ News voice paused")}};newsStopBtn.onclick=()=>{if(newsHasSpeech)window.speechSynthesis.cancel();newsSetStatus("■ Playback stopped")};const newsMakeVideo=document.getElementById("newsMakeVideo"),newsVideoStatus=document.getElementById("newsVideoStatus"),newsVideoPreview=document.getElementById("newsVideoPreview"),newsDownloadVideo=document.getElementById("newsDownloadVideo"),newsVideoSources=document.getElementById("newsVideoSources");
 let newsVideoUrl="",newsVideoAudioContext=null,newsVideoAudioSource=null;
+newsDownloadVideo.addEventListener("click",async(event)=>{
+  if(!newsVideoUrl){event.preventDefault();newsVideoMessage("पहिले भिडियो generate गर्नुहोस्।");return}
+  event.preventDefault();
+  try{
+    const response=await fetch(newsVideoUrl);
+    if(!response.ok)throw new Error("भिडियो फाइल पढ्न सकिएन।");
+    const blob=await response.blob();
+    if(!blob.size)throw new Error("भिडियो खाली छ। फेरि generate गर्नुहोस्।");
+    const ext=(newsDownloadVideo.download||"news-video.webm").split(".").pop()||"webm";
+    const fileName="news-video-"+new Date().toISOString().slice(0,10)+"."+ext;
+    const tempUrl=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+    link.href=tempUrl;link.download=fileName;link.style.display="none";
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(tempUrl),60000);
+    newsVideoMessage("✓ Download सुरु भयो। डाउनलोड फोल्डर जाँच गर्नुहोस्। यदि मोबाइलमा download सुरु भएन भने यही बटन फेरि थिचेर खुलेको भिडियोमा Save/Download गर्नुहोस्।");
+  }catch(error){
+    const fallback=document.createElement("a");fallback.href=newsVideoUrl;fallback.target="_blank";fallback.rel="noopener";fallback.textContent="Open generated video";
+    newsVideoMessage("डाउनलोड सुरु भएन। नयाँ tab मा भिडियो खोल्दैछु—त्यहाँबाट Save/Download गर्नुहोस्।");
+    window.open(newsVideoUrl,"_blank","noopener");
+  }
+});
 function newsVideoMessage(message){newsVideoStatus.textContent=message}document.getElementById("newsVoiceText").addEventListener("input",()=>{newsMakeVideo.disabled=true;newsVideoMessage("Script परिवर्तन भयो। नयाँ अडियो Generate गरेपछि भिडियो बनाउन सकिन्छ।")})
 function newsLoadSceneImage(scene){return new Promise((resolve,reject)=>{const image=new Image();image.crossOrigin="anonymous";image.onload=()=>resolve({...scene,image});image.onerror=()=>reject(new Error("फोटो लोड भएन: "+(scene.title||scene.searchQuery)));image.src=scene.imageUrl})}
 function newsDrawScene(ctx,w,h,scene,progress,fit){const img=scene.image,scaleBase=fit==="contain"?Math.min(w/img.width,h/img.height):Math.max(w/img.width,h/img.height);const zoom=1+0.075*progress,drawW=img.width*scaleBase*zoom,drawH=img.height*scaleBase*zoom;const driftX=(progress-.5)*w*.035,driftY=(.5-progress)*h*.025;const x=(w-drawW)/2+driftX,y=(h-drawH)/2+driftY;ctx.fillStyle="#05080c";ctx.fillRect(0,0,w,h);ctx.save();ctx.drawImage(img,x,y,drawW,drawH);ctx.restore();const shade=ctx.createLinearGradient(0,0,0,h);shade.addColorStop(0,"#00000022");shade.addColorStop(.68,"#00000000");shade.addColorStop(1,"#00000044");ctx.fillStyle=shade;ctx.fillRect(0,0,w,h)}
