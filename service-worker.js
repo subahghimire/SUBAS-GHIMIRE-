@@ -1,4 +1,4 @@
-const CACHE_NAME = "sg-portfolio-v15";
+const CACHE_NAME = "sg-portfolio-v16";
 const CORE = [
   "./",
   "./index.html",
