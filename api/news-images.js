@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         searchQuery: query,
         imageUrl: info.thumburl || info.url,
         title: strip(page.title || ""),
-        sourceUrl: strip(meta.Descriptionshorturl?.value || meta.LicenseUrl?.value || ""),
+        sourceUrl: "https://commons.wikimedia.org/wiki/" + encodeURIComponent(page.title || ""),
         artist: strip(meta.Artist?.value || ""),
         license: strip(meta.LicenseShortName?.value || "Wikimedia Commons")
       };
