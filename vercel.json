@@ -137,6 +137,9 @@
     },
     "api/video.js": {
       "maxDuration": 60
+    },
+    "api/news-images.js": {
+      "maxDuration": 60
     }
   }
 }
