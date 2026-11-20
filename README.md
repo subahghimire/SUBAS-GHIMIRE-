@@ -182,7 +182,6 @@ vercel dev
 ## Contact
 
 - **Email** — [ghimiresubas347@gmail.com](mailto:ghimiresubas347@gmail.com)
-- **Phone** — +977 9766454587
 - **GitHub** — [@subahghimire](https://github.com/subahghimire)
 
 ## License
