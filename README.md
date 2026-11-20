@@ -6,8 +6,7 @@
 
 Personal portfolio of **Subas Ghimire** — video editor and visual editor at Kantipur Television, Nepal.
 
-[![Live site](https://img.shields.io/badge/live-subas--ghimire.vercel.app-00d6a0?style=flat-square)](https://subahghimire.github.io/SUBAS-GHIMIRE-)
-[![GitHub Pages](https://img.shields.io/badge/mirror-github.io-00d6a0?style=flat-square)](https://subahghimire.github.io/SUBAS-GHIMIRE-/)
+[![Primary site](https://img.shields.io/badge/primary-GitHub%20Pages-00d6a0?style=flat-square)](https://subahghimire.github.io/SUBAS-GHIMIRE-)
 [![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](#tech-stack)
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](#deployment)
 [![License](https://img.shields.io/badge/license-personal-9cb1a5?style=flat-square)](#license)
