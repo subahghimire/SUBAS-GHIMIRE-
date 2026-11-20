@@ -6,7 +6,12 @@ export default async function handler(req, res) {
     "https://subas-ghimire.com.np",
     "https://www.subas-ghimire.com.np"
   ];
-  if (allowedOrigins.includes(origin)) res.setHeader("Access-Control-Allow-Origin", origin);
+  let allowedOrigin = allowedOrigins.includes(origin);
+  try {
+    const host = new URL(origin).hostname;
+    if (host.endsWith(".vercel.app") && host.startsWith("subas-ghimire-")) allowedOrigin = true;
+  } catch {}
+  if (allowedOrigin) res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
