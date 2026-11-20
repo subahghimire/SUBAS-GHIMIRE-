@@ -50,7 +50,7 @@
 <footer class="wrap"><span>© <span id="year"></span> SUBAS GHIMIRE · SG CREATOR STUDIO</span><span>Built for editing, storytelling &amp; creative workflow.</span></footer>
 <script>
 (function(){
-const apiBase=location.hostname==="subahghimire.github.io"?"https://subahghimire.github.io/SUBAS-GHIMIRE-": "";
+const apiBase=location.hostname==="subahghimire.github.io"?"https://subas-ghimire.vercel.app": "";
 const log=document.getElementById("chatLog"),form=document.getElementById("chatForm"),input=document.getElementById("chatInput"),send=document.getElementById("sendBtn"),imageInput=document.getElementById("imageInput"),photoBtn=document.getElementById("photoBtn"),imageName=document.getElementById("imageName"),preview=document.getElementById("imagePreview"),previewImg=document.getElementById("previewImg"),removeImage=document.getElementById("removeImage");let selectedImage=null;
 document.getElementById("year").textContent=new Date().getFullYear();
 function bubble(text,who){const el=document.createElement("div");el.className="bubble "+who;const label=document.createElement("small");label.textContent=who==="user"?"YOU":"SG ASSISTANT";el.appendChild(label);el.appendChild(document.createTextNode(text));log.appendChild(el);log.scrollTop=log.scrollHeight;return el}
