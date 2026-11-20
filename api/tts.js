@@ -34,7 +34,8 @@ export default async function handler(req, res) {
     const style = typeof body?.style === "string" ? body.style : "bulletin";
     const languages = ["ne", "hi", "en"];
     const styles = ["bulletin", "breaking", "headline", "detailed", "documentary"];
-    const voiceName = "Charon";
+    const voices = ["Charon", "Fenrir", "Orus", "Puck", "Kore", "Aoede", "Zephyr"];
+    const voiceName = typeof body?.voiceName === "string" && voices.includes(body.voiceName) ? body.voiceName : "Charon";
     if (!text) return res.status(400).json({ error: "कृपया पढाउनुपर्ने नेपाली वा अंग्रेजी text लेख्नुहोस्।" });
     if (text.length > 8000) return res.status(413).json({ error: "एक पटकमा ८,००० characters सम्मको text मात्र राख्नुहोस्।" });
     if (!languages.includes(language)) return res.status(400).json({ error: "नेपाली, हिन्दी वा English भाषा छान्नुहोस्।" });
