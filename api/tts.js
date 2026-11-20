@@ -6,16 +6,18 @@ export default async function handler(req, res) {
     "https://subas-ghimire.com.np",
     "https://www.subas-ghimire.com.np"
   ];
-  const allowed = allowedOrigins.includes(origin);
-  if (allowed) res.setHeader("Access-Control-Allow-Origin", origin);
+  if (allowedOrigins.includes(origin)) res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const apiKey = process.env.GEMINI_API_KEY || process.env.SUBAS_ASSISTANCE;
-  if (!apiKey) return res.status(503).json({ error: "GEMINI_API_KEY is not configured in Vercel." });
+  const apiKeys = [...new Set([
+    process.env.GEMINI_API_KEY,
+    process.env.SUBAS_ASSISTANCE
+  ].map(value => typeof value === "string" ? value.trim() : "").filter(Boolean))];
+  if (!apiKeys.length) return res.status(503).json({ error: "Vercel मा GEMINI_API_KEY वा SUBAS_ASSISTANCE configure गरिएको छैन।" });
 
   try {
     let body = req.body;
@@ -41,34 +43,55 @@ export default async function handler(req, res) {
       detailed: "Deliver as a detailed news report, measured pace and clear emphasis on facts.",
       documentary: "Deliver as a documentary news narration, warm, steady and authoritative."
     }[style];
-    const prompt = "Read the following text exactly as written in " + languageName + ". " + styleGuide + " Use natural pronunciation, clear diction and medium pace. Preserve the original wording. Do not translate, summarize, add an introduction, or speak any instructions.\\n\\n" + text;
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseModalities: ["AUDIO"],
-            speechConfig: {
-              voiceConfig: { prebuiltVoiceConfig: { voiceName } }
-            }
+    const prompt = "Read the following text exactly as written in " + languageName + ". " + styleGuide + " Use natural pronunciation, clear diction and medium pace. Preserve the original wording. Do not translate, summarize, add an introduction, or speak any instructions.\n\n" + text;
+
+    let data = null;
+    let lastStatus = 502;
+    let lastMessage = "Gemini TTS बाट audio प्राप्त भएन।";
+    for (let index = 0; index < apiKeys.length; index++) {
+      let response;
+      try {
+        response = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-goog-api-key": apiKeys[index] },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                responseModalities: ["AUDIO"],
+                speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } }
+              }
+            }),
+            signal: AbortSignal.timeout(42000)
           }
-        }),
-        signal: AbortSignal.timeout(90000)
+        );
+      } catch (error) {
+        lastStatus = error?.name === "TimeoutError" ? 504 : 502;
+        lastMessage = error?.name === "TimeoutError" ? "Audio बनाउन धेरै समय लाग्यो। छोटो script राखेर फेरि प्रयास गर्नुहोस्।" : "Gemini सेवा सँग जडान हुन सकेन।";
+        continue;
       }
-    );
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const message = data?.error?.message || "Gemini TTS request failed.";
-      return res.status(response.status).json({ error: message });
+      data = await response.json().catch(() => ({}));
+      if (response.ok) break;
+      lastStatus = response.status;
+      lastMessage = data?.error?.message || "Gemini TTS request असफल भयो।";
+      // Try the backup configured key for invalid-key, access, quota and transient service errors.
+      if (![400, 413].includes(response.status) && index < apiKeys.length - 1) continue;
+      return res.status(lastStatus).json({ error: lastMessage });
+    }
+
+    if (!data || !data.candidates?.length) {
+      return res.status(lastStatus).json({ error: lastMessage });
     }
     const part = (data?.candidates?.[0]?.content?.parts || []).find(p => p?.inlineData?.data || p?.inline_data?.data);
     const encoded = part?.inlineData?.data || part?.inline_data?.data;
-    if (!encoded) return res.status(502).json({ error: "AI ले audio फर्काएन। केहीबेरपछि फेरि प्रयास गर्नुहोस्।" });
+    if (!encoded) {
+      const blockReason = data?.promptFeedback?.blockReason;
+      return res.status(502).json({ error: blockReason ? "Gemini ले यो text audio मा बदल्न अस्वीकार गर्‍यो: " + blockReason : "AI ले audio फर्काएन। छोटो script राखेर फेरि प्रयास गर्नुहोस्।" });
+    }
 
     const pcm = Buffer.from(encoded, "base64");
+    if (!pcm.length) return res.status(502).json({ error: "AI ले खाली audio फर्कायो।" });
     const sampleRate = 24000;
     const channels = 1;
     const bitsPerSample = 16;
@@ -91,10 +114,10 @@ export default async function handler(req, res) {
     res.setHeader("Content-Type", "audio/wav");
     res.setHeader("Content-Length", String(wav.length));
     res.setHeader("Cache-Control", "no-store");
-    res.setHeader("Content-Disposition", 'inline; filename="subas-ai-voice.wav"');
+    res.setHeader("Content-Disposition", 'attachment; filename="news-ai-voice.wav"');
     return res.status(200).send(wav);
   } catch (error) {
     console.error("Gemini TTS error:", error);
-    return res.status(500).json({ error: error?.name === "TimeoutError" ? "Audio बनाउन समय लाग्यो। छोटो text राखेर प्रयास गर्नुहोस्।" : "Audio बनाउन सकिएन। API key र quota जाँच गर्नुहोस्।" });
+    return res.status(500).json({ error: error?.name === "TimeoutError" ? "Audio बनाउन समय लाग्यो। छोटो text राखेर प्रयास गर्नुहोस्।" : "Audio बनाउन सकिएन। API key, model access र quota जाँच गर्नुहोस्।" });
   }
 }
