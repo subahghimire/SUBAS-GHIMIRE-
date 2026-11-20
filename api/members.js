@@ -106,7 +106,7 @@ const membersHtml = page('Client room', `${top}
   <div class="card"><h2>Send footage</h2><p>Drive, WeTransfer or FTP all work. Send the link with the target length, the deadline and any reference cuts.</p><a class="cta" href="mailto:ghimiresubas347@gmail.com?subject=Footage%20link">SEND A LINK ↗</a></div>
   <div class="card"><h2>See the work</h2><p>Broadcast edits, talk shows and short-form pieces — the public portfolio and the case studies.</p><a class="cta" href="/#work">PORTFOLIO ↗</a> &nbsp; <a class="cta" href="/work.html">CASE STUDIES ↗</a></div>
 </div>
-<p class="foot">SUBAS GHIMIRE · VIDEO EDITOR · KATHMANDU, NEPAL · +977 9766454587</p>`);
+<p class="foot">SUBAS GHIMIRE · VIDEO EDITOR · KATHMANDU, NEPAL</p>`);
 
 module.exports = (req, res) => {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
