@@ -23,13 +23,25 @@ export default async function handler(req, res) {
       try { body = JSON.parse(body); } catch { body = {}; }
     }
     const text = typeof body?.text === "string" ? body.text.trim() : "";
-    const voiceName = typeof body?.voiceName === "string" ? body.voiceName : "Charon";
-    const voices = ["Charon", "Fenrir", "Orus", "Puck", "Kore", "Aoede", "Zephyr"];
+    const language = typeof body?.language === "string" ? body.language : "ne";
+    const style = typeof body?.style === "string" ? body.style : "bulletin";
+    const languages = ["ne", "hi", "en"];
+    const styles = ["bulletin", "breaking", "headline", "detailed", "documentary"];
+    const voiceName = "Charon";
     if (!text) return res.status(400).json({ error: "कृपया पढाउनुपर्ने नेपाली वा अंग्रेजी text लेख्नुहोस्।" });
     if (text.length > 8000) return res.status(413).json({ error: "एक पटकमा ८,००० characters सम्मको text मात्र राख्नुहोस्।" });
-    if (!voices.includes(voiceName)) return res.status(400).json({ error: "Invalid voice selection." });
+    if (!languages.includes(language)) return res.status(400).json({ error: "नेपाली, हिन्दी वा English भाषा छान्नुहोस्।" });
+    if (!styles.includes(style)) return res.status(400).json({ error: "समाचारको शैली छान्नुहोस्।" });
 
-    const prompt = "Read the following text exactly as written. Use a clear, natural Nepali male documentary and news narration style, medium pace, confident but warm delivery. Preserve the original language and wording. Do not translate, summarize, add an introduction, or speak any instructions.\n\n" + text;
+    const languageName = language === "ne" ? "Nepali" : language === "hi" ? "Hindi" : "English";
+    const styleGuide = {
+      bulletin: "Deliver as a clear, professional television news bulletin.",
+      breaking: "Deliver as urgent breaking news, energetic and serious but not sensational.",
+      headline: "Deliver crisp headline-style news with clear pauses between headlines.",
+      detailed: "Deliver as a detailed news report, measured pace and clear emphasis on facts.",
+      documentary: "Deliver as a documentary news narration, warm, steady and authoritative."
+    }[style];
+    const prompt = "Read the following text exactly as written in " + languageName + ". " + styleGuide + " Use natural pronunciation, clear diction and medium pace. Preserve the original wording. Do not translate, summarize, add an introduction, or speak any instructions.\\n\\n" + text;
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
       {
