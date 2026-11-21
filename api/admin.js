@@ -2,6 +2,29 @@
 const crypto = require("crypto");
 const COOKIE = "sg_admin";
 const MAX_AGE = 60 * 60 * 8;
+
+// Login brute-force protection (best-effort, in-memory per serverless instance).
+const MAX_FAILS = 5;
+const LOCK_MS = 15 * 60 * 1000;
+const fails = new Map(); // ip -> { count, until }
+function ipOf(req) {
+  return String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
+}
+function lockedFor(ip) {
+  const f = fails.get(ip);
+  if (!f) return 0;
+  if (f.until && f.until > Date.now()) return f.until - Date.now();
+  if (f.until && f.until <= Date.now()) fails.delete(ip);
+  return 0;
+}
+function recordFail(ip) {
+  const f = fails.get(ip) || { count: 0, until: 0 };
+  f.count += 1;
+  if (f.count >= MAX_FAILS) { f.until = Date.now() + LOCK_MS; f.count = 0; }
+  fails.set(ip, f);
+  if (fails.size > 5000) for (const [k, v] of fails) if (!v.until || v.until <= Date.now()) fails.delete(k);
+}
+
 function sign(value, secret) { return crypto.createHmac("sha256", secret).update(value).digest("hex"); }
 function bodyOf(req) {
   if (req.body && typeof req.body === "object") return req.body;
@@ -43,11 +66,24 @@ module.exports = (req, res) => {
   if (!secret || !code) return res.status(503).json({ error: "Admin login is not configured. Add ADMIN_CODE and ADMIN_SECRET in Vercel Environment Variables." });
   const origin = req.headers.origin || "";
   const host = req.headers.host || "";
-  if (origin && new URL(origin).host !== host) return res.status(403).json({ error: "Invalid origin" });
+  if (origin) {
+    let originHost = "";
+    try { originHost = new URL(origin).host; } catch { /* invalid origin */ }
+    if (originHost !== host) return res.status(403).json({ error: "Invalid origin" });
+  }
+
+  const ip = ipOf(req);
+  const wait = lockedFor(ip);
+  if (wait > 0) {
+    res.setHeader("Retry-After", String(Math.ceil(wait / 1000)));
+    return res.status(429).json({ error: "Too many attempts. Try again in " + Math.ceil(wait / 60000) + " minute(s)." });
+  }
+
   const given = String(bodyOf(req).code || "");
   const a = Buffer.from(given), b = Buffer.from(code);
   const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
-  if (!ok) return res.status(401).json({ error: "Incorrect admin code" });
+  if (!ok) { recordFail(ip); return res.status(401).json({ error: "Incorrect admin code" }); }
+  fails.delete(ip);
   const expires = String(Date.now() + MAX_AGE * 1000);
   const token = expires + "." + sign(expires, secret);
   res.setHeader("Set-Cookie", COOKIE + "=" + encodeURIComponent(token) + "; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=" + MAX_AGE);
