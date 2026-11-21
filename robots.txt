@@ -8,4 +8,4 @@ Disallow: /signup.html
 Disallow: /signup-thanks.html
 Disallow: /visitor-dashboard.html
 
-Sitemap: https://subahghimire.github.io/SUBAS-GHIMIRE-/sitemap.xml
+Sitemap: https://subas-ghimire.com.np/sitemap.xml
