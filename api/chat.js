@@ -1,48 +1,142 @@
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function geminiRequest(url, options, timeoutMs = 7000) {
+const RETRYABLE_STATUS = new Set([500, 502, 503, 504]);
+const KEY_RETRY_STATUS = new Set([401, 403, 429]);
+const MODELS = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
+
+async function geminiRequest(url, options, timeoutMs = 10000) {
   let lastError;
+
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const response = await fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
-      if (![500, 502, 503, 504].includes(response.status) || attempt === 1) return response;
-      await sleep(500);
+      const response = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(timeoutMs)
+      });
+
+      if (!RETRYABLE_STATUS.has(response.status) || attempt === 1) {
+        return response;
+      }
     } catch (error) {
       lastError = error;
       if (attempt === 1) throw error;
-      await sleep(500);
     }
+
+    await sleep(400);
   }
+
   throw lastError || new Error("Gemini request failed");
 }
 
+// Move to the next key only for authentication errors or exhausted quota.
+// Important: call geminiRequest here; never call this function recursively.
+async function geminiRequestWithKeys(keys, url, options) {
+  let response;
+
+  for (const key of keys) {
+    const headers = {
+      ...(options.headers || {}),
+      "x-goog-api-key": key
+    };
+
+    response = await geminiRequest(url, { ...options, headers });
+
+    if (!KEY_RETRY_STATUS.has(response.status)) return response;
+  }
+
+  return response;
+}
+
+function getJsonResponse(response) {
+  return response.json().catch(() => ({}));
+}
+
+function getGenerateContentText(data) {
+  return (data?.candidates?.[0]?.content?.parts || [])
+    .map(part => typeof part?.text === "string" ? part.text : "")
+    .join("")
+    .trim();
+}
+
+function getInteractionText(data) {
+  return (data?.steps || [])
+    .filter(step => step?.type === "model_output")
+    .flatMap(step => step?.content || [])
+    .map(part => typeof part?.text === "string" ? part.text : "")
+    .join("")
+    .trim();
+}
+
 export default async function handler(req, res) {
+  const allowedOrigins = new Set([
+    "https://subahghimire.github.io",
+    "https://subas-ghimire.vercel.app",
+    "https://subas-ghimire.com.np",
+    "https://www.subas-ghimire.com.np"
+  ]);
   const origin = req.headers.origin || "";
-  const allowed = origin === "https://subahghimire.github.io" || origin === "https://subas-ghimire.vercel.app" || origin === "https://subas-ghimire.com.np" || origin === "https://www.subas-ghimire.com.np";
-  res.setHeader("Access-Control-Allow-Origin", allowed ? origin : "https://subas-ghimire.vercel.app");
+
+  if (origin && !allowedOrigins.has(origin)) {
+    return res.status(403).json({ reply: "यो वेबसाइटबाट अनुरोध गर्न अनुमति छैन।" });
+  }
+
+  if (origin) res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
 
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ reply: "Method not allowed." });
+  if (req.method !== "POST") {
+    return res.status(405).json({ reply: "Method not allowed." });
+  }
 
   try {
     let body = req.body;
     if (typeof body === "string") {
-      try { body = JSON.parse(body); } catch { body = {}; }
+      try {
+        body = JSON.parse(body);
+      } catch {
+        return res.status(400).json({ reply: "Invalid request body." });
+      }
     }
 
     const message = typeof body?.message === "string" ? body.message.trim() : "";
-    const image = body?.image && typeof body.image.data === "string" && typeof body.image.mimeType === "string" ? body.image : null;
-    if (!message && !image) return res.status(400).json({ reply: "कृपया प्रश्न लेख्नुहोस् वा फोटो छान्नुहोस्।" });
-    if (image && (!/^image\/(jpeg|png|webp|gif)$/.test(image.mimeType) || !/^[A-Za-z0-9+/]+=*$/.test(image.data) || image.data.length > 8 * 1024 * 1024)) return res.status(400).json({ reply: "फोटो JPEG, PNG, WEBP वा GIF हुनुपर्छ र ६ MB भन्दा सानो हुनुपर्छ।" });
-    if (message.length > 4000) return res.status(400).json({ reply: "Please keep your question under 4000 characters." });
+    const image = body?.image &&
+      typeof body.image.data === "string" &&
+      typeof body.image.mimeType === "string"
+      ? body.image
+      : null;
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.SUBAS_ASSISTANCE;
-    if (!apiKey) {
-      console.error("GEMINI_API_KEY is missing");
-      return res.status(200).json({ reply: "AI जोडिएको छैन। Vercel मा GEMINI_API_KEY नामको Environment Variable मा Google AI Studio को API Key राख्नुहोस्।" });
+    if (!message && !image) {
+      return res.status(400).json({ reply: "कृपया प्रश्न लेख्नुहोस् वा फोटो छान्नुहोस्।" });
+    }
+
+    if (message.length > 4000) {
+      return res.status(400).json({ reply: "Please keep your question under 4000 characters." });
+    }
+
+    // 6 MB binary image is approximately 8 MB after Base64 encoding.
+    if (image && (
+      !/^image\/(jpeg|png|webp|gif)$/.test(image.mimeType) ||
+      !/^[A-Za-z0-9+/]+={0,2}$/.test(image.data) ||
+      image.data.length > 8 * 1024 * 1024
+    )) {
+      return res.status(400).json({
+        reply: "फोटो JPEG, PNG, WEBP वा GIF हुनुपर्छ र ६ MB भन्दा सानो हुनुपर्छ।"
+      });
+    }
+
+    const apiKeys = [...new Set([
+      process.env.GEMINI_API_KEY,
+      process.env.SUBAS_ASSISTANCE,
+      process.env.GEMINI_API_KEY_BACKUP
+    ].map(value => typeof value === "string" ? value.trim() : "").filter(Boolean))];
+
+    if (!apiKeys.length) {
+      console.error("Gemini API keys are not configured");
+      return res.status(503).json({
+        reply: "AI जोडिएको छैन। Vercel Environment Variables मा GEMINI_API_KEY राख्नुहोस्।"
+      });
     }
 
     const systemInstruction = [
@@ -58,65 +152,92 @@ export default async function handler(req, res) {
       "Use simple, natural language. Be concise for simple questions and provide detail when the question requires it. Avoid generic filler and do not repeatedly say you are only a video-editing assistant."
     ].join(" ");
 
+    const startedAt = Date.now();
+
     if (image) {
-      // Try lightweight models first so one busy model or exhausted
-      // per-model quota does not block photo questions.
-      const imageModels = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
-      let imageRateLimited = false;
-      let imageTimedOut = false;
-      for (const model of imageModels) {
+      let sawRateLimit = false;
+      let sawAuthError = false;
+      let sawTimeout = false;
+
+      for (const model of MODELS) {
+        if (Date.now() - startedAt > 48000) break;
+
         let response;
         try {
-          response = await geminiRequest(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-
-            body: JSON.stringify({
-              systemInstruction: { parts: [{ text: systemInstruction }] },
-              contents: [{ role: "user", parts: [
-                ...(message ? [{ text: message }] : [{ text: "यो फोटो हेरेर यसको बारेमा बताउनुहोस्।" }]),
-                { inline_data: { mime_type: image.mimeType, data: image.data } }
-              ] }],
-              generationConfig: { maxOutputTokens: 1024 }
-            })
-          });
+          response = await geminiRequestWithKeys(
+            apiKeys,
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                systemInstruction: {
+                  parts: [{ text: systemInstruction }]
+                },
+                contents: [{
+                  role: "user",
+                  parts: [
+                    { text: message || "यो फोटो हेरेर यसको बारेमा बताउनुहोस्।" },
+                    {
+                      inlineData: {
+                        mimeType: image.mimeType,
+                        data: image.data
+                      }
+                    }
+                  ]
+                }],
+                generationConfig: { maxOutputTokens: 1024 }
+              })
+            }
+          );
         } catch (error) {
-          if (error?.name === "TimeoutError" || error?.name === "AbortError") imageTimedOut = true;
+          if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+            sawTimeout = true;
+          }
           console.error("Gemini image request failed:", model, error?.name || "network");
           continue;
         }
 
-        const data = await response.json().catch(() => ({}));
+        const data = await getJsonResponse(response);
+
         if (!response.ok) {
-          console.error("Gemini image API error:", model, response.status, JSON.stringify(data));
-          if (response.status === 429) imageRateLimited = true;
-          if ([400, 404, 429, 500, 502, 503, 504].includes(response.status)) continue;
+          console.error("Gemini image API error:", model, response.status, data?.error?.message || "unknown error");
+          if (response.status === 429) sawRateLimit = true;
+          if (response.status === 401 || response.status === 403) sawAuthError = true;
+          if ([400, 401, 403, 404, 429, 500, 502, 503, 504].includes(response.status)) continue;
           break;
         }
 
-        const reply = (data?.candidates?.[0]?.content?.parts || []).map(part => part?.text || "").join("").trim();
+        const reply = getGenerateContentText(data);
         if (reply) return res.status(200).json({ reply });
+        console.error("Gemini image response contained no text:", model);
       }
 
-      if (imageRateLimited) return res.status(200).json({ reply: "फोटो विश्लेषणका लागि अहिले Gemini को निःशुल्क सीमा पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
-      if (imageTimedOut) return res.status(200).json({ reply: "फोटो विश्लेषणमा ढिलाइ भयो। कृपया सानो फोटो राखेर फेरि प्रयास गर्नुहोस्।" });
-      return res.status(200).json({ reply: "फोटो विश्लेषण अहिले उपलब्ध भएन। कृपया अर्को फोटो प्रयास गर्नुहोस्।" });
+      if (sawAuthError && !sawRateLimit) {
+        return res.status(503).json({ reply: "Gemini API Key मा permission समस्या छ। Vercel Environment Variables जाँच गर्नुहोस्।" });
+      }
+      if (sawRateLimit) {
+        return res.status(503).json({ reply: "फोटो विश्लेषणका लागि अहिले Gemini को request limit पुगेको छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+      }
+      if (sawTimeout) {
+        return res.status(504).json({ reply: "फोटो विश्लेषणमा ढिलाइ भयो। कृपया सानो फोटो राखेर फेरि प्रयास गर्नुहोस्।" });
+      }
+      return res.status(502).json({ reply: "फोटो विश्लेषण अहिले उपलब्ध भएन। कृपया अर्को फोटो प्रयास गर्नुहोस्।" });
     }
 
     const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
-    // Start with the lightweight model for faster replies, then fall back to
-    // progressively stronger models if a model is busy or quota-limited.
-    const models = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
     let sawRateLimit = false;
-    let lastFailure = "";
+    let sawAuthError = false;
+    let sawTimeout = false;
 
-    for (const model of models) {
+    for (const model of MODELS) {
+      if (Date.now() - startedAt > 48000) break;
+
       let response;
       try {
-        response = await geminiRequest(url, {
+        response = await geminiRequestWithKeys(apiKeys, url, {
           method: "POST",
-          headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             model,
             input: message,
@@ -126,45 +247,41 @@ export default async function handler(req, res) {
           })
         });
       } catch (error) {
-        lastFailure = error?.name === "TimeoutError" || error?.name === "AbortError" ? "timeout" : "network";
-        console.error("Gemini request failed:", model, lastFailure);
+        if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+          sawTimeout = true;
+        }
+        console.error("Gemini request failed:", model, error?.name || "network");
         continue;
       }
 
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        lastFailure = data?.error?.message || data?.message || "request failed";
-        console.error("Gemini Interactions API error:", model, response.status, JSON.stringify(data));
+      const data = await getJsonResponse(response);
 
-        if (response.status === 401 || response.status === 403) {
-          return res.status(200).json({ reply: "Gemini API key मा authentication वा permission समस्या छ। Vercel को GEMINI_API_KEY जाँच गर्नुहोस्।" });
-        }
+      if (!response.ok) {
+        console.error("Gemini Interactions API error:", model, response.status, data?.error?.message || "unknown error");
         if (response.status === 429) sawRateLimit = true;
-        if ([400, 404, 429, 500, 502, 503, 504].includes(response.status)) continue;
+        if (response.status === 401 || response.status === 403) sawAuthError = true;
+        if ([400, 401, 403, 404, 429, 500, 502, 503, 504].includes(response.status)) continue;
         break;
       }
 
-      const reply = (data?.steps || [])
-        .filter(step => step?.type === "model_output")
-        .flatMap(step => step?.content || [])
-        .map(part => part?.text || "")
-        .join("")
-        .trim();
-
+      const reply = getInteractionText(data);
       if (reply) return res.status(200).json({ reply });
-      lastFailure = "empty";
-      console.error("Gemini returned no text:", model, JSON.stringify(data));
+      console.error("Gemini returned no text:", model);
     }
 
-    if (lastFailure === "timeout") {
-      return res.status(200).json({ reply: "AI जवाफ आउन ढिलो भयो। छिटो मोडेल र वैकल्पिक मोडेलहरू पनि प्रयास गरियो। कृपया फेरि प्रयास गर्नुहोस्।" });
+    if (sawAuthError && !sawRateLimit) {
+      return res.status(503).json({ reply: "Gemini API Key मा authentication वा permission समस्या छ। Vercel Environment Variables जाँच गर्नुहोस्।" });
     }
     if (sawRateLimit) {
-      return res.status(200).json({ reply: "Gemini API को request limit पुगेको छ वा सेवा व्यस्त छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+      return res.status(503).json({ reply: "Gemini API को request limit पुगेको छ वा सेवा व्यस्त छ। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
     }
-    return res.status(200).json({ reply: "AI सेवा अहिले व्यस्त छ। वैकल्पिक मोडेलहरू पनि प्रयास गरियो, तर जवाफ आएन। कृपया केही समयपछि फेरि प्रयास गर्नुहोस्।" });
+    if (sawTimeout) {
+      return res.status(504).json({ reply: "AI जवाफ आउन ढिलो भयो। वैकल्पिक मोडेलहरू पनि प्रयास गरियो। कृपया फेरि प्रयास गर्नुहोस्।" });
+    }
+
+    return res.status(502).json({ reply: "AI सेवा अहिले व्यस्त छ। वैकल्पिक मोडेलहरू पनि प्रयास गरियो, तर जवाफ आएन। केही समयपछि फेरि प्रयास गर्नुहोस्।" });
   } catch (error) {
-    console.error("Chat handler error:", error);
-    return res.status(200).json({ reply: "AI सेवा अहिले उपलब्ध भएन। कृपया फेरि प्रयास गर्नुहोस्।" });
+    console.error("Chat handler error:", error?.name || "Error", error?.message || "unknown error");
+    return res.status(500).json({ reply: "AI सेवा अहिले उपलब्ध भएन। कृपया फेरि प्रयास गर्नुहोस्।" });
   }
 }
